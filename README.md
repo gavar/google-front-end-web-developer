@@ -7,14 +7,14 @@
 |01.10| Animal Trading Cards     | [link][lesson-01.10-code] | [view][lesson-01.10-view] |
 
 ## Weekly Progress
-#### week #1 19.02 - 25.02.2018
+#### week #1: 19.02 - 25.02
 - [x] revise knowledge from previous course
 - [x] Web Foundations: Animal Trading Cards (project)
 - [ ] Web Foundations: Why Responsive? (1h)
 - [ ] Web Foundations: Starting Small (1h)
 - [ ] Web Foundations: Building Up (1h)
 - [ ] Web Foundations: Common Responsive Patterns (4h)
-#### week #2 26.02 - 04.03.2018
+#### week #2: 26.02 - 04.03
 - [ ] Web Foundations: Optimizations (2h)
 - [ ] Web Foundations: Making Sites Responsive: Resume Site on Mobile (45min)
 - [ ] Web Foundations: Writing READMEs (2h)
