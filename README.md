@@ -9,7 +9,7 @@
 ### Weekly Progress
 ## week #1 19.02 - 25.02.2018
 - [x] revise knowledge from previous course
-- [ ] Web Foundations: Animal Trading Cards (project)
+- [x] Web Foundations: Animal Trading Cards (project)
 - [ ] Web Foundations: Why Responsive? (1h)
 - [ ] Web Foundations: Starting Small (1h)
 - [ ] Web Foundations: Building Up (1h)
