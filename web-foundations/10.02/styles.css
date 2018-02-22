@@ -2,37 +2,37 @@
 
 /* the text is italicized for the animal’s interesting fact. */
 .fact {
-    font-style: italic;
+  font-style: italic;
 }
 
 /* the labels are bolded for the animal’s list items. */
 li > span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* the dots are removed from the animal's list items. */
 ul {
-    padding: 0;
-    list-style-type: none;
+  padding: 0;
+  list-style-type: none;
 }
 
 /* uses border around animal’s name, image, and information (interesting fact, list items, and description) */
 /* uses border around animal’s information. */
 .box {
-    border: thin solid lightgray;
+  border: thin solid lightgray;
 }
 
 /* uses spacing between animal’s name, image, and information. */
 .box {
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 /* the image is 300px wide or the image's width is set to 300px. */
 img {
-    width: 300px;
+  width: 300px;
 }
 
 /*
@@ -41,30 +41,30 @@ Since image is 300px wide, card should be 300px + spacing on either side.
 Card should not expand with the browser window.
 */
 .card {
-    width: min-content;
+  width: min-content;
 }
 
 /* CUSTOMIZATION */
 p {
-    text-align: justify;
+  text-align: justify;
 }
 
 h3 {
-    text-align: center;
-    text-transform: uppercase;
-    color: #5f2700;
+  text-align: center;
+  text-transform: uppercase;
+  color: #5f2700;
 }
 
 img {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 .box {
-    border-radius: 10px;
-    border-color: #b8873d;
+  border-radius: 10px;
+  border-color: #b8873d;
 }
 
 .card {
-    box-shadow: 10px 10px 5px lightgray;
-    background: linear-gradient(to bottom, #ffeac0 50px, white 330px);
+  box-shadow: 10px 10px 5px lightgray;
+  background: linear-gradient(to bottom, #ffeac0 50px, white 330px);
 }
