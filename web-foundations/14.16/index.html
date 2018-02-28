@@ -70,11 +70,28 @@
       width: 100%;
     }
 
-    @media screen and (max-width: 400px) {
-      .dark_blue {
-        color: blue;
+    @media screen and (min-width: 450px) {
+      .light_blue, .green {
+        width: 50%
       }
     }
+
+    @media screen and (min-width: 550px) {
+      .red {
+        width: calc(100% / 3);
+      }
+
+      .orange {
+        width: calc(100% / 3 * 2);
+      }
+    }
+
+    .container {
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
   </style>
 </head>
 <body>
