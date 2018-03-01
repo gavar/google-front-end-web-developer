@@ -1,6 +1,8 @@
 /* reset */
 body {
   position: relative;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* avoid horizontal scroll */
