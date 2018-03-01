@@ -4,7 +4,7 @@
 ### Course Structure:
 Unit               | Lesson                                                | Code                   | Preview                |
 -------------------|-------------------------------------------------------|:----------------------:|:----------------------:|
-Web Foundations    | Animal Trading Cards                                  | [link][U1-L10#02-code] | [view][U1-L10#02-view] |
+Web Foundations    | Project: Animal Trading Cards                         | [link][U1-L10#02-code] | [view][U1-L10#02-view] |
 Web Foundations    | Starting Small: Project Part 1                        | [link][U1-L12#16-code] | [view][U1-L12#16-view] |
 Web Foundations    | Common Responsive Patterns: Combining Fluid Layouts   | [link][U1-L14#06-code] | [view][U1-L14#06-view] |
 Web Foundations    | Common Responsive Patterns: Project Update Part 2     | [link][U1-L14#11-code] | [view][U1-L14#11-view] |
