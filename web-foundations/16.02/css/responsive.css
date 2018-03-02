@@ -1,0 +1,77 @@
+body {
+  position: relative;
+  overflow-x: hidden;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+}
+
+.container {
+  width: 100%;
+  height: fit-content;
+}
+
+.picture, .resume {
+  width: 50%;
+}
+
+.picture {
+  padding: 0;
+  height: 100vh;
+}
+
+.intro {
+  width: 100%;
+  margin-top: 10vh;
+}
+
+.background {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.main {
+  padding: 0;
+  width: calc(100% - 80px);
+}
+
+.sidebar {
+  width: 80px;
+}
+
+@media screen and (max-width: 600px) {
+  .picture {
+    padding: 0;
+    width: 100%;
+    height: 40vh;
+    position: relative;
+  }
+
+  .intro {
+    position: absolute;
+    margin-top: 25vh;
+  }
+
+  .background {
+    height: 40vh;
+    position: relative;
+  }
+
+  .resume {
+    width: 100%;
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .main {
+    width: 100%;
+  }
+
+  .sidebar {
+    float: none;
+  }
+}
