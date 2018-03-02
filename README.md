@@ -9,6 +9,7 @@ Web Foundations    | Starting Small: Project Part 1                        | [li
 Web Foundations    | Common Responsive Patterns: Combining Fluid Layouts   | [link][U1-L14#06-code] | [view][U1-L14#06-view] |
 Web Foundations    | Common Responsive Patterns: Project Update Part 2     | [link][U1-L14#11-code] | [view][U1-L14#11-view] |
 Web Foundations    | Optimizations: Final Project Updates                  | [link][U1-L15#10-code] | [view][U1-L15#10-view] |
+Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [link][U1-L16#02-code] | [view][U1-L16#02-view] |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -21,8 +22,8 @@ Web Foundations    | Optimizations: Final Project Updates                  | [li
 - [x] Web Foundations: Common Responsive Patterns (4h)
 #### week #3: 26.02 - 04.03
 - [x] Web Foundations: Optimizations (2h)
-- [ ] Web Foundations: Making Sites Responsive: Resume Site on Mobile (45min)
-- [ ] Web Foundations: Writing READMEs (2h)
+- [x] Web Foundations: Making Sites Responsive: Resume Site on Mobile (45min)
+- [x] Web Foundations: Writing READMEs (2h)
 - [ ] Web Foundations: Build a Portfolio Site (project)
 
 ### Udacity Frontend Nanodegree Style Guide
@@ -46,3 +47,6 @@ Web Foundations    | Optimizations: Final Project Updates                  | [li
 
 [U1-L15#10-code]: web-foundations/15.10
 [U1-L15#10-view]: https://gavar.github.io/google-front-end-web-developer/web-foundations/15.10/index.html
+
+[U1-L16#02-code]: web-foundations/16.02
+[U1-L16#02-view]: https://gavar.github.io/google-front-end-web-developer/web-foundations/16.02/index.html
