@@ -8,26 +8,18 @@
 
 module.exports = function (grunt) {
 
+    const SIZES = [
+        {width: 320},
+        {width: 640},
+        {width: 1024},
+    ];
+
     grunt.initConfig({
         responsive_images: {
             dev: {
                 options: {
                     engine: 'im',
-                    sizes: [
-                        {
-                            name: "small",
-                            width: 320,
-                            height: 240,
-                        },
-                        {
-                            name: "medium",
-                            width: 640,
-                        },
-                        {
-                            name: "large",
-                            width: 1024,
-                        }
-                    ]
+                    sizes: SIZES
                 },
 
                 /*
@@ -38,7 +30,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src',
                     src: ['images/*.{gif,jpg,png}'],
-                    custom_dest: 'out/images/{%= name %}'
+                    custom_dest: 'out/images/{%= width %}'
                 }]
             }
         },
@@ -60,13 +52,6 @@ module.exports = function (grunt) {
                         src: "**/*.css",
                         dest: "./out/"
                     },
-                    // copy HTML to destination directory
-                    {
-                        expand: true,
-                        cwd: "src",
-                        src: "**/*.html",
-                        dest: "./out/"
-                    },
                     /* Copy the "fixed" images that don't go through processing into the images/directory */
                     {
                         expand: true,
@@ -77,12 +62,41 @@ module.exports = function (grunt) {
                 ]
             },
         },
+
+        replace: {
+            dev: {
+                options: {
+                    patterns: [
+                        {
+                            match: /srcset="(.*)\/(\w+.\w+)"/g,
+                            replacement: function (match, directory, filename) {
+                                const files = [];
+                                for (const size of SIZES) {
+                                    const file = `${directory}/${size.width}/${filename} ${size.width}w`;
+                                    files.push(file);
+                                }
+                                return `srcset="\n` + files.join(",\n") + `\n"`;
+                            }
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: "src",
+                        src: "**/*.html",
+                        dest: "./out/"
+                    }
+                ]
+            }
+        },
     });
 
     grunt.loadNpmTasks('grunt-responsive-images');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-mkdir');
-    grunt.registerTask('default', ['clean', 'copy', 'responsive_images']);
+    grunt.registerTask('default', ['clean', 'copy', 'responsive_images', 'replace']);
 
 };
