@@ -11,7 +11,7 @@ module.exports = function (grunt) {
     const SIZES = [
         {width: 320},
         {width: 640},
-        {width: 1024},
+        {width: 1024, quality: 60},
     ];
 
     grunt.initConfig({
