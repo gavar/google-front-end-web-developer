@@ -1,3 +1,5 @@
+require("../../grunt-patch");
+
 /*
  After you have changed the settings at "Your code goes here",
  run this with one of these options:
