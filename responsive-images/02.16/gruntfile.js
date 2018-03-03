@@ -13,15 +13,21 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     engine: 'im',
-                    sizes: [{
-                        /*
-                        Change these:
-
-                        width: ,
-                        suffix: ,
-                        quality:
-                        */
-                    }]
+                    sizes: [
+                        {
+                            name: "small",
+                            width: 320,
+                            height: 240,
+                        },
+                        {
+                            name: "medium",
+                            width: 640,
+                        },
+                        {
+                            name: "large",
+                            width: 1024,
+                        }
+                    ]
                 },
 
                 /*
@@ -30,37 +36,45 @@ module.exports = function (grunt) {
                 */
                 files: [{
                     expand: true,
-                    src: ['*.{gif,jpg,png}'],
-                    cwd: 'images_src/',
-                    dest: 'images/'
+                    cwd: 'src',
+                    src: ['images/*.{gif,jpg,png}'],
+                    custom_dest: 'out/images/{%= name %}'
                 }]
             }
         },
 
-        /* Clear out the images directory if it exists */
+        /* Clear the destination directory if it exists */
         clean: {
             dev: {
-                src: ['images'],
+                src: ['out'],
             },
         },
 
-        /* Generate the images directory if it is missing */
-        mkdir: {
-            dev: {
-                options: {
-                    create: ['images']
-                },
-            },
-        },
-
-        /* Copy the "fixed" images that don't go through processing into the images/directory */
         copy: {
             dev: {
-                files: [{
-                    expand: true,
-                    src: 'images_src/fixed/*.{gif,jpg,png}',
-                    dest: 'images/'
-                }]
+                files: [
+                    // copy CSS to destination directory
+                    {
+                        expand: true,
+                        cwd: "src",
+                        src: "**/*.css",
+                        dest: "./out/"
+                    },
+                    // copy HTML to destination directory
+                    {
+                        expand: true,
+                        cwd: "src",
+                        src: "**/*.html",
+                        dest: "./out/"
+                    },
+                    /* Copy the "fixed" images that don't go through processing into the images/directory */
+                    {
+                        expand: true,
+                        cwd: 'src',
+                        src: 'images/fixed/*.{gif,jpg,png}',
+                        dest: './out/'
+                    }
+                ]
             },
         },
     });
@@ -69,6 +83,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-mkdir');
-    grunt.registerTask('default', ['clean', 'mkdir', 'copy', 'responsive_images']);
+    grunt.registerTask('default', ['clean', 'copy', 'responsive_images']);
 
 };
