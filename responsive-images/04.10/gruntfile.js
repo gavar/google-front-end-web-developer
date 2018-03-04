@@ -11,9 +11,9 @@ require("../../grunt-patch");
 module.exports = function (grunt) {
 
     const SIZES = [
-        {width: 320},
-        {width: 640},
-        {width: 1024, quality: 60},
+        {width: 400},
+        {width: 800, quality: 70},
+        {width: 1600, quality: 60},
     ];
 
     grunt.initConfig({
@@ -71,18 +71,34 @@ module.exports = function (grunt) {
         },
 
         replace: {
-            html: {
+            picture: {
                 options: {
                     patterns: [
                         {
-                            match: /srcset="(.*)\/(\w+.\w+)"/g,
-                            replacement: function (match, directory, filename) {
-                                const files = [];
-                                for (const size of SIZES) {
-                                    const file = `${directory}/${size.width}/${filename} ${size.width}w`;
-                                    files.push(file);
+                            match: /(<img src=")(.*)\/(\w+.\w+)(.*>)/g,
+                            replacement: function (match, prefix, directory, filename, suffix) {
+
+                                const sources = [];
+                                for (let i = SIZES.length - 2; i >= 0; i--) {
+                                    const size = SIZES[i];
+                                    const size2x = SIZES[i + 1];
+                                    const media = `(min-width: ${size.width}px)`;
+                                    const src = `${directory}/${size.width}/${filename}`;
+                                    const src2x = `${directory}/${size2x.width}/${filename}`;
+                                    const source = `<source media="${media}" srcset="${src2x} 2x, ${src}">`;
+                                    sources.push(source);
                                 }
-                                return `srcset="\n` + files.join(",\n") + `\n"`;
+
+                                const min = SIZES[0];
+                                const src = `${directory}/${min.width}/${filename}`;
+                                const img = prefix + src + suffix;
+
+                                const html = [];
+                                html.push(`<picture>`);
+                                html.push(sources.join("\n"));
+                                html.push(img);
+                                html.push(`</picture>`);
+                                return html.join("\n");
                             }
                         }
                     ]
