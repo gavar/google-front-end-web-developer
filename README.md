@@ -11,8 +11,8 @@ Web Foundations    | Common Responsive Patterns: Project Update Part 2     | [li
 Web Foundations    | Optimizations: Final Project Updates                  | [link][U1-L15#10-code] | [view][U1-L15#10-view] |
 Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [link][U1-L16#02-code] | [view][U1-L16#02-view] |
 Responsive Images  | Units, Formats, Environments:  Project Part 1         | [link][E1-L02#16-code] | [view][E1-L02#16-view] |
-Responsive Images  | Images with Markup:            Project Part 2         | [link][E1-L03#14-code] | [view][E1-L03#14-view] |
-Responsive Images  | Full Responsiveness:           Project Part 3         | [link][E1-L04#10-code] | [view][E1-L04#10-view] |
+Responsive Images  | Images with Markup: Project Part 2                    | [link][E1-L03#14-code] | [view][E1-L03#14-view] |
+Responsive Images  | Full Responsiveness: Project Part 3                   | [link][E1-L04#10-code] | [view][E1-L04#10-view] |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
