@@ -10,6 +10,9 @@ Web Foundations    | Common Responsive Patterns: Combining Fluid Layouts   | [li
 Web Foundations    | Common Responsive Patterns: Project Update Part 2     | [link][U1-L14#11-code] | [view][U1-L14#11-view] |
 Web Foundations    | Optimizations: Final Project Updates                  | [link][U1-L15#10-code] | [view][U1-L15#10-view] |
 Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [link][U1-L16#02-code] | [view][U1-L16#02-view] |
+Responsive Images  | Units, Formats, Environments:  Project Part 1         | [link][E1-L02#16-code] | [view][E1-L02#16-view] |
+Responsive Images  | Images with Markup:            Project Part 2         | [link][E1-L03#14-code] | [view][E1-L03#14-view] |
+Responsive Images  | Full Responsiveness:           Project Part 3         | [link][E1-L04#10-code] | [view][E1-L04#10-view] |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -24,6 +27,11 @@ Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [li
 - [x] Web Foundations: Optimizations (2h)
 - [x] Web Foundations: Making Sites Responsive: Resume Site on Mobile (45min)
 - [x] Web Foundations: Writing READMEs (2h)
+- [x] Responsive Images: Getting Up and Running (2h)
+- [x] Responsive Images: Units, Formats, Environments (3h)
+- [x] Responsive Images: Images with Markup (3h)
+- [x] Responsive Images: Full Responsiveness (2h)
+#### week #4: 05.03 - 11.03
 - [ ] Web Foundations: Build a Portfolio Site (project)
 
 ### Udacity Frontend Nanodegree Style Guide
@@ -50,3 +58,12 @@ Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [li
 
 [U1-L16#02-code]: web-foundations/16.02
 [U1-L16#02-view]: https://gavar.github.io/google-front-end-web-developer/web-foundations/16.02/index.html
+
+[E1-L02#16-code]: responsive-images/02.16
+[E1-L02#16-view]: https://gavar.github.io/google-front-end-web-developer/responsive-images/02.16/index.html
+
+[E1-L03#14-code]: responsive-images/03.14
+[E1-L03#14-view]: https://gavar.github.io/google-front-end-web-developer/responsive-images/03.14/index.html
+
+[E1-L04#10-code]: responsive-images/04.10
+[E1-L04#10-view]: https://gavar.github.io/google-front-end-web-developer/responsive-images/04.10/index.html
