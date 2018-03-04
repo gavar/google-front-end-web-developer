@@ -18,7 +18,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         responsive_images: {
-            dev: {
+            images: {
                 options: {
                     engine: 'im',
                     sizes: SIZES
@@ -39,22 +39,27 @@ module.exports = function (grunt) {
 
         /* Clear the destination directory if it exists */
         clean: {
-            dev: {
+            out: {
                 src: ['out'],
             },
         },
 
         copy: {
-            dev: {
+            // copy CSS to destination directory
+            css: {
                 files: [
-                    // copy CSS to destination directory
                     {
                         expand: true,
                         cwd: "src",
                         src: "**/*.css",
                         dest: "./out/"
                     },
-                    /* Copy the "fixed" images that don't go through processing into the images/directory */
+                ]
+            },
+
+            /* Copy the "fixed" images that don't go through processing into the images/directory */
+            fixed: {
+                files: [
                     {
                         expand: true,
                         cwd: 'src',
@@ -66,7 +71,7 @@ module.exports = function (grunt) {
         },
 
         replace: {
-            dev: {
+            html: {
                 options: {
                     patterns: [
                         {
@@ -92,10 +97,30 @@ module.exports = function (grunt) {
                 ]
             }
         },
+
+        watch: {
+            css: {
+                files: ['src/**/*css'],
+                tasks: ['copy:css'],
+            },
+            fixed: {
+                files: ['src/images/fixed/*'],
+                tasks: ['copy:fixed'],
+            },
+            html: {
+                files: ['src/**/*html'],
+                tasks: ['replace:html'],
+            },
+            images: {
+                files: ['src/images/*'],
+                tasks: ['responsive_images'],
+            },
+        }
     });
 
     grunt.loadNpmTasks('grunt-responsive-images');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-mkdir');
