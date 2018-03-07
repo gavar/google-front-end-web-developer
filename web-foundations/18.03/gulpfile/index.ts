@@ -71,12 +71,20 @@ function pages() {
 }
 gulp.task(pages);
 
+/** Compile assets. */
+function assets() {
+    return gulp.src(["./src/assets/**/*"])
+        .pipe(gulp.dest("./dist/assets"));
+}
+gulp.task(assets);
+
 /** All tasks sequence. */
 gulp.task("default", series(
     clean,
     parallel(
         pages,
-        style
+        style,
+        assets,
     )
 ));
 
@@ -84,5 +92,6 @@ gulp.task("default", series(
 function watch() {
     gulp.watch("./src/**/*.hbs", pages);
     gulp.watch("./src/**/*.scss", style);
+    gulp.watch("./src/assets/*", assets);
 }
 gulp.task("watch", gulp.series("default", watch));
