@@ -1,15 +1,15 @@
 import * as del from "del";
 import * as gulp from "gulp";
 import {parallel, series} from "gulp";
+import * as autoprefixer from "gulp-autoprefixer";
 import * as sass from "gulp-sass";
 import * as Handlebars from 'handlebars';
 import * as layouts from 'handlebars-layouts';
 import * as registrar from "handlebars-registrar";
 import * as path from "path";
-import * as autoprefixer from "gulp-autoprefixer";
 import {isString} from "util";
 import {TaskCallback} from "./core";
-import {HandlebarsRendererStream} from "./tools";
+import {beautify, render} from "./tools";
 
 /** Clean previous compilation files. */
 function clean(done: TaskCallback) {
@@ -26,6 +26,7 @@ function style(): NodeJS.ReadWriteStream {
             ],
         }))
         .pipe(autoprefixer())
+        .pipe(beautify.css())
         .pipe(gulp.dest('./dist'));
 }
 gulp.task(style);
@@ -67,7 +68,7 @@ function pages() {
     });
 
     return gulp.src("./src/app/**/*.hbs")
-        .pipe(new HandlebarsRendererStream({handlebars: handlebars}))
+        .pipe(render.handlebars({handlebars: handlebars}))
         .pipe(gulp.dest('./dist'));
 }
 gulp.task(pages);
