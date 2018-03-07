@@ -7,4 +7,19 @@
   }
 
   @include mat-base-typography($config, $selector);
+
+  // normalize typography
+  @mixin normalize-typography() {
+    h1, h2, h3, h4, h5 {
+      margin: 0;
+    }
+  }
+
+  @if ($selector != "") {
+    #{$selector} {
+      @include normalize-typography();
+    }
+  } @else {
+    @include normalize-typography();
+  }
 }
