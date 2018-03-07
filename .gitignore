@@ -126,3 +126,6 @@ typings/
 
 ### Yarn ###
 yarn.lock
+
+### custom ###
+\#*
