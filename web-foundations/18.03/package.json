@@ -1,0 +1,33 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "portfolio website of Max Stankevich",
+  "main": "index.js",
+  "author": "Max Stankevich",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/del": "^3.0.0",
+    "@types/gulp": "^4.0.0",
+    "@types/gulp-sass": "^0.0.31",
+    "@types/gulp-util": "^3.0.34",
+    "@types/handlebars": "^4.0.36",
+    "@types/js-beautify": "^0.0.31",
+    "@types/node": "^9.4.6",
+    "@types/vinyl": "^2.0.2",
+    "commondir": "^1.0.1",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-handlebars-render": "^0.0.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-util": "^3.0.8",
+    "handlebars": "^4.0.11",
+    "handlebars-layouts": "^3.1.4",
+    "handlebars-registrar": "^1.5.2",
+    "js-beautify": "^1.7.5",
+    "ts-node": "^5.0.1",
+    "tslib": "^1.9.0",
+    "typescript": "^2.7.2",
+    "vinyl": "^2.1.0"
+  }
+}
