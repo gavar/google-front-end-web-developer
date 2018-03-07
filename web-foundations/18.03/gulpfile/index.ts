@@ -48,10 +48,12 @@ function pages() {
         ],
         bustCache: true,
         parsePartialName: function (file) {
-            const extension = path.extname(file.path);
+            let name = file.path;
 
-            // remove extension name
-            let name = file.path.slice(0, -extension.length);
+            // remove extension / category name
+            const index = name.indexOf(".");
+            if (index > 0)
+                name = name.substring(0, index);
 
             // use 'node style' by removing '.../index'
             if (name.endsWith("/index"))

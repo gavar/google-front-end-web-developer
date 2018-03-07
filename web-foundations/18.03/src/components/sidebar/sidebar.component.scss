@@ -33,12 +33,10 @@
 
 .person-subtitle {
   display: flex;
-  //text-align: left;
   justify-content: center;
 
   * {
     flex-grow: 1;
-    //padding: 0 10px;
   }
 
   h2 {
