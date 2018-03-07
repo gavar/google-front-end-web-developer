@@ -6,6 +6,7 @@ import * as Handlebars from 'handlebars';
 import * as layouts from 'handlebars-layouts';
 import * as registrar from "handlebars-registrar";
 import * as path from "path";
+import * as autoprefixer from "gulp-autoprefixer";
 import {isString} from "util";
 import {TaskCallback} from "./core";
 import {HandlebarsRendererStream} from "./tools";
@@ -24,6 +25,7 @@ function style(): NodeJS.ReadWriteStream {
                 "./src",
             ],
         }))
+        .pipe(autoprefixer())
         .pipe(gulp.dest('./dist'));
 }
 gulp.task(style);

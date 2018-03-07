@@ -9,6 +9,7 @@
   "devDependencies": {
     "@types/del": "^3.0.0",
     "@types/gulp": "^4.0.0",
+    "@types/gulp-autoprefixer": "^0.0.31",
     "@types/gulp-sass": "^0.0.31",
     "@types/gulp-util": "^3.0.34",
     "@types/handlebars": "^4.0.36",
@@ -18,6 +19,7 @@
     "commondir": "^1.0.1",
     "del": "^3.0.0",
     "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^5.0.0",
     "gulp-handlebars-render": "^0.0.1",
     "gulp-sass": "^3.1.0",
     "gulp-util": "^3.0.8",
