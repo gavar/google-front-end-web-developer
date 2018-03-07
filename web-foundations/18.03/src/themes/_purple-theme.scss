@@ -1,0 +1,12 @@
+@import "core/theming/theming";
+@import "components/componenets-theme";
+@import "components/componenets-typography";
+
+// define a theme.
+$primary: mat-palette($mat-deep-purple);
+$accent: mat-palette($mat-orange);
+$theme: mat-dark-theme($primary, $accent);
+
+// include theme styles for the components.
+@include components-theme($theme);
+@include components-typography();
