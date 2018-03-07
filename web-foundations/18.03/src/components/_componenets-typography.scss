@@ -1,0 +1,10 @@
+@import 'core/typography/typography';
+
+// includes all of the typographic styles.
+@mixin components-typography($config: null,  $selector: "") {
+  @if $config == null {
+    $config: mat-typography-config();
+  }
+
+  @include mat-base-typography($config, $selector);
+}
