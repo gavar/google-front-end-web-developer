@@ -22,7 +22,6 @@ function style(): NodeJS.ReadWriteStream {
         .pipe(sass({
             includePaths: [
                 "./src",
-                "./src/styles.scss"
             ],
         }))
         .pipe(gulp.dest('./dist'));
