@@ -31,8 +31,16 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 - [x] Responsive Images: Units, Formats, Environments (3h)
 - [x] Responsive Images: Images with Markup (3h)
 - [x] Responsive Images: Full Responsiveness (2h)
+
 #### week #4: 05.03 - 11.03
 - [ ] Web Foundations: Build a Portfolio Site (project)
+
+#### week #5: 12.03 - 18.03
+- [ ] Web Programming JS: Lesson 8: Syntax (2h)
+- [ ] Web Programming JS: Shell Workshop (2h)
+- [ ] Web Programming JS: What is Version Control? (1h 15m)
+- [ ] Web Programming JS: Create A Git Repo (1h 15m)
+- [ ] Web Programming JS: Review a Repo's History (2h)
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
