@@ -1,0 +1,17 @@
+<article class="project">
+    <!-- project view -->
+    <div class="project-text">
+        <div class="project-title">{{project.title}}</div>
+        <div class="project-description">
+            {{{project.post.content}}}
+        </div>
+        <div class="project-technologies">
+            <div class="technologies-title">Technologies</div>
+            {{> "components/tech-tags" technologies=project.technologies }}
+        </div>
+    </div>
+    <!-- project image -->
+    <div class="project-image">
+        <img src="{{project.post.image}}" alt="{{project.name}} project picture">
+    </div>
+</article>

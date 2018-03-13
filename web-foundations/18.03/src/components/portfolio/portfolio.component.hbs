@@ -1,0 +1,11 @@
+<section class="portfolio-section">
+    <h1 class="portfolio-title">Portfolio</h1>
+    <!-- timeline -->
+    <div class="timeline portfolio-timeline">
+        {{#each projects as |project|}}
+            <div class="timeline-item">
+                {{> "components/project/project-post" project=project }}
+            </div>
+        {{/each}}
+    </div>
+</section>
