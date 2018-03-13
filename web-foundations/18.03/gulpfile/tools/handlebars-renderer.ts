@@ -23,7 +23,8 @@ class HandlebarsRenderer extends TransformStream {
 
         // render
         const template = handlebars.compile(buffer.toString());
-        let html = template({});
+        let data = resolveData(file.path) || {};
+        let html = template(data);
 
         // apply
         buffer = new Buffer(html);
@@ -33,6 +34,20 @@ class HandlebarsRenderer extends TransformStream {
     }
 }
 
+const dataTypes = [".json", ".data", ""];
+function resolveData(templatePath: string): any {
+    for (const dataType of dataTypes) {
+        try {
+            const filePath = gutil.replaceExtension(templatePath, dataType);
+            const absolutePath = require.resolve(filePath);
+            return require(absolutePath);
+        }
+        catch (e) {
+            /* continue */
+        }
+    }
+    console.log(`template ${templatePath} does not provide data to render`);
+}
 
 export function render(options?: HandlebarsRendererOptions) {
     return new HandlebarsRenderer(options);
