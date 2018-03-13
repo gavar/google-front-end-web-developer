@@ -9,6 +9,7 @@ import * as registrar from "handlebars-registrar";
 import * as path from "path";
 import {isString} from "util";
 import {TaskCallback} from "./core";
+import {TaskInfo} from "./core/types";
 import {beautify, render} from "./tools";
 
 /** Clean previous compilation files. */
@@ -75,6 +76,16 @@ function pages() {
 }
 gulp.task(pages);
 
+/** Clears NodeJS modules cache. */
+function clearNodeCache(done: TaskCallback) {
+    const cache = require.cache;
+    for (const key of Object.getOwnPropertyNames(cache))
+        delete cache[key];
+
+    done();
+}
+(clearNodeCache as TaskInfo).displayName = "clear-node-cache";
+
 /** Compile assets. */
 function images() {
     return gulp.src(["./src/app/img/**/*"])
@@ -97,5 +108,6 @@ function watch() {
     gulp.watch("./src/**/*.hbs", pages);
     gulp.watch("./src/**/*.scss", style);
     gulp.watch("./src/img/*", images);
+    gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
 }
 gulp.task("watch", gulp.series("default", watch));
