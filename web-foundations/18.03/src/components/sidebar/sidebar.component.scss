@@ -1,7 +1,13 @@
+$navbar-width: 225px;
+
 .sidebar {
-  width: 100%;
-  max-width: fit-content;
-  height: 100vh;
+  position: fixed;
+  width: $navbar-width;
+  height: 100%;
+}
+
+.content {
+  margin-left: $navbar-width;
 }
 
 .sidebar-inner {
