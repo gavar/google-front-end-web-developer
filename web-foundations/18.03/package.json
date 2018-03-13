@@ -6,6 +6,9 @@
   "author": "Max Stankevich",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "serve": "browser-sync start --server --serveStatic ./dist --files ./dist/**/*"
+  },
   "devDependencies": {
     "@types/del": "^3.0.0",
     "@types/gulp": "^4.0.0",
