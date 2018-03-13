@@ -21,10 +21,19 @@ class HandlebarsRenderer extends TransformStream {
     /** @inheritDoc */
     transformBuffer(buffer: Buffer, file: File): Buffer | Promise<Buffer> {
 
+        // data
+        const data = resolveData(file.path) || {};
+        const options = {
+            data: {
+                intl: {
+                    locales: "en-US"
+                }
+            }
+        };
+
         // render
-        const template = handlebars.compile(buffer.toString());
-        let data = resolveData(file.path) || {};
-        let html = template(data);
+        const template = this.handlebars.compile(buffer.toString());
+        const html = template(data, options as any);
 
         // apply
         buffer = new Buffer(html);
