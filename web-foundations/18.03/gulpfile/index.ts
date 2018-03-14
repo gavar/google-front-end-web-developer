@@ -21,7 +21,7 @@ gulp.task(clean);
 
 /** Compile page styles */
 function style(): NodeJS.ReadWriteStream {
-    return gulp.src('./src/app/**/*.scss')
+    return gulp.src('./src/app/**/*.+(css|scss)')
         .pipe(sass({
             includePaths: [
                 "./src",
@@ -89,9 +89,9 @@ function clearNodeCache(done: TaskCallback) {
 }
 (clearNodeCache as TaskInfo).displayName = "clear-node-cache";
 
-/** Compile assets. */
+/** Copy images. */
 function images() {
-    return gulp.src(["./src/app/img/**/*"])
+    return gulp.src("./src/app/img/**/*")
         .pipe(gulp.dest("./dist/img"));
 }
 gulp.task(images);
@@ -109,8 +109,8 @@ gulp.task("default", series(
 // watch for changes
 function watch() {
     gulp.watch("./src/**/*.hbs", pages);
-    gulp.watch("./src/**/*.scss", style);
-    gulp.watch("./src/img/*", images);
+    gulp.watch("./src/**/*.+(css|scss)", style);
+    gulp.watch("./src/app/img/**/*", images);
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
 }
 gulp.task("watch", gulp.series("default", watch));
