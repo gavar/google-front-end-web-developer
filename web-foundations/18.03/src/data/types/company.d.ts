@@ -1,4 +1,4 @@
 export interface Company {
     name: string;
-    url: string;
+    url?: string;
 }

@@ -7,7 +7,8 @@ export interface Project {
     url?: string;
     dateFrom: Date;
     dateTo: Date;
-    company?: Company;
-    technologies?: Technology[];
+    company?: Company | Company[];
+    role: string,
+    technologies: Technology[];
     post: Post;
 }
