@@ -1,1 +1,21 @@
 // Global Styles
+*, :after, :before {
+  box-sizing: inherit
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px/1.6 Roboto, Helvetica, sans-serif;
+  font-weight: 300
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

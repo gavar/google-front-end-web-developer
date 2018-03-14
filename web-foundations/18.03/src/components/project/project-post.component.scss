@@ -4,4 +4,26 @@
   line-height: 1;
 }
 
+.technologies-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  padding-bottom: .5em;
+}
+
+.project > * {
+  display: inline-block;
+}
+
+.project-text {
+  vertical-align: top;
+  max-width: 70%;
+}
+
+.project-image {
+  max-width: calc(30% - 5px);
+  img {
+    max-width: 100%;
+  }
+}
+
 @import "components/tech-tags/tech-tags.component";

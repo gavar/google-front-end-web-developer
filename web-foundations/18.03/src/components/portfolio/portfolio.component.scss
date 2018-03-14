@@ -1,11 +1,83 @@
+$timeline-width: 130px;
+$timeline-padding-right: 15px;
+$portfolio-section-padding: 50px;
+
 .portfolio-section {
-  padding: 50px;
+  position: relative;
+  padding: $portfolio-section-padding;
 }
 
 .portfolio-title {
   font-size: 36px;
   font-weight: 400;
   text-transform: uppercase;
+  margin-bottom: 15px;
+  line-height: 1;
+}
+
+.portfolio-timeline {
+  position: relative;
+}
+
+.timeline-entry {
+  position: relative;
+  width: auto;
+}
+
+.timeline-date {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+
+  text-align: right;
+  font-style: italic;
+
+  width: $timeline-width;
+  padding: 32px $timeline-padding-right;
+  margin-left: -$portfolio-section-padding;
+  border-right: 1px solid;
+
+  &:after {
+    content: " ";
+    position: absolute;
+    top: 42.5px;
+    right: 7px * -0.5;
+    width: 7px;
+    height: 7px;
+  }
+}
+
+.timeline-item {
+  width: auto;
+  max-width: 800px;
+  border-top: 1px solid;
+  position: relative;
+  padding: 30px 30px 0 0;
+  margin-left: 30px;
+  margin-right: 30px;
+  left: $timeline-width - $portfolio-section-padding;
+}
+
+.timeline-entry:first-child {
+
+  .timeline-item {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .timeline-date {
+    padding-top: 0;
+    margin-top: 12.5px;
+    &:after {
+      top: 0;
+    }
+  }
+
+  .timeline-date-text {
+    display: block;
+    margin-top: -10px;
+  }
 }
 
 @import "components/project/project-post.component";
