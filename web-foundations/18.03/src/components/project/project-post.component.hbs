@@ -1,7 +1,15 @@
 <article class="project">
     <!-- project view -->
     <div class="project-text">
-        <div class="project-title">{{project.title}}</div>
+        <div class="project-title">
+            {{#if project.url}}
+                <a rel="nofollow" target="_blank" href="{{project.url}}">
+                    {{project.title}}<i class="fas fa-link"></i>
+                </a>
+            {{else}}
+                <h2>{{project.title}}</h2>
+            {{/if}}
+        </div>
         <div class="project-description">
             {{{project.post.content}}}
         </div>

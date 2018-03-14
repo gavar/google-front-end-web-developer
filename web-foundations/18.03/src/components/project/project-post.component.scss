@@ -1,7 +1,17 @@
-.project-title {
+.project-title > * {
   font-weight: 400;
   font-size: 30px;
   line-height: 1;
+}
+
+.project-title a:hover {
+  text-decoration: none;
+}
+
+.project-title svg {
+  margin-left: 5px;
+  margin-bottom: 3px;
+  font-size: 20px;
 }
 
 .technologies-title {
