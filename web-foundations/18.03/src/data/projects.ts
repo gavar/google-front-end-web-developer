@@ -88,8 +88,17 @@ export const KonsusProject: Project = {
             }]
         },
         content: `<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
-</p>`,
+<strong>Konsus</strong> is the world's first On-Demand Freelance Business Support service, available
+24/7 via chat. Konsus participated in the 2016 winter batch of <a rel="nofollow"
+target="_blank" href="http://www.ycombinator.com/">Y Combinator</a> and raised $1.5 million.
+</p>
+<strong>Tech Achievements:</strong>
+<ul>
+    <li>migration from NodeJS to Java Spring server</li>
+    <li>cross-device seamless authorization</li>
+    <li>an invoicing system including automatic billing and work hours tracking</li>
+</ul>
+`,
     }
 };
 
@@ -131,10 +140,23 @@ export const HunterX: Project = {
             }]
         },
         content: `<p>
-Planet has gone wrong, and evil portals have opened with creatures to eliminate everyone. Main Hero - HunterX is a
-stylish guy who has come to save the planet and destroy all the evil creatures. 60th feet tall head demon named "Red",
-is leading the attack on humanity and has challenged all the mankind with clear intents to enslave the souls of mortals.
-</p>`,
+Planet has gone wrong and portals have been opened to evil creatures willing to conquer the
+world. Main Hero - HunterX is a stylish guy who has come to save the planet and destroy all
+the evil creatures. 60th feet tall head demon named "Red" is leading the attack on humanity
+and has challenged all the mankind with clear intents to enslave the souls of mortals.
+</p>
+<ul>
+  <li>UI powered by <a href="http://www.tasharen.com/?page_id=140">NGUI</a></li>
+  <li>Integrations:
+    <a rel="nofollow" target="_blank" href="http://www.giftiz.com/">Giftiz</a>,
+    <a rel="nofollow" target="_blank" href="https://www.heyzap.com/">heyZap</a>,
+    <a rel="nofollow" target="_blank" href="http://www.adcolony.com/">adColony</a>,
+    <a rel="nofollow" target="_blank" href="http://www.flurry.com/">Flurry</a>,
+    <a rel="nofollow" target="_blank" href="http://www.adbuddiz.com/">AdBuddiz</a>
+  </li>
+  <li>Platforms: Android, Standalone, Web Player</li>
+</ul>
+`,
     }
 };
 
