@@ -5,6 +5,7 @@ import * as autoprefixer from "gulp-autoprefixer";
 import * as sass from "gulp-sass";
 import * as Handlebars from 'handlebars';
 import * as HandlebarsIntl from 'handlebars-intl';
+import * as HandlebarsHelpers from 'handlebars-helpers';
 import * as layouts from 'handlebars-layouts';
 import * as registrar from "handlebars-registrar";
 import * as path from "path";
@@ -42,6 +43,7 @@ function pages() {
     // handlebars setup
     handlebars.registerHelper(layouts(handlebars));
     HandlebarsIntl.registerWith(handlebars);
+    HandlebarsHelpers.comparison({handlebars: handlebars});
 
     registrar(handlebars, {
         cwd: "./src",
