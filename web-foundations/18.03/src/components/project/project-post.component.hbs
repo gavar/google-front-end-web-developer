@@ -21,8 +21,21 @@
             {{> "components/tech-tags" technologies=project.technologies }}
         </div>
     </div>
-    <!-- project image -->
-    <div class="project-image">
-        <img src="{{project.post.image}}" alt="{{project.name}} project picture">
+
+    <!-- project gallery -->
+    <div class="project-gallery {{project.post.gallery.orientation}}">
+        <div class="phone-box">
+            {{#each project.post.gallery.items as |media|}}
+                {{#is media.type "image"}}
+                    <!-- project image -->
+                    <img src="{{media.href}}" alt="{{../project.title}} project picture">
+                {{/is}}
+                {{#is media.type "video"}}
+                    <video controls>
+                        <source src="{{media.href}}" type="video/mp4">
+                    </video>
+                {{/is}}
+            {{/each}}
+        </div>
     </div>
 </article>

@@ -1,4 +1,6 @@
+import {Gallery} from "./gallery";
+
 export interface Post {
-    image: string;
+    gallery: Gallery;
     content: string;
 }

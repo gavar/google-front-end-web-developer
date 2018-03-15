@@ -14,7 +14,13 @@ export const Fronted: Project = {
     role: "Backend Developer",
     technologies: [Java, Spring, MySQL, Maven, NodeJS, TypeScript, Handlebars, Gulp],
     post: {
-        image: "https://placeimg.com/270/480/tech",
+        gallery: {
+            orientation: "iphone-6-horizontal",
+            items: [{
+                type: "image",
+                href: "https://placeimg.com/225/400/tech"
+            }]
+        },
         content: `<p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
 </p>`,
@@ -30,7 +36,13 @@ export const MyCountryAR: Project = {
     company: GameInsight,
     technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
     post: {
-        image: "https://placeimg.com/270/480/tech",
+        gallery: {
+            orientation: "iphone-6-horizontal",
+            items: [{
+                type: "image",
+                href: "https://placeimg.com/225/400/tech"
+            }]
+        },
         content: `<p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
 </p>`,
@@ -46,7 +58,13 @@ export const Moana: Project = {
     role: "Developer / Tech Lead",
     technologies: [Unity3D, CSharp, Java, TypeScript, AWSLambda, Serverless, Jenkins, JIRA],
     post: {
-        image: "https://placeimg.com/270/480/tech",
+        gallery: {
+            orientation: "iphone-6-horizontal",
+            items: [{
+                type: "image",
+                href: "https://placeimg.com/225/400/tech"
+            }]
+        },
         content: `<p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
 </p>`,
@@ -62,7 +80,13 @@ export const KonsusProject: Project = {
     role: "Full Stack Web Developer",
     technologies: [Java, Spring, JavaScript, TypeScript, React, NodeJS, Webpack],
     post: {
-        image: "https://placeimg.com/270/480/tech",
+        gallery: {
+            orientation: "iphone-6-horizontal",
+            items: [{
+                type: "image",
+                href: "https://placeimg.com/225/400/tech"
+            }]
+        },
         content: `<p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
 </p>`,
@@ -77,7 +101,13 @@ export const MyCountry3D: Project = {
     role: "Developer / Tech Lead",
     technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
     post: {
-        image: "https://placeimg.com/270/480/tech",
+        gallery: {
+            orientation: "iphone-6-horizontal",
+            items: [{
+                type: "image",
+                href: "https://placeimg.com/225/400/tech"
+            }]
+        },
         content: `<p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
 </p>`,
@@ -92,9 +122,17 @@ export const HunterX: Project = {
     role: "Developer / Co-Founder",
     technologies: [Unity3D, CSharp],
     post: {
-        image: "https://placeimg.com/270/480/tech",
+        gallery: {
+            orientation: "horizontal",
+            items: [{
+                type: "video",
+                href: "assets/projects/hunter-x/hunter-x-trailer.mp4"
+            }]
+        },
         content: `<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet purus gravida quis. Sit amet justo donec enim diam vulputate ut pharetra. Sed cras ornare arcu dui. Pulvinar pellentesque habitant morbi tristique senectus. Sit amet consectetur adipiscing elit ut. Sed egestas egestas fringilla phasellus faucibus. Ut aliquam purus sit amet luctus. Sem integer vitae justo eget magna. Quis vel eros donec ac odio tempor. Aliquam eleifend mi in nulla posuere sollicitudin aliquam. Mi proin sed libero enim sed faucibus turpis in. Scelerisque eleifend donec pretium vulputate.
+Planet has gone wrong, and evil portals have opened with creatures to eliminate everyone. Main Hero - HunterX is a
+stylish guy who has come to save the planet and destroy all the evil creatures. 60th feet tall head demon named "Red",
+is leading the attack on humanity and has challenged all the mankind with clear intents to enslave the souls of mortals.
 </p>`,
     }
 };

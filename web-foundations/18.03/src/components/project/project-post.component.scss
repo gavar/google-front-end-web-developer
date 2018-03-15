@@ -1,3 +1,13 @@
+.project {
+  display: flex;
+  align-content: center;
+  margin-right: 10px;
+}
+
+.project > * {
+  flex-grow: 1;
+}
+
 .project-title > * {
   font-weight: 400;
   font-size: 30px;
@@ -14,7 +24,7 @@
   font-size: 18px;
 }
 
-.project-role{
+.project-role {
   font-weight: 300;
   font-size: 20px;
 }
@@ -31,13 +41,70 @@
 
 .project-text {
   vertical-align: top;
-  max-width: 70%;
+  max-width: calc(100% - 50% - 5px);
 }
 
-.project-image {
-  max-width: calc(30% - 5px);
-  img {
-    max-width: 100%;
+.project-video {
+  width: 100%;
+  height: 100%;
+}
+
+// aspect box, vertical by default (9:16)
+.project-gallery {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+  max-width: 230px;
+  //margin-left: 13.55%;
+  //margin-right: 13.55%;
+  //margin-left: 10px;
+  //margin-right: 10px;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: url("../assets/iphone-7-vertical.png") no-repeat;
+  background-size: 100% 100%;
+
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: (625 / 310) * 100%; // 9:16
+  }
+}
+
+.phone-box {
+
+  top: 0;
+  left: 0;
+  position: absolute;
+
+  padding: 26.1% 7% 23.5% 7%;
+
+  width: 100%;
+  height: 100%;
+
+  img, video {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// aspect box, horizontal (16:9)
+.project-gallery.horizontal {
+
+  max-width: 463.7px;
+  background: url("../assets/iphone-7-horizontal.png") no-repeat;
+  background-size: 100% 100%;
+
+  &:before {
+    padding-top: (310 / 625) * 100%; // 16:9
+  }
+
+  .phone-box {
+    padding: 3.6% 11% 3.3% 11.5%;
   }
 }
 
