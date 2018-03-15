@@ -15,7 +15,7 @@ export const Fronted: Project = {
     technologies: [Java, Spring, MySQL, Maven, NodeJS, TypeScript, Handlebars, Gulp],
     post: {
         gallery: {
-            orientation: "iphone-6-horizontal",
+            boxType: "phone",
             items: [{
                 type: "image",
                 href: "https://placeimg.com/225/400/tech"
@@ -37,7 +37,7 @@ export const MyCountryAR: Project = {
     technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
     post: {
         gallery: {
-            orientation: "iphone-6-horizontal",
+            boxType: "phone",
             items: [{
                 type: "image",
                 href: "https://placeimg.com/225/400/tech"
@@ -59,7 +59,7 @@ export const Moana: Project = {
     technologies: [Unity3D, CSharp, Java, TypeScript, AWSLambda, Serverless, Jenkins, JIRA],
     post: {
         gallery: {
-            orientation: "iphone-6-horizontal",
+            boxType: "phone",
             items: [{
                 type: "image",
                 href: "https://placeimg.com/225/400/tech"
@@ -81,10 +81,10 @@ export const KonsusProject: Project = {
     technologies: [Java, Spring, JavaScript, TypeScript, React, NodeJS, Webpack],
     post: {
         gallery: {
-            orientation: "iphone-6-horizontal",
+            boxType: "tablet",
             items: [{
                 type: "image",
-                href: "https://placeimg.com/225/400/tech"
+                href: "assets/projects/konsus/konsus-website-1.png"
             }]
         },
         content: `<p>
@@ -102,7 +102,7 @@ export const MyCountry3D: Project = {
     technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
     post: {
         gallery: {
-            orientation: "iphone-6-horizontal",
+            boxType: "phone",
             items: [{
                 type: "image",
                 href: "https://placeimg.com/225/400/tech"
@@ -123,6 +123,7 @@ export const HunterX: Project = {
     technologies: [Unity3D, CSharp],
     post: {
         gallery: {
+            boxType: "phone",
             orientation: "horizontal",
             items: [{
                 type: "video",

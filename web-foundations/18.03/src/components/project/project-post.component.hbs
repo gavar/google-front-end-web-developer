@@ -23,8 +23,8 @@
     </div>
 
     <!-- project gallery -->
-    <div class="project-gallery {{project.post.gallery.orientation}}">
-        <div class="phone-box">
+    <div class="project-gallery {{project.post.gallery.orientation}} {{project.post.gallery.boxType }}">
+        <div class="{{project.post.gallery.boxType }}-box">
             {{#each project.post.gallery.items as |media|}}
                 {{#is media.type "image"}}
                     <!-- project image -->
