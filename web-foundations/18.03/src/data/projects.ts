@@ -42,7 +42,7 @@ export const MyCountryAR: Project = {
             boxType: "phone",
             items: [{
                 type: "image",
-                href: "assets/projects/my-country-ar/my-country-ar-01.jpg"
+                href: "assets/projects/my-country-ar/my-country-ar-screen-5.jpg"
             }]
         },
         content: `<p>
@@ -79,10 +79,9 @@ export const Moana: Project = {
     post: {
         gallery: {
             boxType: "phone",
-            orientation: "horizontal",
             items: [{
                 type: "image",
-                href: "assets/projects/moana/moana-01.jpg"
+                href: "assets/projects/moana/moana-screen-1.jpg"
             }]
         },
         content: `<p>
