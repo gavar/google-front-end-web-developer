@@ -6,7 +6,11 @@
             <div class="timeline-entry">
                 <div class="timeline-date">
                     <time class="timeline-date-text">
-                        {{formatDate project.dateTo month="short" year="numeric"}}
+                        {{#compare ../this.now ">" project.dateTo}}
+                            {{formatDate project.dateTo month="short" year="numeric"}}
+                        {{else}}
+                            currently
+                        {{/compare}}
                     </time>
                 </div>
                 <div class="timeline-item">
