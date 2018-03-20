@@ -106,6 +106,13 @@ function assets() {
 }
 gulp.task(assets);
 
+/** Copy vendor files. */
+function vendor() {
+    return gulp.src("./src/app/vendor/**/*")
+        .pipe(gulp.dest("./dist/vendor"));
+}
+gulp.task(vendor);
+
 /** All tasks sequence. */
 gulp.task("default", series(
     clean,
