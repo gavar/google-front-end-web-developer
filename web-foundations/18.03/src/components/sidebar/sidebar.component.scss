@@ -1,4 +1,4 @@
-$navbar-width: 225px;
+$navbar-width: 265px;
 
 .sidebar {
   position: fixed;
@@ -61,4 +61,19 @@ $navbar-width: 225px;
 .person-subtitle-right {
   text-align: left;
   padding-left: 10px;
+}
+
+.person-social-links a {
+  font-size: 25px;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.person-info .email {
+  display: block;
+  margin-top: 5px;
+  padding-bottom: 0;
+  text-transform: lowercase;
+  color: inherit;
 }

@@ -11,4 +11,11 @@
     color: mat-color($foreground, text);
     background-color: mat-color($primary);
   }
+
+  .person-social-links a {
+    color: rgba(mat-color($foreground, text), .8);
+    &:hover {
+      color: mat-color($foreground, text);
+    }
+  }
 }
