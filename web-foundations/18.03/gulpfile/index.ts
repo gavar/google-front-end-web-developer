@@ -44,6 +44,7 @@ function pages() {
     handlebars.registerHelper(layouts(handlebars));
     HandlebarsIntl.registerWith(handlebars);
     HandlebarsHelpers.comparison({handlebars: handlebars});
+    HandlebarsHelpers.date({handlebars: handlebars});
 
     registrar(handlebars, {
         cwd: "./src",

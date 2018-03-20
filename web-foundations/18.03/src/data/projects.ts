@@ -9,7 +9,7 @@ export const Fronted: Project = {
     title: "Fronted",
     url: "http://fronted.com/",
     dateFrom: new Date(2017, 3),
-    dateTo: new Date(),
+    dateTo: dateAdd(new Date(), "day", 1),
     company: SafetyWing,
     role: "Backend Developer",
     technologies: [Java, Spring, MySQL, Maven, NodeJS, TypeScript, Handlebars, Gulp],
@@ -252,3 +252,31 @@ const projects = [
 projects.sort((a, b) => b.dateTo.getTime() - a.dateTo.getTime());
 
 export default projects;
+
+type TimeUnit = "year" | "month" | "day" | "hour" | "second";
+function dateAdd(date: Date, unit: TimeUnit, interval: number): Date {
+    date = new Date(date); //don't change original date
+    switch (unit.toLowerCase()) {
+        case 'year':
+            date.setFullYear(date.getFullYear() + interval);
+            break;
+        case 'month':
+            date.setMonth(date.getMonth() + interval);
+            break;
+        case 'day':
+            date.setDate(date.getDate() + interval);
+            break;
+        case 'hour':
+            date.setTime(date.getTime() + interval * 60 * 60 * 1000);
+            break;
+        case 'minute':
+            date.setTime(date.getTime() + interval * 60 * 1000);
+            break;
+        case 'second':
+            date.setTime(date.getTime() + interval * 1000);
+            break;
+        default :
+            throw new Error("unknown type unit: " + unit);
+    }
+    return date;
+}
