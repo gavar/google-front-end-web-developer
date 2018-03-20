@@ -140,4 +140,19 @@
   max-width: 225px;
 }
 
+.project-stores {
+  text-align: center;
+
+  a {
+    margin: 0 2px;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 155px;
+    object-fit: cover;
+  }
+}
+
 @import "components/tech-tags/tech-tags.component";

@@ -37,6 +37,12 @@ export const MyCountryAR: Project = {
     role: "Developer / Tech Lead",
     company: GameInsight,
     technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
+    apps: [
+        {
+            type: "app-store",
+            href: "https://itunes.apple.com/US/app/id1247796322",
+        }
+    ],
     post: {
         gallery: {
             boxType: "phone",
@@ -76,6 +82,20 @@ export const Moana: Project = {
     company: [GameInsight, Disney],
     role: "Developer / Tech Lead",
     technologies: [Unity3D, CSharp, Java, TypeScript, AWSLambda, Serverless, Jenkins, JIRA],
+    apps: [
+        {
+            type: "app-store",
+            href: "https://itunes.apple.com/app/moana-island-life/id1127517805",
+        },
+        {
+            type: "google-play",
+            href: "https://play.google.com/store/apps/details?id=com.disney.moanaislandlife_goo",
+        },
+        {
+            type: "amazon",
+            href: "https://www.amazon.com/Disney-Moana-Island-Life/dp/B01N6HRBC6",
+        }
+    ],
     post: {
         gallery: {
             boxType: "phone",
@@ -183,6 +203,12 @@ export const HunterX: Project = {
     company: TSG,
     role: "Developer / Co-Founder",
     technologies: [Unity3D, CSharp],
+    apps: [
+        {
+            type: "google-play",
+            href: "https://apkpure.com/hunterx-zombie-shooter/com.TSGStudio.HunterX",
+        }
+    ],
     post: {
         gallery: {
             boxType: "phone",
