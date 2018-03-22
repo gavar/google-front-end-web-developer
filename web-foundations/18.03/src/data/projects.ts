@@ -1,6 +1,6 @@
 import {Disney, GameInsight, Konsus, SafetyWing, TSG} from "./companies";
 import {
-    AWSLambda, CSharp, Gulp, Java, Jenkins, JIRA, Maven, MySQL, NodeJS, Serverless, Spring, TypeScript,
+    AWSLambda, CSharp, Gulp, Java, Jenkins, JIRA, Maven, MySQL, nodejs, Serverless, Spring, TypeScript,
     Handlebars, Unity3D, JavaScript, React, Webpack
 } from "./technologies";
 import {Project} from "./types";
@@ -12,7 +12,7 @@ export const Fronted: Project = {
     dateTo: dateAdd(new Date(), "day", 1),
     company: SafetyWing,
     role: "Backend Developer",
-    technologies: [Java, Spring, MySQL, Maven, NodeJS, TypeScript, Handlebars, Gulp],
+    technologies: [Java, Spring, MySQL, Maven, nodejs, TypeScript, Handlebars, Gulp],
     post: {
         gallery: {
             boxType: "wip",
@@ -130,7 +130,7 @@ export const KonsusProject: Project = {
     dateTo: new Date(2016, 9),
     company: Konsus,
     role: "Full Stack Web Developer",
-    technologies: [Java, Spring, JavaScript, TypeScript, React, NodeJS, Webpack],
+    technologies: [Java, Spring, JavaScript, TypeScript, React, nodejs, Webpack],
     post: {
         gallery: {
             boxType: "tablet",
