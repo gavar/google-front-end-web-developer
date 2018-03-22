@@ -15,7 +15,7 @@ export const Fronted: Project = {
     technologies: [Java, Spring, MySQL, Maven, nodejs, TypeScript, Handlebars, Gulp],
     post: {
         gallery: {
-            boxType: "wip",
+            boxType: "none wip",
             items: [{
                 type: "image",
                 href: "assets/wip-image.png"
