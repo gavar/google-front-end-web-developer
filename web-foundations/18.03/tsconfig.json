@@ -28,7 +28,7 @@
     "sourceMap": true,
     "target": "es2017",
     "baseUrl": ".",
-    "rootDir": "./packages/",
     "outDir": "./out/ts"
+    "rootDir": "./src/",
   }
 }
