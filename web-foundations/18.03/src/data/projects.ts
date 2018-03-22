@@ -48,6 +48,18 @@ export const MyCountryAR: Project = {
             boxType: "phone",
             items: [{
                 type: "image",
+                href: "assets/projects/my-country-ar/my-country-ar-screen-1.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/my-country-ar/my-country-ar-screen-2.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/my-country-ar/my-country-ar-screen-3.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/my-country-ar/my-country-ar-screen-4.jpg"
+            }, {
+                type: "image",
                 href: "assets/projects/my-country-ar/my-country-ar-screen-5.jpg"
             }]
         },
@@ -82,26 +94,34 @@ export const Moana: Project = {
     company: [GameInsight, Disney],
     role: "Developer / Tech Lead",
     technologies: [Unity3D, CSharp, Java, TypeScript, AWSLambda, Serverless, Jenkins, JIRA],
-    apps: [
-        {
-            type: "app-store",
-            href: "https://itunes.apple.com/app/moana-island-life/id1127517805",
-        },
-        {
-            type: "google-play",
-            href: "https://play.google.com/store/apps/details?id=com.disney.moanaislandlife_goo",
-        },
-        {
-            type: "amazon",
-            href: "https://www.amazon.com/Disney-Moana-Island-Life/dp/B01N6HRBC6",
-        }
-    ],
+    apps: [{
+        type: "app-store",
+        href: "https://itunes.apple.com/app/moana-island-life/id1127517805",
+    }, {
+        type: "google-play",
+        href: "https://play.google.com/store/apps/details?id=com.disney.moanaislandlife_goo",
+    }, {
+        type: "amazon",
+        href: "https://www.amazon.com/Disney-Moana-Island-Life/dp/B01N6HRBC6",
+    }],
     post: {
         gallery: {
             boxType: "phone",
             items: [{
                 type: "image",
                 href: "assets/projects/moana/moana-screen-1.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/moana/moana-screen-2.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/moana/moana-screen-3.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/moana/moana-screen-4.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/moana/moana-screen-5.jpg"
             }]
         },
         content: `<p>
@@ -136,7 +156,13 @@ export const KonsusProject: Project = {
             boxType: "tablet",
             items: [{
                 type: "image",
-                href: "assets/projects/konsus/konsus-website-1.png"
+                href: "assets/projects/konsus/konsus-website-1.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/konsus/konsus-website-2.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/konsus/konsus-website-3.jpg"
             }]
         },
         content: `<p>
@@ -172,7 +198,16 @@ export const MyCountry3D: Project = {
             orientation: "horizontal",
             items: [{
                 type: "image",
-                href: "assets/projects/my-country-3d/my-country-3d-03.png"
+                href: "assets/projects/my-country-3d/my-country-3d-01.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/my-country-3d/my-country-3d-02.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/my-country-3d/my-country-3d-03.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/my-country-3d/my-country-3d-04.jpg"
             }]
         },
         content: `<p>
@@ -203,19 +238,44 @@ export const HunterX: Project = {
     company: TSG,
     role: "Developer / Co-Founder",
     technologies: [Unity3D, CSharp],
-    apps: [
-        {
-            type: "google-play",
-            href: "https://apkpure.com/hunterx-zombie-shooter/com.TSGStudio.HunterX",
-        }
-    ],
+    apps: [{
+        type: "google-play",
+        href: "https://apkpure.com/hunterx-zombie-shooter/com.TSGStudio.HunterX",
+    }],
     post: {
         gallery: {
             boxType: "phone",
             orientation: "horizontal",
             items: [{
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-01.jpg"
+            }, {
                 type: "video",
                 href: "assets/projects/hunter-x/hunter-x-trailer.mp4"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-02.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-03.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-04.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-05.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-06.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-07.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-08.jpg"
+            }, {
+                type: "image",
+                href: "assets/projects/hunter-x/hunter-x-09.jpg"
             }]
         },
         content: `<p>
