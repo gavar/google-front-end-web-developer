@@ -65,6 +65,8 @@ declare module "swiper" {
         longSwipesRatio?: number;
         longSwipesMs?: number;
         followFinger?: boolean;
+        allowSlidePrev?: boolean;
+        allowSlideNext?: boolean;
         onlyExternal?: boolean;
         threshold?: number;
         touchMoveStopPropagation?: boolean;
@@ -90,9 +92,9 @@ declare module "swiper" {
         // Navigation Controls
         uniqueNavElements?: boolean;
         navigation?: {
-            hideOnClick: boolean,
-            prevEl: string,
-            nextEl: string,
+            hideOnClick?: boolean,
+            prevEl?: string,
+            nextEl?: string,
         }
 
         // Pagination
@@ -117,6 +119,11 @@ declare module "swiper" {
         lastSlideMessage?: string;
         paginationBulletMessage?: string;
         // Keyboard / Mousewheel
+        keyboard?: {
+            hideOnClick: boolean,
+            prevEl: string,
+            nextEl: string,
+        }
         keyboardControl?: boolean;
         mousewheelControl?: boolean;
         mousewheelForceToAxis?: boolean;
@@ -263,6 +270,10 @@ declare module "swiper" {
         swipeTo(index: number, speed?: number, runCallbacks?: boolean): boolean;
         activeSlide(): SwiperSlide;
         updateActiveSlide(index: number): void;
+        navigation: {
+            prevEl: HTMLElement,
+            nextEl: HTMLElement,
+        };
 
         // Controller
         controller: {
