@@ -15,6 +15,13 @@
   line-height: 1;
 }
 
+.project-title i {
+  position: absolute;
+  font-size: 20px;
+  padding-top: 6px;
+  padding-left: 6px;
+}
+
 .project-title a:hover {
   text-decoration: none;
 }
