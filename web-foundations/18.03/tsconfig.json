@@ -28,7 +28,12 @@
     "sourceMap": true,
     "target": "es2017",
     "baseUrl": ".",
-    "outDir": "./out/ts"
     "rootDir": "./src/",
+    "outDir": "./out/ts",
+    "paths": {
+      "swiper": [
+        "./@types/swiper/index.d.ts"
+      ]
+    }
   }
 }
