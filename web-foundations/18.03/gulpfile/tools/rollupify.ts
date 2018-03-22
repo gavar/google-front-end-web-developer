@@ -12,7 +12,10 @@ class Rollupify extends TransformStream {
 
     constructor(public readonly options?: RollupifyOptions) {
         super();
-        options = options || {};
+        const defaults: RollupifyOptions = {
+            external: [],
+        };
+        this.options = Object.assign(defaults, options);
     }
 
     /** @inheritDoc */
