@@ -1,5 +1,5 @@
 declare module "swiper" {
-    export interface SwiperOptions {
+    interface SwiperOptions {
         init?: boolean;
         initialSlide?: number;
         direction?: string;
@@ -205,18 +205,18 @@ declare module "swiper" {
         onKeyPress?(swiper: Swiper, kc: any): void;
     }
 
-    export interface SwiperScrollbarOptions {
+    interface SwiperScrollbarOptions {
         container: string;          // Default: '.swiper-scrollbar'
         draggable?: boolean;        // Default: true
         hide?: boolean;             // Default: true
         snapOnRelease?: boolean;    // Default: false
     }
 
-    export interface SwiperSlide extends HTMLElement {
+    interface SwiperSlide extends HTMLElement {
         cloneNode(deep?: boolean): this;
     }
 
-    export class Swiper {
+    class Swiper {
         constructor(container: string | Element, options?: SwiperOptions);
 
         // Properties
@@ -332,6 +332,8 @@ declare module "swiper" {
             debugger?(swiper: any, params: any): void;
         };
     }
+
+    export = Swiper;
 }
 
 
