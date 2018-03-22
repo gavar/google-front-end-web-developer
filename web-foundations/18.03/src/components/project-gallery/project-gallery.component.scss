@@ -1,0 +1,94 @@
+// aspect box, vertical by default (9:16)
+.project-gallery {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+  }
+
+  // tablet gallery, vertical (3:4)
+  &.tablet {
+    max-width: 350px;
+    background: url("../assets/ipad-air-2-vertical.png") no-repeat;
+    background-size: 100% 100%;
+
+    &:before {
+      padding-top: (572 / 405) * 100%; // 3:4
+    }
+  }
+
+  // phone gallery vertical (9:16)
+  &.phone {
+    max-width: 230px;
+    background: url("../assets/iphone-7-vertical.png") no-repeat;
+    background-size: 100% 100%;
+
+    &:before {
+      padding-top: (625 / 310) * 100%; // 9:16
+    }
+  }
+
+  // phone gallery horizontal (16:9)
+  &.phone.horizontal {
+    max-width: 463.7px;
+    background: url("../assets/iphone-7-horizontal.png") no-repeat;
+    background-size: 100% 100%;
+
+    &:before {
+      padding-top: (310 / 625) * 100%; // 16:9
+    }
+  }
+
+  // work in progress sign
+  &.wip {
+    max-width: 225px;
+  }
+
+  // gallery content wrapper
+  &-wrapper {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    // vertical phone content
+    &.phone {
+      padding: 25.5% 6.9% 23% 6.9%;
+    }
+
+    // horizontal phone content
+    &.phone.horizontal {
+      padding: 3% 11% 3% 12%;
+    }
+
+    // vertical tablet content
+    &.tablet {
+      padding: 11.5% 5.5% 11.5% 5.5%;
+    }
+
+    // empty background
+    &.none {
+      position: relative;
+    }
+  }
+
+  img, video {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  // swiper
+  .swiper-navigation .hidden {
+    display: none;
+  }
+}

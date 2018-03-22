@@ -40,20 +40,6 @@
     </div>
 
     <!-- project gallery -->
-    <div class="project-gallery {{project.post.gallery.orientation}} {{project.post.gallery.boxType }}">
-        <div class="{{project.post.gallery.boxType }}-box">
-            {{#each project.post.gallery.items as |media|}}
-                {{#is media.type "image"}}
-                    <!-- project image -->
-                    <img src="{{media.href}}" alt="{{../project.title}} project picture">
-                {{/is}}
-                {{#is media.type "video"}}
-                    <!-- project video -->
-                    <video controls>
-                        <source src="{{media.href}}" type="video/mp4">
-                    </video>
-                {{/is}}
-            {{/each}}
-        </div>
-    </div>
+    {{> "components/project-gallery" gallery=project.post.gallery }}
+
 </article>

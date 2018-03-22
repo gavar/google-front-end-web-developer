@@ -3,6 +3,7 @@
 @import "portfolio/portfolio.theme";
 @import "project/project-post.theme";
 @import "tech-tags/tech-tags.theme";
+@import "project-gallery/project-gallery.theme";
 
 // create a theme.
 @mixin components-theme($theme) {
@@ -10,4 +11,5 @@
   @include portfolio-theme($theme);
   @include project-post-theme($theme);
   @include tech-tags-theme($theme);
+  @include project-gallery-theme($theme);
 }
