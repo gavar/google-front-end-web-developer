@@ -3,20 +3,21 @@ import * as gulp from "gulp";
 import {parallel, series} from "gulp";
 import * as autoprefixer from "gulp-autoprefixer";
 import * as sass from "gulp-sass";
+import * as ts from "gulp-typescript";
 import * as Handlebars from 'handlebars';
-import * as HandlebarsIntl from 'handlebars-intl';
 import * as HandlebarsHelpers from 'handlebars-helpers';
+import * as HandlebarsIntl from 'handlebars-intl';
 import * as layouts from 'handlebars-layouts';
 import * as registrar from "handlebars-registrar";
 import * as path from "path";
 import {isString} from "util";
 import {TaskCallback} from "./core";
 import {TaskInfo} from "./core/types";
-import {beautify, render} from "./tools";
+import {beautify, render, rollupify} from "./tools";
 
 /** Clean previous compilation files. */
 function clean(done: TaskCallback) {
-    del("./dist").then(x => done(void 0, x), done);
+    del(["./dist", "./temp"]).then(x => done(void 0, x), done);
 }
 gulp.task(clean);
 
@@ -92,6 +93,23 @@ function clearNodeCache(done: TaskCallback) {
 }
 (clearNodeCache as TaskInfo).displayName = "clear-node-cache";
 
+/** Compile scripts. */
+const tsProject = ts.createProject('tsconfig.json');
+function scripts() {
+    return gulp.src('./src/**/*.+(ts|js)')
+        .pipe(tsProject())
+        .pipe(gulp.dest('./temp'))
+}
+gulp.task(scripts);
+
+/** Rollup scripts. */
+function roll() {
+    return gulp.src('./temp/app/js/**/*')
+        .pipe(rollupify())
+        .pipe(gulp.dest('./dist/js'));
+}
+gulp.task(roll);
+
 /** Copy images. */
 function images() {
     return gulp.src("./src/app/img/**/*")
@@ -119,6 +137,10 @@ gulp.task("default", series(
     parallel(
         pages,
         style,
+        series(
+            scripts,
+            roll,
+        ),
         images,
         assets,
     )
@@ -128,6 +150,7 @@ gulp.task("default", series(
 function watch() {
     gulp.watch("./src/**/*.hbs", pages);
     gulp.watch("./src/**/*.+(css|scss)", style);
+    gulp.watch("./src/**/*.+(ts|js)", series(clearNodeCache, scripts, roll));
     gulp.watch("./src/app/img/**/*", images);
     gulp.watch("./src/app/assets/**/*", assets);
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
