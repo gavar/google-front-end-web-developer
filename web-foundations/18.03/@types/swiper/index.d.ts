@@ -288,6 +288,7 @@ declare module "swiper" {
         clickedSlideIndex: number;
         clickedSlide: SwiperSlide;
         wrapperTransitionEnd(callback: () => void, permanent: boolean): void;
+        once(event: string, callback: (this: Swiper) => void);
         on(event: string, callback: (this: Swiper) => void);
 
         // Init/reset
