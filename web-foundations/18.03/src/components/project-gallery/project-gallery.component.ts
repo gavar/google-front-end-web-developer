@@ -17,7 +17,7 @@ import Swiper from "swiper";
     }) as any;
 
     for (const swiper of swipers) {
-        swiper.on('init', function (this: Swiper) {
+        swiper.once('init', function (this: Swiper) {
             // activate swiping and navigation
             if (this.slides.length > 1) {
                 this.keyboard.enable();
@@ -30,6 +30,17 @@ import Swiper from "swiper";
                 this.navigation.prevEl.classList.remove("hidden");
             }
         });
+
+        swiper.on('slideChange', function (this: Swiper) {
+            const prev = this.slides[this.previousIndex];
+
+            // pause video when change slide
+            const video = prev.querySelector("video");
+            if (video instanceof HTMLVideoElement) {
+                video.pause();
+            }
+        });
+
         swiper.init();
     }
 })();
