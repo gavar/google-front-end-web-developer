@@ -105,7 +105,11 @@ gulp.task(scripts);
 /** Rollup scripts. */
 function roll() {
     return gulp.src('./temp/app/js/**/*')
-        .pipe(rollupify())
+        .pipe(rollupify({
+            external: [
+                "swiper",
+            ]
+        }))
         .pipe(gulp.dest('./dist/js'));
 }
 gulp.task(roll);
