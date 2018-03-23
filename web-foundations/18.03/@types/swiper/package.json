@@ -1,0 +1,15 @@
+{
+  "name": "@types/swiper",
+  "version": "4.0.0",
+  "description": "TypeScript definitions for Swiper",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Max Stankevich ",
+      "url": "https://github.com/gavar",
+      "githubUsername": "gavar"
+    }
+  ],
+  "main": "",
+  "typeScriptVersion": "2.3"
+}
