@@ -86,9 +86,19 @@
     max-height: 100%;
     object-fit: contain;
   }
+}
 
-  // swiper
-  .swiper-navigation .hidden {
-    display: none;
-  }
+// Swiper
+.swiper-button-hidden,
+.swiper-pagination-hidden {
+  display: none;
+}
+
+.swiper-pagination {
+  width: 100%;
+}
+
+.swiper-pagination-bullet {
+  margin-left: 4px;
+  margin-right: 4px;
 }
