@@ -50,6 +50,47 @@ declare module "swiper" {
          */
         allowTouchMove?: boolean
 
+        /* LOOP */
+
+        /**
+         * Set to <code>true</code> to enable continuous loop mode.
+         * @warning If you use it along with <b>{@link slidesPerView}: 'auto'</b>,
+         * then you need to specify {@link loopedSlides} parameter with amount of slides to loop (duplicate).
+         * @default false
+         */
+        loop?: boolean;
+
+        /**
+         * If you use {@link slidesPerView}:'auto' with loop mode you should tell
+         * how many slides it should loop (duplicate) using this parameter
+         * @default 0
+         */
+        loopedSlides?: number;
+
+        /* SLIDES GRID */
+
+        /**
+         * Number of slides per view (slides visible at the same time on slider's container).
+         * @warning If you use it with <b>'auto'</b> value and along with <b>{@link loop}: true</b>
+         * then you need to specify {@link loopedSlides} parameter with amount of slides to loop (duplicate)
+         * @default 1
+         */
+        slidesPerView?: number | 'auto';
+
+        /* SWIPING / NO SWIPING */
+
+        /**
+         * Set to <code>false</code> to disable swiping to previous slide direction (to left or top).
+         * @default true
+         */
+        allowSlidePrev?: boolean;
+
+        /**
+         * Set to <code>false</code> to disable swiping to next slide direction (to right or bottom).
+         * @default true
+         */
+        allowSlideNext?: boolean;
+
         /** Pagination Parameters. */
         pagination?: {
             /**
@@ -117,47 +158,20 @@ declare module "swiper" {
             hiddenClass?: string;
         }
 
-        /* LOOP */
+        /** Keyboard Control Parameters. */
+        keyboard?: {
+            /**
+             * Set to <code>true</code> to enable keyboard control.
+             * @default false.
+             */
+            enabled?: boolean;
 
-        /**
-         * Set to <code>true</code> to enable continuous loop mode.
-         * @warning If you use it along with <b>{@link slidesPerView}: 'auto'</b>,
-         * then you need to specify {@link loopedSlides} parameter with amount of slides to loop (duplicate).
-         * @default false
-         */
-        loop?: boolean;
-
-        /**
-         * If you use {@link slidesPerView}:'auto' with loop mode you should tell
-         * how many slides it should loop (duplicate) using this parameter
-         * @default 0
-         */
-        loopedSlides?: number;
-
-        /* SLIDES GRID */
-
-        /**
-         * Number of slides per view (slides visible at the same time on slider's container).
-         * @warning If you use it with <b>'auto'</b> value and along with <b>{@link loop}: true</b>
-         * then you need to specify {@link loopedSlides} parameter with amount of slides to loop (duplicate)
-         * @default 1
-         */
-        slidesPerView?: number | 'auto';
-
-
-        /* SWIPING / NO SWIPING */
-
-        /**
-         * Set to <code>false</code> to disable swiping to previous slide direction (to left or top).
-         * @default true
-         */
-        allowSlidePrev?: boolean;
-
-        /**
-         * Set to <code>false</code> to disable swiping to next slide direction (to right or bottom).
-         * @default true
-         */
-        allowSlideNext?: boolean;
+            /**
+             * When enabled it will control sliders that are currently in viewport.
+             * @default true.
+             */
+            onlyInViewport?: boolean;
+        }
     }
 
     export interface SwiperSlide extends HTMLElement {
@@ -260,6 +274,28 @@ declare module "swiper" {
 
             /** Disable keyboard control. */
             disable(): void;
+        };
+
+        /** Controller Parameters */
+        controller: {
+            /**
+             * One or many {@see Swiper} instances that should be controlled by this instance.
+             * @default: undefined
+             */
+            control?: Swiper | Swiper[];
+
+            /**
+             * Set to <code>true</code> and controlling will be in inverse direction.
+             * @default false
+             */
+            inverse: boolean;
+
+            /**
+             * Defines a way how to control another slider: slide by slide (with respect to other slider's grid)
+             * or depending on all slides / container (depending on total slider percentage)
+             * @default 'slide'
+             */
+            by: "slide" | "cointainer";
         };
 
         /** no documentation available. */
