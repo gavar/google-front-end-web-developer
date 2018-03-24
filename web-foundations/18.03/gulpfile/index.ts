@@ -79,6 +79,7 @@ function pages() {
 
     return gulp.src("./src/app/**/*.hbs")
         .pipe(render.handlebars({handlebars: handlebars}))
+        .pipe(beautify.html())
         .pipe(gulp.dest('./dist'));
 }
 gulp.task(pages);
