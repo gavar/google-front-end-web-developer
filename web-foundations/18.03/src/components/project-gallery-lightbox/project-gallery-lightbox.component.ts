@@ -1,5 +1,5 @@
 import Swiper, {SwiperOptions} from "swiper";
-import {HtmlUtil, SwiperUtil} from "../common";
+import {Html, SwiperCommons} from "../common";
 
 export let projectGalleryLightbox: ProjectGalleryLightbox;
 
@@ -14,7 +14,7 @@ export class ProjectGalleryLightbox {
     constructor(swiper: Swiper) {
         this.swiper = swiper;
         this.swiper.controller.control = [];
-        this.root = HtmlUtil.querySelectorInParents<HTMLElement>(this.swiper.el, ".project-gallery-lightbox");
+        this.root = Html.querySelectorInParents<HTMLElement>(this.swiper.el, ".project-gallery-lightbox");
         this.root.querySelector<HTMLElement>(".project-gallery-lightbox-bg").addEventListener("click", this.close.bind(this));
     }
 
@@ -71,37 +71,36 @@ export class ProjectGalleryLightbox {
     }
 }
 
-(function () {
-    const options: SwiperOptions = {
-        init: false,
-        direction: "horizontal",
-        roundLengths: true,
-        allowTouchMove: true,
-        navigation: {
-            prevEl: ".swiper-button-prev",
-            nextEl: ".swiper-button-next",
-        },
-        pagination: {
-            clickable: true,
-        },
-        keyboard: {
-            enabled: true,
-        }
-    };
-
-    const swiper = new Swiper(".project-gallery-lightbox .swiper-container", options);
-    swiper.on('init', function (this: Swiper) {
-        this.on('slideChange', SwiperUtil.onSlideChange);
-        this.params.pagination.el = HtmlUtil.querySelectorWithPararents<HTMLElement>(this.el, ".swiper-pagination");
-        this.pagination.init();
-    });
-    swiper.init();
-    projectGalleryLightbox = new ProjectGalleryLightbox(swiper);
-})();
-
-
 interface SwiperMemory {
     keyboard: {
         enabled: boolean;
     }
 }
+
+const options: SwiperOptions = {
+    init: false,
+    direction: "horizontal",
+    roundLengths: true,
+    allowTouchMove: true,
+    navigation: {
+        prevEl: ".swiper-button-prev",
+        nextEl: ".swiper-button-next",
+    },
+    pagination: {
+        clickable: true,
+    },
+    keyboard: {
+        enabled: true,
+    }
+};
+
+const swiper = new Swiper(".project-gallery-lightbox .swiper-container", options);
+swiper.on('init', function (this: Swiper) {
+    this.on('slideChange', SwiperCommons.onSlideChange);
+    this.params.pagination.el = Html.querySelectorWithParents<HTMLElement>(this.el, ".swiper-pagination");
+    this.pagination.init();
+});
+swiper.init();
+projectGalleryLightbox = new ProjectGalleryLightbox(swiper);
+
+
