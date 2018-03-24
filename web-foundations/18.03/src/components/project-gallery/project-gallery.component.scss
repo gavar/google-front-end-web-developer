@@ -90,8 +90,8 @@
 
   .swiper-slide {
     img, video {
-      max-width: 101%;
-      max-height: 101%;
+      max-width: calc(100% + 2px);
+      max-height: calc(100% + 2px);
       object-fit: contain;
     }
   }

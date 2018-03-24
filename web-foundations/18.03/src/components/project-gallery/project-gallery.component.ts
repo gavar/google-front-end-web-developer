@@ -8,7 +8,7 @@ import {projectGalleryLightbox} from "../project-gallery-lightbox";
         init: false,
         direction: "horizontal",
         runCallbacksOnInit: true,
-        spaceBetween: 3,
+        spaceBetween: 5,
         navigation: {
             prevEl: ".swiper-button-prev",
             nextEl: ".swiper-button-next",
@@ -31,12 +31,17 @@ import {projectGalleryLightbox} from "../project-gallery-lightbox";
                 this.allowSlideNext = true;
                 this.allowTouchMove = true;
 
+                // horizontal spacing looks smaller, so scale it up
+                const root = HtmlUtil.querySelectorInParents<HTMLElement>(this.el, ".project-gallery");
+                if (root.classList.contains("horizontal"))
+                    this.params.spaceBetween *= 1.35;
+
                 // show navigation
                 this.navigation.nextEl.classList.remove(this.params.navigation.hiddenClass);
                 this.navigation.prevEl.classList.remove(this.params.navigation.hiddenClass);
 
                 // setup pagination
-                this.params.pagination.el = HtmlUtil.querySelectorInParents<HTMLElement>(this.el, ".swiper-pagination");
+                this.params.pagination.el = HtmlUtil.querySelectorWithPararents<HTMLElement>(this.el, ".swiper-pagination");
                 this.params.pagination.el.classList.remove(this.params.pagination.hiddenClass);
                 this.pagination.init();
 
