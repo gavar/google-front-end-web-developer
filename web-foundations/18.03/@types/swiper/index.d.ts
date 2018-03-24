@@ -70,6 +70,12 @@ declare module "swiper" {
         /* SLIDES GRID */
 
         /**
+         * Distance between slides in px.
+         * @default 0
+         */
+        spaceBetween?: number;
+
+        /**
          * Number of slides per view (slides visible at the same time on slider's container).
          * @warning If you use it with <b>'auto'</b> value and along with <b>{@link loop}: true</b>
          * then you need to specify {@link loopedSlides} parameter with amount of slides to loop (duplicate)
