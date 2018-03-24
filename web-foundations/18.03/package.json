@@ -34,6 +34,7 @@
     "handlebars-registrar": "^1.5.2",
     "js-beautify": "^1.7.5",
     "rollup": "^0.57.1",
+    "rollup-plugin-buble": "^0.19.2",
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "swiper": "^4.2.0",

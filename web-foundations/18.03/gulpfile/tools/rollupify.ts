@@ -1,11 +1,15 @@
 import {ExternalOption, OutputChunk, rollup} from "rollup";
+import * as buble from "rollup-plugin-buble";
+import * as commonjs from "rollup-plugin-commonjs";
 import * as resolve from "rollup-plugin-node-resolve";
+import {GlobalsOption} from "rollup/dist/typings/rollup";
 import {isString} from 'util';
 import File from "vinyl";
 import {TransformStream} from "../core";
 
 interface RollupifyOptions {
-    external?: ExternalOption
+    external?: ExternalOption,
+    globals?: GlobalsOption,
 }
 
 class Rollupify extends TransformStream {
@@ -14,6 +18,7 @@ class Rollupify extends TransformStream {
         super();
         const defaults: RollupifyOptions = {
             external: [],
+            globals: {},
         };
         this.options = Object.assign(defaults, options);
     }
@@ -23,9 +28,13 @@ class Rollupify extends TransformStream {
 
         const bundle: OutputChunk = await rollup({
             input: file.path,
-            treeshake: false,
             external: this.options.external,
             plugins: [
+                buble({
+                    transforms: {
+                        dangerousForOf: true,
+                    }
+                }),
                 resolve({
                     jsnext: true,
                     main: true,
@@ -36,12 +45,15 @@ class Rollupify extends TransformStream {
                         ]
                     }
                 }),
+                commonjs({
+                    include: 'node_modules/**'
+                }),
             ]
         }) as OutputChunk;
 
         const output = await bundle.generate({
-            name: "",
-            format: 'es',
+            format: 'iife',
+            globals: this.options.globals,
         });
 
         // remove external imports
