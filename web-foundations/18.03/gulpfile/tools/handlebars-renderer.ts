@@ -31,8 +31,16 @@ class HandlebarsRenderer extends TransformStream {
             }
         };
 
+        // pre-process template
+        let content = buffer.toString();
+
+        // fix 'scss' links
+        content = content.replace(/.scss"/g, `.css"`);
+        // fix 'ts' links
+        content = content.replace(/.ts"/g, `.js"`);
+
         // render
-        const template = this.handlebars.compile(buffer.toString());
+        const template = this.handlebars.compile(content);
         const html = template(data, options as any);
 
         // apply
