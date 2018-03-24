@@ -8,6 +8,7 @@ import {projectGalleryLightbox} from "../project-gallery-lightbox";
         init: false,
         direction: "horizontal",
         runCallbacksOnInit: true,
+        spaceBetween: 3,
         navigation: {
             prevEl: ".swiper-button-prev",
             nextEl: ".swiper-button-next",

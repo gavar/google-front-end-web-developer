@@ -15,7 +15,7 @@ export const Fronted: Project = {
     technologies: [Java, Spring, MySQL, Maven, nodejs, TypeScript, Handlebars, Gulp],
     post: {
         gallery: {
-            boxType: "none wip",
+            style: "none wip",
             items: [{
                 type: "image",
                 href: "assets/wip-image.png"
@@ -45,7 +45,7 @@ export const MyCountryAR: Project = {
     ],
     post: {
         gallery: {
-            boxType: "phone",
+            style: "phone",
             items: [{
                 type: "image",
                 href: "assets/projects/my-country-ar/my-country-ar-screen-1.jpg"
@@ -106,7 +106,7 @@ export const Moana: Project = {
     }],
     post: {
         gallery: {
-            boxType: "phone",
+            style: "phone",
             items: [{
                 type: "image",
                 href: "assets/projects/moana/moana-screen-1.jpg"
@@ -153,7 +153,7 @@ export const KonsusProject: Project = {
     technologies: [Java, Spring, JavaScript, TypeScript, React, nodejs, Webpack],
     post: {
         gallery: {
-            boxType: "tablet",
+            style: "tablet",
             items: [{
                 type: "image",
                 href: "assets/projects/konsus/konsus-website-1.jpg"
@@ -194,8 +194,7 @@ export const MyCountry3D: Project = {
     technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
     post: {
         gallery: {
-            boxType: "phone",
-            orientation: "horizontal",
+            style: "horizontal phone",
             items: [{
                 type: "image",
                 href: "assets/projects/my-country-3d/my-country-3d-01.jpg"
@@ -244,8 +243,7 @@ export const HunterX: Project = {
     }],
     post: {
         gallery: {
-            boxType: "phone",
-            orientation: "horizontal",
+            style: "horizontal phone",
             items: [{
                 type: "image",
                 href: "assets/projects/hunter-x/hunter-x-01.jpg"

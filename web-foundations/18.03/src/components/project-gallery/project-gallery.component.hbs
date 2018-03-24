@@ -1,24 +1,22 @@
-<div class="project-gallery {{gallery.orientation}} {{gallery.boxType }} ">
-    <div class="project-gallery-wrapper {{gallery.orientation}} {{project.post.gallery.boxType}} ">
-        <div class="swiper-container">
-            <div class="swiper-wrapper">
-                {{#each project.post.gallery.items as |media|}}
-                    <div class="swiper-slide">
-                        {{#is media.type "image"}}
-                            <img src="{{media.href}}" alt="{{../project.title}} project picture">
-                        {{/is}}
-                        {{#is media.type "video"}}
-                            <video controls>
-                                <source src="{{media.href}}" type="video/mp4">
-                            </video>
-                        {{/is}}
-                    </div>
-                {{/each}}
-            </div>
-            <div class="swiper-navigation">
-                <div class="swiper-button-prev swiper-button-hidden"></div>
-                <div class="swiper-button-next swiper-button-hidden"></div>
-            </div>
+<div class="project-gallery {{project.post.gallery.style}}">
+    <div class="swiper-container {{project.post.gallery.style}}">
+        <div class="swiper-wrapper">
+            {{#each project.post.gallery.items as |media|}}
+                <div class="swiper-slide">
+                    {{#is media.type "image"}}
+                        <img src="{{media.href}}" alt="{{../project.title}} project picture">
+                    {{/is}}
+                    {{#is media.type "video"}}
+                        <video controls>
+                            <source src="{{media.href}}" type="video/mp4">
+                        </video>
+                    {{/is}}
+                </div>
+            {{/each}}
+        </div>
+        <div class="swiper-navigation">
+            <div class="swiper-button-prev swiper-button-hidden"></div>
+            <div class="swiper-button-next swiper-button-hidden"></div>
         </div>
     </div>
     <div class="swiper-pagination swiper-pagination-hidden"></div>
