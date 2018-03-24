@@ -6,4 +6,28 @@
   $warn: map-get($theme, warn);
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
+
+  .portfolio-section {
+    color: #333;
+  }
+
+  .portfolio-title {
+    color: #555;
+  }
+
+  .portfolio-timeline {
+
+    .timeline-item {
+      border-color: #ddd;
+    }
+
+    .timeline-date {
+      color: #999;
+      border-color: #ddd;
+
+      &:after {
+        background-color: rgb(187, 30, 30);
+      }
+    }
+  }
 }

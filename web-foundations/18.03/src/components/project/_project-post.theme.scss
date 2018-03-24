@@ -6,4 +6,10 @@
   $warn: map-get($theme, warn);
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
+
+  .project-title {
+    a {
+      color: inherit;
+    }
+  }
 }

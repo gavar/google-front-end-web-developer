@@ -7,6 +7,11 @@
 
 // create a theme.
 @mixin components-theme($theme) {
+
+  a {
+    color: #bb1e1e;
+  }
+
   @include sidebar-theme($theme);
   @include portfolio-theme($theme);
   @include project-post-theme($theme);
