@@ -1,79 +1,86 @@
-$navbar-width: 265px;
+@mixin navbar-mobile() {
+  .navbar {
+    // fullscreen on mobiles
+    width: 100%;
 
-.sidebar {
-  position: fixed;
-  width: $navbar-width;
-  height: 100%;
-}
+    .profile {
+      padding-top: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
 
-.content {
-  margin-left: $navbar-width;
-}
+      font-weight: 300;
+      font-size: 16px;
+      text-align: center;
+      text-transform: uppercase;
+    }
 
-.sidebar-inner {
-  padding: 40px 20px;
-}
+    .profile-image {
+      border-radius: 50%;
+      max-width: 152px;
+    }
 
-.person {
-  font-weight: 300;
-  font-size: 16px;
-  text-align: center;
-  text-transform: uppercase;
-}
+    .profile-info {
+      margin-top: 10px;
+    }
 
-.person {
-  img {
-    border-radius: 50%;
-    max-width: 150px;
+    .profile-title {
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .profile-subtitle {
+      display: flex;
+      justify-content: center;
+
+      * {
+        flex-grow: 1;
+      }
+
+      h2 {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 22px;
+      }
+    }
+
+    .profile-subtitle-left {
+      text-align: right;
+      padding-right: 10px;
+      border-right: 1px solid;
+    }
+
+    .profile-subtitle-right {
+      text-align: left;
+      padding-left: 10px;
+    }
+
+    .profile-social-links a {
+      font-size: 30px;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .profile-info-email {
+      display: block;
+      margin-top: 5px;
+      padding-bottom: 0;
+      text-transform: lowercase;
+      color: inherit;
+    }
   }
 }
 
-.person-info {
-  margin-top: 10px;
-}
+@mixin navbar-desktop() {
+  $navbar-width: 265px;
 
-.person-title {
-  font-size: 22px;
-  font-weight: 500;
-}
-
-.person-subtitle {
-  display: flex;
-  justify-content: center;
-
-  * {
-    flex-grow: 1;
+  .navbar {
+    height: 100%;
+    width: $navbar-width;
+    position: fixed;
   }
 
-  h2 {
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 22px;
+  main {
+    margin-left: $navbar-width;
   }
-}
-
-.person-subtitle-left {
-  text-align: right;
-  padding-right: 10px;
-  border-right: 1px solid;
-}
-
-.person-subtitle-right {
-  text-align: left;
-  padding-left: 10px;
-}
-
-.person-social-links a {
-  font-size: 30px;
-  &:hover {
-    text-decoration: none;
-  }
-}
-
-.person-info .email {
-  display: block;
-  margin-top: 5px;
-  padding-bottom: 0;
-  text-transform: lowercase;
-  color: inherit;
 }

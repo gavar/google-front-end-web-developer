@@ -7,12 +7,12 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  .sidebar {
+  .navbar {
     color: mat-color($foreground, text);
     background-color: mat-color($primary);
   }
 
-  .person-social-links a {
+  .profile-social-links a {
     color: rgba(mat-color($foreground, text), .8);
     &:hover {
       color: mat-color($foreground, text);
