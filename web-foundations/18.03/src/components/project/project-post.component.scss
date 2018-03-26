@@ -1,69 +1,89 @@
-.project {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  margin-right: 10px;
-}
+@mixin project-post-mobile() {
+  .project-title {
+    & > * {
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1;
+    }
 
-.project > * {
-  flex-grow: 1;
-}
+    i {
+      position: absolute;
+      font-size: 20px;
+      padding-top: 6px;
+      padding-left: 6px;
+    }
 
-.project-title > * {
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 1;
-}
+    a:hover {
+      text-decoration: none;
+    }
 
-.project-title i {
-  position: absolute;
-  font-size: 20px;
-  padding-top: 6px;
-  padding-left: 6px;
-}
-
-.project-title a:hover {
-  text-decoration: none;
-}
-
-.project-title svg {
-  margin-left: 5px;
-  margin-bottom: 2px;
-  font-size: 18px;
-}
-
-.project-role {
-  font-weight: 300;
-  font-size: 20px;
-}
-
-.technologies-title {
-  font-size: 12px;
-  text-transform: uppercase;
-  padding-bottom: .5em;
-}
-
-.project > * {
-  display: inline-block;
-}
-
-.project-text {
-  vertical-align: top;
-  max-width: calc(100% - 50% - 5px);
-}
-
-.project-stores {
-  text-align: center;
-
-  a {
-    margin: 0 2px;
+    svg {
+      margin-left: 5px;
+      margin-bottom: 2px;
+      font-size: 18px;
+    }
   }
 
-  img {
-    width: 100%;
-    height: auto;
-    max-width: 155px;
-    object-fit: cover;
+  .project-role {
+    font-weight: 300;
+    font-size: 20px;
+  }
+
+  .project-stores {
+    text-align: center;
+    margin: 20px auto;
+
+    a {
+      margin: 0 2px;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 155px;
+      object-fit: cover;
+    }
+  }
+
+  .technologies-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    padding-bottom: .5em;
+  }
+}
+
+@mixin project-post-desktop() {
+  @supports (display: grid) {
+    .project {
+      display: grid;
+      grid-template-rows: repeat(2, 50%);
+      grid-template-columns: repeat(2, 50%);
+    }
+
+    .project-gallery-column {
+      grid-column: 2;
+      grid-row-start: 1;
+      grid-row-end: span 2;
+      align-self: center;
+    }
+  }
+
+  @supports not (display: grid) {
+    .project > * {
+      width: 50%;
+      display: inline-block;
+    }
+
+    .project-gallery-column {
+      float: right;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: center;
+      & > * {
+        flex: 1 1 100%;
+      }
+    }
   }
 }
 
