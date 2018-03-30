@@ -153,7 +153,7 @@ export const KonsusProject: Project = {
     technologies: [Java, Spring, JavaScript, TypeScript, React, nodejs, Webpack],
     post: {
         gallery: {
-            style: "tablet",
+            style: "horizontal tablet",
             items: [{
                 type: "image",
                 href: "assets/projects/konsus/konsus-website-1.jpg"
