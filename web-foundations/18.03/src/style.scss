@@ -9,7 +9,11 @@ html {
 
 body {
   font: 16px/1.6 Roboto, Helvetica, sans-serif;
-  font-weight: 300
+  font-weight: 300;
+
+  & > svg {
+    display: none;
+  }
 }
 
 a {
