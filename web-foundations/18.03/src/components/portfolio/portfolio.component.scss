@@ -112,3 +112,8 @@
   @include project-post-desktop();
 }
 
+@mixin portfolio-hover() {
+  // include dependencies
+  @include project-post-hover();
+  @include project-gallery-lightbox-hover();
+}

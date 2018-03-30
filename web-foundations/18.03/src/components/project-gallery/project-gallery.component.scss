@@ -49,13 +49,8 @@
         margin: auto;
         display: block;
         fill: white;
-        opacity: .7;
         stroke: grey;
         stroke-width: 10;
-      }
-
-      .swiper-button:hover {
-        .swiper-button-icon { opacity: 1; }
       }
 
       .swiper-button-prev { left: 0; }
@@ -203,6 +198,17 @@
       height: 10px;
       margin-left: 5px;
       margin-right: 5px;
+    }
+  }
+}
+
+@mixin project-gallery-hover() {
+  .project-gallery {
+    .swiper-navigation {
+      .swiper-button-icon { opacity: .7; }
+      .swiper-button:hover {
+        .swiper-button-icon { opacity: 1; }
+      }
     }
   }
 }

@@ -97,3 +97,8 @@
   // include dependencies
   @include project-gallery-desktop();
 }
+
+@mixin project-post-hover() {
+  // include dependencies
+  @include project-gallery-hover();
+}
