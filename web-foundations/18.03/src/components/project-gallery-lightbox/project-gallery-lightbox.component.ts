@@ -5,17 +5,36 @@ export let projectGalleryLightbox: ProjectGalleryLightbox;
 
 export class ProjectGalleryLightbox {
 
-    private source: Swiper;
-    private memory: SwiperMemory;
-
     public readonly swiper: Swiper;
     public readonly root: HTMLElement;
 
+    private source: Swiper;
+    private memory: SwiperMemory;
+
     constructor(swiper: Swiper) {
+        const self = this;
         this.swiper = swiper;
         this.swiper.controller.control = [];
         this.root = Html.querySelectorInParents<HTMLElement>(this.swiper.el, ".project-gallery-lightbox");
-        this.root.querySelector<HTMLElement>(".project-gallery-lightbox-bg").addEventListener("click", this.close.bind(this));
+
+        // do not close when clicking on slide content
+        this.swiper.wrapperEl.addEventListener("click", function (e: MouseEvent) {
+            if (!e.toElement.classList.contains("swiper-slide"))
+                e.stopPropagation();
+        });
+
+        // do not close when clicking on navigation
+        this.swiper.navigation.nextEl.addEventListener("click", e => e.stopPropagation());
+        this.swiper.navigation.prevEl.addEventListener("click", e => e.stopPropagation());
+
+        // do not close when clicking on pagination
+        this.swiper.pagination.el.addEventListener("click", e => e.stopPropagation());
+
+        // close when any other type of click appears
+        this.root.addEventListener("click", function (e: MouseEvent) {
+            console.log(e);
+            self.close();
+        });
     }
 
     public open(source: Swiper) {
@@ -102,5 +121,3 @@ swiper.on('init', function (this: Swiper) {
 });
 swiper.init();
 projectGalleryLightbox = new ProjectGalleryLightbox(swiper);
-
-

@@ -1,5 +1,6 @@
 // import dependencies
 @import "components/project/project-post.component";
+@import "components/project-gallery-lightbox/project-gallery-lightbox.component";
 
 @mixin portfolio-mobile() {
 
@@ -30,6 +31,7 @@
 
   // include dependencies
   @include project-post-mobile();
+  @include project-gallery-lightbox-mobile();
 }
 
 @mixin portfolio-desktop() {
@@ -110,4 +112,3 @@
   @include project-post-desktop();
 }
 
-@import "components/project-gallery-lightbox/project-gallery-lightbox.component";

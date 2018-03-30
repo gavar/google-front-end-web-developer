@@ -1,63 +1,172 @@
-.project-gallery-lightbox {
-  // full screen lightbox
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-
-  user-select: none;
-  box-sizing: border-box;
-
-  padding: 60px;
-  z-index: 90;
-
-  // hidden by default
-  display: none;
-
-  &.show {
-    display: block;
-  }
-}
-
-.project-gallery-lightbox-bg {
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  position: absolute;
-  background-color: rgba(0, 0, 0, .8);
-}
-
-// swiper
-.project-gallery-lightbox {
-  .swiper-container {
-    z-index: 20;
+@mixin project-gallery-lightbox-mobile {
+  .project-gallery-lightbox {
+    // full screen lightbox
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-  }
+    position: fixed;
+    user-select: none;
+    box-sizing: border-box;
+    z-index: 100;
 
-  .swiper-slide {
-    // center horizontally
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    // hidden by default
+    display: none;
 
-    // content
-    img, video {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+    &.show {
+      display: block;
+    }
+
+    .swiper-button-close {
+      top: 0;
+      right: 0;
+      width: 20%;
+      z-index: 2;
+      max-width: 130px;
+      position: absolute;
+
+      // aspect box 1:1
+      &:before {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+      }
+
+      .swiper-button-icon {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        max-width: 25px;
+        max-height: 25px;
+        margin: auto;
+        opacity: .7;
+        fill: white;
+        stroke: grey;
+        stroke-width: 10;
+        stroke-linecap: round;
+      }
     }
   }
 
-  .swiper-pagination {
-    position: relative;
-    margin-top: 10px;
+  // swiper
+  .project-gallery-lightbox {
+    .swiper-container {
+      height: 100%;
+    }
+
+    .swiper-slide {
+      // center horizontally
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      // content
+      & > * {
+        max-width: 105%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .swiper-pagination {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: fit-content;
+      position: absolute;
+      margin-left: auto;
+      margin-right: auto;
+      pointer-events: auto;
+    }
+
+    .swiper-pagination-bullet {
+      width: 16px;
+      height: 16px;
+      margin: auto 8px;
+
+      &:focus {
+        outline-width: 0;
+      }
+    }
+
+    // navigation buttons
+    .swiper-navigation {
+
+      .swiper-button {
+        top: 0;
+        bottom: 0;
+        width: 20%;
+        max-width: 130px;
+        height: auto;
+        margin-top: 0;
+        background-image: none;
+        transition: .2s;
+      }
+
+      // arrow icon
+      .swiper-button-icon {
+        width: 30px;
+        height: 100%;
+        margin: auto;
+        display: block;
+        fill: white;
+        stroke: grey;
+        stroke-width: 10;
+      }
+
+      .swiper-button-prev { left: 0; }
+      .swiper-button-next { right: 0; }
+
+      .swiper-button-disabled {
+        opacity: .1;
+        pointer-events: auto
+      }
+
+      .swiper-button-icon-prev { background: url("/img/arrow-left.svg"); }
+      .swiper-button-icon-next { background: url("/img/arrow-right.svg"); }
+    }
   }
 
-  .swiper-pagination-bullet {
-    width: 16px;
-    height: 16px;
+  .project-gallery-lightbox-bg {
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, .85);
+  }
+
+  .project-gallery-lightbox-bottom-shadow {
+    bottom: 0;
+    z-index: 1;
+    height: 8%;
+    width: 100%;
+    position: absolute;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .5) 100%);
+    pointer-events: none;
+  }
+}
+
+@mixin project-gallery-lightbox-hover() {
+  .project-gallery-lightbox {
+
+    .swiper-button-close {
+      .swiper-button-icon { opacity: .7; }
+      &:hover {
+        background-color: rgba(0, 0, 0, .3);
+        .swiper-button-icon { opacity: 1; }
+      }
+    }
+
+    .swiper-navigation {
+      .swiper-button[aria-disabled=false]:hover {
+        background-color: rgba(0, 0, 0, .3);
+        .swiper-button-icon { opacity: 1; }
+      }
+    }
   }
 }
