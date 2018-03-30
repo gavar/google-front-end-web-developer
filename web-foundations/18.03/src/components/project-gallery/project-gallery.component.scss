@@ -166,15 +166,3 @@
     }
   }
 }
-
-@mixin project-gallery-landscape() {
-  .project-gallery {
-    // full screen for vertical gallery in landscape mode
-    margin: auto -20px;
-
-    // restore margin for horizontal gallery in landscape mode
-    &.horizontal {
-      margin: auto;
-    }
-  }
-}
