@@ -1,5 +1,5 @@
 import Swiper, {SwiperOptions} from "swiper";
-import {Html, SwiperCommons} from "../common";
+import {Html, SwiperCommons, VHChromeFix} from "../common";
 import {projectGalleryLightbox} from "../project-gallery-lightbox";
 
 const options: SwiperOptions = {
@@ -20,9 +20,14 @@ const options: SwiperOptions = {
     allowTouchMove: false,
 };
 
+// fix chrome viewport height (vh) on mobiles
+const vhFix = new VHChromeFix();
+
 const swipers: Swiper[] = new Swiper(".project-gallery .swiper-container", options) as any;
 for (const swiper of swipers) {
     swiper.once('init', function (this: Swiper) {
+        const root = Html.querySelectorInParents<HTMLElement>(this.el, ".swiper-container");
+
         // activate swiping and navigation when more than one slide
         if (this.slides.length > 1) {
             this.allowSlidePrev = true;
@@ -30,7 +35,6 @@ for (const swiper of swipers) {
             this.allowTouchMove = true;
 
             // horizontal spacing looks smaller, so scale it up
-            const root = Html.querySelectorInParents<HTMLElement>(this.el, ".project-gallery");
             if (root.classList.contains("horizontal"))
                 this.params.spaceBetween *= 1.35;
 
@@ -52,6 +56,14 @@ for (const swiper of swipers) {
                 projectGalleryLightbox.open(this);
             });
         }
+
+        const update = () => this.update();
+
+        // update when orientation changes
+        window.addEventListener("orientationchange", update);
+
+        // update when changing size of images
+        vhFix.usePrefixStyle([root.querySelector(".swiper-wrapper")], update);
     });
 
     swiper.on('slideChange', SwiperCommons.onSlideChange);

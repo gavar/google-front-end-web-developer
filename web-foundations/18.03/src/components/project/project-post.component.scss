@@ -1,3 +1,6 @@
+// import dependencies
+@import "components/project-gallery/project-gallery.component";
+
 @mixin project-post-mobile() {
   .project-title {
     & > * {
@@ -50,6 +53,9 @@
     text-transform: uppercase;
     padding-bottom: .5em;
   }
+
+  // include dependencies
+  @include project-gallery-mobile();
 }
 
 @mixin project-post-desktop() {
@@ -85,7 +91,10 @@
       }
     }
   }
+
+  // include dependencies
+  @include project-gallery-desktop();
+}
 }
 
 @import "components/tech-tags/tech-tags.component";
-@import "components/project-gallery/project-gallery.component";
