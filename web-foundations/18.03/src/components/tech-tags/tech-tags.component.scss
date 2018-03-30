@@ -1,23 +1,25 @@
-.tech-tags {
-  margin: 0;
-  padding: 0;
-  display: block;
-  list-style: none;
+@mixin tech-tags-mobile {
+  .tech-tags {
+    margin: 0;
+    padding: 0;
+    display: block;
+    list-style: none;
 
-  li {
-    display: inline-block;
-    margin-bottom: 5px;
+    li {
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 4px 10px;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
   }
 
-  a {
-    display: inline-block;
-    padding: 4px 10px;
-    text-transform: uppercase;
-    font-size: 13px;
+  .technologies-title {
+    font-size: 12px;
+    padding-bottom: .5em;
   }
-}
-
-.technologies-title {
-  font-size: 12px;
-  padding-bottom: .5em;
 }

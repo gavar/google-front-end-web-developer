@@ -1,4 +1,5 @@
 // import dependencies
+@import "components/tech-tags/tech-tags.component";
 @import "components/project-gallery/project-gallery.component";
 
 @mixin project-post-mobile() {
@@ -56,6 +57,7 @@
 
   // include dependencies
   @include project-gallery-mobile();
+  @include tech-tags-mobile;
 }
 
 @mixin project-post-desktop() {
@@ -95,5 +97,3 @@
   // include dependencies
   @include project-gallery-desktop();
 }
-
-@import "components/tech-tags/tech-tags.component";
