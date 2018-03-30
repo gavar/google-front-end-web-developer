@@ -74,6 +74,11 @@
       content: "";
     }
 
+    // restore margin
+    &.horizontal {
+      margin: auto;
+    }
+
     // tablet gallery, vertical (3:4)
     &.tablet {
       max-width: 350px;
