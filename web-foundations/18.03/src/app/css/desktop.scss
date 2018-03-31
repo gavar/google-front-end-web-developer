@@ -2,5 +2,7 @@
 @import "components/componenets-responsive";
 
 // include styles
-@include navbar-desktop();
-@include portfolio-desktop();
+@media screen and (min-width: 1024px) {
+  @include navbar-desktop();
+  @include portfolio-desktop();
+}
