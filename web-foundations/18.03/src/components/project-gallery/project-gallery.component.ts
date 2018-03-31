@@ -26,6 +26,8 @@ const vhFix = new VHChromeFix();
 const swipers: Swiper[] = new Swiper(".project-gallery .swiper-container", options) as any;
 for (const swiper of swipers) {
     swiper.once('init', function (this: Swiper) {
+
+        const self = this;
         const root = Html.querySelectorInParents<HTMLElement>(this.el, ".swiper-container");
 
         // activate swiping and navigation when more than one slide
@@ -52,8 +54,8 @@ for (const swiper of swipers) {
             this.pagination.bullets[this.activeIndex].classList.add(this.params.pagination.bulletActiveClass);
 
             // open lightbox on click
-            this.on('click', function (this: Swiper) {
-                projectGalleryLightbox.open(this);
+            this.wrapperEl.addEventListener('click', function (e: MouseEvent) {
+                projectGalleryLightbox.open(self);
             });
         }
 
