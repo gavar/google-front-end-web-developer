@@ -48,19 +48,19 @@ export const MyCountryAR: Project = {
             style: "phone",
             items: [{
                 type: "image",
-                href: "assets/projects/my-country-ar/my-country-ar-screen-1.jpg"
+                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-1.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/my-country-ar-screen-2.jpg"
+                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-2.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/my-country-ar-screen-3.jpg"
+                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-3.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/my-country-ar-screen-4.jpg"
+                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-4.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/my-country-ar-screen-5.jpg"
+                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-5.jpeg"
             }]
         },
         content: `<p>
@@ -109,19 +109,19 @@ export const Moana: Project = {
             style: "phone",
             items: [{
                 type: "image",
-                href: "assets/projects/moana/moana-screen-1.jpg"
+                href: "assets/projects/moana/9x16/moana-screen-1.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/moana-screen-2.jpg"
+                href: "assets/projects/moana/9x16/moana-screen-2.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/moana-screen-3.jpg"
+                href: "assets/projects/moana/9x16/moana-screen-3.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/moana-screen-4.jpg"
+                href: "assets/projects/moana/9x16/moana-screen-4.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/moana-screen-5.jpg"
+                href: "assets/projects/moana/9x16/moana-screen-5.jpg"
             }]
         },
         content: `<p>
