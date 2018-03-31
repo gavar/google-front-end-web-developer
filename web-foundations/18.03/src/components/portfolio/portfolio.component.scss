@@ -5,7 +5,7 @@
 @mixin portfolio-mobile() {
 
   .portfolio-section {
-    padding: 20px;
+    padding: 20px 20px 0;
   }
 
   .portfolio-title {
@@ -41,7 +41,7 @@
   $portfolio-section-padding: 50px;
 
   .portfolio-section {
-    padding: $portfolio-section-padding;
+    padding: $portfolio-section-padding $portfolio-section-padding 0;
   }
 
   .portfolio-timeline {
