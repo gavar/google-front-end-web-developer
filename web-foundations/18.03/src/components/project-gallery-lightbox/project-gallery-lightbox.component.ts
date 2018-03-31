@@ -32,9 +32,16 @@ export class ProjectGalleryLightbox {
 
         // close when any other type of click appears
         this.root.addEventListener("click", function (e: MouseEvent) {
-            console.log(e);
             self.close();
         });
+
+        // avoid site scroll when lightbox is open
+        this.root.addEventListener("wheel", function (e: Event) {
+            e.preventDefault();
+        }, false)
+        this.root.addEventListener("touchmove", function (e: Event) {
+            e.preventDefault();
+        }, false)
     }
 
     public open(source: Swiper) {
