@@ -5,29 +5,31 @@ interface Style {
 }
 
 interface Styleable {
-    apply(): void;
+    apply(height: number): void;
 }
 
-const CHROME_NAVBAR_OFFSET = 74;
+function windowHeight() {
+    // devices have tiny bar at the top which shows charge level, we assume its height is 20px
+    let size = window.innerHeight >= window.innerWidth ? screen.height : screen.width;
+    if (window.innerHeight < size) size -= 20;
+    return size;
+}
 
 export class VHChromeFix {
 
     private active: boolean;
-    private windowWidth: number;
-    private windowHeight: number;
     private readonly styleables: Styleable[] = [];
 
     constructor() {
         const userAgent = navigator.userAgent;
         const androidChrome = /chrome/i.test(userAgent) && /android/i.test(userAgent);
         const iOSChrome = /crios/i.test(userAgent);
-        this.active = androidChrome || iOSChrome;
+
+        // HACK: devtools doesn't have menu bar
+        const fullscreen = window.innerHeight == screen.height || window.innerHeight == screen.width;
+        this.active = !fullscreen && androidChrome || iOSChrome;
 
         if (this.active) {
-            // Cache window dimensions
-            this.windowWidth = window.innerWidth;
-            this.windowHeight = window.innerHeight;
-
             // BUG: do not change to .bind(this)
             const update = () => this.update();
             window.addEventListener('resize', update);
@@ -45,7 +47,8 @@ export class VHChromeFix {
         explicitStyle.elements = elements;
         explicitStyle.onResize = onResize;
 
-        if (this.active) explicitStyle.apply();
+        const height = windowHeight();
+        if (this.active) explicitStyle.apply(height);
         this.styleables.push(explicitStyle);
     }
 
@@ -54,20 +57,15 @@ export class VHChromeFix {
         prefixStyle.elements = elements;
         prefixStyle.onResize = onResize;
 
-        if (this.active) prefixStyle.apply();
+        const height = windowHeight();
+        if (this.active) prefixStyle.apply(height);
         this.styleables.push(prefixStyle);
     }
 
-    public update(force?: boolean) {
-        // Both width and height changed (orientation change)
-        // This is a hack, as Android when keyboard pops up
-        // Triggers orientation change
-        if (force || this.windowWidth !== window.innerWidth && this.windowHeight !== window.innerHeight) {
-            this.windowWidth = window.innerWidth;
-            this.windowHeight = window.innerHeight;
-            for (let i = 0; i < this.styleables.length; i++)
-                this.styleables[i].apply();
-        }
+    public update() {
+        const height = windowHeight();
+        for (let i = 0; i < this.styleables.length; i++)
+            this.styleables[i].apply(height);
     }
 }
 
@@ -80,16 +78,15 @@ class ExplicitStyle implements Styleable, Style {
     onResize?: Function;
     elements: ArrayLike<HTMLElement>;
 
-    public apply() {
+    public apply(height: number) {
 
         let style: CSSStyleDeclaration;
-        const innerHeight = window.innerHeight + CHROME_NAVBAR_OFFSET;
 
         for (let i = 0; i < this.elements.length; i++) {
             style = this.elements[i].style;
-            style.height = this.height && `${innerHeight * this.height / 100}px`;
-            style.minHeight = this.minHeight && `${innerHeight * this.minHeight / 100}px`;
-            style.maxHeight = this.maxHeight && `${innerHeight * this.maxHeight / 100}px`;
+            style.height = this.height && `${height * this.height / 100}px`;
+            style.minHeight = this.minHeight && `${height * this.minHeight / 100}px`;
+            style.maxHeight = this.maxHeight && `${height * this.maxHeight / 100}px`;
         }
 
         if (this.onResize)
@@ -101,25 +98,24 @@ class PrefixStyle implements Styleable {
     onResize?: Function;
     elements: ArrayLike<HTMLElement>;
 
-    public apply() {
+    public apply(height: number) {
 
         let value: number;
         let style: CSSStyleDeclaration;
         let computedStyle: CSSStyleDeclaration;
-        const innerHeight = window.innerHeight + CHROME_NAVBAR_OFFSET;
 
         for (let i = 0; i < this.elements.length; i++) {
             style = this.elements[i].style;
             computedStyle = window.getComputedStyle(this.elements[i]);
 
             value = computedStyle.getPropertyValue("--chrome-height") as any;
-            style.height = value && `${innerHeight * value / 100}px`;
+            style.height = value && `${height * value / 100}px`;
 
             value = computedStyle.getPropertyValue("--chrome-min-height") as any;
-            style.minHeight = value && `${innerHeight * value / 100}px`;
+            style.minHeight = value && `${height * value / 100}px`;
 
             value = computedStyle.getPropertyValue("--chrome-max-height") as any;
-            style.maxHeight = value && `${innerHeight * value / 100}px`;
+            style.maxHeight = value && `${height * value / 100}px`;
         }
 
         if (this.onResize)
