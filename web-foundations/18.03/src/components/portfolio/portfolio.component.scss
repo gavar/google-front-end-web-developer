@@ -35,7 +35,6 @@
 }
 
 @mixin portfolio-desktop() {
-
   $timeline-width: 130px;
   $timeline-padding-right: 15px;
   $portfolio-section-padding: 50px;
@@ -56,10 +55,8 @@
       bottom: 0;
       display: initial; // TODO: remove
       position: absolute;
-
       text-align: right;
       font-style: italic;
-
       width: $timeline-width;
       padding: 32px $timeline-padding-right;
       margin-left: -$portfolio-section-padding;

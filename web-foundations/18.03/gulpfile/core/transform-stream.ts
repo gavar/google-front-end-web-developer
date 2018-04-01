@@ -1,5 +1,5 @@
-import File from "vinyl";
 import {Transform} from "stream";
+import File from "vinyl";
 
 export class TransformStream extends Transform {
 

@@ -1,7 +1,22 @@
 import {Disney, GameInsight, Konsus, SafetyWing, TSG} from "./companies";
 import {
-    AWSLambda, CSharp, Gulp, Java, Jenkins, JIRA, Maven, MySQL, nodejs, Serverless, Spring, TypeScript,
-    Handlebars, Unity3D, JavaScript, React, Webpack
+    AWSLambda,
+    CSharp,
+    Gulp,
+    Handlebars,
+    Java,
+    JavaScript,
+    Jenkins,
+    JIRA,
+    Maven,
+    MySQL,
+    nodejs,
+    React,
+    Serverless,
+    Spring,
+    TypeScript,
+    Unity3D,
+    Webpack
 } from "./technologies";
 import {Project} from "./types";
 
