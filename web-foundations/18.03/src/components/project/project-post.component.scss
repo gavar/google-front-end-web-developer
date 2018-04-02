@@ -3,6 +3,11 @@
 @import "components/project-gallery/project-gallery.component";
 
 @mixin project-post-mobile() {
+
+  .project-post {
+    max-width: 16px * 40; // 40em
+  }
+
   .project-title {
     & > * {
       font-weight: 400;
@@ -49,6 +54,11 @@
     }
   }
 
+  .project-description {
+    p { text-align: justify; }
+    ul { margin-top: 0; }
+  }
+
   .technologies-title {
     font-size: 12px;
     text-transform: uppercase;
@@ -60,12 +70,17 @@
   @include tech-tags-mobile;
 }
 
+@mixin project-post-tablet() {
+  // include dependencies
+  @include project-gallery-tablet();
+}
+
 @mixin project-post-desktop() {
   @supports (display: grid) {
     .project {
       display: grid;
-      grid-template-rows: repeat(2, 50%);
       grid-template-columns: repeat(2, 50%);
+      grid-column-gap: 5px;
     }
 
     .project-gallery-column {

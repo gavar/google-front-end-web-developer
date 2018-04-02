@@ -3,9 +3,12 @@
 @import "components/project-gallery-lightbox/project-gallery-lightbox.component";
 
 @mixin portfolio-mobile() {
+  $portfolio-section-padding: 20px;
 
   .portfolio-section {
-    padding: 20px 20px 0;
+    padding: $portfolio-section-padding $portfolio-section-padding 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .portfolio-title {
@@ -34,14 +37,10 @@
   @include project-gallery-lightbox-mobile();
 }
 
-@mixin portfolio-desktop() {
-  $timeline-width: 130px;
+@mixin portfolio-tablet() {
+  $timeline-width: 100px;
   $timeline-padding-right: 15px;
-  $portfolio-section-padding: 50px;
-
-  .portfolio-section {
-    padding: $portfolio-section-padding $portfolio-section-padding 0;
-  }
+  $portfolio-section-padding: 20px;
 
   .portfolio-timeline {
 
@@ -74,11 +73,10 @@
 
     .timeline-item {
       width: auto;
-      max-width: 1000px;
       position: relative;
       padding-top: 30px;
       margin-left: 20px;
-      margin-right: 30px;
+      margin-right: $timeline-width - $portfolio-section-padding;
       left: $timeline-width - $portfolio-section-padding;
     }
 
@@ -104,6 +102,11 @@
     }
   }
 
+  // include dependencies
+  @include project-post-tablet();
+}
+
+@mixin portfolio-desktop() {
   // include dependencies
   @include project-post-desktop();
 }

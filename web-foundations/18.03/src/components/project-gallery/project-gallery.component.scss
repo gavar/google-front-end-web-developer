@@ -1,6 +1,7 @@
 @mixin project-gallery-common {
   // swiper
   .project-gallery {
+
     // full screen for horizontal gallery in portrait mode
     &.horizontal {
       margin: auto -20px;
@@ -87,6 +88,15 @@
       height: 12px;
       margin: auto 8px;
       &:focus { outline-width: 0; }
+    }
+  }
+}
+
+@mixin project-gallery-tablet() {
+  .project-gallery {
+    // reset full screen mode
+    &.horizontal {
+      margin: auto;
     }
   }
 }

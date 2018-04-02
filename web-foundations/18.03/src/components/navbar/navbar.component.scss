@@ -73,13 +73,15 @@
 @mixin navbar-desktop() {
   $navbar-width: 265px;
 
-  .navbar {
-    height: 100%;
-    width: $navbar-width;
-    position: fixed;
-  }
+  @media screen and (min-width: 1400px) {
+    .navbar {
+      height: 100%;
+      width: $navbar-width;
+      position: fixed;
+    }
 
-  main {
-    margin-left: $navbar-width;
+    main {
+      margin-left: $navbar-width;
+    }
   }
 }
