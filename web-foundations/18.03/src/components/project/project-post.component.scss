@@ -39,14 +39,17 @@
   }
 
   .project-stores {
+    left: -2px;
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 5px;
     text-align: center;
-    margin: 20px auto;
+    vertical-align: center;
 
-    a {
-      margin: 0 2px;
-    }
+    a { margin-right: 5px; }
 
     img {
+      margin: 0 2px;
       width: 100%;
       height: auto;
       max-width: 155px;
@@ -59,10 +62,14 @@
     ul { margin-top: 0; }
   }
 
-  .technologies-title {
-    font-size: 12px;
-    text-transform: uppercase;
-    padding-bottom: .5em;
+  .project-technologies {
+    text-align: center;
+
+    .technologies-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      padding-bottom: .5em;
+    }
   }
 
   // include dependencies
@@ -76,36 +83,59 @@
 }
 
 @mixin project-post-desktop() {
+
+  .project-stores {
+    text-align: left;
+    margin-top: 0;
+  }
+
+  .project-technologies {
+    text-align: left;
+  }
+
   @supports (display: grid) {
     .project {
       display: grid;
       grid-template-columns: repeat(2, 50%);
       grid-column-gap: 5px;
+      grid-row-gap: 0;
+      & > * {
+        width: 100%;
+        grid-column: 1;
+      }
     }
 
-    .project-gallery-column {
+    .project-gallery {
       grid-column: 2;
       grid-row-start: 1;
-      grid-row-end: span 2;
-      align-self: center;
+      grid-row-end: span 3;
+      // center content vertically
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      align-content: center;
+      & > * { width: 100%; }
     }
   }
 
   @supports not (display: grid) {
+    .project {
+      overflow: auto;
+    }
+
     .project > * {
       width: 50%;
+      float: left;
       display: inline-block;
     }
 
-    .project-gallery-column {
+    .project-stores,
+    .project-technologies {
+      clear: left;
+    }
+
+    .project-gallery {
       float: right;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      align-content: center;
-      & > * {
-        flex: 1 1 100%;
-      }
     }
   }
 
