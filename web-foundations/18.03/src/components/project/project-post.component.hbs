@@ -3,7 +3,7 @@
     <div class="project-post">
         <div class="project-title">
             {{#if project.url}}
-                <a rel="nofollow" target="_blank" href="{{project.url}}">
+                <a rel="nofollow" href="{{project.url}}">
                     {{project.title}}<i class="fas fa-link"></i>
                 </a>
             {{else}}
@@ -23,7 +23,7 @@
     {{#if project.apps}}
         <div class="project-stores">
             {{#each project.apps as |app|}}
-                <a class="store.type" target="_blank" href="{{app.href}}">
+                <a class="store.type" href="{{app.href}}">
                     {{#is app.type "app-store"}}
                         <img src="assets/badges/app-store-badge.svg" alt="{{app.type}} app link">
                     {{/is}}
