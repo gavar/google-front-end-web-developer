@@ -6,7 +6,7 @@ const options: SwiperOptions = {
     init: false,
     direction: "horizontal",
     runCallbacksOnInit: true,
-    spaceBetween: 5,
+    spaceBetween: "1.5%" as any,
     navigation: {
         prevEl: ".swiper-button-prev",
         nextEl: ".swiper-button-next",
@@ -26,19 +26,13 @@ const vhFix = new VHChromeFix();
 const swipers: Swiper[] = new Swiper(".project-gallery .swiper-container", options) as any;
 for (const swiper of swipers) {
     swiper.once('init', function (this: Swiper) {
-
         const self = this;
-        const root = Html.querySelectorInParents<HTMLElement>(this.el, ".swiper-container");
 
         // activate swiping and navigation when more than one slide
         if (this.slides.length > 1) {
             this.allowSlidePrev = true;
             this.allowSlideNext = true;
             this.allowTouchMove = true;
-
-            // horizontal spacing looks smaller, so scale it up
-            if (root.classList.contains("horizontal"))
-                this.params.spaceBetween *= 1.35;
 
             // show navigation
             this.navigation.nextEl.classList.remove(this.params.navigation.hiddenClass);
@@ -65,7 +59,7 @@ for (const swiper of swipers) {
         window.addEventListener("orientationchange", update);
 
         // update when changing size of images
-        vhFix.usePrefixStyle([root.querySelector(".swiper-wrapper")], update);
+        vhFix.usePrefixStyle([this.wrapperEl], update);
     });
 
     swiper.on('slideChange', SwiperCommons.onSlideChange);
