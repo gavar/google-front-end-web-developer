@@ -20,15 +20,10 @@
   }
 
   .portfolio-timeline {
-
     .timeline-item {
       padding-top: 20px;
       padding-bottom: 20px;
       border-top: 1px solid;
-    }
-
-    .timeline-date {
-      display: none; // TODO: remove
     }
   }
 
@@ -52,7 +47,6 @@
       top: 0;
       left: 0;
       bottom: 0;
-      display: initial; // TODO: remove
       position: absolute;
       text-align: right;
       font-style: italic;
