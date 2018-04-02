@@ -68,11 +68,6 @@
   @include project-gallery-common();
 
   .project-gallery {
-    // work in progress sign
-    &.wip {
-      display: none;
-    }
-
     // swiper
     .swiper-wrapper {
       max-height: 90vh;
@@ -88,6 +83,13 @@
       height: 12px;
       margin: auto 8px;
       &:focus { outline-width: 0; }
+    }
+  }
+
+  .project-gallery-box {
+    // work in progress sign
+    &.wip {
+      display: none;
     }
   }
 }
@@ -182,7 +184,7 @@
 
     // work in progress sign
     &.wip {
-      display: block;
+      display: initial;
       max-width: 225px;
     }
 
@@ -190,21 +192,24 @@
     &.none {
       position: relative;
     }
+
+    &.phone,
+    &.tablet {
+      .swiper-container {
+        box-sizing: border-box;
+        border: black solid 2.5px;
+        border-radius: 4px;
+        background-color: black;
+      }
+    }
   }
 
   // swiper
-  .project-gallery {
+  .project-gallery-box {
 
     .swiper-wrapper {
       max-height: initial;
       --chrome-max-height: initial
-    }
-
-    .swiper-container {
-      box-sizing: border-box;
-      border: black solid 2.5px;
-      border-radius: 4px;
-      background-color: black;
     }
 
     .swiper-pagination-bullet {
