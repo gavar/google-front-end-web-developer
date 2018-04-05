@@ -1,4 +1,5 @@
 @mixin project-gallery-lightbox-mobile {
+  $border-radius: 20px;
   .project-gallery-lightbox {
     // full screen lightbox
     top: 0;
@@ -19,12 +20,14 @@
     }
 
     .swiper-button-close {
-      top: 0;
-      right: 0;
       width: 20%;
       z-index: 2;
       max-width: 130px;
       position: absolute;
+      top: -$border-radius;
+      right: -$border-radius;
+      min-width: 40px + $border-radius;
+      border-radius: $border-radius;
 
       // aspect box 1:1
       &:before {
@@ -34,9 +37,9 @@
       }
 
       .swiper-button-icon {
-        top: 0;
+        top: $border-radius;
         left: 0;
-        right: 0;
+        right: $border-radius;
         bottom: 0;
         position: absolute;
         width: 100%;
@@ -123,10 +126,12 @@
         top: 0;
         bottom: 0;
         width: 20%;
+        min-width: 40px + $border-radius;
         max-width: 130px;
-        height: auto;
-        margin-top: 0;
+        height: 20%;
+        margin: auto;
         background-image: none;
+        border-radius: $border-radius;
         transition: .2s;
       }
 
@@ -141,8 +146,14 @@
         stroke-width: 10;
       }
 
-      .swiper-button-prev { left: 0; }
-      .swiper-button-next { right: 0; }
+      .swiper-button-prev {
+        left: -$border-radius;
+        padding-left: $border-radius;
+      }
+      .swiper-button-next {
+        right: -$border-radius;
+        padding-right: $border-radius;
+      }
 
       .swiper-button-disabled {
         opacity: .1;
