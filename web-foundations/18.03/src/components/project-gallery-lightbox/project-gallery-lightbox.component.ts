@@ -58,7 +58,7 @@ export class ProjectGalleryLightbox {
             this.swiper.appendSlide(source.slides[i].cloneNode(true));
 
         this.swiper.activeIndex = source.activeIndex;
-        this.swiper.controller.control = source;
+        // this.swiper.controller.control = source;
 
         this.root.classList.add("show");
         this.swiper.update();
