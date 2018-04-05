@@ -115,6 +115,10 @@ const options: SwiperOptions = {
     pagination: {
         clickable: true,
     },
+    lazy: {
+        loadOnTransitionStart: true,
+        preloaderClass: "lazy-preloader",
+    },
     keyboard: {
         enabled: true,
     }

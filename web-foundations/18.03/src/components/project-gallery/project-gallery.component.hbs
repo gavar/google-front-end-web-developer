@@ -5,7 +5,15 @@
                 {{#each project.post.gallery.items as |media|}}
                     <div class="swiper-slide">
                         {{#is media.type "image"}}
-                            <img src="{{media.href}}" alt="{{../project.title}} project picture">
+                            <img class="swiper-lazy"
+                                 data-src="{{media.href}}"
+                                 data-alt="{{../project.title}} project picture #{{add @index 1}}">
+                            <div class="lazy-preloader">
+                                <div class="lazy-preloader-scale">
+                                    <div class="image-loader"></div>
+                                </div>
+                                <div>loading</div>
+                            </div>
                         {{/is}}
                         {{#is media.type "video"}}
                             <video controls>

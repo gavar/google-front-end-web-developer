@@ -1,4 +1,4 @@
-import Swiper, {SwiperOptions} from "swiper";
+import Swiper, {SwiperOptions, SwiperSlide} from "swiper";
 import {Html, SwiperCommons, VHChromeFix} from "../common";
 import {projectGalleryLightbox} from "../project-gallery-lightbox";
 
@@ -7,12 +7,17 @@ const options: SwiperOptions = {
     direction: "horizontal",
     runCallbacksOnInit: true,
     spaceBetween: "1.5%" as any,
+    preloadImages: false,
     navigation: {
         prevEl: ".swiper-button-prev",
         nextEl: ".swiper-button-next",
     },
     pagination: {
         clickable: true,
+    },
+    lazy: {
+        loadOnTransitionStart: true,
+        preloaderClass: "lazy-preloader",
     },
     // will be enabled if contains more than one slide
     allowSlidePrev: false,
@@ -63,5 +68,8 @@ for (const swiper of swipers) {
     });
 
     swiper.on('slideChange', SwiperCommons.onSlideChange);
+    swiper.on('lazyImageReady', function (slide: SwiperSlide, image: HTMLImageElement) {
+        image.alt = image.getAttribute('data-alt');
+    });
     swiper.init();
 }
