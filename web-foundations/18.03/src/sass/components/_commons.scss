@@ -1,0 +1,8 @@
+@import "sass/functions";
+
+/// Generate animation name of the CSS element.
+@function animation-name($self, $postfix:'') {
+  $value: #{str-replace(#{$self}, '.', '-')};
+  @if ($postfix) { $value: #{$value}#{'-'}#{$postfix};}
+  @return #{$value}#{'-animation'};
+}
