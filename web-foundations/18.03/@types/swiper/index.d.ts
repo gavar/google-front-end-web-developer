@@ -97,6 +97,21 @@ declare module "swiper" {
          */
         allowSlideNext?: boolean;
 
+        /* IMAGES */
+
+        /**
+         * When enabled Swiper will force to load all images.
+         * @default true
+         */
+        preloadImages?: boolean;
+
+        /**
+         * When enabled Swiper will be reinitialized after all inner images (<img> tags) are loaded.
+         * Required <b>{@link preloadImages}: true</b>
+         * @default true
+         */
+        updateOnImagesReady?: boolean;
+
         /** Pagination Parameters. */
         pagination?: {
             /**
@@ -162,6 +177,52 @@ declare module "swiper" {
              * @default 'swiper-button-hidden'
              */
             hiddenClass?: string;
+        }
+
+        /** Lazy Loading Parameters */
+        lazy?: boolean | {
+            /**
+             * Set to "true" to enable lazy loading for the closest slides images (for previous and next slide images).
+             * @default false
+             */
+            loadPrevNext?: boolean;
+
+            /**
+             * Amount of next/prev slides to preload lazy images in. Can't be less than {@link slidesPerView}.
+             * @default 1
+             */
+            loadPrevNextAmount?: number;
+
+            /**
+             * By default, Swiper will load lazy images after transition to this slide,
+             * so you may enable this parameter if you need it to start loading of new image in the beginning of transition.
+             * @default false
+             */
+            loadOnTransitionStart?: boolean;
+
+            /**
+             * CSS class name of lazy element.
+             * @default swiper-lazy
+             */
+            elementClass?: string;
+
+            /**
+             * CSS class name of lazy loading element.
+             * @default swiper-lazy-loading
+             */
+            loadingClass?: string;
+
+            /**
+             * CSS class name of lazy loaded element.
+             * @default swiper-lazy-loaded
+             */
+            loadedClass?: string;
+
+            /**
+             * CSS class name of lazy preloader.
+             * @default swiper-lazy-preloader
+             */
+            preloaderClass?: string;
         }
 
         /** Keyboard Control Parameters. */
@@ -361,21 +422,21 @@ declare module "swiper" {
          * @param {string} event - event to listen for.
          * @param handler - event handler to invoke when event occurs.
          */
-        on(event: string, handler: (this: Swiper) => void): void;
+        on(event: string, handler: (this: Swiper, ...args: any[]) => void): void;
 
         /**
          * Add event listener that will be executed only once.
          * @param {string} event - event to listen for.
          * @param handler - event handler to invoke when event occurs.
          */
-        once(event: string, handler: (this: Swiper) => void): void;
+        once(event: string, handler: (this: Swiper, ...args: any[]) => void): void;
 
         /**
          * Remove event listener for specified event.
          * @param {string} event - event to remove.
          * @param handler - event handler to remove.
          */
-        off(event: string, handler: (this: Swiper) => void): void;
+        off(event: string, handler: (this: Swiper, ...args: any[]) => void): void;
 
         /**
          * Remove all listeners for specified event.
