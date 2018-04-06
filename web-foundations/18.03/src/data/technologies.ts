@@ -2,7 +2,7 @@ import {Technology} from "./types";
 
 export const CSharp: Technology = {
     name: "C#",
-    icon: "img/tech/csharp-logo.svg",
+    icon: "assets/tech/csharp-logo.svg",
 };
 
 export const Java: Technology = {

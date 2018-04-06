@@ -116,13 +116,6 @@ function roll() {
 }
 gulp.task(roll);
 
-/** Copy images. */
-function images() {
-    return gulp.src("./src/app/img/**/*")
-        .pipe(gulp.dest("./dist/img"));
-}
-gulp.task(images);
-
 /** Copy assets. */
 function assets() {
     return gulp.src("./src/app/assets/**/*")
@@ -147,7 +140,6 @@ gulp.task("default", series(
             scripts,
             roll,
         ),
-        images,
         assets,
     )
 ));
@@ -157,7 +149,6 @@ function watch() {
     gulp.watch("./src/**/*.hbs", pages);
     gulp.watch("./src/**/*.+(css|scss)", style);
     gulp.watch("./src/**/*.+(ts|js)", series(clearNodeCache, scripts, roll));
-    gulp.watch("./src/app/img/**/*", images);
     gulp.watch("./src/app/assets/**/*", assets);
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
 }
