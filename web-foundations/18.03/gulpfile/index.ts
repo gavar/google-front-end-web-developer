@@ -10,10 +10,9 @@ import * as HandlebarsIntl from 'handlebars-intl';
 import * as layouts from 'handlebars-layouts';
 import * as registrar from "handlebars-registrar";
 import * as path from "path";
-import {isString} from "util";
 import {TaskCallback} from "./core";
 import {TaskInfo} from "./core/types";
-import {beautify, render, rollupify} from "./tools";
+import {beautify, render, resources, rollupify} from "./tools";
 
 /** Clean previous compilation files. */
 function clean(done: TaskCallback) {
@@ -118,8 +117,9 @@ gulp.task(roll);
 
 /** Copy assets. */
 function assets() {
-    return gulp.src("./src/app/assets/**/*")
-        .pipe(gulp.dest("./dist/assets"));
+    return gulp.src("./dist/**/*.+(html|css)")
+        .pipe(resources({base: "src/app"}))
+        .pipe(gulp.dest("./dist"));
 }
 gulp.task(assets);
 
@@ -140,8 +140,8 @@ gulp.task("default", series(
             scripts,
             roll,
         ),
-        assets,
-    )
+    ),
+    assets,
 ));
 
 // watch for changes
@@ -149,7 +149,7 @@ function watch() {
     gulp.watch("./src/**/*.hbs", pages);
     gulp.watch("./src/**/*.+(css|scss)", style);
     gulp.watch("./src/**/*.+(ts|js)", series(clearNodeCache, scripts, roll));
-    gulp.watch("./src/app/assets/**/*", assets);
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
+    gulp.watch("./dist/**/*.+(html|css)", assets);
 }
 gulp.task("watch", gulp.series("default", watch));
