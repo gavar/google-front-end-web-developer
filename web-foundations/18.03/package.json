@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/del": "^3.0.0",
+    "@types/fs-extra": "^5.0.1",
     "@types/gulp": "^4.0.0",
     "@types/gulp-autoprefixer": "^0.0.31",
     "@types/gulp-sass": "^0.0.31",
@@ -21,6 +22,7 @@
     "@types/vinyl": "^2.0.2",
     "commondir": "^1.0.1",
     "del": "^3.0.0",
+    "fs-extra": "^5.0.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-handlebars-render": "^0.0.1",
