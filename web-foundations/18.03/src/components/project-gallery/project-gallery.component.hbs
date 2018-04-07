@@ -6,6 +6,7 @@
                     <div class="swiper-slide">
                         {{#is media.type "image"}}
                             <img class="swiper-lazy"
+                                 data-img-sizes="375, 750, 1080"
                                  data-src="{{media.href}}"
                                  data-alt="{{../project.title}} project picture #{{add @index 1}}">
                             <div class="lazy-preloader">

@@ -12,7 +12,7 @@ import * as registrar from "handlebars-registrar";
 import * as path from "path";
 import {TaskCallback} from "./core";
 import {TaskInfo} from "./core/types";
-import {beautify, render, resources, rollupify} from "./tools";
+import {beautify, render, resources, responsify, rollupify} from "./tools";
 
 /** Clean previous compilation files. */
 function clean(done: TaskCallback) {
@@ -130,6 +130,13 @@ function vendor() {
 }
 gulp.task(vendor);
 
+/** Responsive images. */
+function responsive() {
+    return gulp.src("./dist/**/*.+(html)")
+        .pipe(responsify({base: "src/app"}))
+        .pipe(gulp.dest("./dist"))
+}
+
 /** All tasks sequence. */
 gulp.task("default", series(
     clean,
@@ -141,6 +148,7 @@ gulp.task("default", series(
             roll,
         ),
     ),
+    responsive,
     assets,
 ));
 
@@ -150,6 +158,6 @@ function watch() {
     gulp.watch("./src/**/*.+(css|scss)", style);
     gulp.watch("./src/**/*.+(ts|js)", series(clearNodeCache, scripts, roll));
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
-    gulp.watch("./dist/**/*.+(html|css)", assets);
+    gulp.watch("./dist/**/*.+(html|css)", series(responsive, assets));
 }
 gulp.task("watch", gulp.series("default", watch));
