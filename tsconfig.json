@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": false, // TODO: true
+    "noImplicitAny": false, // TODO: true
+    "noImplicitThis": false, // TODO: true
+    "noImplicitReturns": false, // TODO: false
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false, // TODO: true
+    "preserveConstEnums": true,
+    "allowUnusedLabels": true, // TODO: false
+    "allowUnreachableCode": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": false,
+    "noEmitOnError": true,
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "pretty": true,
+    "declaration": false,
+    "isolatedModules": false,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noResolve": false,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "esnext",
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
