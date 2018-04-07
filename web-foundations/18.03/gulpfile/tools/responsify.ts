@@ -71,16 +71,15 @@ class Responsify extends TransformStream {
 
         for (let i = 0; i < images.length; i++) {
             const image: HTMLImageElement = images[i];
-            const rawSizes = image.getAttribute("data-img-sizes");
-            if (!rawSizes) continue;
+            const sizes = image.getAttribute("data-img-sizes");
+            if (!sizes) continue;
 
             image.removeAttribute("data-img-sizes");
-            const widths = rawSizes.split(',').map(x => Number(x));
-
-            const imagePath = image.getAttribute("data-src");
-            image.removeAttribute("data-src");
+            const widths = sizes.split(',').map(x => Number(x));
+            if (widths.length < 1) continue;
 
             // push image file itself
+            const imagePath = image.getAttribute("data-src");
             const imageFile = await resolveImage(file, this.options.base, imagePath);
             this.push(imageFile);
 
