@@ -97,7 +97,7 @@ class Responsify extends TransformStream {
                     const imagePath = `${imageFile.path.slice(0, -ext.length)}-${width}${ext}`;
 
                     await resize({
-                        srcData: imageFile.contents.toString(),
+                        srcData: imageFile.contents as any,
                         dstPath: imagePath,
                         width: width,
                     });
