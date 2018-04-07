@@ -17,7 +17,7 @@
     "@types/gulp-util": "^3.0.34",
     "@types/handlebars": "^4.0.36",
     "@types/js-beautify": "^0.0.31",
-    "@types/node": "^9.4.6",
+    "@types/node": "^9.6.2",
     "@types/vinyl": "^2.0.2",
     "commondir": "^1.0.1",
     "del": "^3.0.0",
