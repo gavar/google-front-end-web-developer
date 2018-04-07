@@ -38,7 +38,7 @@ class HtmlResources extends Transform {
         // HTML
         {
             let exec: RegExpExecArray;
-            const regex = /<(img|video).*?src="(.*?)"/g;
+            const regex = /<(img|source).*?src="(.*?)"/g;
             while (exec = regex.exec(content))
                 await this.dependency(file, basePath, exec[2]);
         }
