@@ -148,16 +148,18 @@ gulp.task("default", series(
             roll,
         ),
     ),
-    responsive,
-    assets,
+    parallel(
+        responsive,
+        assets,
+    ),
 ));
 
 // watch for changes
 function watch() {
-    gulp.watch("./src/**/*.hbs", pages);
+    gulp.watch("./src/**/*.hbs", series(pages, responsive));
     gulp.watch("./src/**/*.+(css|scss)", style);
     gulp.watch("./src/**/*.+(ts|js)", series(clearNodeCache, scripts, roll));
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
-    gulp.watch("./dist/**/*.+(html|css)", series(responsive, assets));
+    gulp.watch("./dist/**/*.+(html|css)", assets);
 }
 gulp.task("watch", gulp.series("default", watch));
