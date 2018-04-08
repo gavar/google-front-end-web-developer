@@ -62,6 +62,11 @@ export class ProjectGalleryLightbox {
         this.root.addEventListener("touchmove", function (e: Event) {
             e.preventDefault();
         }, false)
+
+        const update = () => { this.swiper.update(); };
+        window.addEventListener('resize', update);
+        window.addEventListener('resize', () => setTimeout(update, 100)); // chrome fix
+        window.addEventListener('resize', () => setTimeout(update, 150)); // chrome fix
     }
 
     public open(source: Swiper) {
