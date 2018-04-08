@@ -1,5 +1,20 @@
 import Swiper, {SwiperOptions} from "swiper";
-import {Html, SwiperCommons} from "../common";
+import {Html, HtmlVideo, SwiperCommons} from "../common";
+
+function memoize(swiper: Swiper): SwiperMemory {
+    return swiper && {
+        keyboard: {
+            enabled: swiper.keyboard.enabled,
+        }
+    }
+}
+
+function restore(value: Swiper, memory: SwiperMemory) {
+    if (!value || !memory)
+        return;
+
+    value.keyboard.enabled = memory.keyboard.enabled;
+}
 
 export let projectGalleryLightbox: ProjectGalleryLightbox;
 
@@ -17,8 +32,13 @@ export class ProjectGalleryLightbox {
         this.swiper.controller.control = [];
         this.root = Html.querySelectorInParents<HTMLElement>(this.swiper.el, ".project-gallery-lightbox");
 
-        // do not close when clicking on slide content
         this.swiper.wrapperEl.addEventListener("click", function (e: MouseEvent) {
+
+            // toggle play state on video
+            if (e.target instanceof HTMLVideoElement)
+                HtmlVideo.toggle(e.target);
+
+            // do not close when clicking on slide content
             if (!e.toElement.classList.contains("swiper-slide"))
                 e.stopPropagation();
         });
@@ -74,26 +94,11 @@ export class ProjectGalleryLightbox {
 
         // restore setting of currently active swiper
         if (this.source && this.source != next)
-            ProjectGalleryLightbox.restore(this.source, this.memory);
+            restore(this.source, this.memory);
 
         // save setting of next swiper
         this.source = next;
-        this.memory = ProjectGalleryLightbox.memoize(next);
-    }
-
-    private static memoize(swiper: Swiper): SwiperMemory {
-        return swiper && {
-            keyboard: {
-                enabled: swiper.keyboard.enabled,
-            }
-        }
-    }
-
-    private static restore(value: Swiper, memory: SwiperMemory) {
-        if (!value || !memory)
-            return;
-
-        value.keyboard.enabled = memory.keyboard.enabled;
+        this.memory = memoize(next);
     }
 }
 

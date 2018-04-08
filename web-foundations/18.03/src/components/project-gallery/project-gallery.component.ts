@@ -1,5 +1,5 @@
 import Swiper, {SwiperOptions, SwiperSlide} from "swiper";
-import {Html, SwiperCommons, VHChromeFix} from "../common";
+import {Html, HtmlVideo, SwiperCommons, VHChromeFix} from "../common";
 import {projectGalleryLightbox} from "../project-gallery-lightbox";
 
 const options: SwiperOptions = {
@@ -54,7 +54,13 @@ for (const swiper of swipers) {
 
             // open lightbox on click
             this.wrapperEl.addEventListener('click', function (e: MouseEvent) {
-                projectGalleryLightbox.open(self);
+                // play video instead of opening lightbox
+                if (e.target instanceof HTMLVideoElement) {
+                    HtmlVideo.toggle(e.target);
+                }
+                else {
+                    projectGalleryLightbox.open(self);
+                }
             });
         }
 
