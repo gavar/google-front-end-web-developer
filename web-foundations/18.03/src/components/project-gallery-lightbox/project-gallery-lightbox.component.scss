@@ -50,7 +50,7 @@
         opacity: .7;
         fill: white;
         stroke: grey;
-        stroke-width: 10;
+        stroke-width: 10px;
         stroke-linecap: round;
       }
     }
@@ -147,7 +147,7 @@
         display: block;
         fill: white;
         stroke: grey;
-        stroke-width: 10;
+        stroke-width: 10px;
       }
 
       .swiper-button-prev {
@@ -163,9 +163,6 @@
         opacity: .1;
         pointer-events: auto
       }
-
-      .swiper-button-icon-prev { background: url("/img/arrow-left.svg"); }
-      .swiper-button-icon-next { background: url("/img/arrow-right.svg"); }
     }
   }
 

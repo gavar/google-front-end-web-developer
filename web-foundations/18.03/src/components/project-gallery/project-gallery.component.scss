@@ -59,15 +59,12 @@
         display: block;
         fill: white;
         stroke: grey;
-        stroke-width: 10;
+        stroke-width: 10px;
       }
 
       .swiper-button-prev { left: 0; }
       .swiper-button-next { right: 0; }
       .swiper-button-disabled { display: none; }
-
-      .swiper-button-icon-prev { background: url("/img/arrow-left.svg"); }
-      .swiper-button-icon-next { background: url("/img/arrow-right.svg"); }
     }
 
     /* LAZY LOADING */
@@ -155,7 +152,7 @@
     // tablet gallery, vertical (3:4)
     &.tablet {
       max-width: 350px;
-      background: url("../assets/ipad-air-2-vertical.png") no-repeat;
+      background: url("/assets/ipad-air-2-vertical.png") no-repeat;
       background-size: 100% auto;
 
       &:before {
@@ -175,7 +172,7 @@
     // phone gallery vertical (9:16)
     &.phone {
       max-width: 230px;
-      background: url("../assets/iphone-7-vertical.png") no-repeat;
+      background: url("/assets/iphone-7-vertical.png") no-repeat;
       background-size: 100% auto;
 
       &:before {
@@ -195,7 +192,7 @@
     // phone gallery horizontal (16:9)
     &.phone.horizontal {
       max-width: 463.7px;
-      background: url("../assets/iphone-7-horizontal.png") no-repeat;
+      background: url("/assets/iphone-7-horizontal.png") no-repeat;
       background-size: 100% auto;
 
       &:before {
