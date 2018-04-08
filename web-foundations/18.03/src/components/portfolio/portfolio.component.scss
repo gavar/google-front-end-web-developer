@@ -103,6 +103,7 @@
 @mixin portfolio-desktop() {
   // include dependencies
   @include project-post-desktop();
+  @include project-gallery-lightbox-desktop();
 }
 
 @mixin portfolio-hover() {
