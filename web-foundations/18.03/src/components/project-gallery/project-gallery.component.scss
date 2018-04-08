@@ -44,26 +44,31 @@
       .swiper-button {
         top: 0;
         bottom: 0;
-        width: 40px;
-        height: auto;
-        margin-top: 0;
+        margin: auto;
+        width: auto;
+        height: fit-content;
         background-image: none;
         transition: .2s;
       }
 
       // arrow icon
       .swiper-button-icon {
-        width: 30px;
-        height: 100%;
-        margin: auto;
+        max-width: 25px;
+        max-height: 25px * 3;
         display: block;
         fill: white;
         stroke: grey;
         stroke-width: 10px;
       }
 
-      .swiper-button-prev { left: 0; }
-      .swiper-button-next { right: 0; }
+      .swiper-button-prev {
+        left: 0;
+        padding-right: 10px;
+      }
+      .swiper-button-next {
+        right: 0;
+        padding-left: 10px;
+      }
       .swiper-button-disabled { display: none; }
     }
 
