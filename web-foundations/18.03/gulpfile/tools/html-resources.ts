@@ -6,7 +6,7 @@ import * as File from "vinyl";
 function resolveWebPath(file: File, basePath: string, resource: string): string {
     switch (resource[0]) {
         case '/':
-            return path.resolve(basePath, resource);
+            return path.resolve(basePath, resource.slice(1));
         default:
             const directoryPath = path.dirname(file.path).slice(file.base.length + 1);
             return path.resolve(basePath, directoryPath, resource);
@@ -18,8 +18,6 @@ interface HtmlResourcesOptions {
 }
 
 class HtmlResources extends Transform {
-
-    private readonly files: File[] = [];
 
     constructor(public readonly options: HtmlResourcesOptions) {
         super({objectMode: true});
