@@ -87,6 +87,10 @@ class Responsify extends TransformStream {
                 const sources: string[] = [];
                 const features = await identify(imageFile.path);
 
+                // this required since srcset doesn't work with max-width: 100%
+                image.style.maxWidth = `${features.width}px`;
+                image.style.maxHeight = `${features.height}px`;
+
                 for (const width of widths) {
                     // avoid upscaling
                     if (features.width < width)
