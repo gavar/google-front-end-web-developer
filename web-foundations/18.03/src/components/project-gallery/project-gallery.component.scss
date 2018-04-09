@@ -17,6 +17,10 @@
       align-items: center;
       justify-content: center;
 
+      // hide not loaded images
+      img { display: none;}
+      img[src], img[srcset] { display: block;}
+
       // content
       & > * {
         max-width: 100%;
