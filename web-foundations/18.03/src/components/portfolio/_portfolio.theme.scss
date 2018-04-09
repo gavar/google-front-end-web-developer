@@ -4,6 +4,7 @@
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
   $primary-color: mat-color($primary);
   $accent-color: mat-color($accent);
 
@@ -16,7 +17,7 @@
   }
 
   .portfolio-timeline {
-    $border-color-1: mat-color($primary, lighter);
+    $border-color-1: mat-color($background, background);
     $border-color-2: mat-color($primary);
 
     .timeline-date {
@@ -34,17 +35,21 @@
 
     // horizontal separation line
     .timeline-separator {
-      top: -20px;
-      height: 1px;
-      position: relative;
-      background: linear-gradient(to right, $border-color-2, white);
+      background: linear-gradient(to right, $border-color-1, $border-color-2, $border-color-1);
     }
+  }
+}
 
-    // hide timeline separator for the first item
-    .timeline-entry:nth-child(1) {
-      .timeline-separator {
-        display: none;
-      }
+@mixin portfolio-theme-mobile-only($theme) {
+  $primary: map-get($theme, primary);
+  $background: map-get($theme, background);
+  $border-color-1: mat-color($background, background);
+  $border-color-2: mat-color($primary);
+
+  .portfolio-timeline {
+    // horizontal separation line
+    .timeline-separator {
+      background: linear-gradient(to right, $border-color-2, $border-color-1);
     }
   }
 }

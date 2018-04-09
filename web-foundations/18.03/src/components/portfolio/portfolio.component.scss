@@ -24,6 +24,10 @@
       padding-top: 20px;
       padding-bottom: 20px;
     }
+
+    .timeline-separator {
+      height: 1px;
+    }
   }
 
   // include dependencies
@@ -72,11 +76,21 @@
       left: $timeline-width - $portfolio-section-padding;
     }
 
+    .timeline-separator {
+      position: relative;
+      margin-right: $timeline-width - $portfolio-section-padding;
+      left: $timeline-width - $portfolio-section-padding;
+    }
+
     .timeline-entry:first-child {
 
       .timeline-item {
         border-top: none;
         padding-top: 0;
+      }
+
+      .timeline-separator {
+        display: none;
       }
 
       .timeline-date {
