@@ -37,7 +37,7 @@ export const Fronted: Project = {
             }]
         },
         content: `<p>
-The project dedicated to freelancers and small bossiness, who wondering how to promote their product
+The project dedicated to freelancers and small business, who wondering how to promote their product
 and find new customers. Fronted is going to solve that problem by introducing expert evaluation of your
 project needs; by providing marketing team and promoting your product using an embedded social platform.
 </p>`,
