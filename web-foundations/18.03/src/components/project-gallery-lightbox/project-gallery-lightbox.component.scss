@@ -48,8 +48,6 @@
         max-height: 25px;
         margin: auto;
         opacity: .7;
-        fill: white;
-        stroke: grey;
         stroke-width: 10px;
         stroke-linecap: round;
       }
@@ -117,7 +115,7 @@
       width: 16px;
       height: 16px;
       margin: auto 8px;
-      border: 1px solid #007aff;
+      border: 1px solid;
       border-radius: 8px;
       opacity: .3;
 

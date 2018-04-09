@@ -1,20 +1,19 @@
 // import the theming functionality.
+@import "typography.theme";
 @import "navbar/navbar.theme";
 @import "portfolio/portfolio.theme";
 @import "project/project-post.theme";
 @import "tech-tags/tech-tags.theme";
 @import "project-gallery/project-gallery.theme";
+@import "project-gallery-lightbox/project-gallery-lightbox.theme";
 
 // create a theme.
 @mixin components-theme($theme) {
-
-  a {
-    color: #bb1e1e;
-  }
-
+  @include typography-theme($theme);
   @include sidebar-theme($theme);
   @include portfolio-theme($theme);
   @include project-post-theme($theme);
   @include tech-tags-theme($theme);
   @include project-gallery-theme($theme);
+  @include project-gallery-lightbox-theme($theme);
 }

@@ -3,30 +3,47 @@
 @mixin portfolio-theme($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
+  $primary-color: mat-color($primary);
+  $accent-color: mat-color($accent);
 
   .portfolio-section {
-    color: #333;
+    color: map-get($foreground, text);
   }
 
   .portfolio-title {
-    color: #555;
+    color: mat-color($foreground, secondary-text);
   }
 
   .portfolio-timeline {
-
-    .timeline-item {
-      border-color: #ddd;
-    }
+    $border-color-1: mat-color($primary, lighter);
+    $border-color-2: mat-color($primary);
 
     .timeline-date {
-      color: #999;
-      border-color: #ddd;
+      // text color
+      color: mat-color($foreground, secondary-text);
+      // timeline knob color
+      &:after { background-color: $accent-color; }
+      // timeline vertical line
+      &:before {
+        content: ""; position: absolute;
+        top: 0; right: 0; bottom: 0; width: 1px;
+        background: linear-gradient(to bottom, $border-color-1, $border-color-2, $border-color-1);
+      }
+    }
 
-      &:after {
-        background-color: rgb(187, 30, 30);
+    // horizontal separation line
+    .timeline-separator {
+      top: -20px;
+      height: 1px;
+      position: relative;
+      background: linear-gradient(to right, $border-color-2, white);
+    }
+
+    // hide timeline separator for the first item
+    .timeline-entry:nth-child(1) {
+      .timeline-separator {
+        display: none;
       }
     }
   }

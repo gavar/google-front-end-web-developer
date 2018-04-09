@@ -4,8 +4,8 @@
 
 // define a theme.
 $primary: mat-palette($mat-deep-purple);
-$accent: mat-palette($mat-orange);
-$theme: mat-dark-theme($primary, $accent);
+$accent: mat-palette($mat-indigo);
+$theme: mat-light-theme($primary, $accent);
 
 // include theme styles for the components.
 @include components-theme($theme);

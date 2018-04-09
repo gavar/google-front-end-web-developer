@@ -2,20 +2,16 @@
 
 @mixin sidebar-theme($theme) {
   $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
+  $color: mat-color($primary, default-contrast);
+  $bg-color: mat-color($primary, default);
 
   .navbar {
-    color: mat-color($foreground, text);
-    background-color: mat-color($primary);
+    color: $color;
+    background-color: $bg-color;
   }
 
   .profile-social-links a {
-    color: rgba(mat-color($foreground, text), .8);
-    &:hover {
-      color: mat-color($foreground, text);
-    }
+    color: rgba($color, 0.8);
+    &:hover { color: $color; }
   }
 }

@@ -1,0 +1,11 @@
+@import 'core/theming/theming';
+
+@mixin typography-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+  a {
+    font-weight: 400;
+    color: mat-color($accent, darker);
+  }
+}
