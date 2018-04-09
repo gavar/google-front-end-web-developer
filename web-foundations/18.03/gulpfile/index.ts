@@ -1,7 +1,8 @@
 import * as del from "del";
 import * as gulp from "gulp";
 import {parallel, series} from "gulp";
-import * as autoprefixer from "gulp-autoprefixer";
+import * as autoprefixer from "autoprefixer";
+import * as postcss from "gulp-postcss";
 import * as sass from "gulp-sass";
 import * as ts from "gulp-typescript";
 import * as Handlebars from 'handlebars';
@@ -28,7 +29,7 @@ function style(): NodeJS.ReadWriteStream {
                 "./src",
             ],
         }))
-        .pipe(autoprefixer())
+        .pipe(postcss([autoprefixer()]))
         .pipe(beautify.css())
         .pipe(gulp.dest('./dist'));
 }
