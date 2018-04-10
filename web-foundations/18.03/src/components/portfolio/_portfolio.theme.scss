@@ -1,0 +1,55 @@
+@import 'core/theming/theming';
+
+@mixin portfolio-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+  $primary-color: mat-color($primary);
+  $accent-color: mat-color($accent);
+
+  .portfolio-section {
+    color: map-get($foreground, text);
+  }
+
+  .portfolio-title {
+    color: mat-color($foreground, secondary-text);
+  }
+
+  .portfolio-timeline {
+    $border-color-1: mat-color($background, background);
+    $border-color-2: mat-color($primary);
+
+    .timeline-date {
+      // text color
+      color: mat-color($foreground, secondary-text);
+      // timeline knob color
+      &:after { background-color: $accent-color; }
+      // timeline vertical line
+      &:before {
+        content: ""; position: absolute;
+        top: 0; right: 0; bottom: 0; width: 1px;
+        background: linear-gradient(to bottom, $border-color-1, $border-color-2, $border-color-1);
+      }
+    }
+
+    // horizontal separation line
+    .timeline-separator {
+      background: linear-gradient(to right, $border-color-1, $border-color-2, $border-color-1);
+    }
+  }
+}
+
+@mixin portfolio-theme-mobile-only($theme) {
+  $primary: map-get($theme, primary);
+  $background: map-get($theme, background);
+  $border-color-1: mat-color($background, background);
+  $border-color-2: mat-color($primary);
+
+  .portfolio-timeline {
+    // horizontal separation line
+    .timeline-separator {
+      background: linear-gradient(to right, $border-color-2, $border-color-1);
+    }
+  }
+}

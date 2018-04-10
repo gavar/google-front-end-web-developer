@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "./src/",
+    "outDir": "./out/ts",
+    "paths": {
+      "swiper": [
+        "./@types/swiper/index.d.ts"
+      ]
+    }
+  }
+}

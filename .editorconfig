@@ -12,5 +12,5 @@ indent_style = space
 indent_size = 2
 
 # CSS
-[*.css]
+[*.{css,scss}]
 indent_size = 2

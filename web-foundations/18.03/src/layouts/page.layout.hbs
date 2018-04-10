@@ -1,0 +1,11 @@
+{{#extend "layouts/base" title=title}}
+    {{#content "body"}}
+        <!-- navbar -->
+        {{> "components/navbar" }}
+        <!-- primary content -->
+        <main>
+            {{#block "main"}}
+            {{/block}}
+        </main>
+    {{/content}}
+{{/extend}}

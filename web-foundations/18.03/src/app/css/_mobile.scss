@@ -1,0 +1,6 @@
+// import responsive components
+@import "components/componenets-responsive";
+
+// include styles
+@include navbar-mobile();
+@include portfolio-mobile();

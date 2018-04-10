@@ -1,0 +1,9 @@
+@import 'core/theming/theming';
+
+@mixin components-theme-base($theme) {
+  $background: map-get($theme, background);
+
+  body {
+    background-color: mat-color($background, background);
+  }
+}

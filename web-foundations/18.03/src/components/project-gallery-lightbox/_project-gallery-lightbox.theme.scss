@@ -1,0 +1,25 @@
+@import 'core/theming/theming';
+
+@mixin project-gallery-lightbox-theme($theme) {
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+  $accent-color: mat-color($accent);
+
+  .project-gallery-lightbox {
+
+    .swiper-button-icon {
+      fill: white;
+      stroke: grey;
+    }
+
+    .swiper-pagination-bullet {
+      opacity: 1;
+      border-color: $accent-color;
+      background: mat-color($foreground, base, .2);
+    }
+
+    .swiper-pagination-bullet-active {
+      background: $accent-color;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+// Global Styles
+*, :after, :before {
+  box-sizing: inherit
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px/1.6 Roboto, Helvetica, sans-serif;
+  font-weight: 300;
+  max-width: 1920px;
+
+  & > svg {
+    display: none;
+  }
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

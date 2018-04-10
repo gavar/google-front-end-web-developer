@@ -1,0 +1,213 @@
+@mixin project-gallery-lightbox-mobile {
+  $border-radius: 20px;
+  .project-gallery-lightbox {
+    // full screen lightbox
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    user-select: none;
+    box-sizing: border-box;
+    z-index: 100;
+
+    // hidden by default
+    display: none;
+
+    &.show {
+      display: block;
+      background: rgba(0, 0, 0, 1);
+    }
+
+    .swiper-button-close {
+      width: 20%;
+      z-index: 2;
+      max-width: 130px;
+      position: absolute;
+      top: -$border-radius;
+      right: -$border-radius;
+      min-width: 40px + $border-radius;
+      border-radius: $border-radius;
+
+      // aspect box 1:1
+      &:before {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+      }
+
+      .swiper-button-icon {
+        top: $border-radius;
+        left: 0;
+        right: $border-radius;
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        max-width: 25px;
+        max-height: 25px;
+        margin: auto;
+        opacity: .7;
+        stroke-width: 10px;
+        stroke-linecap: round;
+      }
+    }
+
+    /* LAZY LOADING */
+    .lazy-preloader {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      // center content vertically and horizontally
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: center;
+      // text & preloader color
+      color: white;
+      font-size: 1.5em;
+    }
+
+    .lazy-preloader-scale {
+      margin: 50px 0;
+      transform: scale(3);
+    }
+  }
+
+  // swiper
+  .project-gallery-lightbox {
+    .swiper-container {
+      height: 100%;
+    }
+
+    .swiper-slide {
+      // center horizontally
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      // hide not loaded images
+      img { display: none;}
+      img[src], img[srcset] { display: block;}
+
+      // content
+      & > * {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      & > img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .swiper-pagination {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: fit-content;
+      position: absolute;
+      margin-left: auto;
+      margin-right: auto;
+      pointer-events: auto;
+    }
+
+    .swiper-pagination-bullet {
+      width: 16px;
+      height: 16px;
+      margin: auto 8px;
+      border: 1px solid;
+      border-radius: 8px;
+      opacity: .3;
+
+      &:focus {
+        outline-width: 0;
+      }
+    }
+
+    .swiper-pagination-bullet-active {
+      opacity: 1;
+    }
+
+    // navigation buttons
+    .swiper-navigation {
+
+      .swiper-button {
+        top: 0;
+        bottom: 0;
+        width: 20%;
+        min-width: 40px + $border-radius;
+        max-width: 130px;
+        height: 20%;
+        margin: auto;
+        background-image: none;
+        border-radius: $border-radius;
+        transition: .2s;
+      }
+
+      // arrow icon
+      .swiper-button-icon {
+        width: 30px;
+        height: 100%;
+        margin: auto;
+        display: block;
+        fill: white;
+        stroke: grey;
+        stroke-width: 10px;
+      }
+
+      .swiper-button-prev {
+        left: -$border-radius;
+        padding-left: $border-radius;
+      }
+      .swiper-button-next {
+        right: -$border-radius;
+        padding-right: $border-radius;
+      }
+
+      .swiper-button-disabled {
+        opacity: .1;
+        pointer-events: auto
+      }
+    }
+  }
+
+  .project-gallery-lightbox-bottom-shadow {
+    bottom: 0;
+    z-index: 1;
+    height: 8%;
+    width: 100%;
+    position: absolute;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .5) 100%);
+    pointer-events: none;
+  }
+}
+
+@mixin project-gallery-lightbox-desktop {
+  .project-gallery-lightbox.show {
+    background: rgba(0, 0, 0, .8);
+  }
+}
+
+@mixin project-gallery-lightbox-hover() {
+  .project-gallery-lightbox {
+
+    .swiper-button-close {
+      .swiper-button-icon { opacity: .7; }
+      &:hover {
+        background-color: rgba(0, 0, 0, .3);
+        .swiper-button-icon { opacity: 1; }
+      }
+    }
+
+    .swiper-navigation {
+      .swiper-button[aria-disabled=false]:hover {
+        background-color: rgba(0, 0, 0, .3);
+        .swiper-button-icon { opacity: 1; }
+      }
+    }
+  }
+}

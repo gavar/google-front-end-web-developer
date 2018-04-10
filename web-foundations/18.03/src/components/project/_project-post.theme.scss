@@ -1,0 +1,7 @@
+@import 'core/theming/theming';
+
+@mixin project-post-theme($theme) {
+  .project-title {
+    a { color: inherit; }
+  }
+}

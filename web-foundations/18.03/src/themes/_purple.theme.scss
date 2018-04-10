@@ -1,0 +1,45 @@
+@import "core/theming/theming";
+@import "components/componenets-theme";
+@import "components/componenets-typography";
+
+$purple: (
+  50 : #e9e1f6,
+  100 : #bea7e4,
+  200 : #9e7cd7,
+  300 : #7645c6,
+  400 : #6737b5,
+  500 : #5a309e,
+  600 : #4d2987,
+  700 : #3f226f,
+  800 : #321b58,
+  900 : #251340,
+  A100 : #e2d2fb,
+  A200 : #a575f2,
+  A400 : #6c2ad7,
+  A700 : #6430b7,
+  contrast: (
+    50 : #000,
+    100 : #000,
+    200 : #000,
+    300 : #fff,
+    400 : #fff,
+    500 : #fff,
+    600 : #fff,
+    700 : #fff,
+    800 : #fff,
+    900 : #fff,
+    A100 : #000,
+    A200 : #000,
+    A400 : #fff,
+    A700 : #fff,
+  )
+);
+
+// define a theme.
+$primary: mat-palette($purple);
+$accent: mat-palette($mat-red, 600, 100, 800);
+$theme: mat-light-theme($primary, $accent);
+
+// include theme styles for the components.
+@include components-theme($theme);
+@include components-typography();

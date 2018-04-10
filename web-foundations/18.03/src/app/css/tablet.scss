@@ -1,0 +1,7 @@
+// import responsive components
+@import "components/componenets-responsive";
+
+// include styles
+@media screen and (min-width: 600px) {
+  @include portfolio-tablet();
+}

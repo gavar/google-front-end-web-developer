@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- meta tags -->
+    {{#block "meta"}}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{/block}}
+    <!-- links (stylesheet) -->
+    {{#block "links"}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css">
+    {{/block}}
+    <title>{{title}}</title>
+</head>
+<body>
+    <!-- content before primary body -->
+    {{#block "pre-body"}}
+    {{/block}}
+    <!-- primary body content -->
+    {{#block "body"}}
+    {{/block}}
+    <!-- content after primary body -->
+    {{#block "post-body"}}
+    {{/block}}
+</body>
+</html>

@@ -1,0 +1,126 @@
+// import dependencies
+@import "components/project/project-post.component";
+@import "components/project-gallery-lightbox/project-gallery-lightbox.component";
+
+@mixin portfolio-mobile() {
+  $portfolio-section-padding: 20px;
+
+  .portfolio-section {
+    padding: $portfolio-section-padding $portfolio-section-padding 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .portfolio-title {
+    font-size: 36px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    line-height: 1;
+  }
+
+  .portfolio-timeline {
+    .timeline-item {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .timeline-separator {
+      height: 1px;
+    }
+  }
+
+  // include dependencies
+  @include project-post-mobile();
+  @include project-gallery-lightbox-mobile();
+}
+
+@mixin portfolio-tablet() {
+  $timeline-width: 100px;
+  $timeline-padding-right: 15px;
+  $portfolio-section-padding: 20px;
+
+  .portfolio-timeline {
+
+    .timeline-entry {
+      position: relative;
+    }
+
+    .timeline-date {
+      top: 0;
+      left: 0;
+      bottom: 0;
+      position: absolute;
+      text-align: right;
+      font-style: italic;
+      width: $timeline-width;
+      padding: 32px $timeline-padding-right;
+      margin-left: -$portfolio-section-padding;
+
+      &:after {
+        content: " ";
+        position: absolute;
+        top: 42.5px;
+        right: -4px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+    }
+
+    .timeline-item {
+      width: auto;
+      position: relative;
+      padding-top: 30px;
+      margin-left: 20px;
+      margin-right: $timeline-width - $portfolio-section-padding;
+      left: $timeline-width - $portfolio-section-padding;
+    }
+
+    .timeline-separator {
+      position: relative;
+      margin-right: $timeline-width - $portfolio-section-padding;
+      left: $timeline-width - $portfolio-section-padding;
+    }
+
+    .timeline-entry:first-child {
+
+      .timeline-item {
+        border-top: none;
+        padding-top: 0;
+      }
+
+      .timeline-separator {
+        display: none;
+      }
+
+      .timeline-date {
+        padding-top: 0;
+        margin-top: 12.5px;
+        &:after {
+          top: 0;
+        }
+      }
+
+      .timeline-date-text {
+        display: block;
+        margin-top: -10px;
+      }
+    }
+  }
+
+  // include dependencies
+  @include project-post-tablet();
+}
+
+@mixin portfolio-desktop() {
+  // include dependencies
+  @include project-post-desktop();
+  @include project-gallery-lightbox-desktop();
+}
+
+@mixin portfolio-hover() {
+  // include dependencies
+  @include project-post-hover();
+  @include project-gallery-lightbox-hover();
+}

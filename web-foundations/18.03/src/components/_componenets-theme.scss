@@ -1,0 +1,28 @@
+// import the theming functionality.
+@import "componenets-base-theme";
+@import "typography.theme";
+@import "navbar/navbar.theme";
+@import "portfolio/portfolio.theme";
+@import "project/project-post.theme";
+@import "tech-tags/tech-tags.theme";
+@import "project-gallery/project-gallery.theme";
+@import "project-gallery-lightbox/project-gallery-lightbox.theme";
+
+// create a theme.
+@mixin components-theme($theme) {
+
+  // any media
+  @include components-theme-base($theme);
+  @include typography-theme($theme);
+  @include sidebar-theme($theme);
+  @include portfolio-theme($theme);
+  @include project-post-theme($theme);
+  @include tech-tags-theme($theme);
+  @include project-gallery-theme($theme);
+  @include project-gallery-lightbox-theme($theme);
+
+  // mobile only
+  @media screen and (max-width: 599px) {
+    @include portfolio-theme-mobile-only($theme);
+  }
+}

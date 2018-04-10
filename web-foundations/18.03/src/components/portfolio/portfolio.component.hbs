@@ -1,0 +1,26 @@
+<!-- project gallery lightbox -->
+{{> "components/project-gallery-lightbox"}}
+<!-- project portfolio -->
+<section class="portfolio-section">
+    <h1 class="portfolio-title">Portfolio</h1>
+    <!-- portfolio timeline -->
+    <div class="timeline portfolio-timeline">
+        {{#each projects as |project|}}
+            <div class="timeline-entry">
+                <div class="timeline-date">
+                    <time class="timeline-date-text">
+                        {{#compare ../this.now ">" project.dateTo}}
+                            {{formatDate project.dateTo month="short" year="numeric"}}
+                        {{else}}
+                            currently
+                        {{/compare}}
+                    </time>
+                </div>
+                <div class="timeline-separator"></div>
+                <div class="timeline-item">
+                    {{> "components/project/project-post" project=project }}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</section>

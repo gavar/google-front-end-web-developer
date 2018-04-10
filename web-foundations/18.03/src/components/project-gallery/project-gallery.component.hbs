@@ -1,0 +1,42 @@
+<div class="project-gallery {{project.post.gallery.style}}">
+    <div class="project-gallery-box {{project.post.gallery.style}}">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {{#each project.post.gallery.items as |media|}}
+                    <div class="swiper-slide">
+                        {{#is media.type "image"}}
+                            <img class="swiper-lazy"
+                                 data-img-sizes="375, 750, 1080"
+                                 data-src="{{media.href}}"
+                                 data-alt="{{../project.title}} project picture #{{add @index 1}}">
+                            <div class="lazy-preloader">
+                                <div class="lazy-preloader-scale">
+                                    <div class="image-loader"></div>
+                                </div>
+                                <div>loading</div>
+                            </div>
+                        {{/is}}
+                        {{#is media.type "video"}}
+                            <video controls>
+                                <source src="{{media.href}}" type="video/mp4">
+                            </video>
+                        {{/is}}
+                    </div>
+                {{/each}}
+            </div>
+            <div class="swiper-navigation">
+                <div class="swiper-button swiper-button-prev swiper-button-hidden">
+                    <svg class="swiper-button-icon">
+                        <use xlink:href="#arrow-left"></use>
+                    </svg>
+                </div>
+                <div class="swiper-button swiper-button-next swiper-button-hidden">
+                    <svg class="swiper-button-icon">
+                        <use xlink:href="#arrow-right"></use>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-pagination swiper-pagination-hidden"></div>
+</div>

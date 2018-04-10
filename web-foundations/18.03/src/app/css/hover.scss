@@ -1,0 +1,6 @@
+/* Primary Input responds to hover fully, such as a mouse or a Nintendo Wii controller */
+// import responsive components
+@import "components/componenets-responsive";
+
+// include styles
+@include portfolio-hover();

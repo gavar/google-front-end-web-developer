@@ -1,0 +1,13 @@
+@import "sass/components/loaders";
+
+div[class$="-loader"] {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  margin: auto;
+}
+
+.image-loader {
+  @include double-eclipse-round(50px, .75s);
+}

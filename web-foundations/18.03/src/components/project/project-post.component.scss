@@ -1,0 +1,149 @@
+// import dependencies
+@import "components/tech-tags/tech-tags.component";
+@import "components/project-gallery/project-gallery.component";
+
+@mixin project-post-mobile() {
+
+  .project-post {
+    max-width: 16px * 40; // 40em
+  }
+
+  .project-title {
+    & > * {
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    i {
+      position: absolute;
+      font-size: 20px;
+      padding-top: 6px;
+      padding-left: 6px;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    svg {
+      margin-left: 5px;
+      margin-bottom: 2px;
+      font-size: 18px;
+    }
+  }
+
+  .project-role {
+    font-weight: 300;
+    font-size: 20px;
+  }
+
+  .project-stores {
+    left: -2px;
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    text-align: center;
+    vertical-align: center;
+
+    a { margin-right: 5px; }
+
+    img {
+      margin: 0 2px;
+      width: 100%;
+      height: auto;
+      max-width: 155px;
+      object-fit: cover;
+    }
+  }
+
+  .project-description {
+    p { text-align: justify; }
+    ul { margin-top: 0; }
+  }
+
+  .project-technologies {
+    text-align: center;
+
+    .technologies-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      padding-bottom: .5em;
+    }
+  }
+
+  // include dependencies
+  @include project-gallery-mobile();
+  @include tech-tags-mobile;
+}
+
+@mixin project-post-tablet() {
+  // include dependencies
+  @include project-gallery-tablet();
+}
+
+@mixin project-post-desktop() {
+
+  .project-stores {
+    text-align: left;
+    margin-top: 0;
+  }
+
+  .project-technologies {
+    text-align: left;
+  }
+
+  @supports (display: grid) {
+    .project {
+      display: grid;
+      grid-template-columns: repeat(2, 50%);
+      grid-column-gap: 5px;
+      grid-row-gap: 0;
+      & > * {
+        width: 100%;
+        grid-column: 1;
+      }
+    }
+
+    .project-gallery {
+      grid-column: 2;
+      grid-row-start: 1;
+      grid-row-end: span 3;
+      // center content vertically
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      align-content: center;
+      & > * { width: 100%; }
+    }
+  }
+
+  @supports not (display: grid) {
+    .project {
+      overflow: auto;
+    }
+
+    .project > * {
+      width: 50%;
+      float: left;
+      display: inline-block;
+    }
+
+    .project-stores,
+    .project-technologies {
+      clear: left;
+    }
+
+    .project-gallery {
+      float: right;
+    }
+  }
+
+  // include dependencies
+  @include project-gallery-desktop();
+}
+
+@mixin project-post-hover() {
+  // include dependencies
+  @include project-gallery-hover();
+}
