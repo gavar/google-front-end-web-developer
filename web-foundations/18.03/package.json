@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve": "browser-sync start --server --serveStatic ./dist --files ./dist/**/*"
+    "serve": "browser-sync start --port 3000 --ui-port 3001 --server --serveStatic ./dist --files ./dist/**/*",
+    "serve-static": "http-server -p 4000 ./dist"
   },
   "devDependencies": {
     "@types/autoprefixer": "^6.7.3",
