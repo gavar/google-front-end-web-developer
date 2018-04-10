@@ -10,6 +10,7 @@ Web Foundations    | Common Responsive Patterns: Combining Fluid Layouts   | [li
 Web Foundations    | Common Responsive Patterns: Project Update Part 2     | [link][U1-L14#11-code] | [view][U1-L14#11-view] |
 Web Foundations    | Optimizations: Final Project Updates                  | [link][U1-L15#10-code] | [view][U1-L15#10-view] |
 Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [link][U1-L16#02-code] | [view][U1-L16#02-view] |
+Web Foundations    | Project: Build a Portfolio Site                       | [link][U1-L17#03-code] | [view][U1-L17#03-view] |
 Responsive Images  | Units, Formats, Environments:  Project Part 1         | [link][E1-L02#16-code] | [view][E1-L02#16-view] |
 Responsive Images  | Images with Markup: Project Part 2                    | [link][E1-L03#14-code] | [view][E1-L03#14-view] |
 Responsive Images  | Full Responsiveness: Project Part 3                   | [link][E1-L04#10-code] | [view][E1-L04#10-view] |
@@ -32,10 +33,10 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 - [x] Responsive Images: Images with Markup (3h)
 - [x] Responsive Images: Full Responsiveness (2h)
 
-#### week #4: 05.03 - 11.03
-- [ ] Web Foundations: Build a Portfolio Site (project)
+#### week #4-8: 05.03 - 10.04
+- [x] Web Foundations: Build a Portfolio Site (project)
 
-#### week #5: 12.03 - 18.03
+#### week #8: 10.04 - 15.04
 - [ ] Web Programming JS: Lesson 8: Syntax (2h)
 - [ ] Web Programming JS: Shell Workshop (2h)
 - [ ] Web Programming JS: What is Version Control? (1h 15m)
@@ -66,6 +67,9 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 
 [U1-L16#02-code]: web-foundations/16.02
 [U1-L16#02-view]: https://gavar.github.io/google-front-end-web-developer/web-foundations/16.02/index.html
+
+[U1-L17#03-code]: web-foundations/18.03
+[U1-L17#03-view]: https://gavar.github.io/google-front-end-web-developer/web-foundations/18.03/dist/index.html
 
 [E1-L02#16-code]: responsive-images/02.16
 [E1-L02#16-view]: https://gavar.github.io/google-front-end-web-developer/responsive-images/02.16/out/index.html
