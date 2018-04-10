@@ -2,12 +2,13 @@
 
 @mixin sidebar-theme($theme) {
   $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
   $color: mat-color($primary, default-contrast);
   $bg-color: mat-color($primary, default);
 
   .navbar {
     color: $color;
-    background-color: $bg-color;
+    background: linear-gradient(135deg, mat-color($primary) 45%, mat-color($accent, darker));
   }
 
   .profile-social-links a {
