@@ -25,13 +25,13 @@
             {{#each project.apps as |app|}}
                 <a class="store.type" href="{{app.href}}">
                     {{#is app.type "app-store"}}
-                        <img src="/img/badges/app-store-badge.svg" alt="{{app.type}} app link">
+                        <img src="img/badges/app-store-badge.svg" alt="{{app.type}} app link">
                     {{/is}}
                     {{#is app.type "google-play"}}
-                        <img src="/img/badges/google-play-badge.svg" alt="{{app.type}} app link">
+                        <img src="img/badges/google-play-badge.svg" alt="{{app.type}} app link">
                     {{/is}}
                     {{#is app.type "amazon"}}
-                        <img src="/img/badges/amazon-badge.svg" alt="{{app.type}} app link">
+                        <img src="img/badges/amazon-badge.svg" alt="{{app.type}} app link">
                     {{/is}}
                 </a>
             {{/each}}
