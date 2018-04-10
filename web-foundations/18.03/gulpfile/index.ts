@@ -116,13 +116,13 @@ function roll() {
 }
 gulp.task(roll);
 
-/** Copy assets. */
-function assets() {
+/** Copy images and assets. */
+function images() {
     return gulp.src("./dist/**/*.+(html|css)")
         .pipe(resources({base: "src/app"}))
         .pipe(gulp.dest("./dist"));
 }
-gulp.task(assets);
+gulp.task(images);
 
 /** Copy vendor files. */
 function vendor() {
@@ -151,7 +151,7 @@ gulp.task("default", series(
     ),
     parallel(
         responsive,
-        assets,
+        images,
     ),
 ));
 
@@ -161,6 +161,6 @@ function watch() {
     gulp.watch("./src/**/*.+(css|scss)", style);
     gulp.watch("./src/**/*.+(ts|js)", series(clearNodeCache, scripts, roll));
     gulp.watch("./src/data/**/*", series(clearNodeCache, pages));
-    gulp.watch("./dist/**/*.+(html|css)", assets);
+    gulp.watch("./dist/**/*.+(html|css)", images);
 }
 gulp.task("watch", gulp.series("default", watch));

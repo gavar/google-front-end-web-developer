@@ -33,7 +33,7 @@ export const Fronted: Project = {
             style: "none wip",
             items: [{
                 type: "image",
-                href: "assets/wip-image.png"
+                href: "img/wip-image.png"
             }]
         },
         content: `<p>
@@ -63,19 +63,19 @@ export const MyCountryAR: Project = {
             style: "phone",
             items: [{
                 type: "image",
-                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-1.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-1.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-2.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-2.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-3.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-3.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-4.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-4.jpeg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-ar/9x16/my-country-ar-screen-5.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-5.jpeg"
             }]
         },
         content: `<p>
@@ -124,19 +124,19 @@ export const Moana: Project = {
             style: "phone",
             items: [{
                 type: "image",
-                href: "assets/projects/moana/9x16/moana-screen-1.jpg"
+                href: "img/projects/moana/9x16/moana-screen-1.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/9x16/moana-screen-2.jpg"
+                href: "img/projects/moana/9x16/moana-screen-2.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/9x16/moana-screen-3.jpg"
+                href: "img/projects/moana/9x16/moana-screen-3.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/9x16/moana-screen-4.jpg"
+                href: "img/projects/moana/9x16/moana-screen-4.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/moana/9x16/moana-screen-5.jpg"
+                href: "img/projects/moana/9x16/moana-screen-5.jpg"
             }]
         },
         content: `<p>
@@ -171,13 +171,13 @@ export const KonsusProject: Project = {
             style: "horizontal tablet",
             items: [{
                 type: "image",
-                href: "assets/projects/konsus/konsus-website-1.jpg"
+                href: "img/projects/konsus/konsus-website-1.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/konsus/konsus-website-2.jpg"
+                href: "img/projects/konsus/konsus-website-2.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/konsus/konsus-website-3.jpg"
+                href: "img/projects/konsus/konsus-website-3.jpg"
             }]
         },
         content: `<p>
@@ -212,16 +212,16 @@ export const MyCountry3D: Project = {
             style: "horizontal phone",
             items: [{
                 type: "image",
-                href: "assets/projects/my-country-3d/my-country-3d-01.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-01.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-3d/my-country-3d-02.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-02.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-3d/my-country-3d-03.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-03.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/my-country-3d/my-country-3d-04.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-04.jpg"
             }]
         },
         content: `<p>
@@ -261,34 +261,34 @@ export const HunterX: Project = {
             style: "horizontal phone",
             items: [{
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-01.jpg"
+                href: "img/projects/hunter-x/hunter-x-01.jpg"
             }, {
                 type: "video",
-                href: "assets/projects/hunter-x/hunter-x-trailer.mp4"
+                href: "img/projects/hunter-x/hunter-x-trailer.mp4"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-02.jpg"
+                href: "img/projects/hunter-x/hunter-x-02.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-03.jpg"
+                href: "img/projects/hunter-x/hunter-x-03.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-04.jpg"
+                href: "img/projects/hunter-x/hunter-x-04.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-05.jpg"
+                href: "img/projects/hunter-x/hunter-x-05.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-06.jpg"
+                href: "img/projects/hunter-x/hunter-x-06.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-07.jpg"
+                href: "img/projects/hunter-x/hunter-x-07.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-08.jpg"
+                href: "img/projects/hunter-x/hunter-x-08.jpg"
             }, {
                 type: "image",
-                href: "assets/projects/hunter-x/hunter-x-09.jpg"
+                href: "img/projects/hunter-x/hunter-x-09.jpg"
             }]
         },
         content: `<p>

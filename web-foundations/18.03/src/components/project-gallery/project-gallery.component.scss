@@ -159,7 +159,7 @@
     // tablet gallery, vertical (3:4)
     &.tablet {
       max-width: 350px;
-      background: url("/assets/ipad-air-2-vertical.png") no-repeat;
+      background: url("/img/ipad-air-2-vertical.png") no-repeat;
       background-size: 100% auto;
 
       &:before {
@@ -179,7 +179,7 @@
     // phone gallery vertical (9:16)
     &.phone {
       max-width: 230px;
-      background: url("/assets/iphone-7-vertical.png") no-repeat;
+      background: url("/img/iphone-7-vertical.png") no-repeat;
       background-size: 100% auto;
 
       &:before {
@@ -199,7 +199,7 @@
     // phone gallery horizontal (16:9)
     &.phone.horizontal {
       max-width: 463.7px;
-      background: url("/assets/iphone-7-horizontal.png") no-repeat;
+      background: url("/img/iphone-7-horizontal.png") no-repeat;
       background-size: 100% auto;
 
       &:before {
