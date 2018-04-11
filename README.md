@@ -37,11 +37,25 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 - [x] Web Foundations: Build a Portfolio Site (project)
 
 #### week #8: 10.04 - 15.04
-- [ ] Web Programming JS: Lesson 8: Syntax (2h)
-- [ ] Web Programming JS: Shell Workshop (2h)
-- [ ] Web Programming JS: What is Version Control? (1h 15m)
-- [ ] Web Programming JS: Create A Git Repo (1h 15m)
+- [x] Web Programming JS: Lesson 8: Syntax (2h)
+- [x] Web Programming JS: Shell Workshop (2h)
+- [x] Web Programming JS: What is Version Control? (1h 15m)
+- [x] Web Programming JS: Create A Git Repo (1h 15m)
 - [ ] Web Programming JS: Review a Repo's History (2h)
+
+#### Upcoming
+- [ ] Web Programming JS: Add Commits To A Repo (1h 30m)
+- [ ] Web Programming JS: Tagging, Branching, and Merging (2h 30m)
+- [ ] Web Programming JS: Undoing Changes (1h)
+- [ ] Web Programming JS: Working With Remotes (2h)
+- [ ] Web Programming JS: Working On Another Developer's Repository (1h 15m)
+- [ ] Web Programming JS: Staying In Sync With A Remote Repository (2h)
+- [ ] Web Programming JS: The Document Object Model (2h)
+- [ ] Web Programming JS: Creating Content with JavaScript (2h)
+- [ ] Web Programming JS: Working with Browser Events (2h)
+- [ ] Web Programming JS: Exercise: Pixel Art Maker (45m)
+- [ ] Web Programming JS: Performance (2h)
+- [ ] Web Programming JS: Memory Game (project)
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
