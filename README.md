@@ -45,11 +45,13 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 - [x] Web Programming JS: Add Commits To A Repo (1h 30m)
 - [x] Web Programming JS: Tagging, Branching, and Merging (2h 30m)
 
+#### week #9: 16.04 - 22.04
+- [x] Web Programming JS: Undoing Changes (1h)
+- [x] Web Programming JS: Working With Remotes (2h)
+- [x] Web Programming JS: Working On Another Developer's Repository (1h 15m)
+- [x] Web Programming JS: Staying In Sync With A Remote Repository (2h)
+
 #### Upcoming
-- [ ] Web Programming JS: Undoing Changes (1h)
-- [ ] Web Programming JS: Working With Remotes (2h)
-- [ ] Web Programming JS: Working On Another Developer's Repository (1h 15m)
-- [ ] Web Programming JS: Staying In Sync With A Remote Repository (2h)
 - [ ] Web Programming JS: The Document Object Model (2h)
 - [ ] Web Programming JS: Creating Content with JavaScript (2h)
 - [ ] Web Programming JS: Working with Browser Events (2h)
