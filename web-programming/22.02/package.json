@@ -1,0 +1,15 @@
+{
+  "name": "pixel-art-maker",
+  "version": "1.0.0",
+  "description": "Pixel Art Maker",
+  "main": "index.js",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "watch": "npx tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}
