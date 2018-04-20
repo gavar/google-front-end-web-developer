@@ -14,6 +14,7 @@ Web Foundations    | Project: Build a Portfolio Site                       | [li
 Responsive Images  | Units, Formats, Environments:  Project Part 1         | [link][E1-L02#16-code] | [view][E1-L02#16-view] |
 Responsive Images  | Images with Markup: Project Part 2                    | [link][E1-L03#14-code] | [view][E1-L03#14-view] |
 Responsive Images  | Full Responsiveness: Project Part 3                   | [link][E1-L04#10-code] | [view][E1-L04#10-view] |
+Web Programming JS | Exercise: Pixel Art Maker                             | [link][U2-L22#02-code] | [view][U2-L22#02-view] |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -52,11 +53,11 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 - [x] Web Programming JS: Staying In Sync With A Remote Repository (2h)
 
 #### Upcoming
-- [ ] Web Programming JS: The Document Object Model (2h)
-- [ ] Web Programming JS: Creating Content with JavaScript (2h)
-- [ ] Web Programming JS: Working with Browser Events (2h)
-- [ ] Web Programming JS: Exercise: Pixel Art Maker (45m)
-- [ ] Web Programming JS: Performance (2h)
+- [x] Web Programming JS: The Document Object Model (2h)
+- [x] Web Programming JS: Creating Content with JavaScript (2h)
+- [x] Web Programming JS: Working with Browser Events (2h)
+- [x] Web Programming JS: Exercise: Pixel Art Maker (45m)
+- [x] Web Programming JS: Performance (2h)
 - [ ] Web Programming JS: Memory Game (project)
 
 ### Udacity Frontend Nanodegree Style Guide
@@ -95,3 +96,6 @@ Responsive Images  | Full Responsiveness: Project Part 3                   | [li
 
 [E1-L04#10-code]: responsive-images/04.10
 [E1-L04#10-view]: https://gavar.github.io/google-front-end-web-developer/responsive-images/04.10/out/index.html
+
+[U2-L22#02-code]: web-programming/22.02
+[U2-L22#02-view]: https://gavar.github.io/google-front-end-web-developer/web-programming/22.02/index.html
