@@ -10,13 +10,12 @@ interface ColorPixels {
     [row: number]: number[];
 }
 
-class PixelCanvas extends EventTarget {
+class PixelCanvas {
 
     private readonly table: HTMLTableElement;
     private readonly colorPicker: HTMLInputElement;
 
     constructor(table: HTMLTableElement, colorPicker: HTMLInputElement) {
-        super();
         this.table = table;
         this.colorPicker = colorPicker;
         this.table.addEventListener("pointerdown", this.onMouseDown.bind(this));
@@ -70,7 +69,7 @@ class PixelCanvas extends EventTarget {
 
         // set visible
         this.table.style.visibility = null;
-        this.dispatchEvent(DRAWING_UPDATE);
+        this.table.dispatchEvent(DRAWING_UPDATE);
     }
 
     save(): Drawing {
@@ -127,7 +126,7 @@ class PixelCanvas extends EventTarget {
                 default:
                     return;
             }
-            this.dispatchEvent(DRAWING_UPDATE);
+            this.table.dispatchEvent(DRAWING_UPDATE);
         }
     }
 
@@ -181,7 +180,7 @@ interface QueryParams {
         canvas.resize(Number(width.value), Number(height.value))
     });
 
-    canvas.addEventListener(DRAWING_UPDATE.type, e => {
+    table.addEventListener(DRAWING_UPDATE.type, e => {
         const drawing = canvas.save();
         const base64 = drawingToBase64(drawing);
         const width = canvas.width();
