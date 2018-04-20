@@ -1,9 +1,22 @@
-class PixelCanvas {
+declare var LZString;
+
+const DRAWING_UPDATE = new Event("drawing-update");
+
+interface Drawing {
+    [color: string]: ColorPixels
+}
+
+interface ColorPixels {
+    [row: number]: number[];
+}
+
+class PixelCanvas extends EventTarget {
 
     private readonly table: HTMLTableElement;
     private readonly colorPicker: HTMLInputElement;
 
     constructor(table: HTMLTableElement, colorPicker: HTMLInputElement) {
+        super();
         this.table = table;
         this.colorPicker = colorPicker;
         this.table.addEventListener("pointerdown", this.onMouseDown.bind(this));
@@ -11,9 +24,24 @@ class PixelCanvas {
         this.table.addEventListener("contextmenu", e => e.preventDefault());
     }
 
-    resize(width: number, height: number) {
+    height(): number {
+        return this.table.rows.length;
+    }
 
-        console.log("resize:", width, "x", height);
+    width(): number {
+        return this.table.rows[0].cells.length;
+    }
+
+
+    find(x: number, y: number): HTMLTableDataCellElement {
+        const rows = this.table.rows;
+        if (rows.length < y) return;
+        const row = rows[y].cells;
+        if (row.length < x) return;
+        return row[x];
+    }
+
+    resize(width: number, height: number) {
 
         // hide to avoid repaints
         this.table.style.visibility = "hidden";
@@ -42,6 +70,48 @@ class PixelCanvas {
 
         // set visible
         this.table.style.visibility = null;
+        this.dispatchEvent(DRAWING_UPDATE);
+    }
+
+    save(): Drawing {
+
+        const drawing: Drawing = {};
+
+        const rows = this.table.rows;
+        for (let r = 0; r < rows.length; r++) {
+            const row = rows[r].cells;
+            for (let c = 0; c < row.length; c++) {
+                const cell = row[c] as HTMLElement;
+                if (cell.style.backgroundColor) {
+                    const hex = this.rgbToHex(cell.style.backgroundColor);
+                    const pixels: ColorPixels = drawing[hex] || {};
+                    const row: number[] = pixels[r] || [];
+                    row.push(c);
+                    pixels[r] = row;
+                    drawing[hex] = pixels;
+                }
+            }
+        }
+
+        return drawing;
+    }
+
+    load(drawing: Drawing) {
+        this.table.style.visibility = "hidden";
+
+        for (const color in drawing) {
+            const pixels: ColorPixels = drawing[color];
+            for (const row in pixels) {
+                const y = Number(row);
+                const columns = pixels[row];
+                for (const x of columns) {
+                    const cell = this.find(x, y);
+                    cell.style.backgroundColor = `#${color}`;
+                }
+            }
+        }
+
+        this.table.style.visibility = null;
     }
 
     private onMouseDown(e: MouseEvent) {
@@ -53,19 +123,33 @@ class PixelCanvas {
                     break;
                 case 2:
                     e.target.style.backgroundColor = null;
-                    break
+                    break;
+                default:
+                    return;
             }
+            this.dispatchEvent(DRAWING_UPDATE);
         }
     }
 
     private onPointerEnter(e: MouseEvent): any {
         this.onMouseDown(e);
     }
+
+    private rgbToHex(rgb: string): string {
+        const left = rgb.indexOf("(");
+        const right = rgb.indexOf("}");
+        const values = rgb.slice(left + 1, right).split(",");
+        let hex = values.map(v => Number(v).toString(16));
+        if (!hex.every(x => x.length == 1))
+            hex = hex.map(x => x.padStart(2, '0'));
+        return hex.join('');
+    }
 }
 
-interface SizePicker {
+interface QueryParams {
     x: number;
     y: number;
+    data: string;
 }
 
 (function () {
@@ -73,7 +157,7 @@ interface SizePicker {
     // references
     const width = document.querySelector<HTMLInputElement>("#inputWidth");
     const height = document.querySelector<HTMLInputElement>("#inputHeight");
-    const canvas = document.querySelector<HTMLTableElement>("#pixelCanvas");
+    const table = document.querySelector<HTMLTableElement>("#pixelCanvas");
     const sizePicker = document.querySelector<HTMLFormElement>("#sizePicker");
     const colorPicker = document.querySelector<HTMLInputElement>("#colorPicker");
 
@@ -81,25 +165,39 @@ interface SizePicker {
     const params = new URLSearchParams(window.location.hash.slice(1));
     const x = Number(params.get("x") || width.value);
     const y = Number(params.get("y") || height.value);
+    const drawing = base64ToDrawing(params.get("data"));
+
     width.value = x.toString();
     height.value = y.toString();
 
     // initialize canvas
-    const drawing = new PixelCanvas(canvas, colorPicker);
-    drawing.resize(x, y);
+    const canvas = new PixelCanvas(table, colorPicker);
+    canvas.resize(x, y);
+    if (drawing) canvas.load(drawing);
 
     sizePicker.addEventListener("submit", e => {
+        // resize drawing
         e.preventDefault();
-        const form = e.target as HTMLFormElement;
-        const data = formToObject<SizePicker>(form);
+        canvas.resize(Number(width.value), Number(height.value))
+    });
+
+    canvas.addEventListener(DRAWING_UPDATE.type, e => {
+        const drawing = canvas.save();
+        const base64 = drawingToBase64(drawing);
+        const width = canvas.width();
+        const height = canvas.height();
+
+        const query: QueryParams = {
+            x: width,
+            y: height,
+            data: base64
+        };
 
         // save params in url
-        const params = objectToParams(data);
+        const params = objectToParams(query);
         window.location.hash = params.toString();
-
-        // resize drawing
-        drawing.resize(data.x, data.y)
     });
+
 
     function formToObject<T extends object>(form: HTMLFormElement): T {
         const data: T = {} as any;
@@ -114,6 +212,42 @@ interface SizePicker {
         for (const key in object)
             params.set(key, object[key]);
         return params;
+    }
+
+    function drawingToBase64(drawing: Drawing): string {
+
+        const colors: string[] = [];
+        for (const byColor in drawing) {
+            const rows: string[] = [];
+            const rowsByColor = drawing[byColor];
+            for (const rowByColor in rowsByColor) {
+                const columnsByRow = rowsByColor[rowByColor];
+                rows.push(`${rowByColor}:${columnsByRow.join(',')}`);
+            }
+            colors.push(`${byColor}=${rows.join('+')}`)
+        }
+
+        const raw = colors.join('|');
+        return LZString.compressToBase64(raw);
+    }
+
+    function base64ToDrawing(base64: string): Drawing {
+        base64 = LZString.decompressFromBase64(base64 || "");
+        const drawing: Drawing = {};
+
+        const byColors = base64.split('|');
+        for (const byColor of byColors) {
+            const [color, valueOfColor] = (byColor || "").split('=');
+            drawing[color] = {};
+            const byColorRows = (valueOfColor || "").split('+');
+            for (const byColorRow of byColorRows) {
+                const [row, valueOfRow] = (byColorRow || "").split(':');
+                const columns = (valueOfRow || "").split(',').map(c => Number(c));
+                drawing[color][Number(row)] = columns;
+            }
+        }
+
+        return drawing;
     }
 })();
 
