@@ -232,7 +232,7 @@ interface QueryParams {
     }
 
     function base64ToDrawing(base64: string): Drawing {
-        base64 = LZString.decompressFromBase64(base64 || "");
+        base64 = LZString.decompressFromBase64(base64 || "") || "";
         const drawing: Drawing = {};
 
         const byColors = base64.split('|');
