@@ -8,7 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "clean-install": "rimraf ./**/node_modules/ && rimraf ./**/yarn.lock && lerna bootstrap"
+    "install": "lerna bootstrap && lerna bootstrap --scope google-front-end-web-developer",
+    "clean": "rimraf ./**/yarn.lock && npm run lerna clean"
   },
   "devDependencies": {
     "@types/browser-sync": "^0.0.39",
