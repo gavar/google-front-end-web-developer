@@ -129,3 +129,4 @@ yarn.lock
 
 ### custom ###
 \#*
+dist/
