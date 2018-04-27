@@ -4,6 +4,7 @@
   "npmClient": "yarn",
   "packages": [
     ".",
-    "web-programming/**/*"
+    "web-programming/**/*",
+    "responsive-images/**/*"
   ]
 }
