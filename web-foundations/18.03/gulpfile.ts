@@ -1,29 +1,28 @@
+import * as autoprefixer from "autoprefixer";
 import * as del from "del";
 import * as gulp from "gulp";
 import {parallel, series} from "gulp";
-import * as autoprefixer from "autoprefixer";
 import * as postcss from "gulp-postcss";
 import * as sass from "gulp-sass";
 import * as ts from "gulp-typescript";
-import * as Handlebars from 'handlebars';
-import * as HandlebarsHelpers from 'handlebars-helpers';
-import * as HandlebarsIntl from 'handlebars-intl';
-import * as layouts from 'handlebars-layouts';
+import * as Handlebars from "handlebars";
+import * as HandlebarsHelpers from "handlebars-helpers";
+import * as HandlebarsIntl from "handlebars-intl";
+import * as layouts from "handlebars-layouts";
 import * as registrar from "handlebars-registrar";
 import * as path from "path";
-import {TaskCallback} from "./core";
-import {TaskInfo} from "./core/types";
-import {beautify, render, resources, responsify, rollupify} from "./tools";
+import {TaskCallback, TaskInfo} from "./gulpfile/core";
+import {beautify, render, resources, responsify, rollupify} from "./gulpfile/tools";
 
 /** Clean previous compilation files. */
 function clean(done: TaskCallback) {
-    del(["./dist", "./temp"]).then(x => done(void 0, x), done);
+    del(["./dist", "./tmp"]).then(x => done(void 0, x), done);
 }
 gulp.task(clean);
 
 /** Compile page styles */
 function style(): NodeJS.ReadWriteStream {
-    return gulp.src('./src/app/**/*.+(css|scss)')
+    return gulp.src("./src/app/**/*.+(css|scss)")
         .pipe(sass({
             includePaths: [
                 "./src",
@@ -31,7 +30,7 @@ function style(): NodeJS.ReadWriteStream {
         }))
         .pipe(postcss([autoprefixer()]))
         .pipe(beautify.css())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest("./dist"));
 }
 gulp.task(style);
 
@@ -51,9 +50,9 @@ function pages() {
     registrar(handlebars, {
         cwd: "./src",
         partials: [
-            'pages/**/*.hbs',
-            'layouts/**/*.hbs',
-            'components/**/*.hbs',
+            "pages/**/*.hbs",
+            "layouts/**/*.hbs",
+            "components/**/*.hbs",
         ],
         bustCache: true,
         parsePartialName: function (file) {
@@ -81,7 +80,7 @@ function pages() {
     return gulp.src("./src/app/**/*.hbs")
         .pipe(render.handlebars({handlebars: handlebars}))
         .pipe(beautify.html())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest("./dist"));
 }
 gulp.task(pages);
 
@@ -96,23 +95,23 @@ function clearNodeCache(done: TaskCallback) {
 (clearNodeCache as TaskInfo).displayName = "clear-node-cache";
 
 /** Compile scripts. */
-const tsProject = ts.createProject('tsconfig.json');
+const tsProject = ts.createProject("tsconfig.json");
 function scripts() {
-    return gulp.src('./src/**/*.+(ts|js)')
+    return gulp.src("./src/**/*.+(ts|js)")
         .pipe(tsProject())
-        .pipe(gulp.dest('./temp'))
+        .pipe(gulp.dest("./tmp"));
 }
 gulp.task(scripts);
 
 /** Rollup scripts. */
 function roll() {
-    return gulp.src('./temp/app/js/**/*')
+    return gulp.src("./tmp/app/js/**/*")
         .pipe(rollupify({
             external: [
                 "swiper",
-            ]
+            ],
         }))
-        .pipe(gulp.dest('./dist/js'));
+        .pipe(gulp.dest("./dist/js"));
 }
 gulp.task(roll);
 
@@ -135,7 +134,7 @@ gulp.task(vendor);
 function responsive() {
     return gulp.src("./dist/**/*.+(html)")
         .pipe(responsify({base: "src/app"}))
-        .pipe(gulp.dest("./dist"))
+        .pipe(gulp.dest("./dist"));
 }
 
 /** All tasks sequence. */
