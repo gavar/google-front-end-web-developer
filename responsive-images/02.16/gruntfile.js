@@ -32,7 +32,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src',
                     src: ['images/*.{gif,jpg,png}'],
-                    custom_dest: 'out/images/{%= width %}'
+                    custom_dest: './dist/images/{%= width %}'
                 }]
             }
         },
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         /* Clear the destination directory if it exists */
         clean: {
             out: {
-                src: ['out'],
+                src: ['./dist'],
             },
         },
 
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: "src",
                         src: "**/*.css",
-                        dest: "./out/"
+                        dest: "./dist/"
                     },
                 ]
             },
@@ -64,7 +64,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'src',
                         src: 'images/fixed/*.{gif,jpg,png}',
-                        dest: './out/'
+                        dest: './dist/'
                     }
                 ]
             },
@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: "src",
                         src: "**/*.html",
-                        dest: "./out/"
+                        dest: "./dist/"
                     }
                 ]
             }
@@ -125,5 +125,4 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-mkdir');
     grunt.registerTask('default', ['clean', 'copy', 'responsive_images', 'replace']);
-
 };
