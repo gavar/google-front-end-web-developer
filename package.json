@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "clean": "lerna clean && rimraf ./**/yarn.lock && rimraf ./**/package-lock.json",
-    "build-all": "lerna run build"
+    "build": "lerna exec yarn run build"
   },
   "devDependencies": {
     "@types/browser-sync": "^0.0.39",
