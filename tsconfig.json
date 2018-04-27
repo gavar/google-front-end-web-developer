@@ -21,7 +21,7 @@
     "pretty": true,
     "declaration": false,
     "isolatedModules": false,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noResolve": false,
     "removeComments": false,
