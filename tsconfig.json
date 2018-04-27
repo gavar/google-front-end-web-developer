@@ -27,9 +27,12 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "esnext",
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "~*": ["node_modules/*"],
+      "@*": ["packages/*"]
+    }
   },
   "exclude": [
     "node_modules"
