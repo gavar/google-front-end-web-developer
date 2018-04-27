@@ -5,6 +5,7 @@
   "packages": [
     ".",
     "web-programming/**/*",
+    "web-foundations/**/*",
     "responsive-images/**/*"
   ]
 }
