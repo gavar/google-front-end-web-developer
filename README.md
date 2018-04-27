@@ -98,4 +98,4 @@ Web Programming JS | Exercise: Pixel Art Maker                             |  [l
 [E1-L04#10-view]: https://gavar.github.io/google-front-end-web-developer/responsive-images/04.10/dist/index.html
 
 [U2-L22#02-code]: web-programming/22.02
-[U2-L22#02-view]: https://gavar.github.io/google-front-end-web-developer/web-programming/22.02/index.html
+[U2-L22#02-view]: https://gavar.github.io/google-front-end-web-developer/web-programming/22.02/dist/index.html
