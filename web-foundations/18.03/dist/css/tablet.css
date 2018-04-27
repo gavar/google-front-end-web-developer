@@ -1,0 +1,59 @@
+@media screen and (min-width: 600px) {
+  .portfolio-timeline .timeline-entry {
+    position: relative;
+  }
+  .portfolio-timeline .timeline-date {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    text-align: right;
+    font-style: italic;
+    width: 100px;
+    padding: 32px 15px;
+    margin-left: -20px;
+  }
+  .portfolio-timeline .timeline-date:after {
+    content: " ";
+    position: absolute;
+    top: 42.5px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+  .portfolio-timeline .timeline-item {
+    width: auto;
+    position: relative;
+    padding-top: 30px;
+    margin-left: 20px;
+    margin-right: 80px;
+    left: 80px;
+  }
+  .portfolio-timeline .timeline-separator {
+    position: relative;
+    margin-right: 80px;
+    left: 80px;
+  }
+  .portfolio-timeline .timeline-entry:first-child .timeline-item {
+    border-top: none;
+    padding-top: 0;
+  }
+  .portfolio-timeline .timeline-entry:first-child .timeline-separator {
+    display: none;
+  }
+  .portfolio-timeline .timeline-entry:first-child .timeline-date {
+    padding-top: 0;
+    margin-top: 12.5px;
+  }
+  .portfolio-timeline .timeline-entry:first-child .timeline-date:after {
+    top: 0;
+  }
+  .portfolio-timeline .timeline-entry:first-child .timeline-date-text {
+    display: block;
+    margin-top: -10px;
+  }
+  .project-gallery.horizontal {
+    margin: auto;
+  }
+}

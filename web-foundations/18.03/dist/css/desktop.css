@@ -1,0 +1,157 @@
+@media screen and (min-width: 1024px) and (min-width: 1400px) {
+  .navbar {
+    height: 100%;
+    width: 265px;
+    position: fixed;
+  }
+  main {
+    margin-left: 265px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .project-stores {
+    text-align: left;
+    margin-top: 0;
+  }
+  .project-technologies {
+    text-align: left;
+  }
+  @supports (display: grid) {
+    .project {
+      display: grid;
+      grid-template-columns: repeat(2, 50%);
+      grid-column-gap: 5px;
+      grid-row-gap: 0;
+    }
+    .project>* {
+      width: 100%;
+      grid-column: 1;
+    }
+    .project-gallery {
+      grid-column: 2;
+      grid-row-start: 1;
+      grid-row-end: span 3;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      align-content: center;
+    }
+    .project-gallery>* {
+      width: 100%;
+    }
+  }
+  @supports not (display: grid) {
+    .project {
+      overflow: auto;
+    }
+    .project>* {
+      width: 50%;
+      float: left;
+      display: inline-block;
+    }
+    .project-stores,
+    .project-technologies {
+      clear: left;
+    }
+    .project-gallery {
+      float: right;
+    }
+  }
+  .project-gallery-box {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    /* LAZY LOADING */
+  }
+  .project-gallery-box:before {
+    display: block;
+    content: "";
+  }
+  .project-gallery-box.horizontal {
+    margin: auto;
+  }
+  .project-gallery-box.tablet {
+    max-width: 350px;
+    background: url("../img/ipad-air-2-vertical.png") no-repeat;
+    background-size: 100% auto;
+  }
+  .project-gallery-box.tablet:before {
+    padding-top: 141.23457%;
+  }
+  .project-gallery-box.tablet .swiper-container {
+    position: absolute;
+    top: 8.5%;
+    left: 5.5%;
+    width: 89%;
+    height: 83.5%;
+  }
+  .project-gallery-box.phone {
+    max-width: 230px;
+    background: url("../img/iphone-7-vertical.png") no-repeat;
+    background-size: 100% auto;
+  }
+  .project-gallery-box.phone:before {
+    padding-top: 201.6129%;
+  }
+  .project-gallery-box.phone .swiper-container {
+    position: absolute;
+    top: 12.5%;
+    left: 6.5%;
+    width: 87%;
+    height: 76%;
+  }
+  .project-gallery-box.phone.horizontal {
+    max-width: 463.7px;
+    background: url("../img/iphone-7-horizontal.png") no-repeat;
+    background-size: 100% auto;
+  }
+  .project-gallery-box.phone.horizontal:before {
+    padding-top: 49.6%;
+  }
+  .project-gallery-box.phone.horizontal .swiper-container {
+    position: absolute;
+    top: 7%;
+    left: 12.5%;
+    width: 75.7%;
+    height: 86.5%;
+  }
+  .project-gallery-box.wip {
+    display: initial;
+    max-width: 225px;
+  }
+  .project-gallery-box.none {
+    position: relative;
+  }
+  .project-gallery-box.phone .swiper-container,
+  .project-gallery-box.tablet .swiper-container {
+    box-sizing: border-box;
+    border: black solid 2.5px;
+    border-radius: 4px;
+    background-color: black;
+  }
+  .project-gallery-box .lazy-preloader {
+    font-size: 1em;
+    color: white;
+  }
+  .project-gallery-box .lazy-preloader .lazy-preloader-scale {
+    margin: 5px 0;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  .project-gallery-box .swiper-wrapper {
+    max-height: initial;
+    --chrome-max-height: initial;
+  }
+  .project-gallery-box .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .project-gallery-lightbox.show {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}

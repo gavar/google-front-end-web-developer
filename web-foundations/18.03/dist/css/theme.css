@@ -1,0 +1,131 @@
+body {
+  background-color: #fafafa;
+}
+
+a {
+  font-weight: 400;
+  color: #c62828;
+}
+
+.navbar {
+  color: white;
+  background: linear-gradient(135deg, #5a309e 45%, #c62828);
+}
+
+.profile-social-links a {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-social-links a:hover {
+  color: white;
+}
+
+.portfolio-section {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.portfolio-title {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.portfolio-timeline .timeline-date {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.portfolio-timeline .timeline-date:after {
+  background-color: #e53935;
+}
+
+.portfolio-timeline .timeline-date:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, #fafafa, #5a309e, #fafafa);
+}
+
+.portfolio-timeline .timeline-separator {
+  background: linear-gradient(to right, #fafafa, #5a309e, #fafafa);
+}
+
+.project-title a {
+  color: inherit;
+}
+
+.tech-tags a {
+  color: white;
+  background-color: rgba(229, 57, 53, 0.9);
+}
+
+.technologies-title {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.project-gallery .swiper-button-icon {
+  fill: #e53935;
+  stroke: white;
+}
+
+.project-gallery .swiper-pagination-bullet {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.project-gallery .swiper-pagination-bullet-active {
+  background: #e53935;
+}
+
+.project-gallery-lightbox .swiper-button-icon {
+  fill: white;
+  stroke: grey;
+}
+
+.project-gallery-lightbox .swiper-pagination-bullet {
+  opacity: 1;
+  border-color: #e53935;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.project-gallery-lightbox .swiper-pagination-bullet-active {
+  background: #e53935;
+}
+
+@media screen and (max-width: 599px) {
+  .portfolio-timeline .timeline-separator {
+    background: linear-gradient(to right, #5a309e, #fafafa);
+  }
+}
+
+h1 {
+  font: 400 24px/32px Roboto, "Helvetica Neue", sans-serif;
+}
+
+h2 {
+  font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+}
+
+h3 {
+  font: 400 16px/28px Roboto, "Helvetica Neue", sans-serif;
+}
+
+h4 {
+  font: 400 15px/24px Roboto, "Helvetica Neue", sans-serif;
+}
+
+h5 {
+  font: 400 11.62px/20px Roboto, "Helvetica Neue", sans-serif;
+}
+
+h6 {
+  font: 400 9.38px/20px Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}

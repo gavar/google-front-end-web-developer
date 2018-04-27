@@ -1,0 +1,29 @@
+/* Primary Input responds to hover fully, such as a mouse or a Nintendo Wii controller */
+
+.project-gallery .swiper-navigation .swiper-button-icon {
+  opacity: .7;
+}
+
+.project-gallery .swiper-navigation .swiper-button:hover .swiper-button-icon {
+  opacity: 1;
+}
+
+.project-gallery-lightbox .swiper-button-close .swiper-button-icon {
+  opacity: .7;
+}
+
+.project-gallery-lightbox .swiper-button-close:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.project-gallery-lightbox .swiper-button-close:hover .swiper-button-icon {
+  opacity: 1;
+}
+
+.project-gallery-lightbox .swiper-navigation .swiper-button[aria-disabled=false]:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.project-gallery-lightbox .swiper-navigation .swiper-button[aria-disabled=false]:hover .swiper-button-icon {
+  opacity: 1;
+}
