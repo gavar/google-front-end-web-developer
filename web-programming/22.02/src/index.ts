@@ -1,4 +1,4 @@
-declare var LZString;
+import * as LZString from "lz-string";
 
 const DRAWING_UPDATE = new Event("drawing-update");
 
@@ -30,7 +30,6 @@ class PixelCanvas {
     width(): number {
         return this.table.rows[0].cells.length;
     }
-
 
     find(x: number, y: number): HTMLTableDataCellElement {
         const rows = this.table.rows;
@@ -140,8 +139,8 @@ class PixelCanvas {
         const values = rgb.slice(left + 1, right).split(",");
         let hex = values.map(v => Number(v).toString(16));
         if (!hex.every(x => x.length == 1))
-            hex = hex.map(x => x.padStart(2, '0'));
-        return hex.join('');
+            hex = hex.map(x => x.padStart(2, "0"));
+        return hex.join("");
     }
 }
 
@@ -177,7 +176,7 @@ interface QueryParams {
     sizePicker.addEventListener("submit", e => {
         // resize drawing
         e.preventDefault();
-        canvas.resize(Number(width.value), Number(height.value))
+        canvas.resize(Number(width.value), Number(height.value));
     });
 
     table.addEventListener(DRAWING_UPDATE.type, e => {
@@ -189,14 +188,13 @@ interface QueryParams {
         const query: QueryParams = {
             x: width,
             y: height,
-            data: base64
+            data: base64,
         };
 
         // save params in url
         const params = objectToParams(query);
         window.location.hash = params.toString();
     });
-
 
     function formToObject<T extends object>(form: HTMLFormElement): T {
         const data: T = {} as any;
@@ -221,12 +219,12 @@ interface QueryParams {
             const rowsByColor = drawing[byColor];
             for (const rowByColor in rowsByColor) {
                 const columnsByRow = rowsByColor[rowByColor];
-                rows.push(`${rowByColor}:${columnsByRow.join(',')}`);
+                rows.push(`${rowByColor}:${columnsByRow.join(",")}`);
             }
-            colors.push(`${byColor}=${rows.join('+')}`)
+            colors.push(`${byColor}=${rows.join("+")}`);
         }
 
-        const raw = colors.join('|');
+        const raw = colors.join("|");
         return LZString.compressToBase64(raw);
     }
 
@@ -234,19 +232,17 @@ interface QueryParams {
         base64 = LZString.decompressFromBase64(base64 || "") || "";
         const drawing: Drawing = {};
 
-        const byColors = base64.split('|');
+        const byColors = base64.split("|");
         for (const byColor of byColors) {
-            const [color, valueOfColor] = (byColor || "").split('=');
+            const [color, valueOfColor] = (byColor || "").split("=");
             drawing[color] = {};
-            const byColorRows = (valueOfColor || "").split('+');
+            const byColorRows = (valueOfColor || "").split("+");
             for (const byColorRow of byColorRows) {
-                const [row, valueOfRow] = (byColorRow || "").split(':');
-                const columns = (valueOfRow || "").split(',').map(c => Number(c));
-                drawing[color][Number(row)] = columns;
+                const [row, valueOfRow] = (byColorRow || "").split(":");
+                drawing[color][Number(row)] = (valueOfRow || "").split(",").map(c => Number(c));
             }
         }
 
         return drawing;
     }
 })();
-
