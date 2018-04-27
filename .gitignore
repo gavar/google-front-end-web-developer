@@ -132,3 +132,6 @@ yarn.lock
 out/
 tmp/
 dist/
+
+### PUBLISH ###
+!dist/
