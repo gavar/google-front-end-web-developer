@@ -7,6 +7,9 @@
   "author": "Max Stankevich <max.stankevich.me@gmail.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "clean-install": "rimraf ./**/node_modules/ && rimraf ./**/yarn.lock && lerna bootstrap"
+  },
   "devDependencies": {
     "@types/browser-sync": "^0.0.39",
     "@types/del": "^3.0.1",
