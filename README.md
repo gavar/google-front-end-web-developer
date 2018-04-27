@@ -2,19 +2,19 @@
 ## [Front-End Web Dev](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001)
 
 ### Course Structure:
-Unit               | Lesson                                                | Code                   | Preview                |
--------------------|-------------------------------------------------------|:----------------------:|:----------------------:|
-Web Foundations    | Project: Animal Trading Cards                         | [link][U1-L10#02-code] | [view][U1-L10#02-view] |
-Web Foundations    | Starting Small: Project Part 1                        | [link][U1-L12#16-code] | [view][U1-L12#16-view] |
-Web Foundations    | Common Responsive Patterns: Combining Fluid Layouts   | [link][U1-L14#06-code] | [view][U1-L14#06-view] |
-Web Foundations    | Common Responsive Patterns: Project Update Part 2     | [link][U1-L14#11-code] | [view][U1-L14#11-view] |
-Web Foundations    | Optimizations: Final Project Updates                  | [link][U1-L15#10-code] | [view][U1-L15#10-view] |
-Web Foundations    | Making Sites Responsive: Resume Site on Mobile        | [link][U1-L16#02-code] | [view][U1-L16#02-view] |
-Web Foundations    | Project: Build a Portfolio Site                       | [link][U1-L17#03-code] | [view][U1-L17#03-view] |
-Responsive Images  | Units, Formats, Environments:  Project Part 1         | [link][E1-L02#16-code] | [view][E1-L02#16-view] |
-Responsive Images  | Images with Markup: Project Part 2                    | [link][E1-L03#14-code] | [view][E1-L03#14-view] |
-Responsive Images  | Full Responsiveness: Project Part 3                   | [link][E1-L04#10-code] | [view][E1-L04#10-view] |
-Web Programming JS | Exercise: Pixel Art Maker                             | [link][U2-L22#02-code] | [view][U2-L22#02-view] |
+Unit               | Lesson                                                | Code                     | Preview                  |
+-------------------|-------------------------------------------------------|:------------------------:|:------------------------:|
+Web Foundations    | Project: Animal Trading Cards                         |  [link][U1-L10#02-code]  |  [view][U1-L10#02-view]  |
+Web Foundations    | Starting Small: Project Part 1                        |  [link][U1-L12#16-code]  |  [view][U1-L12#16-view]  |
+Web Foundations    | Common Responsive Patterns: Combining Fluid Layouts   |  [link][U1-L14#06-code]  |  [view][U1-L14#06-view]  |
+Web Foundations    | Common Responsive Patterns: Project Update Part 2     |  [link][U1-L14#11-code]  |  [view][U1-L14#11-view]  |
+Web Foundations    | Optimizations: Final Project Updates                  |  [link][U1-L15#10-code]  |  [view][U1-L15#10-view]  |
+Web Foundations    | Making Sites Responsive: Resume Site on Mobile        |  [link][U1-L16#02-code]  |  [view][U1-L16#02-view]  |
+Web Foundations    | **Project: Build a Portfolio Site**                   |**[link][U1-L17#03-code]**|**[view][U1-L17#03-view]**|
+Responsive Images  | Units, Formats, Environments:  Project Part 1         |  [link][E1-L02#16-code]  |  [view][E1-L02#16-view]  |
+Responsive Images  | Images with Markup: Project Part 2                    |  [link][E1-L03#14-code]  |  [view][E1-L03#14-view]  |
+Responsive Images  | Full Responsiveness: Project Part 3                   |  [link][E1-L04#10-code]  |  [view][E1-L04#10-view]  |
+Web Programming JS | Exercise: Pixel Art Maker                             |  [link][U2-L22#02-code]  |  [view][U2-L22#02-view]  |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
