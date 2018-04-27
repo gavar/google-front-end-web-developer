@@ -95,7 +95,9 @@ function clearNodeCache(done: TaskCallback) {
 (clearNodeCache as TaskInfo).displayName = "clear-node-cache";
 
 /** Compile scripts. */
-const tsProject = ts.createProject("tsconfig.json");
+const tsProject = ts.createProject("tsconfig.json", {
+    module: "esnext",
+});
 function scripts() {
     return gulp.src("./src/**/*.+(ts|js)")
         .pipe(tsProject())
