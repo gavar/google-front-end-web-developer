@@ -4,11 +4,11 @@ import {CheckerPlugin} from "awesome-typescript-loader";
 
 const config: Configuration = {
     mode: "development",
-    entry: "./src/index",
+    entry: "./src/js/app",
     devtool: "source-map",
     output: {
-        filename: "index.js",
-        path: path.resolve("./dist"),
+        filename: "app.js",
+        path: path.resolve("./dist/js"),
     },
     module: {
         rules: [
