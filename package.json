@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "clean": "lerna clean && rimraf ./**/yarn.lock && rimraf ./**/package-lock.json",
+    "clean": "lerna clean && rimraf node_modules && del-cli **/yarn.lock **/package-lock.json",
     "build": "lerna exec yarn run build"
   },
   "devDependencies": {
@@ -23,6 +23,7 @@
     "awesome-typescript-loader": "^5.0.0",
     "browser-sync": "^2.23.7",
     "del": "^3.0.0",
+    "del-cli": "^1.1.0",
     "fs-extra": "^5.0.0",
     "gulp": "^4.0.0",
     "lerna": "^2.10.2",
