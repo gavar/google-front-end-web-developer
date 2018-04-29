@@ -96,7 +96,7 @@ interface ApplicationState {
 
 const store: ApplicationState = {
     moves: 0,
-    stars: 0,
+    stars: 3,
 };
 
 // cheats
@@ -105,6 +105,7 @@ const QUICK_WIN = false;
 interface MemoryGameProps {
     deck: HTMLElement;
     moves: HTMLElement;
+    stars: HTMLElement;
     restart: HTMLElement;
 }
 
@@ -121,6 +122,7 @@ interface MemoryGameCard {
 
 interface MemoryGameState {
     visible: boolean;
+    stars: HTMLElement[],
     cards: MemoryGameCard[],
 }
 
@@ -142,6 +144,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
         props.deck.style.display = state.visible ? null : "none";
         props.moves.innerText = store.moves.toString();
 
+        // update cards
         for (const card of state.cards) {
             switch (card.status) {
                 case CORRECT:
@@ -154,6 +157,10 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
                     break;
             }
         }
+
+        // update stars
+        while (state.stars.length > store.stars)
+            state.stars.pop().remove();
     }
 
     /** Restart the game. */
@@ -161,16 +168,16 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
         // reset application state
         store.moves = 0;
-        store.stars = 0;
+        store.stars = 3;
 
         this.setState((state, props) => {
+
+            // default state
+            const next = this.initialState();
 
             // remove previous cards
             for (const card of state.cards)
                 card.element.remove();
-
-            // default state
-            const next = this.initialState();
 
             // create cards
             for (let i = 0; i < icons.length; i++) {
@@ -187,6 +194,19 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
                 );
             }
 
+            // remove previous stars
+            for (const star of state.stars)
+                star.remove();
+
+            // create stars
+            for (let i = 0; i < store.stars; i++) {
+                const element = document.createElement("li");
+                const icon = document.createElement("i");
+                icon.classList.add("fa", `fa-star`);
+                element.appendChild(icon);
+                next.stars.push(element);
+            }
+
             // quick win
             if (QUICK_WIN) {
                 for (let i = next.cards.length - 3; i >= 0; i--) {
@@ -197,10 +217,19 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
             // shuffle
             shuffle(next.cards);
 
-            // attach to the document
-            const fragment = document.createDocumentFragment();
-            for (const card of next.cards) fragment.appendChild(card.element);
-            props.deck.appendChild(fragment);
+            // attach cards to the document
+            {
+                const fragment = document.createDocumentFragment();
+                for (const card of next.cards) fragment.appendChild(card.element);
+                props.deck.appendChild(fragment);
+            }
+
+            // attach stars to the document
+            {
+                const fragment = document.createDocumentFragment();
+                for (const star of next.stars) fragment.appendChild(star);
+                props.stars.appendChild(fragment);
+            }
 
             return next;
         });
@@ -215,6 +244,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     protected initialState(): MemoryGameState {
         return {
             visible: true,
+            stars: [],
             cards: [],
         };
     }
@@ -371,9 +401,10 @@ class GameOver extends Component<GameOverProps, GameOverState> {
 
 // RUN GAME
 const memoryGame = new MemoryGame({
-    deck: document.querySelector<HTMLUListElement>("ul.deck"),
-    moves: document.querySelector<HTMLElement>(".moves"),
-    restart: document.querySelector<HTMLElement>(".restart"),
+    deck: document.querySelector<HTMLUListElement>(".game .deck"),
+    moves: document.querySelector<HTMLElement>(".game .moves"),
+    stars: document.querySelector<HTMLElement>(".game .stars"),
+    restart: document.querySelector<HTMLElement>(".game .restart"),
 });
 
 const gameOver = new GameOver({
