@@ -15,6 +15,7 @@ Responsive Images  | Units, Formats, Environments:  Project Part 1         |  [l
 Responsive Images  | Images with Markup: Project Part 2                    |  [link][E1-L03#14-code]  |  [view][E1-L03#14-view]  |
 Responsive Images  | Full Responsiveness: Project Part 3                   |  [link][E1-L04#10-code]  |  [view][E1-L04#10-view]  |
 Web Programming JS | Exercise: Pixel Art Maker                             |  [link][U2-L22#02-code]  |  [view][U2-L22#02-view]  |
+Web Programming JS | **Project: Memory Game**                              |**[link][U2-L24#03-code]**|**[view][U2-L24#03-view]**|
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -58,7 +59,7 @@ Web Programming JS | Exercise: Pixel Art Maker                             |  [l
 - [x] Web Programming JS: Working with Browser Events (2h)
 - [x] Web Programming JS: Exercise: Pixel Art Maker (45m)
 - [x] Web Programming JS: Performance (2h)
-- [ ] Web Programming JS: Memory Game (project)
+- [x] Web Programming JS: Memory Game (project)
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
@@ -99,3 +100,6 @@ Web Programming JS | Exercise: Pixel Art Maker                             |  [l
 
 [U2-L22#02-code]: web-programming/22.02
 [U2-L22#02-view]: https://gavar.github.io/google-front-end-web-developer/web-programming/22.02/dist/index.html
+
+[U2-L24#03-code]: web-programming/24.03
+[U2-L24#03-view]: https://gavar.github.io/google-front-end-web-developer/web-programming/24.03/dist/index.html
