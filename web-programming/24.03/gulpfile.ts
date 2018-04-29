@@ -9,13 +9,9 @@ function clean() {
     return del(["./dist"]);
 }
 
+const syncGlob = ["./src/**/*.{css,html,img,png}"];
 function sync() {
-    const glob = ["./src/**/*.{css,html,img,png}"];
-
-    if (args.watch)
-        gulp.watch(glob, sync);
-
-    return gulp.src(glob)
+    return gulp.src(syncGlob)
         .pipe(gulp.dest("./dist"));
 }
 
@@ -29,7 +25,12 @@ function serve() {
     return bs.serve({server: "./dist"});
 }
 
-function serveFlags(done: Function) {
+function watch() {
+    if (!args.watch) return;
+    gulp.watch(syncGlob, sync);
+}
+
+function enableWatch(done: Function) {
     args.flags.push("-w", "--watch");
     args.watch = true;
     done();
@@ -44,11 +45,12 @@ task("default", series(
     parallel(
         sync,
         compile,
-    )),
-);
+        watch,
+    ),
+));
 
 task("serve", series(
-    serveFlags,
+    enableWatch,
     parallel(
         "default",
         serve,
