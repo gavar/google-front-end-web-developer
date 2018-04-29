@@ -15,15 +15,13 @@ interface MemoryGameProps {
     restart: HTMLElement;
 }
 
-enum MemoryGameCardStatus {
-    NONE,
-    SELECTION,
-    CORRECT,
-}
+const CORRECT = "correct";
+const SELECTION = "selection";
+type MemoryGameCardStatus = "correct" | "selection";
 
 interface MemoryGameCard {
     element: HTMLElement;
-    status: MemoryGameCardStatus,
+    status?: MemoryGameCardStatus,
 }
 
 interface MemoryGameState {
@@ -78,12 +76,13 @@ class MemoryGame extends EventTarget {
 
         for (const card of this.state.cards) {
             switch (card.status) {
-                case MemoryGameCardStatus.NONE:
-                    card.element.classList.remove("show");
-                    break;
-                case MemoryGameCardStatus.SELECTION:
-                case MemoryGameCardStatus.CORRECT:
+                case CORRECT:
+                case SELECTION:
                     card.element.classList.add("show");
+                    break;
+
+                default:
+                    card.element.classList.remove("show");
                     break;
             }
         }
@@ -111,14 +110,13 @@ class MemoryGame extends EventTarget {
             element.appendChild(icon);
 
             this.state.cards.push(
-                {status: MemoryGameCardStatus.NONE, element: element},
-                {status: MemoryGameCardStatus.NONE, element: element.cloneNode(true) as HTMLElement},
+                {element: element},
+                {element: element.cloneNode(true) as HTMLElement},
             );
         }
 
         // shuffle
         shuffle(this.state.cards);
-        console.log(this.state);
 
         // attach to the document
         const fragment = document.createDocumentFragment();
@@ -173,29 +171,29 @@ class MemoryGame extends EventTarget {
     }
 
     /**
-     * Set status of the cards with {@link MemoryGameCardStatus#SELECTION} status.
+     * Set status of the cards with {@link SELECTION} status.
      * @param status - status to set.
      */
     private setStatusOfSelections(status: MemoryGameCardStatus) {
-        this.setStatusOf(MemoryGameCardStatus.SELECTION, status);
+        this.setStatusOf(SELECTION, status);
     }
 
     private onSelectListElement(element: HTMLLIElement) {
 
         // max active selections
-        if (this.countOf(MemoryGameCardStatus.SELECTION) > 1)
+        if (this.countOf(SELECTION) > 1)
             return;
 
         // check if card already active
         const card = this.cardOf(element);
-        if (card.status == MemoryGameCardStatus.SELECTION)
+        if (card.status == SELECTION)
             return;
 
         // set card as active
-        card.status = MemoryGameCardStatus.SELECTION;
+        card.status = SELECTION;
 
         // decide if correct selections
-        if (this.countOf(MemoryGameCardStatus.SELECTION) > 1) {
+        if (this.countOf(SELECTION) > 1) {
             this.state.moves++;
             this.analyzeSelections();
         }
@@ -206,7 +204,7 @@ class MemoryGame extends EventTarget {
     private analyzeSelections() {
 
         // check if classes of all selected card icons are equal
-        const selections = this.state.cards.filter(x => x.status == MemoryGameCardStatus.SELECTION);
+        const selections = this.state.cards.filter(x => x.status == SELECTION);
         const classes = selections.map(x => x.element.firstElementChild.className);
         const correct = classes.every((value, index, array) => value === array[0]);
 
@@ -214,12 +212,12 @@ class MemoryGame extends EventTarget {
             // show wrong result for some time
             setTimeout(() => {
                 // change status to default
-                this.setStatusOfSelections(MemoryGameCardStatus.NONE);
+                this.setStatusOfSelections(void 0);
             }, this.delay);
         }
         else {
             // change status to correct
-            this.setStatusOfSelections(MemoryGameCardStatus.CORRECT);
+            this.setStatusOfSelections(CORRECT);
         }
     }
 
