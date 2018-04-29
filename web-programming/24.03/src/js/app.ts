@@ -123,6 +123,7 @@ interface MemoryGameCard {
 
 interface MemoryGameState {
     visible: boolean;
+    mistakes: number;
     stars: HTMLElement[],
     cards: MemoryGameCard[],
 }
@@ -245,6 +246,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     protected initialState(): MemoryGameState {
         return {
             visible: true,
+            mistakes: 0,
             stars: [],
             cards: [],
         };
@@ -322,7 +324,6 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
                 const correct = this.isCorrect(state, selections);
                 if (correct) this.onCorrectSelection(selections);
                 else this.onWrongSelection(selections);
-                store.stars = this.calculateStars(state);
             }
 
             return state;
@@ -358,30 +359,28 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     private onWrongSelection(selection: number[]) {
         setTimeout(() => {
             this.setState(state => {
+                let isAnyShownPreviously = false;
+
                 // update status
                 for (const index of selection) {
                     const card = state.cards[index];
+                    if (card.shows > 1) isAnyShownPreviously = true;
                     delete card.status;
                 }
+
+                // check if made mistake
+                if (isAnyShownPreviously)
+                    state.mistakes++;
+
+                // update stars
+                store.stars = this.calculateStars(state.mistakes);
             });
         }, this.delay);
     }
 
-    private calculateStars(state: MemoryGameState): number {
-        let shows = 0;
-        let mistakes = 0;
-        for (const card of state.cards) {
-            shows += card.shows;
-            if (card.shows > 1)
-                mistakes += card.shows - 1;
-        }
-
-        // all values are paired
-        shows *= .5;
-        mistakes *= .5;
-        console.log("shows:", shows, "mistakes:", mistakes);
-
-        // mistakes to stars
+    private calculateStars(mistakes: number): number {
+        console.log("moves:", store.moves, "mistakes:", mistakes);
+        // convert mistakes to stars
         if (mistakes < 3) return 3; // less then 3 mistakes
         if (mistakes < 6) return 2; // from 3 to 5 mistakes
         return 1; // more then 5 mistakes
