@@ -1,13 +1,7 @@
 {
   "lerna": "2.10.2",
-  "version": "1.0.0",
+  "version": "independent",
   "npmClient": "yarn",
-  "npmClientArgs": ["--production", "--no-optional"],
   "concurrency": 1,
-  "packages": [
-    ".",
-    "web-programming/**/*",
-    "web-foundations/**/*",
-    "responsive-images/**/*"
-  ]
+  "useWorkspaces": true
 }
