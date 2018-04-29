@@ -158,16 +158,15 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
         for (const card of state.cards) {
             switch (card.status) {
                 case CORRECT:
-                    card.element.classList.add("match");
+                    card.element.classList.add("show", "match");
                     break;
 
                 case SELECTION:
-                    card.element.classList.add("open", "show");
+                    card.element.classList.add("show", "open");
                     break;
 
                 case INCORRECT:
-                    card.element.classList.add("open", "show");
-                    card.element.classList.add("wrong");
+                    card.element.classList.add("show", "open", "wrong");
                     break;
 
                 default:
@@ -446,13 +445,21 @@ class GameOver extends Component<GameOverProps, GameOverState> {
     render(props?: Readonly<GameOverProps>, state?: Readonly<GameOverState>) {
         props.moves.innerText = store.moves.toString();
         props.stars.innerText = store.stars.toString();
-        props.view.style.display = state.visible ? null : "none";
+
+        switch (state.visible) {
+            case true:
+                props.view.classList.add("show");
+                break;
+            case false:
+                props.view.classList.remove("show");
+                break;
+        }
     }
 
     /** @inheritDoc */
     protected initialState(): GameOverState {
         return {
-            visible: false,
+            visible: undefined,
         };
     }
 
