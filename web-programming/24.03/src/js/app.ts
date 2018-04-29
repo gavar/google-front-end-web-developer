@@ -112,8 +112,9 @@ interface MemoryGameProps {
 const GAME_OVER = new Event("game-over");
 
 const CORRECT = "correct";
+const INCORRECT = "incorrect";
 const SELECTION = "selection";
-type MemoryGameCardStatus = "correct" | "selection";
+type MemoryGameCardStatus = "selection" | "correct" | "incorrect";
 
 interface MemoryGameCard {
     shows: number;
@@ -127,6 +128,13 @@ interface MemoryGameState {
     stars: HTMLElement[],
     cards: MemoryGameCard[],
 }
+
+const CLASSES = [
+    "open",
+    "show",
+    "match",
+    "wrong",
+];
 
 class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
@@ -150,12 +158,20 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
         for (const card of state.cards) {
             switch (card.status) {
                 case CORRECT:
+                    card.element.classList.add("match");
+                    break;
+
                 case SELECTION:
-                    card.element.classList.add("show");
+                    card.element.classList.add("open", "show");
+                    break;
+
+                case INCORRECT:
+                    card.element.classList.add("open", "show");
+                    card.element.classList.add("wrong");
                     break;
 
                 default:
-                    card.element.classList.remove("show");
+                    card.element.classList.remove.apply(card.element.classList, CLASSES);
                     break;
             }
         }
@@ -321,22 +337,22 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
             // decide if correct selections
             if (selections.length > 1) {
                 store.moves++;
-                const correct = this.isCorrect(state, selections);
-                if (correct) this.onCorrectSelection(selections);
-                else this.onWrongSelection(selections);
+                const match = this.hasMatch(state, selections);
+                if (match) this.onSucessfulMatch(selections);
+                else this.onMatchFailure(selections);
             }
 
             return state;
         });
     }
 
-    private isCorrect(state: MemoryGameState, selections: number[]) {
-        if (selections.length < 1)
+    private hasMatch(state: MemoryGameState, indexes: number[]) {
+        if (indexes.length < 1)
             return false;
 
-        const first = state.cards[selections[0]].element.firstElementChild;
-        for (let i = 1; i < selections.length; i++) {
-            const icon = state.cards[selections[i]].element.firstElementChild;
+        const first = state.cards[indexes[0]].element.firstElementChild;
+        for (let i = 1; i < indexes.length; i++) {
+            const icon = state.cards[indexes[i]].element.firstElementChild;
             if (first.className != icon.className)
                 return false;
         }
@@ -344,10 +360,10 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
         return true;
     }
 
-    private onCorrectSelection(selection: number[]) {
+    private onSucessfulMatch(indexes: number[]) {
         this.setState(state => {
             // update status
-            for (const index of selection) {
+            for (const index of indexes) {
                 state.cards[index].status = CORRECT;
             }
             // game over?
@@ -356,26 +372,36 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
         });
     }
 
-    private onWrongSelection(selection: number[]) {
+    private onMatchFailure(indexes: number[]) {
+        this.setState(state => {
+            let isAnyShownPreviously = false;
+
+            // update status
+            for (const index of indexes) {
+                const card = state.cards[index];
+                if (card.shows > 1) isAnyShownPreviously = true;
+                card.status = INCORRECT;
+            }
+
+            // check if made mistake
+            if (isAnyShownPreviously)
+                state.mistakes++;
+
+            // update stars
+            store.stars = this.calculateStars(state.mistakes);
+        });
+
         setTimeout(() => {
-            this.setState(state => {
-                let isAnyShownPreviously = false;
-
-                // update status
-                for (const index of selection) {
-                    const card = state.cards[index];
-                    if (card.shows > 1) isAnyShownPreviously = true;
-                    delete card.status;
-                }
-
-                // check if made mistake
-                if (isAnyShownPreviously)
-                    state.mistakes++;
-
-                // update stars
-                store.stars = this.calculateStars(state.mistakes);
-            });
+            this.deleteStatusByIndexes(indexes);
         }, this.delay);
+    }
+
+    private deleteStatusByIndexes(indexes: number[]) {
+        this.setState((state) => {
+            for (const index of indexes) {
+                delete state.cards[index].status;
+            }
+        });
     }
 
     private calculateStars(mistakes: number): number {
