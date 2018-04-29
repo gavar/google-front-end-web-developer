@@ -8,9 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build-all": "lerna run build",
-    "install": "lerna bootstrap",
-    "clean": "rimraf ./**/yarn.lock && lerna clean"
+    "clean": "lerna clean && rimraf node_modules && del-cli **/yarn.lock **/package-lock.json",
+    "build": "lerna exec yarn run build"
   },
   "devDependencies": {
     "@types/browser-sync": "^0.0.39",
@@ -24,6 +23,7 @@
     "awesome-typescript-loader": "^5.0.0",
     "browser-sync": "^2.23.7",
     "del": "^3.0.0",
+    "del-cli": "^1.1.0",
     "fs-extra": "^5.0.0",
     "gulp": "^4.0.0",
     "lerna": "^2.10.2",
@@ -34,5 +34,10 @@
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15",
     "yargs": "^11.0.0"
-  }
+  },
+  "workspaces": [
+    "web-programming/*",
+    "web-foundations/*",
+    "responsive-images/*"
+  ]
 }
