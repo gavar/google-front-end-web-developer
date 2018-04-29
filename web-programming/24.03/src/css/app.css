@@ -34,6 +34,17 @@ h1 {
 }
 
 /*
+ * COMMON
+ */
+button {
+  border: none;
+  color: white;
+  background-color: #02b7a7;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+/*
  * GAME
  */
 
@@ -100,7 +111,7 @@ h1 {
 
 .score-panel {
   text-align: left;
-  width: 345px;
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -118,6 +129,8 @@ h1 {
 .score-panel .restart {
   float: right;
   cursor: pointer;
+  background-color: crimson;
+  margin-top: -10px;
 }
 
 /*
@@ -141,14 +154,6 @@ h1 {
 
 .game-over p {
   text-align: center;
-}
-
-.game-over .restart {
-  border: none;
-  color: white;
-  background-color: #02b7a7;
-  padding: 10px 20px;
-  border-radius: 5px;
 }
 
 @keyframes game-over-show {
