@@ -116,6 +116,7 @@ const SELECTION = "selection";
 type MemoryGameCardStatus = "correct" | "selection";
 
 interface MemoryGameCard {
+    shows: number;
     element: HTMLElement;
     status?: MemoryGameCardStatus,
 }
@@ -189,8 +190,8 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
                 element.appendChild(icon);
 
                 next.cards.push(
-                    {element: element},
-                    {element: element.cloneNode(true) as HTMLElement},
+                    {shows: 0, element: element},
+                    {shows: 0, element: element.cloneNode(true) as HTMLElement},
                 );
             }
 
@@ -308,38 +309,82 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
             // set card as active
             card.status = SELECTION;
+            card.shows++;
+
+            const selections = [];
+            for (let i = 0; i < state.cards.length; i++)
+                if (state.cards[i].status == SELECTION)
+                    selections.push(i);
 
             // decide if correct selections
-            if (this.countOf(state.cards, SELECTION) > 1) {
-                this.setState(state => {
-                    store.moves++;
-                    this.analyzeSelections(state);
-                    return state;
-                });
+            if (selections.length > 1) {
+                store.moves++;
+                const correct = this.isCorrect(state, selections);
+                if (correct) this.onCorrectSelection(selections);
+                else this.onWrongSelection(selections);
+                store.stars = this.calculateStars(state);
             }
+
+            return state;
         });
     }
 
-    private analyzeSelections(state: MemoryGameState) {
+    private isCorrect(state: MemoryGameState, selections: number[]) {
+        if (selections.length < 1)
+            return false;
 
-        // check if classes of all selected card icons are equal
-        const selections = state.cards.filter(x => x.status == SELECTION);
-        const classes = selections.map(x => x.element.firstElementChild.className);
-        const correct = classes.every((value, index, array) => value === array[0]);
-
-        if (!correct) {
-            // show wrong result for some time
-            setTimeout(() => {
-                // change status to default
-                this.setStatusOfSelections(void 0);
-            }, this.delay);
+        const first = state.cards[selections[0]].element.firstElementChild;
+        for (let i = 1; i < selections.length; i++) {
+            const icon = state.cards[selections[i]].element.firstElementChild;
+            if (first.className != icon.className)
+                return false;
         }
-        else {
-            // change status to correct
-            this.setStatusOfSelections(CORRECT);
+
+        return true;
+    }
+
+    private onCorrectSelection(selection: number[]) {
+        this.setState(state => {
+            // update status
+            for (const index of selection) {
+                state.cards[index].status = CORRECT;
+            }
+            // game over?
             if (this.isGameOver(state))
                 this.dispatchEvent(GAME_OVER);
+        });
+    }
+
+    private onWrongSelection(selection: number[]) {
+        setTimeout(() => {
+            this.setState(state => {
+                // update status
+                for (const index of selection) {
+                    const card = state.cards[index];
+                    delete card.status;
+                }
+            });
+        }, this.delay);
+    }
+
+    private calculateStars(state: MemoryGameState): number {
+        let shows = 0;
+        let mistakes = 0;
+        for (const card of state.cards) {
+            shows += card.shows;
+            if (card.shows > 1)
+                mistakes += card.shows - 1;
         }
+
+        // all values are paired
+        shows *= .5;
+        mistakes *= .5;
+        console.log("shows:", shows, "mistakes:", mistakes);
+
+        // mistakes to stars
+        if (mistakes < 3) return 3; // less then 3 mistakes
+        if (mistakes < 6) return 2; // from 3 to 5 mistakes
+        return 1; // more then 5 mistakes
     }
 
     private onDeckClick(e: MouseEvent) {
@@ -374,9 +419,9 @@ class GameOver extends Component<GameOverProps, GameOverState> {
 
     /** @inheritDoc */
     render(props?: Readonly<GameOverProps>, state?: Readonly<GameOverState>) {
-        props.view.style.display = state.visible ? null : "none";
         props.moves.innerText = store.moves.toString();
         props.stars.innerText = store.stars.toString();
+        props.view.style.display = state.visible ? null : "none";
     }
 
     /** @inheritDoc */
