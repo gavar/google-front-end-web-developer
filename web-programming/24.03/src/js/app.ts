@@ -9,29 +9,6 @@ const icons: string[] = [
     "paper-plane-o",
 ];
 
-interface MemoryGameProps {
-    deck: HTMLElement;
-    moves: HTMLElement;
-    restart: HTMLElement;
-}
-
-// cheats
-const QUICK_WIN = true;
-
-const CORRECT = "correct";
-const SELECTION = "selection";
-type MemoryGameCardStatus = "correct" | "selection";
-
-interface MemoryGameCard {
-    element: HTMLElement;
-    status?: MemoryGameCardStatus,
-}
-
-interface MemoryGameState {
-    moves: number;
-    cards: MemoryGameCard[],
-}
-
 function shuffle<T>(array: Array<T>): Array<T> {
     let t: T;
     let r: number;
@@ -61,21 +38,22 @@ abstract class Component<P, S> extends EventTarget {
         this.state = this.initialState();
 
         // mount
-        this.componentWillMount();
-        this.repaint();
+        this.componentWillMount(this.props, this.state);
+        this.render(this.props, this.state);
+        this.componentDidMount(this.props, this.state);
     }
-
-    /**
-     * Set next state of the component to render.
-     * @param next - next state value.
-     */
-    setState(next: Partial<S>);
 
     /**
      * Set next state of the component to render.
      * @param next - function that returns next state of the component.
      */
     setState(next: (prev?: S, props?: P) => Partial<S> | void);
+
+    /**
+     * Set next state of the component to render.
+     * @param next - next state value.
+     */
+    setState(next: Partial<S>);
 
     setState(next) {
 
@@ -95,7 +73,10 @@ abstract class Component<P, S> extends EventTarget {
     abstract render(props?: Readonly<P>, state?: Readonly<S>);
 
     /** Called immediately before mounting occurs, and before {@link Component#render}. */
-    protected componentWillMount() { }
+    protected componentWillMount(props?: Readonly<P>, state?: Readonly<S>) { }
+
+    /** Called immediately after a component is mounted. */
+    protected componentDidMount(props?: Readonly<P>, state?: Readonly<S>) { }
 
     /** Get initial state of the component. */
     protected initialState(): S {
@@ -108,7 +89,40 @@ abstract class Component<P, S> extends EventTarget {
     }
 }
 
+interface ApplicationState {
+    moves: number;
+    stars: number;
+}
+
+const store: ApplicationState = {
+    moves: 0,
+    stars: 0,
+};
+
+// cheats
+const QUICK_WIN = false;
+
+interface MemoryGameProps {
+    deck: HTMLElement;
+    moves: HTMLElement;
+    restart: HTMLElement;
+}
+
 const GAME_OVER = new Event("game-over");
+
+const CORRECT = "correct";
+const SELECTION = "selection";
+type MemoryGameCardStatus = "correct" | "selection";
+
+interface MemoryGameCard {
+    element: HTMLElement;
+    status?: MemoryGameCardStatus,
+}
+
+interface MemoryGameState {
+    visible: boolean;
+    cards: MemoryGameCard[],
+}
 
 class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
@@ -125,10 +139,9 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     /** @inheritDoc */
     public render(props: Readonly<MemoryGameProps>, state: Readonly<MemoryGameState>) {
 
-        // values
-        props.moves.innerText = state.moves.toString();
+        props.deck.style.display = state.visible ? null : "none";
+        props.moves.innerText = store.moves.toString();
 
-        // classes
         for (const card of state.cards) {
             switch (card.status) {
                 case CORRECT:
@@ -145,12 +158,18 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
     /** Restart the game. */
     public restart() {
+
+        // reset application state
+        store.moves = 0;
+        store.stars = 0;
+
         this.setState((state, props) => {
 
             // remove previous cards
             for (const card of state.cards)
                 card.element.remove();
 
+            // default state
             const next = this.initialState();
 
             // create cards
@@ -171,7 +190,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
             // quick win
             if (QUICK_WIN) {
                 for (let i = next.cards.length - 3; i >= 0; i--) {
-                    next.cards[i].status = "correct";
+                    next.cards[i].status = CORRECT;
                 }
             }
 
@@ -195,7 +214,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     /** @inheritDoc */
     protected initialState(): MemoryGameState {
         return {
-            moves: 0,
+            visible: true,
             cards: [],
         };
     }
@@ -263,7 +282,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
             // decide if correct selections
             if (this.countOf(state.cards, SELECTION) > 1) {
                 this.setState(state => {
-                    state.moves++;
+                    store.moves++;
                     this.analyzeSelections(state);
                     return state;
                 });
@@ -303,8 +322,64 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     }
 }
 
+interface GameOverProps {
+    view: HTMLElement;
+    game: MemoryGame;
+    moves: HTMLElement;
+    stars: HTMLElement;
+    restart: HTMLElement;
+}
+
+interface GameOverState {
+    visible: boolean;
+}
+
+class GameOver extends Component<GameOverProps, GameOverState> {
+
+    constructor(props: GameOverProps) {
+        super(props);
+        props.game.addEventListener("game-over", this.onGameOver.bind(this));
+        props.restart.addEventListener("click", this.onPlayAgainClick.bind(this));
+    }
+
+    /** @inheritDoc */
+    render(props?: Readonly<GameOverProps>, state?: Readonly<GameOverState>) {
+        props.view.style.display = state.visible ? null : "none";
+        props.moves.innerText = store.moves.toString();
+        props.stars.innerText = store.stars.toString();
+    }
+
+    /** @inheritDoc */
+    protected initialState(): GameOverState {
+        return {
+            visible: false,
+        };
+    }
+
+    private onGameOver() {
+        this.setState({visible: true});
+    }
+
+    private onPlayAgainClick() {
+        this.setState((state, props) => {
+            state.visible = false;
+            props.game.restart();
+            return state;
+        });
+    }
+}
+
+// RUN GAME
 const memoryGame = new MemoryGame({
     deck: document.querySelector<HTMLUListElement>("ul.deck"),
     moves: document.querySelector<HTMLElement>(".moves"),
     restart: document.querySelector<HTMLElement>(".restart"),
+});
+
+const gameOver = new GameOver({
+    game: memoryGame,
+    view: document.querySelector<HTMLElement>(".game-over"),
+    moves: document.querySelector<HTMLElement>(".game-over .moves"),
+    stars: document.querySelector<HTMLElement>(".game-over .stars"),
+    restart: document.querySelector<HTMLElement>(".game-over .restart"),
 });
