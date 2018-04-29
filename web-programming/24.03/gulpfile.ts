@@ -10,7 +10,7 @@ function clean() {
 }
 
 function sync() {
-    const glob = ["./src/**/*.{css,html}"];
+    const glob = ["./src/**/*.{css,html,img,png}"];
 
     if (args.watch)
         gulp.watch(glob, sync);
@@ -31,6 +31,7 @@ function serve() {
 
 function serveFlags(done: Function) {
     args.flags.push("-w", "--watch");
+    args.watch = true;
     done();
 }
 
