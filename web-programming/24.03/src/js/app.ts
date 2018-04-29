@@ -15,6 +15,9 @@ interface MemoryGameProps {
     restart: HTMLElement;
 }
 
+// cheats
+const QUICK_WIN = true;
+
 const CORRECT = "correct";
 const SELECTION = "selection";
 type MemoryGameCardStatus = "correct" | "selection";
@@ -41,40 +44,92 @@ function shuffle<T>(array: Array<T>): Array<T> {
     return array;
 }
 
-class MemoryGame extends EventTarget {
+abstract class Component<P, S> extends EventTarget {
+    private readonly props: Readonly<P>;
+    private readonly state: Readonly<S>;
 
     private dirty: boolean;
-    private readonly state: MemoryGameState;
-    private readonly props: MemoryGameProps;
-    private readonly delay: number = 1000;
 
-    constructor(props: MemoryGameProps) {
+    protected constructor(props: P) {
         super();
 
         // setup
-        this.props = props;
-        this.render = this.render.bind(this);
+        this.props = Object.assign({}, props);
+        this.repaint = this.repaint.bind(this);
 
-        // initial state
+        // state
         this.state = this.initialState();
-        this.restart();
 
-        // render
-        this.render();
-
-        // events
-        this.props.deck.addEventListener("click", this.onDeckClick.bind(this));
-        this.props.restart.addEventListener("click", this.onRestartClick.bind(this));
+        // mount
+        this.componentWillMount();
+        this.repaint();
     }
 
     /**
-     * Render state of the game.
+     * Set next state of the component to render.
+     * @param next - next state value.
      */
-    public render() {
-        this.dirty = false;
-        this.props.moves.innerText = this.state.moves.toString();
+    setState(next: Partial<S>);
 
-        for (const card of this.state.cards) {
+    /**
+     * Set next state of the component to render.
+     * @param next - function that returns next state of the component.
+     */
+    setState(next: (prev?: S, props?: P) => Partial<S> | void);
+
+    setState(next) {
+
+        const prev = this.state;
+        const props = this.props;
+
+        if (typeof next == "function")
+            next = next(prev, props) || prev;
+
+        Object.assign(this.state, next);
+        if (this.dirty) return;
+        this.dirty = true;
+        setTimeout(this.repaint, 0);
+    }
+
+    /** Render state of the component. */
+    abstract render(props?: Readonly<P>, state?: Readonly<S>);
+
+    /** Called immediately before mounting occurs, and before {@link Component#render}. */
+    protected componentWillMount() { }
+
+    /** Get initial state of the component. */
+    protected initialState(): S {
+        return {} as S;
+    }
+
+    private repaint() {
+        this.dirty = false;
+        this.render(this.props, this.state);
+    }
+}
+
+const GAME_OVER = new Event("game-over");
+
+class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
+
+    private readonly delay: number = 1000;
+
+    constructor(props: MemoryGameProps) {
+        super(props);
+
+        // events
+        props.deck.addEventListener("click", this.onDeckClick.bind(this));
+        props.restart.addEventListener("click", this.onRestartClick.bind(this));
+    }
+
+    /** @inheritDoc */
+    public render(props: Readonly<MemoryGameProps>, state: Readonly<MemoryGameState>) {
+
+        // values
+        props.moves.innerText = state.moves.toString();
+
+        // classes
+        for (const card of state.cards) {
             switch (card.status) {
                 case CORRECT:
                 case SELECTION:
@@ -88,70 +143,77 @@ class MemoryGame extends EventTarget {
         }
     }
 
-    /**
-     * Restart the game.
-     */
+    /** Restart the game. */
     public restart() {
+        this.setState((state, props) => {
 
-        // remove previous cards
-        for (const card of this.state.cards)
-            card.element.remove();
+            // remove previous cards
+            for (const card of state.cards)
+                card.element.remove();
 
-        // reset state
-        Object.assign(this.state, this.initialState());
+            const next = this.initialState();
 
-        // create cards
-        for (let i = 0; i < icons.length; i++) {
-            const element = document.createElement("li");
-            element.classList.add("card");
+            // create cards
+            for (let i = 0; i < icons.length; i++) {
+                const element = document.createElement("li");
+                element.classList.add("card");
 
-            const icon = document.createElement("i");
-            icon.classList.add("fa", `fa-${icons[i]}`);
-            element.appendChild(icon);
+                const icon = document.createElement("i");
+                icon.classList.add("fa", `fa-${icons[i]}`);
+                element.appendChild(icon);
 
-            this.state.cards.push(
-                {element: element},
-                {element: element.cloneNode(true) as HTMLElement},
-            );
-        }
+                next.cards.push(
+                    {element: element},
+                    {element: element.cloneNode(true) as HTMLElement},
+                );
+            }
 
-        // shuffle
-        shuffle(this.state.cards);
+            // quick win
+            if (QUICK_WIN) {
+                for (let i = next.cards.length - 3; i >= 0; i--) {
+                    next.cards[i].status = "correct";
+                }
+            }
 
-        // attach to the document
-        const fragment = document.createDocumentFragment();
-        for (const card of this.state.cards) fragment.appendChild(card.element);
-        this.props.deck.appendChild(fragment);
+            // shuffle
+            shuffle(next.cards);
 
-        // render
-        this.setDirty();
+            // attach to the document
+            const fragment = document.createDocumentFragment();
+            for (const card of next.cards) fragment.appendChild(card.element);
+            props.deck.appendChild(fragment);
+
+            return next;
+        });
     }
 
-    /**
-     * Construct initial state of the game.
-     */
-    private initialState(): MemoryGameState {
+    /** @inheritDoc */
+    protected componentWillMount() {
+        this.restart();
+    }
+
+    /** @inheritDoc */
+    protected initialState(): MemoryGameState {
         return {
             moves: 0,
             cards: [],
         };
     }
 
-    private setDirty() {
-        if (this.dirty) return;
-        setTimeout(this.render, 0);
+    private isGameOver(state: MemoryGameState) {
+        return this.countOf(state.cards, CORRECT) === state.cards.length;
     }
 
-    private cardOf(element: HTMLLIElement): MemoryGameCard {
-        for (const card of this.state.cards)
+    private cardOf(cards: MemoryGameCard[], element: HTMLLIElement): MemoryGameCard {
+        for (const card of cards)
             if (card.element === element)
                 return card;
     }
 
-    private countOf(status: MemoryGameCardStatus): number {
+    private countOf(cards: MemoryGameCard[], status: MemoryGameCardStatus): number {
         let count = 0;
-        for (let i = 0; i < this.state.cards.length; i++)
-            if (this.state.cards[i].status === status)
+        for (let i = 0; i < cards.length; i++)
+            if (cards[i].status === status)
                 count++;
 
         return count;
@@ -163,11 +225,13 @@ class MemoryGame extends EventTarget {
      * @param next - status to set.
      */
     private setStatusOf(status: MemoryGameCardStatus, next: MemoryGameCardStatus) {
-        for (const card of this.state.cards)
-            if (card.status === status)
-                card.status = next;
+        this.setState(state => {
+            for (const card of state.cards)
+                if (card.status === status)
+                    card.status = next;
 
-        this.setDirty();
+            return state;
+        });
     }
 
     /**
@@ -179,32 +243,38 @@ class MemoryGame extends EventTarget {
     }
 
     private onSelectListElement(element: HTMLLIElement) {
+        this.setState(state => {
 
-        // max active selections
-        if (this.countOf(SELECTION) > 1)
-            return;
+            // check if card already selected or correct
+            const card = this.cardOf(state.cards, element);
+            switch (card.status) {
+                case SELECTION:
+                case CORRECT:
+                    return;
+            }
 
-        // check if card already active
-        const card = this.cardOf(element);
-        if (card.status == SELECTION)
-            return;
+            // max active selections
+            if (this.countOf(state.cards, SELECTION) > 1)
+                return;
 
-        // set card as active
-        card.status = SELECTION;
+            // set card as active
+            card.status = SELECTION;
 
-        // decide if correct selections
-        if (this.countOf(SELECTION) > 1) {
-            this.state.moves++;
-            this.analyzeSelections();
-        }
-
-        this.setDirty();
+            // decide if correct selections
+            if (this.countOf(state.cards, SELECTION) > 1) {
+                this.setState(state => {
+                    state.moves++;
+                    this.analyzeSelections(state);
+                    return state;
+                });
+            }
+        });
     }
 
-    private analyzeSelections() {
+    private analyzeSelections(state: MemoryGameState) {
 
         // check if classes of all selected card icons are equal
-        const selections = this.state.cards.filter(x => x.status == SELECTION);
+        const selections = state.cards.filter(x => x.status == SELECTION);
         const classes = selections.map(x => x.element.firstElementChild.className);
         const correct = classes.every((value, index, array) => value === array[0]);
 
@@ -218,6 +288,8 @@ class MemoryGame extends EventTarget {
         else {
             // change status to correct
             this.setStatusOfSelections(CORRECT);
+            if (this.isGameOver(state))
+                this.dispatchEvent(GAME_OVER);
         }
     }
 
@@ -226,7 +298,7 @@ class MemoryGame extends EventTarget {
             this.onSelectListElement(e.target);
     }
 
-    private onRestartClick(e: MouseEvent) {
+    private onRestartClick() {
         this.restart();
     }
 }
