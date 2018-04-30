@@ -21,14 +21,16 @@ function shuffle<T>(array: Array<T>): Array<T> {
     return array;
 }
 
-abstract class Component<P, S> extends EventTarget {
+abstract class Component<P, S> implements EventTarget {
+
+    private readonly events: EventTarget;
     private readonly props: Readonly<P>;
     private readonly state: Readonly<S>;
 
     private dirty: boolean;
 
     protected constructor(props: P) {
-        super();
+        this.events = document.createDocumentFragment();
 
         // setup
         this.props = Object.assign({}, props);
@@ -71,6 +73,21 @@ abstract class Component<P, S> extends EventTarget {
 
     /** Render state of the component. */
     abstract render(props?: Readonly<P>, state?: Readonly<S>);
+
+    /** @inheritDoc */
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions): void {
+        this.events.addEventListener(type, listener, options);
+    }
+
+    /** @inheritDoc */
+    dispatchEvent(evt: Event): boolean {
+        return this.events.dispatchEvent(evt);
+    }
+
+    /** @inheritDoc */
+    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void {
+        this.events.removeEventListener(type, listener, options);
+    }
 
     /** Called immediately before mounting occurs, and before {@link Component#render}. */
     protected componentWillMount(props?: Readonly<P>, state?: Readonly<S>) { }
