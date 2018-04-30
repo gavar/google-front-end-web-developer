@@ -21,6 +21,9 @@
     "@types/webpack": "^4.1.3",
     "@types/yargs": "^11.0.0",
     "awesome-typescript-loader": "^5.0.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.23.7",
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
@@ -42,8 +45,8 @@
     "yargs": "^11.0.0"
   },
   "workspaces": [
-    "web-programming/*",
-    "web-foundations/*",
-    "responsive-images/*"
-  ]
-}
+      "web-programming/*",
+      "web-foundations/*",
+      "responsive-images/*"
+    ]
+  }

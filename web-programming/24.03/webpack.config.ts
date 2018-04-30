@@ -36,7 +36,16 @@ export = async function (env: WebpackEnv, argv: WebpackArgv): Promise<Configurat
                 },
                 {
                     test: /\.tsx?$/,
-                    use: ["awesome-typescript-loader"],
+                    loader: "awesome-typescript-loader",
+                    options: {
+                        "useBabel": true,
+                        "babelOptions": {
+                            "babelrc": false, /* Important line */
+                            "presets": [
+                                ["env", {"targets": "last 2 versions, ie 11", "modules": false}],
+                            ],
+                        },
+                    },
                 },
             ],
         },
