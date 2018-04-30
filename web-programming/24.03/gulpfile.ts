@@ -3,24 +3,15 @@ import {args} from "@cli";
 import {spawn} from "child_process";
 import * as del from "del";
 import * as gulp from "gulp";
-import * as postcss from "gulp-postcss";
-import * as autoprefixer from "autoprefixer";
 import {parallel, series, task} from "gulp";
 
 function clean() {
     return del(["./dist"]);
 }
 
-const syncGlob = ["./src/**/*.{html,img,png}"];
+const syncGlob = ["./src/**/*.html"];
 function sync() {
     return gulp.src(syncGlob)
-        .pipe(gulp.dest("./dist"));
-}
-
-const cssGlob = ["./src/**/*.css"];
-function css() {
-    return gulp.src(cssGlob)
-        .pipe(postcss([autoprefixer()]))
         .pipe(gulp.dest("./dist"));
 }
 
@@ -34,10 +25,11 @@ function serve() {
     return bs.serve({server: "./dist"});
 }
 
-function watch() {
-    if (!args.watch) return;
-    gulp.watch(cssGlob, css);
-    gulp.watch(syncGlob, sync);
+function watch(done: Function) {
+    if (args.watch) {
+        gulp.watch(syncGlob, sync);
+    }
+    done();
 }
 
 function enableWatch(done: Function) {
@@ -54,7 +46,6 @@ task("default", series(
     clean,
     parallel(
         sync,
-        css,
         compile,
         watch,
     ),
