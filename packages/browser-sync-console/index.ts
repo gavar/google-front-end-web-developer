@@ -6,6 +6,7 @@ import * as path from "path";
 export const plugin = function (options: any, browserSync: BrowserSyncInstance) {
     const server: EventEmitter = (browserSync as any).io; // SocketIO.Server
     server.on("connect", function (socket) {
+        console.log("connect", socket.client.id);
         socket.on("message", function (type: string, ...args) {
             switch (type) {
                 case "console:log":
