@@ -9,6 +9,7 @@ export = async function (env: WebpackEnv, argv: WebpackArgv): Promise<Configurat
     const develop = !production;
     return {
         mode: "development",
+        devtool: "source-map",
         entry: {
             "js/app.js": "./src/js/app",
             "css/app.css": "./src/css/app",
