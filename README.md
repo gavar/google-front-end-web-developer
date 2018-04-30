@@ -34,10 +34,8 @@ Web Programming JS | **Project: Memory Game**                              |**[l
 - [x] Responsive Images: Units, Formats, Environments (3h)
 - [x] Responsive Images: Images with Markup (3h)
 - [x] Responsive Images: Full Responsiveness (2h)
-
 #### week #4-8: 05.03 - 10.04
 - [x] Web Foundations: Build a Portfolio Site (project)
-
 #### week #8: 10.04 - 15.04
 - [x] Web Programming JS: Lesson 8: Syntax (2h)
 - [x] Web Programming JS: Shell Workshop (2h)
@@ -46,20 +44,42 @@ Web Programming JS | **Project: Memory Game**                              |**[l
 - [x] Web Programming JS: Review a Repo's History (2h)
 - [x] Web Programming JS: Add Commits To A Repo (1h 30m)
 - [x] Web Programming JS: Tagging, Branching, and Merging (2h 30m)
-
 #### week #9: 16.04 - 22.04
 - [x] Web Programming JS: Undoing Changes (1h)
 - [x] Web Programming JS: Working With Remotes (2h)
 - [x] Web Programming JS: Working On Another Developer's Repository (1h 15m)
 - [x] Web Programming JS: Staying In Sync With A Remote Repository (2h)
-
-#### Upcoming
+#### week #10: 23.04 - 29.04
 - [x] Web Programming JS: The Document Object Model (2h)
 - [x] Web Programming JS: Creating Content with JavaScript (2h)
 - [x] Web Programming JS: Working with Browser Events (2h)
 - [x] Web Programming JS: Exercise: Pixel Art Maker (45m)
 - [x] Web Programming JS: Performance (2h)
 - [x] Web Programming JS: Memory Game (project)
+#### Upcoming
+- [ ] Exploring JS: Accessibility Overview (1h)
+- [ ] Exploring JS: Focus (1h 15m)
+- [ ] Exploring JS: Semantics Basics (1h 15m)
+- [ ] Exploring JS: Navigating Content (1h)
+- [ ] Exploring JS: ARIA (1h 15m)
+- [ ] Exploring JS: Style (1h 15m)
+- [ ] Exploring JS: Objects in Depth (2h)
+- [ ] Exploring JS: Functions at Runtime (2h)
+- [ ] Exploring JS: Classes and Objects (3h)
+- [ ] Exploring JS: Functions (2h)
+- [ ] Exploring JS: Built-ins (2h)
+- [ ] Exploring JS: Professional Developer-fu (1h 30m)
+- [ ] Exploring JS: PRoject: Classic Arcade Game Clone
+- [ ] Exploring JS: Introducing Web Tooling and Automation (35m)
+- [ ] Exploring JS: Productive Editing (12m)
+- [ ] Exploring JS: Powerful Builds (13m)
+- [ ] Exploring JS: Expressive Live Editing (15m)
+- [ ] Exploring JS: How to Prevent Disasters (30m)
+- [ ] Exploring JS: Awesome Optimizations (1h)
+- [ ] Exploring JS: Web Tooling and Automation Conclusion (15m)
+- [ ] Exploring JS: Rethinking Testing (2h)
+- [ ] Exploring JS: Writing Test Suites (4h)
+- [ ] Exploring JS: Project: Feed Reader Testing
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
