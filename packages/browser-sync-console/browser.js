@@ -6,7 +6,7 @@
         var fn = console[name];
         console[name] = function () {
             fn.apply(console, arguments);
-            ___browserSync___.socket.send('console:' + name, ...arguments);
-        }
+            ___browserSync___.socket.send("console:" + name, ...arguments);
+        };
     }
 })(console);
