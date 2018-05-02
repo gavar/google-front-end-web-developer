@@ -29,12 +29,17 @@
     "target": "esnext",
     "baseUrl": ".",
     "rootDir": ".",
+    "outDir": "out",
     "paths": {
       "~*": ["node_modules/*"],
       "@*": ["packages/*"]
     }
   },
   "exclude": [
-    "node_modules"
+    "**/#*", // all files where names starts with #
+    "**/out", // all 'out' directories
+    "**/tmp", // all 'tmp' directories
+    "**/dist", // all 'dist' directories
+    "**/node_modules"  // all 'node_modules' directories
   ]
 }
