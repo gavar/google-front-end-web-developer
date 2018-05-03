@@ -8,11 +8,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "preinstall": "yarn use-yarn || npx use-yarn",
     "clean": "lerna clean && rimraf node_modules && del-cli **/yarn.lock **/package-lock.json",
-    "build": "lerna exec yarn run build",
-    "lint": "npx tslint --project tsconfig.json",
-    "lint-fix": "npx tslint --project tsconfig.json --fix",
-    "lint-uniq": "npm run lint | sed 's/^.*]://' | sort | uniq"
+    "build": "lerna exec yarn build",
+    "lint": "tslint --project tsconfig.json",
+    "lint-fix": "tslint --project tsconfig.json --fix",
+    "lint-uniq": "lint | sed 's/^.*]://' | sort | uniq"
   },
   "devDependencies": {
     "@types/browser-sync": "^0.0.39",
@@ -44,6 +45,7 @@
     "tslint": "^5.9.1",
     "typescript": "^2.8.3",
     "url-loader": "^1.0.1",
+    "use-yarn": "^2.2.0",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15",
     "yargs": "^11.0.0"
