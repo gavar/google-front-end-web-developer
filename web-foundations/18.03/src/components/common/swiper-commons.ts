@@ -7,4 +7,4 @@ export function onSlideChange(this: Swiper) {
 
 export default {
     onSlideChange,
-}
+};

@@ -1,5 +1,6 @@
 import * as bs from "@browser-sync";
 import {args} from "@cli";
+import {Action} from "@syntax";
 import {spawn} from "child_process";
 import * as del from "del";
 import * as gulp from "gulp";
@@ -25,14 +26,14 @@ function serve() {
     return bs.serve({server: "./dist"});
 }
 
-function watch(done: Function) {
+function watch(done: Action) {
     if (args.watch) {
         gulp.watch(syncGlob, sync);
     }
     done();
 }
 
-function enableWatch(done: Function) {
+function enableWatch(done: Action) {
     args.flags.push("-w", "--watch");
     args.watch = true;
     done();

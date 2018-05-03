@@ -5,10 +5,9 @@ import * as path from "path";
 import * as File from "vinyl";
 import {TransformStream} from "../core";
 
-
 function resolveWebPath(file: File, basePath: string, resource: string): string {
     switch (resource[0]) {
-        case '/':
+        case "/":
             return path.resolve(basePath, resource);
         default:
             const directoryPath = path.dirname(file.path).slice(file.base.length + 1);
@@ -28,28 +27,26 @@ async function resolveImage(html: File, basePath: string, imagePath: string): Pr
         cwd: html.cwd,
         base: basePath,
         path: resolvePath,
-        stat: stat,
-        contents: contents,
+        stat,
+        contents,
     });
 }
-
 
 async function resize(options: im.Options): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         im.resize(options, (error, result) => {
             if (error) reject(error);
             else resolve(result);
-        })
+        });
     });
 }
-
 
 async function identify(filename: string): Promise<im.Features> {
     return new Promise<im.Features>((resolve, reject) => {
         im.identify(filename, (error, features) => {
             if (error) reject(error);
             else resolve(features);
-        })
+        });
     });
 }
 
@@ -69,13 +66,12 @@ class Responsify extends TransformStream {
         const document = jsdom.window.document;
         const images = document.querySelectorAll<HTMLImageElement>("img");
 
-        for (let i = 0; i < images.length; i++) {
-            const image: HTMLImageElement = images[i];
+        for (const image of images) {
             const sizes = image.getAttribute("data-img-sizes");
             if (!sizes) continue;
 
             image.removeAttribute("data-img-sizes");
-            const widths = sizes.split(',').map(x => Number(x));
+            const widths = sizes.split(",").map(Number);
             if (widths.length < 1) continue;
 
             // push image file itself
@@ -102,7 +98,7 @@ class Responsify extends TransformStream {
                     await resize({
                         srcData: imageFile.contents as any,
                         dstPath: imagePath,
-                        width: width,
+                        width,
                     });
 
                     const resizeImage = new File({
@@ -125,9 +121,8 @@ class Responsify extends TransformStream {
                 sources.push(`${relativePath} ${features.width}w`);
 
                 // override attribute value
-                image.setAttribute('data-srcset', sources.join(","));
-            }
-            catch (e) {
+                image.setAttribute("data-srcset", sources.join(","));
+            } catch (e) {
                 console.error(e);
             }
         }

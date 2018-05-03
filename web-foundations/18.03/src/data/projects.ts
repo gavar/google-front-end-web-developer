@@ -1,47 +1,30 @@
-import {Disney, GameInsight, Konsus, SafetyWing, TSG} from "./companies";
-import {
-    AWSLambda,
-    CSharp,
-    Gulp,
-    Handlebars,
-    Java,
-    JavaScript,
-    Jenkins,
-    JIRA,
-    Maven,
-    MySQL,
-    nodejs,
-    React,
-    Serverless,
-    Spring,
-    TypeScript,
-    Unity3D,
-    Webpack
-} from "./technologies";
+import * as company from "./companies";
+import * as tech from "./technologies";
 import {Project} from "./types";
 
+// tslint:disable:variable-name
 export const Fronted: Project = {
     title: "Fronted",
     url: "http://fronted.com/",
     dateFrom: new Date(2017, 3),
     dateTo: dateAdd(new Date(), "day", 1),
-    company: SafetyWing,
+    company: company.SafetyWing,
     role: "Backend Developer",
-    technologies: [Java, Spring, MySQL, Maven, nodejs, TypeScript, Handlebars, Gulp],
+    technologies: [tech.Java, tech.Spring, tech.MySQL, tech.Maven, tech.NodeJS, tech.TypeScript, tech.Handlebars, tech.Gulp],
     post: {
         gallery: {
             style: "none wip",
             items: [{
                 type: "image",
-                href: "img/wip-image.png"
-            }]
+                href: "img/wip-image.png",
+            }],
         },
         content: `<p>
 The project dedicated to freelancers and small business, who wondering how to promote their product
 and find new customers. Fronted is going to solve that problem by introducing expert evaluation of your
 project needs; by providing marketing team and promoting your product using an embedded social platform.
 </p>`,
-    }
+    },
 };
 
 export const MyCountryAR: Project = {
@@ -50,33 +33,33 @@ export const MyCountryAR: Project = {
     dateFrom: new Date(2017, 9),
     dateTo: new Date(2017, 10),
     role: "Developer / Tech Lead",
-    company: GameInsight,
-    technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
+    company: company.GameInsight,
+    technologies: [tech.Unity3D, tech.CSharp, tech.Java, tech.Jenkins, tech.JIRA],
     apps: [
         {
             type: "app-store",
             href: "https://itunes.apple.com/US/app/id1247796322",
-        }
+        },
     ],
     post: {
         gallery: {
             style: "phone",
             items: [{
                 type: "image",
-                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-1.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-1.jpeg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-2.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-2.jpeg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-3.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-3.jpeg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-4.jpeg"
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-4.jpeg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-5.jpeg"
-            }]
+                href: "img/projects/my-country-ar/9x16/my-country-ar-screen-5.jpeg",
+            }],
         },
         content: `<p>
 Welcome to the first game that lets you build your own country in <strong>augmented reality!</strong> Using the
@@ -98,7 +81,7 @@ store and has been stated as first city-builder available in AR mode.</strong>
     <li>the game mostly based on the engine from previous games</li>
 </ul>
 `,
-    }
+    },
 };
 
 export const Moana: Project = {
@@ -106,9 +89,9 @@ export const Moana: Project = {
     url: "http://www.game-insight.com/en/games/moana",
     dateFrom: new Date(2017, 2),
     dateTo: new Date(2017, 8),
-    company: [GameInsight, Disney],
+    company: [company.GameInsight, company.Disney],
     role: "Developer / Tech Lead",
-    technologies: [Unity3D, CSharp, Java, TypeScript, AWSLambda, Serverless, Jenkins, JIRA],
+    technologies: [tech.Unity3D, tech.CSharp, tech.Java, tech.TypeScript, tech.AWSLambda, tech.Serverless, tech.Jenkins, tech.JIRA],
     apps: [{
         type: "app-store",
         href: "https://itunes.apple.com/app/moana-island-life/id1127517805",
@@ -124,20 +107,20 @@ export const Moana: Project = {
             style: "phone",
             items: [{
                 type: "image",
-                href: "img/projects/moana/9x16/moana-screen-1.jpg"
+                href: "img/projects/moana/9x16/moana-screen-1.jpg",
             }, {
                 type: "image",
-                href: "img/projects/moana/9x16/moana-screen-2.jpg"
+                href: "img/projects/moana/9x16/moana-screen-2.jpg",
             }, {
                 type: "image",
-                href: "img/projects/moana/9x16/moana-screen-3.jpg"
+                href: "img/projects/moana/9x16/moana-screen-3.jpg",
             }, {
                 type: "image",
-                href: "img/projects/moana/9x16/moana-screen-4.jpg"
+                href: "img/projects/moana/9x16/moana-screen-4.jpg",
             }, {
                 type: "image",
-                href: "img/projects/moana/9x16/moana-screen-5.jpg"
-            }]
+                href: "img/projects/moana/9x16/moana-screen-5.jpg",
+            }],
         },
         content: `<p>
 The ocean has called you to Motunui! Create your own magical paradise inspired by <strong>Disney’s</strong>
@@ -155,30 +138,30 @@ quests to earn rewards, and discover the islands of Oceania. Your island adventu
     <li>DLC (downloadable content) packages applied while you play</li>
 </ul>
 `,
-    }
+    },
 };
 
-export const KonsusProject: Project = {
+export const Konsus: Project = {
     title: "Konsus",
     url: "https://www.konsus.com/",
     dateFrom: new Date(2016, 2),
     dateTo: new Date(2016, 9),
-    company: Konsus,
+    company: company.Konsus,
     role: "Full Stack Web Developer",
-    technologies: [Java, Spring, JavaScript, TypeScript, React, nodejs, Webpack],
+    technologies: [tech.Java, tech.Spring, tech.JavaScript, tech.TypeScript, tech.React, tech.NodeJS, tech.Webpack],
     post: {
         gallery: {
             style: "horizontal tablet",
             items: [{
                 type: "image",
-                href: "img/projects/konsus/konsus-website-1.jpg"
+                href: "img/projects/konsus/konsus-website-1.jpg",
             }, {
                 type: "image",
-                href: "img/projects/konsus/konsus-website-2.jpg"
+                href: "img/projects/konsus/konsus-website-2.jpg",
             }, {
                 type: "image",
-                href: "img/projects/konsus/konsus-website-3.jpg"
-            }]
+                href: "img/projects/konsus/konsus-website-3.jpg",
+            }],
         },
         content: `<p>
 <strong>Konsus</strong> is the world's first On-Demand Freelance Business Support service,
@@ -196,7 +179,7 @@ target="_blank" href="http://www.ycombinator.com/">Y Combinator</a> and raised $
     <li>user analytics via multiple platforms</li>
 </ul>
 `,
-    }
+    },
 };
 
 export const MyCountry3D: Project = {
@@ -204,25 +187,25 @@ export const MyCountry3D: Project = {
     url: "https://www.game-insight.com/en/news/game-insight-unveils-details-around-its-upcoming-title-my-country-3d",
     dateFrom: new Date(2013, 10),
     dateTo: new Date(2017, 0),
-    company: GameInsight,
+    company: company.GameInsight,
     role: "Developer / Tech Lead",
-    technologies: [Unity3D, CSharp, Java, Jenkins, JIRA],
+    technologies: [tech.Unity3D, tech.CSharp, tech.Java, tech.Jenkins, tech.JIRA],
     post: {
         gallery: {
             style: "horizontal phone",
             items: [{
                 type: "image",
-                href: "img/projects/my-country-3d/my-country-3d-01.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-01.jpg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-3d/my-country-3d-02.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-02.jpg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-3d/my-country-3d-03.jpg"
+                href: "img/projects/my-country-3d/my-country-3d-03.jpg",
             }, {
                 type: "image",
-                href: "img/projects/my-country-3d/my-country-3d-04.jpg"
-            }]
+                href: "img/projects/my-country-3d/my-country-3d-04.jpg",
+            }],
         },
         content: `<p>
 <strong>My Country 3D</strong> is the full-3D follow-up to the smash-hit series, My Country!
@@ -241,7 +224,7 @@ Coming soon! The full-3D follow-up to the smash-hit series, <strong>My Country</
     <li>handling up to 100K components on scene using custom entity component system</li>
 </ul>
 </p>`,
-    }
+    },
 };
 
 export const HunterX: Project = {
@@ -249,9 +232,9 @@ export const HunterX: Project = {
     url: "https://www.facebook.com/HunterXZombieShooter/",
     dateFrom: new Date(2013, 1),
     dateTo: new Date(2013, 8),
-    company: TSG,
+    company: company.TSG,
     role: "Developer / Co-Founder",
-    technologies: [Unity3D, CSharp],
+    technologies: [tech.Unity3D, tech.CSharp],
     apps: [{
         type: "google-play",
         href: "https://apkpure.com/hunterx-zombie-shooter/com.TSGStudio.HunterX",
@@ -261,35 +244,35 @@ export const HunterX: Project = {
             style: "horizontal phone",
             items: [{
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-01.jpg"
+                href: "img/projects/hunter-x/hunter-x-01.jpg",
             }, {
                 type: "video",
-                href: "img/projects/hunter-x/hunter-x-trailer.mp4"
+                href: "img/projects/hunter-x/hunter-x-trailer.mp4",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-02.jpg"
+                href: "img/projects/hunter-x/hunter-x-02.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-03.jpg"
+                href: "img/projects/hunter-x/hunter-x-03.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-04.jpg"
+                href: "img/projects/hunter-x/hunter-x-04.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-05.jpg"
+                href: "img/projects/hunter-x/hunter-x-05.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-06.jpg"
+                href: "img/projects/hunter-x/hunter-x-06.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-07.jpg"
+                href: "img/projects/hunter-x/hunter-x-07.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-08.jpg"
+                href: "img/projects/hunter-x/hunter-x-08.jpg",
             }, {
                 type: "image",
-                href: "img/projects/hunter-x/hunter-x-09.jpg"
-            }]
+                href: "img/projects/hunter-x/hunter-x-09.jpg",
+            }],
         },
         content: `<p>
 Planet has gone wrong and portals have been opened to evil creatures willing to conquer the
@@ -309,14 +292,14 @@ and has challenged all the mankind with clear intents to enslave the souls of mo
   <li>Platforms: Android, Standalone, Web Player</li>
 </ul>
 `,
-    }
+    },
 };
 
 const projects = [
     Fronted,
     MyCountryAR,
     Moana,
-    KonsusProject,
+    Konsus,
     MyCountry3D,
     HunterX,
 ];
@@ -328,28 +311,28 @@ export default projects;
 
 type TimeUnit = "year" | "month" | "day" | "hour" | "second";
 function dateAdd(date: Date, unit: TimeUnit, interval: number): Date {
-    date = new Date(date); //don't change original date
+    date = new Date(date); // don't change original date
     switch (unit.toLowerCase()) {
-        case 'year':
+        case "year":
             date.setFullYear(date.getFullYear() + interval);
             break;
-        case 'month':
+        case "month":
             date.setMonth(date.getMonth() + interval);
             break;
-        case 'day':
+        case "day":
             date.setDate(date.getDate() + interval);
             break;
-        case 'hour':
+        case "hour":
             date.setTime(date.getTime() + interval * 60 * 60 * 1000);
             break;
-        case 'minute':
+        case "minute":
             date.setTime(date.getTime() + interval * 60 * 1000);
             break;
-        case 'second':
+        case "second":
             date.setTime(date.getTime() + interval * 1000);
             break;
         default :
-            throw new Error("unknown type unit: " + unit);
+            throw new Error(`unknown type unit: ${unit}`);
     }
     return date;
 }

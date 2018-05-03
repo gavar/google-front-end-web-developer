@@ -22,7 +22,7 @@ declare module "swiper" {
          * Could be 'horizontal' or 'vertical' (for vertical slider).
          * @default 'horizontal'.
          */
-        direction?: 'horizontal' | 'vertical';
+        direction?: "horizontal" | "vertical";
 
         /**
          * Set to <code>true</code> and slider wrapper will adopt its height to the height of the currently active slide.
@@ -81,7 +81,7 @@ declare module "swiper" {
          * then you need to specify {@link loopedSlides} parameter with amount of slides to loop (duplicate)
          * @default 1
          */
-        slidesPerView?: number | 'auto';
+        slidesPerView?: number | "auto";
 
         /* SWIPING / NO SWIPING */
 

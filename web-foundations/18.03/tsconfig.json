@@ -3,11 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
-    "outDir": "./out/ts",
-    "paths": {
-      "swiper": [
-        "./@types/swiper/index.d.ts"
-      ]
-    }
+    "outDir": "./out/ts"
   }
 }

@@ -51,7 +51,7 @@ export const Maven: Technology = {
 };
 
 // NodeJS / JS / TS
-export const nodejs: Technology = {
+export const NodeJS: Technology = {
     name: "NodeJS",
     url: "https://nodejs.org",
 };
@@ -85,4 +85,3 @@ export const Webpack: Technology = {
     name: "Webpack",
     url: "https://webpack.js.org/",
 };
-

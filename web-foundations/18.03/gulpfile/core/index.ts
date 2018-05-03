@@ -1,2 +1,2 @@
 export * from "./types";
-export * from "./transform-stream"
+export * from "./transform-stream";
