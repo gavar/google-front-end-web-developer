@@ -9,8 +9,5 @@
   "scripts": {
     "build": "gulp",
     "serve": "gulp serve"
-  },
-  "devDependencies": {
-    "lerna": "^2.10.2"
   }
 }
