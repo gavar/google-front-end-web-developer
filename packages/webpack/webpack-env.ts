@@ -4,5 +4,5 @@
  * @see https://webpack.js.org/api/cli/#environment-options
  */
 export interface WebpackEnv {
-    
+    [key: string]: any;
 }
