@@ -38,6 +38,7 @@ export = async function (env: WebpackEnv, argv: WebpackArgv): Promise<Configurat
                     test: /\.tsx?$/,
                     loader: "awesome-typescript-loader",
                     options: {
+                        configFileName: "webpack.tsconfig.json",
                         useBabel: true,
                         babelOptions: {
                             babelrc: false, /* Important line */
