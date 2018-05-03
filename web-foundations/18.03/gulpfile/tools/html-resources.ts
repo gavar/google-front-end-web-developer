@@ -1,3 +1,4 @@
+import {Callback} from "@syntax";
 import * as fs from "fs-extra";
 import * as path from "path";
 import {Transform} from "stream";
@@ -5,7 +6,7 @@ import * as File from "vinyl";
 
 function resolveWebPath(file: File, basePath: string, resource: string): string {
     switch (resource[0]) {
-        case '/':
+        case "/":
             return path.resolve(basePath, resource.slice(1));
         default:
             const directoryPath = path.dirname(file.path).slice(file.base.length + 1);
@@ -24,7 +25,7 @@ class HtmlResources extends Transform {
     }
 
     /** @inheritDoc */
-    _transform(file: File, encoding: string, callback: Function): void {
+    _transform(file: File, encoding: string, callback: Callback): void {
         this.process(file).then(callback as any, callback as any);
     }
 
@@ -58,8 +59,7 @@ class HtmlResources extends Transform {
         try {
             stat = await fs.stat(resolvePath);
             contents = await fs.readFile(resolvePath);
-        }
-        catch (e) {
+        } catch (e) {
             return;
         }
 
@@ -67,8 +67,8 @@ class HtmlResources extends Transform {
             cwd: file.cwd,
             base: basePath,
             path: resolvePath,
-            stat: stat,
-            contents: contents,
+            stat,
+            contents,
         });
 
         this.push(resource);

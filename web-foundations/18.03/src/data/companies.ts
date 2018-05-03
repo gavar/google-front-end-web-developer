@@ -1,5 +1,6 @@
 import {Company} from "./types";
 
+// tslint:disable:variable-name
 export const SafetyWing: Company = {
     name: "SafetyWing",
     url: "https://www.safetywing.com/",

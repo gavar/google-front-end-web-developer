@@ -13,4 +13,4 @@ export {
     rollupify,
     resources,
     responsify,
-}
+};

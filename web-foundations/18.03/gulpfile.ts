@@ -43,9 +43,9 @@ function pages() {
     // handlebars setup
     handlebars.registerHelper(layouts(handlebars));
     HandlebarsIntl.registerWith(handlebars);
-    HandlebarsHelpers.comparison({handlebars: handlebars});
-    HandlebarsHelpers.date({handlebars: handlebars});
-    HandlebarsHelpers.math({handlebars: handlebars});
+    HandlebarsHelpers.comparison({handlebars});
+    HandlebarsHelpers.date({handlebars});
+    HandlebarsHelpers.math({handlebars});
 
     registrar(handlebars, {
         cwd: "./src",
@@ -55,7 +55,7 @@ function pages() {
             "components/**/*.hbs",
         ],
         bustCache: true,
-        parsePartialName: function (file) {
+        parsePartialName(file) {
             let name = file.path;
 
             // remove extension / category name
@@ -78,7 +78,7 @@ function pages() {
     });
 
     return gulp.src("./src/app/**/*.hbs")
-        .pipe(render.handlebars({handlebars: handlebars}))
+        .pipe(render.handlebars({handlebars}))
         .pipe(beautify.html())
         .pipe(gulp.dest("./dist"));
 }

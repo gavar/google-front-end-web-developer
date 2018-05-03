@@ -30,8 +30,7 @@ const vhFix = new VHChromeFix();
 
 const swipers: Swiper[] = new Swiper(".project-gallery .swiper-container", options) as any;
 for (const swiper of swipers) {
-    swiper.once('init', function (this: Swiper) {
-        const self = this;
+    swiper.once("init", function (this: Swiper) {
 
         // activate swiping and navigation when more than one slide
         if (this.slides.length > 1) {
@@ -53,13 +52,12 @@ for (const swiper of swipers) {
             this.pagination.bullets[this.activeIndex].classList.add(this.params.pagination.bulletActiveClass);
 
             // open lightbox on click
-            this.wrapperEl.addEventListener('click', function (e: MouseEvent) {
+            this.wrapperEl.addEventListener("click", (e: MouseEvent) => {
                 // play video instead of opening lightbox
                 if (e.target instanceof HTMLVideoElement) {
                     HtmlVideo.toggle(e.target);
-                }
-                else {
-                    projectGalleryLightbox.open(self);
+                } else {
+                    projectGalleryLightbox.open(this);
                 }
             });
         }
@@ -73,9 +71,9 @@ for (const swiper of swipers) {
         vhFix.usePrefixStyle([this.wrapperEl], update);
     });
 
-    swiper.on('slideChange', SwiperCommons.onSlideChange);
-    swiper.on('lazyImageReady', function (slide: SwiperSlide, image: HTMLImageElement) {
-        image.alt = image.getAttribute('data-alt');
+    swiper.on("slideChange", SwiperCommons.onSlideChange);
+    swiper.on("lazyImageReady", function (slide: SwiperSlide, image: HTMLImageElement) {
+        image.alt = image.getAttribute("data-alt");
     });
     swiper.init();
 }
