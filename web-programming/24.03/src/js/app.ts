@@ -9,7 +9,7 @@ const icons: string[] = [
     "paper-plane-o",
 ];
 
-function shuffle<T>(array: Array<T>): Array<T> {
+function shuffle<T>(array: T[]): T[] {
     let t: T;
     let r: number;
     for (let i = array.length - 1; i >= 0; i--) {
@@ -26,15 +26,13 @@ abstract class Component<P, S> implements EventTarget {
     private readonly events: EventTarget;
     private readonly props: Readonly<P>;
     private readonly state: Readonly<S>;
-
     private dirty: boolean;
 
     protected constructor(props: P) {
         this.events = document.createDocumentFragment();
 
         // setup
-        this.props = Object.assign({}, props);
-        this.repaint = this.repaint.bind(this);
+        this.props = {...props as any};
 
         // state
         this.state = this.initialState();
@@ -62,7 +60,7 @@ abstract class Component<P, S> implements EventTarget {
         const prev = this.state;
         const props = this.props;
 
-        if (typeof next == "function")
+        if (typeof next === "function")
             next = next(prev, props) || prev;
 
         Object.assign(this.state, next);
@@ -89,21 +87,25 @@ abstract class Component<P, S> implements EventTarget {
         this.events.removeEventListener(type, listener, options);
     }
 
-    /** Called immediately before mounting occurs, and before {@link Component#render}. */
-    protected componentWillMount(props?: Readonly<P>, state?: Readonly<S>) { }
-
-    /** Called immediately after a component is mounted. */
-    protected componentDidMount(props?: Readonly<P>, state?: Readonly<S>) { }
-
     /** Get initial state of the component. */
     protected initialState(): S {
-        return {} as S;
+        return {} as any;
     }
 
-    private repaint() {
+    /** Called immediately after a component is mounted. */
+    protected componentWillMount(props?: Readonly<P>, state?: Readonly<S>) {
+        // virtual
+    }
+
+    /** Called immediately before mounting occurs, and before {@link Component#render}. */
+    protected componentDidMount(props?: Readonly<P>, state?: Readonly<S>) {
+        // virtual
+    }
+
+    private readonly repaint = () => {
         this.dirty = false;
         this.render(this.props, this.state);
-    }
+    };
 }
 
 interface ApplicationState {
@@ -136,14 +138,14 @@ type MemoryGameCardStatus = "selection" | "correct" | "incorrect";
 interface MemoryGameCard {
     shows: number;
     element: HTMLElement;
-    status?: MemoryGameCardStatus,
+    status?: MemoryGameCardStatus;
 }
 
 interface MemoryGameState {
     visible: boolean;
     mistakes: number;
-    stars: HTMLElement[],
-    cards: MemoryGameCard[],
+    stars: HTMLElement[];
+    cards: MemoryGameCard[];
 }
 
 const CLASSES = [
@@ -214,16 +216,16 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
                 card.element.remove();
 
             // create cards
-            for (let i = 0; i < icons.length; i++) {
+            for (const icon of icons) {
                 const element = document.createElement("li");
                 element.classList.add("card");
 
-                const icon = document.createElement("i");
-                icon.classList.add("fa", `fa-${icons[i]}`);
-                element.appendChild(icon);
+                const i = document.createElement("i");
+                i.classList.add("fa", `fa-${icon}`);
+                element.appendChild(i);
 
                 next.cards.push(
-                    {shows: 0, element: element},
+                    {shows: 0, element},
                     {shows: 0, element: element.cloneNode(true) as HTMLElement},
                 );
             }
@@ -236,7 +238,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
             for (let i = 0; i < store.stars; i++) {
                 const element = document.createElement("li");
                 const icon = document.createElement("i");
-                icon.classList.add("fa", `fa-star`);
+                icon.classList.add("fa", "fa-star");
                 element.appendChild(icon);
                 next.stars.push(element);
             }
@@ -296,34 +298,11 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
     private countOf(cards: MemoryGameCard[], status: MemoryGameCardStatus): number {
         let count = 0;
-        for (let i = 0; i < cards.length; i++)
-            if (cards[i].status === status)
+        for (const card of cards)
+            if (card.status === status)
                 count++;
 
         return count;
-    }
-
-    /**
-     * Modify status of the cards which have given status.
-     * @param status - status to change.
-     * @param next - status to set.
-     */
-    private setStatusOf(status: MemoryGameCardStatus, next: MemoryGameCardStatus) {
-        this.setState(state => {
-            for (const card of state.cards)
-                if (card.status === status)
-                    card.status = next;
-
-            return state;
-        });
-    }
-
-    /**
-     * Set status of the cards with {@link SELECTION} status.
-     * @param status - status to set.
-     */
-    private setStatusOfSelections(status: MemoryGameCardStatus) {
-        this.setStatusOf(SELECTION, status);
     }
 
     private onSelectListElement(element: HTMLLIElement) {
@@ -347,7 +326,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
             const selections = [];
             for (let i = 0; i < state.cards.length; i++)
-                if (state.cards[i].status == SELECTION)
+                if (state.cards[i].status === SELECTION)
                     selections.push(i);
 
             // decide if correct selections
@@ -369,7 +348,7 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
         const first = state.cards[indexes[0]].element.firstElementChild;
         for (let i = 1; i < indexes.length; i++) {
             const icon = state.cards[indexes[i]].element.firstElementChild;
-            if (first.className != icon.className)
+            if (first.className !== icon.className)
                 return false;
         }
 
