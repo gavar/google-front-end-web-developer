@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "build": "gulp",
-    "serve": "gulp serve"
+    "serve": "gulp serve",
+    "udacity": "tsc src/js/app.ts --out dist/js/app.js --target es6 -w"
   }
 }
