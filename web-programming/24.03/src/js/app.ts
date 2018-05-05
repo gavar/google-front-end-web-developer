@@ -28,7 +28,10 @@ function shuffle<T>(array: T[]): T[] {
 
 interface Component<P, S> {
     /** Called immediately after a component is mounted. */
-    componentWillMount?(props?: Readonly<P>, state?: Readonly<S>): void;
+    componentWillMount?(props: Readonly<P>, state: Readonly<S>): void;
+
+    /** Called immediately after a component is mounted. */
+    componentDidMount?(props: Readonly<P>, state: Readonly<S>): void;
 }
 
 /**
@@ -43,6 +46,7 @@ abstract class Component<P, S> implements EventTarget {
 
     protected constructor(props: P) {
         this.componentWillMount = this.componentWillMount || noop;
+        this.componentDidMount = this.componentDidMount || noop;
 
         this.events = document.createDocumentFragment();
         this.props = {...props as any};
@@ -50,6 +54,7 @@ abstract class Component<P, S> implements EventTarget {
 
         this.componentWillMount(this.props, this.state);
         this.render(this.props, this.state);
+        this.componentDidMount(this.props, this.state);
     }
 
     /**
@@ -109,11 +114,15 @@ abstract class Component<P, S> implements EventTarget {
 interface StoreState {
     moves: number;
     stars: number;
+    startTime: number;
+    completeTime: number;
 }
 
 const INITIAL_STORE_STATE: StoreState = {
     moves: 0,
     stars: 3,
+    startTime: 0,
+    completeTime: 0,
 };
 
 /** Global application state storage. */
@@ -131,6 +140,7 @@ const SELECTION = "selection";
 type MemoryGameCardStatus = "selection" | "correct" | "incorrect";
 
 interface MemoryGameProps {
+    time: HTMLElement;
     deck: HTMLElement;
     moves: HTMLElement;
     stars: HTMLElement;
@@ -206,8 +216,8 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     public restart() {
 
         // reset application state
-        STORE.moves = 0;
-        STORE.stars = 3;
+        for (const key in STORE) delete STORE[key];
+        Object.assign(STORE, INITIAL_STORE_STATE);
 
         this.setState((state, props) => {
 
@@ -280,6 +290,12 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
     }
 
     /** @inheritDoc */
+    componentDidMount(props: MemoryGameProps) {
+        this.update(props);
+        setInterval(() => this.update(props), 250);
+    }
+
+    /** @inheritDoc */
     protected initialState(): MemoryGameState {
         return {
             visible: true,
@@ -287,6 +303,22 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
             stars: [],
             cards: [],
         };
+    }
+
+    private update(props: Readonly<MemoryGameProps>) {
+        const now = Date.now();
+        const duration = new Date((STORE.completeTime || now) - (STORE.startTime || now));
+
+        let seconds: number | string = duration.getSeconds();
+        if (duration.getMilliseconds() >= 500) seconds++;
+        if (seconds < 10) seconds = "0" + seconds;
+
+        let minutes: number | string = duration.getMinutes();
+        if (minutes < 10) minutes = "0" + minutes;
+
+        const text = `${minutes}:${seconds}`;
+        if (props.time.innerText !== text)
+            props.time.innerText = text;
     }
 
     private isGameOver(state: MemoryGameState) {
@@ -310,6 +342,10 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 
     private onSelectListElement(element: HTMLLIElement) {
         this.setState(state => {
+
+            // start timer
+            if (STORE.startTime <= 0)
+                STORE.startTime = Date.now();
 
             // check if card already selected or correct
             const card = this.cardOf(state.cards, element);
@@ -365,8 +401,10 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
                 state.cards[index].status = CORRECT;
 
             // game over?
-            if (this.isGameOver(state))
+            if (this.isGameOver(state)) {
+                STORE.completeTime = Date.now();
                 this.dispatchEvent(GAME_OVER_EVENT);
+            }
         });
     }
 
@@ -423,6 +461,8 @@ class MemoryGame extends Component<MemoryGameProps, MemoryGameState> {
 interface GameOverProps {
     view: HTMLElement;
     game: MemoryGame;
+    minutes: HTMLElement;
+    seconds: HTMLElement;
     moves: HTMLElement;
     stars: HTMLElement;
     restart: HTMLElement;
@@ -442,6 +482,11 @@ class GameOver extends Component<GameOverProps, GameOverState> {
 
     /** @inheritDoc */
     render(props?: Readonly<GameOverProps>, state?: Readonly<GameOverState>) {
+
+        const duration = new Date(STORE.completeTime - STORE.startTime);
+        props.seconds.innerText = `${duration.getSeconds()} seconds`;
+        props.minutes.innerText = `${duration.getMinutes()} minutes`;
+
         props.moves.innerText = STORE.moves.toString();
         props.stars.innerText = STORE.stars.toString();
 
@@ -476,17 +521,22 @@ class GameOver extends Component<GameOverProps, GameOverState> {
 }
 
 // RUN GAME
+const gameView = document.querySelector<HTMLElement>(".game");
 const memoryGame = new MemoryGame({
-    deck: document.querySelector<HTMLUListElement>(".game .deck"),
-    moves: document.querySelector<HTMLElement>(".game .moves"),
-    stars: document.querySelector<HTMLElement>(".game .stars"),
-    restart: document.querySelector<HTMLElement>(".game .restart"),
+    deck: gameView.querySelector<HTMLUListElement>(".deck"),
+    time: gameView.querySelector<HTMLElement>(".time"),
+    moves: gameView.querySelector<HTMLElement>(".moves"),
+    stars: gameView.querySelector<HTMLElement>(".stars"),
+    restart: gameView.querySelector<HTMLElement>(".restart"),
 });
 
+const gameOverView = document.querySelector<HTMLElement>(".game-over");
 const gameOver = new GameOver({
     game: memoryGame,
-    view: document.querySelector<HTMLElement>(".game-over"),
-    moves: document.querySelector<HTMLElement>(".game-over .moves"),
-    stars: document.querySelector<HTMLElement>(".game-over .stars"),
-    restart: document.querySelector<HTMLElement>(".game-over .restart"),
+    view: gameOverView,
+    seconds: gameOverView.querySelector<HTMLElement>(".seconds"),
+    minutes: gameOverView.querySelector<HTMLElement>(".minutes"),
+    moves: gameOverView.querySelector<HTMLElement>(".moves"),
+    stars: gameOverView.querySelector<HTMLElement>(".stars"),
+    restart: gameOverView.querySelector<HTMLElement>(".restart"),
 });

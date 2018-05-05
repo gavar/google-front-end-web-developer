@@ -153,6 +153,17 @@ button {
   margin-top: -10px;
 }
 
+.score-panel .time-label {
+  margin-right: 5px;
+  float: right;
+}
+
+.score-panel .time {
+  width: 45px;
+  margin-right: 10px;
+  float: right;
+}
+
 /*
 * GAME OVER
 */
@@ -166,6 +177,10 @@ button {
 
 .game-over.show {
   animation: game-over-show .4s ease-in-out forwards;
+}
+
+.game-over span {
+  font-weight: bold;
 }
 
 @keyframes game-over-show {
