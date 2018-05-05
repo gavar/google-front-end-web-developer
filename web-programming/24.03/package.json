@@ -9,6 +9,6 @@
   "scripts": {
     "build": "gulp",
     "serve": "gulp serve",
-    "udacity": "tsc src/js/app.ts --out dist/js/app.js --target es6 -w"
+    "udacity": "tsc src/js/app.ts --outDir dist/js --target es6 -w"
   }
 }
