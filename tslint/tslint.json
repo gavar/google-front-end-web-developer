@@ -3,6 +3,7 @@
   "rules": {
     // TypeScript Specific
     "member-access": false,
+    "member-ordering": false,
     "no-empty-interface": false,
     "no-namespace": false,
     "only-arrow-functions": false,
