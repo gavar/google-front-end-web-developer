@@ -26,8 +26,11 @@ body {
 
 .container {
   display: flex;
-  justify-content: center;
+  margin: auto;
+  padding: 20px;
+  max-width: 660px;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
 }
 
@@ -51,36 +54,46 @@ button {
  * GAME
  */
 
+.game {
+  width: 100%;
+}
+
 /*
  * Styles for the deck of cards
  */
 
 .deck {
-  width: 660px;
-  min-height: 680px;
+  display: grid;
+  padding: 20px;
+  grid-gap: 20px;
+  max-width: 660px;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
-  padding: 32px;
   border-radius: 10px;
   box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 0 3em;
+}
+
+/* aspect ratio 1:1 (sets cell height equal to width) */
+.deck .card:before {
+  content: "";
+  display: block;
+  height: auto;
+  padding-top: 100%;
 }
 
 .deck .card {
-  height: 125px;
-  width: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #2e3d49;
   font-size: 0;
   color: #fff;
   border-radius: 8px;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+  text-align: center;
+  vertical-align: middle;
   /* animations */
   transition: all .25s ease-in-out;
 }
@@ -92,11 +105,15 @@ button {
 
 .deck .card.show {
   transform: rotateY(180deg);
-  font-size: 33px;
 }
 
 .deck .card i {
   transform: rotateY(180deg);
+  pointer-events: none;
+}
+
+.deck .card.show i {
+  font-size: 33px;
 }
 
 .deck .card.wrong {
@@ -140,23 +157,15 @@ button {
 * GAME OVER
 */
 .game-over {
+  max-width: 700px;
+  position: absolute;
   visibility: hidden;
-  position: fixed;
   background-color: white;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  text-align: center;
 }
 
 .game-over.show {
   animation: game-over-show .4s ease-in-out forwards;
-}
-
-.game-over p {
-  text-align: center;
 }
 
 @keyframes game-over-show {
@@ -225,5 +234,13 @@ button {
 @keyframes check-mark-scale-fill {
   100% {
     box-shadow: inset 0 0 0 30px #7ac142;
+  }
+}
+
+/* MOBILE */
+@media screen and (max-width: 660px) {
+  .deck {
+    padding: 10px;
+    grid-gap: 10px;
   }
 }
