@@ -8,7 +8,7 @@ class BeautifyStream<T> extends TransformStream {
 
     constructor(readonly beautifier: Beautifier<T>,
                 readonly options?: T) {
-        super()
+        super();
     }
 
     /** @inheritDoc */
@@ -24,32 +24,32 @@ class BeautifyStream<T> extends TransformStream {
 }
 
 export function js(options?: JsBeautifyOptions): BeautifyStream<JsBeautifyOptions> {
-    const defaults: JsBeautifyOptions = {
+    return new BeautifyStream(beautify.js, {
         eol: EOL,
         indent_size: 2,
         end_with_newline: true,
         preserve_newlines: false,
-    };
-    return new BeautifyStream(beautify.js, Object.assign(defaults, options));
+        ...options,
+    });
 }
 
 export function html(options?: HTMLBeautifyOptions): BeautifyStream<HTMLBeautifyOptions> {
-    const defaults: HTMLBeautifyOptions = {
+    return new BeautifyStream(beautify.html, {
         eol: EOL,
         indent_size: 2,
         end_with_newline: true,
         preserve_newlines: false,
-    };
-    return new BeautifyStream(beautify.html, Object.assign(defaults, options));
+        ...options,
+    });
 }
 
 export function css(options?: CSSBeautifyOptions): BeautifyStream<CSSBeautifyOptions> {
-    const defaults: CSSBeautifyOptions = {
+    return new BeautifyStream(beautify.css, {
         eol: EOL,
         indent_size: 2,
         end_with_newline: true,
-    };
-    return new BeautifyStream(beautify.css, Object.assign(defaults, options));
+        ...options,
+    });
 }
 
 interface JsBeautifyOptions {
@@ -62,7 +62,7 @@ interface JsBeautifyOptions {
     max_preserve_newlines?: number;
     jslint_happy?: boolean;
     space_after_anon_function?: boolean;
-    brace_style?: 'collapse-preserve-inline' | 'collapse' | 'expand' | 'end-expand' | 'none';
+    brace_style?: "collapse-preserve-inline" | "collapse" | "expand" | "end-expand" | "none";
     keep_array_indentation?: boolean;
     keep_function_indentation?: boolean;
     space_before_conditional?: boolean;
@@ -70,7 +70,7 @@ interface JsBeautifyOptions {
     eval_code?: boolean;
     unescape_strings?: boolean;
     wrap_line_length?: number;
-    wrap_attributes?: 'auto' | 'force';
+    wrap_attributes?: "auto" | "force";
     wrap_attributes_indent_size?: number;
     end_with_newline?: boolean;
 }
@@ -85,10 +85,10 @@ interface HTMLBeautifyOptions {
     preserve_newlines?: boolean;
     max_preserve_newlines?: number;
     indent_inner_html?: boolean;
-    brace_style?: 'collapse-preserve-inline' | 'collapse' | 'expand' | 'end-expand' | 'none';
-    indent_scripts?: 'keep' | 'separate' | 'normal';
+    brace_style?: "collapse-preserve-inline" | "collapse" | "expand" | "end-expand" | "none";
+    indent_scripts?: "keep" | "separate" | "normal";
     wrap_line_length?: number;
-    wrap_attributes?: 'auto' | 'force';
+    wrap_attributes?: "auto" | "force";
     wrap_attributes_indent_size?: number;
     unformatted?: string[];
     content_unformatted?: string[];

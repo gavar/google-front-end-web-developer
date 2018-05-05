@@ -1,6 +1,5 @@
 import * as gutil from "gulp-util";
 import * as handlebars from "handlebars";
-import {EOL} from "os";
 import File from "vinyl";
 import {TransformStream} from "../core";
 
@@ -26,9 +25,9 @@ class HandlebarsRenderer extends TransformStream {
         const options = {
             data: {
                 intl: {
-                    locales: "en-US"
-                }
-            }
+                    locales: "en-US",
+                },
+            },
         };
 
         // pre-process template
@@ -45,7 +44,7 @@ class HandlebarsRenderer extends TransformStream {
 
         // apply
         buffer = new Buffer(html);
-        file.path = gutil.replaceExtension(file.path, '.html');
+        file.path = gutil.replaceExtension(file.path, ".html");
 
         return buffer;
     }
@@ -58,8 +57,7 @@ function resolveData(templatePath: string): any {
             const filePath = gutil.replaceExtension(templatePath, dataType);
             const absolutePath = require.resolve(filePath);
             return require(absolutePath);
-        }
-        catch (e) {
+        } catch (e) {
             /* continue */
         }
     }

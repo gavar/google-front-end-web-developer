@@ -3,7 +3,7 @@ import * as LZString from "lz-string";
 const DRAWING_UPDATE = new Event("drawing-update");
 
 interface Drawing {
-    [color: string]: ColorPixels
+    [color: string]: ColorPixels;
 }
 
 interface ColorPixels {
@@ -97,8 +97,10 @@ class PixelCanvas {
     load(drawing: Drawing) {
         this.table.style.visibility = "hidden";
 
+        // tslint:disable-next-line:forin
         for (const color in drawing) {
             const pixels: ColorPixels = drawing[color];
+            // tslint:disable-next-line:forin
             for (const row in pixels) {
                 const y = Number(row);
                 const columns = pixels[row];
@@ -138,7 +140,7 @@ class PixelCanvas {
         const right = rgb.indexOf("}");
         const values = rgb.slice(left + 1, right).split(",");
         let hex = values.map(v => Number(v).toString(16));
-        if (!hex.every(x => x.length == 1))
+        if (!hex.every(x => x.length === 1))
             hex = hex.map(x => x.padStart(2, "0"));
         return hex.join("");
     }
@@ -214,9 +216,11 @@ interface QueryParams {
     function drawingToBase64(drawing: Drawing): string {
 
         const colors: string[] = [];
+        // tslint:disable-next-line:forin
         for (const byColor in drawing) {
             const rows: string[] = [];
             const rowsByColor = drawing[byColor];
+            // tslint:disable-next-line:forin
             for (const rowByColor in rowsByColor) {
                 const columnsByRow = rowsByColor[rowByColor];
                 rows.push(`${rowByColor}:${columnsByRow.join(",")}`);
@@ -239,7 +243,7 @@ interface QueryParams {
             const byColorRows = (valueOfColor || "").split("+");
             for (const byColorRow of byColorRows) {
                 const [row, valueOfRow] = (byColorRow || "").split(":");
-                drawing[color][Number(row)] = (valueOfRow || "").split(",").map(c => Number(c));
+                drawing[color][Number(row)] = (valueOfRow || "").split(",").map(Number);
             }
         }
 

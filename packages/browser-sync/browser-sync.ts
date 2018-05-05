@@ -12,7 +12,7 @@ const defaults: Options = {
 };
 
 export function serve(options?: Options): BrowserSyncInstance {
-    options = Object.assign({}, defaults, options);
+    options = {...defaults, ...options};
     console.log("options:", options);
     const bs = browserSync.create();
     return bs.init(options);

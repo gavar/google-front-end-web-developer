@@ -1,5 +1,6 @@
 import * as bs from "@browser-sync";
 import {args} from "@cli";
+import {Action} from "@syntax";
 import {spawn} from "child_process";
 import * as del from "del";
 import * as gulp from "gulp";
@@ -29,7 +30,7 @@ function serve() {
     return bs.serve({server: "./dist"});
 }
 
-function serveFlags(done: Function) {
+function serveFlags(done: Action) {
     args.flags.push("-w", "--watch");
     done();
 }

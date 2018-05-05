@@ -14,4 +14,4 @@ export function querySelectorInParents<E extends Element = Element>(element: Ele
 export default {
     querySelectorWithParents,
     querySelectorInParents,
-}
+};

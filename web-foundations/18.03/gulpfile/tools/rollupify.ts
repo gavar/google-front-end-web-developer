@@ -1,39 +1,40 @@
-import {ExternalOption, OutputChunk, rollup} from "rollup";
+import {GlobalsOption, OutputChunk, rollup} from "rollup";
 import * as buble from "rollup-plugin-buble";
 import * as commonjs from "rollup-plugin-commonjs";
 import * as resolve from "rollup-plugin-node-resolve";
-import {GlobalsOption} from "rollup/dist/typings/rollup";
-import {isString} from 'util';
+import {isString} from "util";
 import File from "vinyl";
 import {TransformStream} from "../core";
 
 interface RollupifyOptions {
-    external?: ExternalOption,
-    globals?: GlobalsOption,
+    external: string[];
+    globals: GlobalsOption;
 }
 
 class Rollupify extends TransformStream {
 
-    constructor(public readonly options?: RollupifyOptions) {
+    public readonly options: RollupifyOptions;
+
+    constructor(options?: Partial<RollupifyOptions>) {
         super();
-        const defaults: RollupifyOptions = {
+        this.options = {
             external: [],
             globals: {},
+            ...options,
         };
-        this.options = Object.assign(defaults, options);
     }
 
     /** @inheritDoc */
     async transformBuffer(buffer: Buffer, file: File): Promise<Buffer> {
 
-        const bundle: OutputChunk = await rollup({
+        const bundle = await rollup({
             input: file.path,
             external: this.options.external,
             plugins: [
                 buble({
                     transforms: {
                         dangerousForOf: true,
-                    }
+                    },
                 }),
                 resolve({
                     jsnext: true,
@@ -42,24 +43,23 @@ class Rollupify extends TransformStream {
                         moduleDirectory: [
                             "node_modules",
                             "temp",
-                        ]
-                    }
+                        ],
+                    },
                 }),
                 commonjs({
-                    include: 'node_modules/**'
+                    include: "node_modules/**",
                 }),
-            ]
+            ],
         }) as OutputChunk;
 
         const output = await bundle.generate({
-            format: 'iife',
+            format: "iife",
             globals: this.options.globals,
         });
 
         // remove external imports
         let code = output.code;
-        for (let i = 0; i < this.options.external.length; i++) {
-            const entry = this.options.external[i];
+        for (const entry of this.options.external) {
             if (isString(entry)) {
                 const regex = new RegExp(`import.*from.*'${entry}'.*`, "g");
                 code = code.replace(regex, " ");
@@ -71,6 +71,6 @@ class Rollupify extends TransformStream {
     }
 }
 
-export function rollupify(options?: RollupifyOptions): Rollupify {
+export function rollupify(options?: Partial<RollupifyOptions>): Rollupify {
     return new Rollupify(options);
 }

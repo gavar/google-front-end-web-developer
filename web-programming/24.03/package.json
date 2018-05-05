@@ -8,9 +8,7 @@
   "private": true,
   "scripts": {
     "build": "gulp",
-    "serve": "gulp serve"
-  },
-  "devDependencies": {
-    "lerna": "^2.10.2"
+    "serve": "gulp serve",
+    "udacity": "tsc src/js/app.ts --outDir dist/js --target es6 -w"
   }
 }

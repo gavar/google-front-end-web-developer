@@ -5,8 +5,8 @@ function memoize(swiper: Swiper): SwiperMemory {
     return swiper && {
         keyboard: {
             enabled: swiper.keyboard.enabled,
-        }
-    }
+        },
+    };
 }
 
 function restore(value: Swiper, memory: SwiperMemory) {
@@ -27,7 +27,6 @@ export class ProjectGalleryLightbox {
     private memory: SwiperMemory;
 
     constructor(swiper: Swiper) {
-        const self = this;
         this.swiper = swiper;
         this.swiper.controller.control = [];
         this.root = Html.querySelectorInParents<HTMLElement>(this.swiper.el, ".project-gallery-lightbox");
@@ -51,22 +50,22 @@ export class ProjectGalleryLightbox {
         this.swiper.pagination.el.addEventListener("click", e => e.stopPropagation());
 
         // close when any other type of click appears
-        this.root.addEventListener("click", function (e: MouseEvent) {
-            self.close();
+        this.root.addEventListener("click", (e: MouseEvent) => {
+            this.close();
         });
 
         // avoid site scroll when lightbox is open
         this.root.addEventListener("wheel", function (e: Event) {
             e.preventDefault();
-        }, false)
+        }, false);
         this.root.addEventListener("touchmove", function (e: Event) {
             e.preventDefault();
-        }, false)
+        }, false);
 
         const update = () => { this.swiper.update(); };
-        window.addEventListener('resize', update);
-        window.addEventListener('resize', () => setTimeout(update, 100)); // chrome fix
-        window.addEventListener('resize', () => setTimeout(update, 150)); // chrome fix
+        window.addEventListener("resize", update);
+        window.addEventListener("resize", () => setTimeout(update, 100)); // chrome fix
+        window.addEventListener("resize", () => setTimeout(update, 150)); // chrome fix
     }
 
     public open(source: Swiper) {
@@ -79,8 +78,8 @@ export class ProjectGalleryLightbox {
 
         // populate slides
         this.swiper.removeAllSlides();
-        for (let i = 0; i < source.slides.length; i++)
-            this.swiper.appendSlide(source.slides[i].cloneNode(true));
+        for (const slide of source.slides)
+            this.swiper.appendSlide(slide.cloneNode(true));
 
         this.swiper.activeIndex = source.activeIndex;
         // this.swiper.controller.control = source;
@@ -98,7 +97,7 @@ export class ProjectGalleryLightbox {
     private setSource(next: Swiper) {
 
         // restore setting of currently active swiper
-        if (this.source && this.source != next)
+        if (this.source && this.source !== next)
             restore(this.source, this.memory);
 
         // save setting of next swiper
@@ -110,7 +109,7 @@ export class ProjectGalleryLightbox {
 interface SwiperMemory {
     keyboard: {
         enabled: boolean;
-    }
+    };
 }
 
 const options: SwiperOptions = {
@@ -131,12 +130,12 @@ const options: SwiperOptions = {
     },
     keyboard: {
         enabled: true,
-    }
+    },
 };
 
 const swiper = new Swiper(".project-gallery-lightbox .swiper-container", options);
-swiper.on('init', function (this: Swiper) {
-    this.on('slideChange', SwiperCommons.onSlideChange);
+swiper.on("init", function (this: Swiper) {
+    this.on("slideChange", SwiperCommons.onSlideChange);
     this.params.pagination.el = Html.querySelectorWithParents<HTMLElement>(this.el, ".swiper-pagination");
     this.pagination.init();
 });

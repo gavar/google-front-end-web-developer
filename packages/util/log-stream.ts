@@ -1,4 +1,5 @@
 import {Construct} from "@annotations";
+import {Action} from "@syntax";
 import {Transform} from "stream";
 import {isString} from "util";
 
@@ -7,11 +8,11 @@ export class LogStream extends Transform {
 
     static construct() {
         // default logging outputs
-        this.prototype._log = console.log;
-        this.prototype._logger = console;
+        this.prototype.log = console.log;
+        this.prototype.logger = console;
 
         // default chunk string transformation
-        this.prototype._stringify = function (chunk: any): string {
+        this.prototype.stringify = function (chunk: any): string {
             return isString(chunk) ? chunk : chunk.toString();
         };
     }
@@ -27,39 +28,40 @@ export class LogStream extends Transform {
     }
 
     /** Logger instance that holds {@link #log} function (optional). */
-    private _logger: any;
+    private logger: any;
 
     /** Function that writes messages to a log. */
-    private _log: (message: string) => void;
+    private log: (message: string) => void;
 
     /** Incoming chung transformation to string. */
-    private _stringify: (chung: any) => string;
+    private stringify: (chung: any) => string;
 
     constructor(log: (message: string) => void, logger?: any) {
         super({objectMode: true});
-        this._log = log;
-        this._logger = logger;
+        this.log = log;
+        this.logger = logger;
     }
 
     message<T = any>(value?: (T: any) => string): this {
-        if (value) this._stringify = value;
-        else delete this._stringify;
+        if (value) this.stringify = value;
+        else delete this.stringify;
         return this;
     }
 
-    _transform(chunk: any, encoding: string, callback: Function): void {
-        const message = this._stringify(chunk);
+    _transform(chunk: any, encoding: string, done: Action): void {
+        const message = this.stringify(chunk);
 
-        let offset, index: number;
+        let index: number;
+        let offset: number = 0;
         while ((index = message.indexOf("\n", offset)) >= 0) {
-            this._log.call(this._logger, message.slice(offset, index));
+            this.log.call(this.logger, message.slice(offset, index));
             offset = index + 1;
         }
 
         if (!offset || offset < message.length)
-            this._log.call(this._logger, message.slice(offset));
+            this.log.call(this.logger, message.slice(offset));
 
         this.push(chunk, encoding);
-        callback();
+        done();
     }
 }

@@ -30,4 +30,4 @@ export default {
     pause,
     toggle,
     playing,
-}
+};

@@ -1,3 +1,5 @@
+import {Action} from "@syntax";
+
 interface Style {
     height?: number;
     minHeight?: number;
@@ -17,7 +19,7 @@ function windowHeight() {
 
 export class VHChromeFix {
 
-    private active: boolean;
+    private readonly active: boolean;
     private readonly styleables: Styleable[] = [];
 
     constructor() {
@@ -26,23 +28,23 @@ export class VHChromeFix {
         const iOSChrome = /crios/i.test(userAgent);
 
         // HACK: devtools doesn't have menu bar
-        const fullscreen = window.innerHeight == screen.height || window.innerHeight == screen.width;
+        const fullscreen = window.innerHeight === screen.height || window.innerHeight === screen.width;
         this.active = !fullscreen && androidChrome || iOSChrome;
 
         if (this.active) {
             // BUG: do not change to .bind(this)
             const update = () => this.update();
-            window.addEventListener('resize', update);
-            window.addEventListener('orientationchange', update);
+            window.addEventListener("resize", update);
+            window.addEventListener("orientationchange", update);
         }
     }
 
-    public setStyleBySelector(selector: string, style: Style, onResize?: Function) {
+    public setStyleBySelector(selector: string, style: Style, onResize?: Action) {
         this.setStyle(document.querySelectorAll<HTMLElement>(selector), style, onResize);
     }
 
-    public setStyle(elements: ArrayLike<HTMLElement>, style: Style, onResize?: Function) {
-        const explicitStyle = new ExplicitStyle();
+    public setStyle<T extends HTMLElement>(elements: NodeListOf<T> | T[], style: Style, onResize?: Action) {
+        const explicitStyle = new ExplicitStyle<T>();
         Object.assign(explicitStyle, style);
         explicitStyle.elements = elements;
         explicitStyle.onResize = onResize;
@@ -52,8 +54,8 @@ export class VHChromeFix {
         this.styleables.push(explicitStyle);
     }
 
-    public usePrefixStyle(elements: ArrayLike<HTMLElement>, onResize?: Function) {
-        const prefixStyle = new PrefixStyle();
+    public usePrefixStyle<T extends HTMLElement>(elements: NodeListOf<T> | T[], onResize?: Action) {
+        const prefixStyle = new PrefixStyle<T>();
         prefixStyle.elements = elements;
         prefixStyle.onResize = onResize;
 
@@ -64,26 +66,26 @@ export class VHChromeFix {
 
     public update() {
         const height = windowHeight();
-        for (let i = 0; i < this.styleables.length; i++)
-            this.styleables[i].apply(height);
+        for (const styleable of this.styleables)
+            styleable.apply(height);
     }
 }
 
-class ExplicitStyle implements Styleable, Style {
+class ExplicitStyle<T extends HTMLElement> implements Styleable, Style {
 
     height?: number;
     minHeight?: number;
     maxHeight?: number;
 
-    onResize?: Function;
-    elements: ArrayLike<HTMLElement>;
+    onResize?: Action;
+    elements: NodeListOf<T> | T[];
 
     public apply(height: number) {
 
         let style: CSSStyleDeclaration;
 
-        for (let i = 0; i < this.elements.length; i++) {
-            style = this.elements[i].style;
+        for (const element of this.elements) {
+            style = element.style;
             style.height = this.height && `${height * this.height / 100}px`;
             style.minHeight = this.minHeight && `${height * this.minHeight / 100}px`;
             style.maxHeight = this.maxHeight && `${height * this.maxHeight / 100}px`;
@@ -94,9 +96,9 @@ class ExplicitStyle implements Styleable, Style {
     }
 }
 
-class PrefixStyle implements Styleable {
-    onResize?: Function;
-    elements: ArrayLike<HTMLElement>;
+class PrefixStyle<T extends HTMLElement> implements Styleable {
+    onResize?: Action;
+    elements: NodeListOf<T> | T[];
 
     public apply(height: number) {
 
@@ -104,9 +106,9 @@ class PrefixStyle implements Styleable {
         let style: CSSStyleDeclaration;
         let computedStyle: CSSStyleDeclaration;
 
-        for (let i = 0; i < this.elements.length; i++) {
-            style = this.elements[i].style;
-            computedStyle = window.getComputedStyle(this.elements[i]);
+        for (const element of this.elements) {
+            style = element.style;
+            computedStyle = window.getComputedStyle(element);
 
             value = computedStyle.getPropertyValue("--chrome-height") as any;
             style.height = value && `${height * value / 100}px`;

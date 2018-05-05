@@ -1,0 +1,52 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    // TypeScript Specific
+    "member-access": false,
+    "member-ordering": false,
+    "no-empty-interface": false,
+    "no-namespace": false,
+    "only-arrow-functions": false,
+    "promise-function-async": false, // TODO: enable
+    "unified-signatures": false,
+
+    // Functionality
+    "curly": false,
+    "no-conditional-assignment": false,
+    "no-console": false,
+    "no-debugger": false,
+    "no-implicit-dependencies": false, // TODO: enable when it will work with tsconfig.js paths
+    "no-shadowed-variable": false, // TODO: enable?
+    "strict-type-predicates": false, // TODO: enable with tsconfig strictNullChecks
+
+    // Maintainability
+    "max-classes-per-file": false,
+    "max-line-length": [
+      true,
+      {
+        // ignore strings
+        "limit": 160,
+        "ignore-pattern": "\".*\""
+      }
+    ],
+    "no-duplicate-imports": false,
+    "no-irregular-whitespace": true,
+    "object-literal-sort-keys": false,
+    "arrow-parens": false,
+    "callable-types": false,
+    "interface-name": false,
+    "no-consecutive-blank-lines": [true, 1],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "always",
+        "asyncArrow": "always",
+        "constructor": "never",
+        "method": "never",
+        "named": "never"
+      }
+    ],
+    "switch-final-break": false
+  }
+}
