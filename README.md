@@ -55,6 +55,7 @@ Web Programming JS | **Project: Memory Game**                              |**[l
 - [x] Web Programming JS: Working with Browser Events (2h)
 - [x] Web Programming JS: Exercise: Pixel Art Maker (45m)
 - [x] Web Programming JS: Performance (2h)
+#### week #11: 30.04 - 06.05
 - [x] Web Programming JS: Memory Game (project)
 #### Upcoming
 - [ ] Exploring JS: Accessibility Overview (1h)
