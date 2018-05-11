@@ -1,0 +1,9 @@
+{
+  "name": "arcade-game",
+  "version": "1.0.0",
+  "description": "Arcade Game",
+  "main": "index.js",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
