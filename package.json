@@ -51,6 +51,7 @@
     "yargs": "^11.0.0"
   },
   "workspaces": [
+    "exploring-js/*",
     "web-programming/*",
     "web-foundations/*",
     "responsive-images/*"
