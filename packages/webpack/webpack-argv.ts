@@ -1,3 +1,5 @@
+import {Options} from "webpack";
+
 /**
  * Webpack options which describes the options passed to webpack.
  * @see https://webpack.js.org/configuration/configuration-types/#exporting-a-function
@@ -7,4 +9,5 @@ export interface WebpackArgv {
     w: boolean;
     watch: boolean;
     debug: boolean;
+    devtool: Options.Devtool;
 }
