@@ -27,21 +27,20 @@ function html() {
 
 function css() {
     const argv = [
-        "-r ts-node/register",
-        "-r tsconfig-paths/register",
-        ...process.argv.slice(2),
+        "-r", "ts-node/register",
+        "-r", "tsconfig-paths/register",
+        "--config", "webpack/webpack-sass.config.ts",
+        ...cli.options.webpack.argv(),
     ];
 
-    if (!cli.options.webpack().parse().config)
-        argv.push("--config webpack/webpack-sass.config.ts");
-
     if (cli.options.udacity().parse().udacity) {
-        argv.push("--mode development");
-        argv.push("--devtool false");
-        argv.push("--env.url-loader.limit 1");
+        argv.push("--mode", "development");
+        argv.push("--devtool", "false");
+        argv.push("--env.url-loader.limit", "1");
     }
 
     const exe = require.resolve(".bin/webpack");
+    console.log([exe, ...argv].join(" "));
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
@@ -52,15 +51,14 @@ function compile() {
 
 function webpack() {
     const argv = [
-        "-r ts-node/register",
-        "-r tsconfig-paths/register",
-        ...process.argv.slice(2),
+        "-r", "ts-node/register",
+        "-r", "tsconfig-paths/register",
+        "--config", "webpack/webpack-ts.config.ts",
+        ...cli.options.webpack.argv(),
     ];
 
-    if (!cli.options.webpack().parse().config)
-        argv.push("--config webpack/webpack-ts.config.ts");
-
     const exe = require.resolve(".bin/webpack");
+    console.log([exe, ...argv].join(" "));
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
@@ -93,7 +91,7 @@ function es6() {
 }
 
 function udacity(done: Action) {
-    process.argv.push("--env.udacity");
+    process.argv.push("--udacity");
     done();
 }
 
