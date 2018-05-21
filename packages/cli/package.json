@@ -1,0 +1,12 @@
+{
+  "name": "gulp",
+  "version": "1.0.0",
+  "main": "index",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "description": "CLI utilities",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "yargs": "^11.0.0"
+  }
+}
