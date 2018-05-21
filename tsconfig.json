@@ -12,6 +12,7 @@
     "allowUnreachableCode": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "noEmit": false,
     "noEmitOnError": true,
     "noEmitHelpers": true,
