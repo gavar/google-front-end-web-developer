@@ -50,6 +50,7 @@
     "yargs": "^11.0.0"
   },
   "workspaces": [
+    "packages/*",
     "exploring-js/*",
     "web-programming/*",
     "web-foundations/*",
