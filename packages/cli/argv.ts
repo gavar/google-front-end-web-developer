@@ -1,15 +1,15 @@
 import * as yargs from "yargs";
 import {Arguments, Options, ParseCallback} from "yargs";
 
-export interface Argv<T={}> {
+export interface Argv<T = void> extends yargs.Argv {
     (): T;
     (args: string[], cwd?: string): T;
 
     /** @inheritDoc */
-    parse(): T ;
+    parse(): T & Arguments;
 
     /** @inheritDoc */
-    parse(args: string | string[], context?: object, callback?: ParseCallback): T;
+    parse(args: string | string[], context?: object, callback?: ParseCallback): T & Arguments;
 
     /** @inheritDoc */
     option(key: keyof T, options: Options): this;

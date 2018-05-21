@@ -1,6 +1,6 @@
 import {Argv} from "@cli";
-import yargs from "yargs";
+import Yargs from "yargs/yargs";
 
-export function lazy<T>(argv?: Argv<any>): Argv<T> {
-    return argv || yargs(process.argv, process.cwd()) as any;
+export function lazy<T = void>(argv?: Argv<any>): Argv<T> {
+    return argv || Yargs(process.argv.slice(2)) as any;
 }
