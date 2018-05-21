@@ -6,8 +6,14 @@ import {Options} from "webpack";
  */
 export interface WebpackArgv {
     mode: "development" | "production" | "none";
-    w: boolean;
     watch: boolean;
     debug: boolean;
+    config: string;
     devtool: Options.Devtool;
+
+    /** Shortcut for --optimize-minimize --define process.env.NODE_ENV="production". */
+    p: boolean;
+
+    /** Shortcut for --debug --devtool cheap-module-eval-source-map --output-pathinfo */
+    d: boolean;
 }
