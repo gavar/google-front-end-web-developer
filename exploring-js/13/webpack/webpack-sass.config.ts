@@ -6,10 +6,9 @@ import {Configuration} from "webpack";
 export default function (env: WebpackEnv, argv: WebpackArgv): Configuration {
     env = safeWebpackEnv(env);
     const urlLoader = env["url-loader"];
-
     return {
         entry: {
-            "css/style.css": "./src/css/style",
+            "css/style.css": "./src/css/style.css",
         },
         mode: argv.mode || "development",
         devtool: argv.devtool || argv.mode !== "production" ? "source-map" : false,

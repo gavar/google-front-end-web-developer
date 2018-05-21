@@ -1,3 +1,5 @@
+require("tsconfig-paths/register");
+
 import {WebpackArgv, WebpackEnv} from "@webpack";
 import {Configuration} from "webpack";
 import sass from "./webpack/webpack-sass.config";
