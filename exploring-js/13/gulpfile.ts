@@ -66,7 +66,7 @@ function webpack() {
 
 function es6() {
     const glob = [
-        "src/js/classes.ts",
+        "src/js/*.js",
     ];
 
     const input: Partial<Rollup.InputOptions> = {
