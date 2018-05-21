@@ -5,5 +5,11 @@
   "main": "index.js",
   "author": "Max Stankevich <max.stankevich.me@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "tsc": "tsc",
+    "gulp": "gulp",
+    "rollup": "rollup",
+    "webpack": "webpack"
+  }
 }
