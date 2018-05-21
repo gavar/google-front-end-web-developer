@@ -1,5 +1,6 @@
 import cli from "@cli";
 import gulp from "@gulp";
+import {Action} from "@syntax";
 import {spawn} from "child_process";
 import del from "del";
 import rollup from "gulp-better-rollup";
@@ -91,6 +92,11 @@ function es6() {
         .pipe(gulp.dest("./dist/js"));
 }
 
+function udacity(done: Action) {
+    process.argv.push("--env.udacity");
+    done();
+}
+
 gulp.task("default", gulp.series(
     clean,
     gulp.parallel(
@@ -98,4 +104,9 @@ gulp.task("default", gulp.series(
         css,
         compile,
     ),
+));
+
+gulp.task("udacity", gulp.series(
+    udacity,
+    "default",
 ));
