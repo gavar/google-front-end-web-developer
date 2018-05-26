@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "out"
+    "outDir": "out",
+    "paths": {
+      "@*": ["packages/*"],
+      "$*": ["exploring-js/13/src/ts/*"]
+    }
   },
   "include": ["./**/*.ts"]
 }
