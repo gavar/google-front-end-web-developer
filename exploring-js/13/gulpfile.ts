@@ -62,6 +62,22 @@ function webpack() {
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
+function devServer() {
+    const argv = [
+        "-r", "ts-node/register",
+        "-r", "tsconfig-paths/register",
+        ...cli.options.webpack.argv(),
+        "--no-inline",
+    ];
+    const exe = require.resolve(".bin/webpack-dev-server");
+    console.log([exe, ...argv].join(" "));
+    return spawn(exe, argv, {shell: true, stdio: "inherit"});
+}
+
+namespace devServer {
+    export const displayName = "dev-server";
+}
+
 function es6() {
     gulp.watcher.add([
         "src/ts/**/*.ts",
@@ -96,6 +112,11 @@ namespace es6 {
     });
 }
 
+function watch(done: Action) {
+    process.argv.push("--watch");
+    done();
+}
+
 function udacity(done: Action) {
     process.argv.push("--udacity");
     done();
@@ -105,6 +126,7 @@ gulp.task(css);
 gulp.task(html);
 gulp.task(clean);
 gulp.task(compile);
+gulp.task(devServer);
 
 gulp.task("default", gulp.series(
     clean,
@@ -112,6 +134,16 @@ gulp.task("default", gulp.series(
         css,
         html,
         compile,
+        gulp.watcher.watch,
+    ),
+));
+
+gulp.task("serve", gulp.series(
+    clean,
+    watch,
+    gulp.parallel(
+        html,
+        devServer,
         gulp.watcher.watch,
     ),
 ));

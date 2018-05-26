@@ -11,6 +11,10 @@ export default function (env: WebpackEnv, argv: WebpackArgv): Configuration {
         entry: {
             "js/resources.js": "./src/js/resources",
         },
+        devServer: {
+            contentBase: "dist",
+            hot: true,
+        },
         output: {
             filename: "[name]",
             path: path.resolve("./dist"),

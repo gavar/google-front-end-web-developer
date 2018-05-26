@@ -12,6 +12,10 @@ export default function (env: WebpackEnv, argv: WebpackArgv): Configuration {
         },
         mode: argv.mode || "development",
         devtool: argv.devtool || argv.mode !== "production" ? "source-map" : false,
+        devServer: {
+            contentBase: "dist",
+            hot: true,
+        },
         output: {
             filename: "[name]",
             path: path.resolve("./dist"),
@@ -28,11 +32,10 @@ export default function (env: WebpackEnv, argv: WebpackArgv): Configuration {
                 },
                 {
                     test: /\.css$/,
-                    use: ExtractTextPlugin.extract({
+                    use: ["css-hot-loader"].concat(ExtractTextPlugin.extract({
                         use: ["css-loader", "postcss-loader"],
-                    }),
+                    })),
                 },
-
             ],
         },
         resolve: {
