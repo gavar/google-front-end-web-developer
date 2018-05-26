@@ -63,18 +63,15 @@ function webpack() {
 }
 
 function es6() {
-    const glob = [
-        "src/js/*.js",
-    ];
+    gulp.watcher.add([
+        "src/ts/**/*.ts",
+        "src/js/**/*.js",
+    ], compile);
 
     const input: Partial<Rollup.InputOptions> = {
         treeshake: false,
         plugins: [
-            typescript({
-                clean: true,
-                typescript: require("typescript"),
-                tsconfig: require.resolve("./tsconfig.json"),
-            }) as any,
+            es6.ts as any,
         ],
     };
 
@@ -84,10 +81,19 @@ function es6() {
         format: "cjs",
     };
 
-    return gulp.watchify(glob)
-        .pipe(rollup(input, output) as NodeJS.ReadWriteStream)
-        .pipe(rename((path) => path.extname = ".js"))
+    return gulp.src("src/js/**/*.js") // sources
+        .pipe(rollup(input, output))
+        .pipe(rename(path => path.extname = ".js"))
         .pipe(gulp.dest("./dist/js"));
+}
+
+namespace es6 {
+    export const ts = typescript({
+        clean: true,
+        abortOnError: !cli.options.common().parse().watch,
+        typescript: require("typescript"),
+        tsconfig: require.resolve("./tsconfig.json"),
+    });
 }
 
 function udacity(done: Action) {
@@ -95,12 +101,18 @@ function udacity(done: Action) {
     done();
 }
 
+gulp.task(css);
+gulp.task(html);
+gulp.task(clean);
+gulp.task(compile);
+
 gulp.task("default", gulp.series(
     clean,
     gulp.parallel(
-        html,
         css,
+        html,
         compile,
+        gulp.watcher.watch,
     ),
 ));
 
