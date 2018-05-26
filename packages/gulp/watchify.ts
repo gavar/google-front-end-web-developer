@@ -15,9 +15,9 @@ export interface WatchifyOptions extends Object {
 /** CLI arguments */
 const args = cli.options.common().parse();
 
-export function watchify(glob: string | string[], watch: boolean): NodeJS.ReadWriteStream;
-export function watchify(glob: string | string[], options: Partial<WatchifyOptions>): NodeJS.ReadWriteStream;
-export function watchify(glob: string | string[], options: boolean | Partial<WatchifyOptions>): NodeJS.ReadWriteStream {
+export function watchify(glob: string | string[], watch?: boolean): NodeJS.ReadWriteStream;
+export function watchify(glob: string | string[], options?: Partial<WatchifyOptions>): NodeJS.ReadWriteStream;
+export function watchify(glob: string | string[], options?: boolean | Partial<WatchifyOptions>): NodeJS.ReadWriteStream {
     let stream = gulp.src(glob);
     options = parse(options);
     if (options.watch) {
