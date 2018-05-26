@@ -15,19 +15,17 @@ export interface WatchifyOptions extends Object {
 /** CLI arguments */
 const args = cli.options.common().parse();
 
-export function watchify(glob: string | string[], options?: boolean | Partial<WatchifyOptions>): NodeJS.ReadWriteStream {
+export function watchify(glob: string | string[], watch: boolean): NodeJS.ReadWriteStream;
+export function watchify(glob: string | string[], options: Partial<WatchifyOptions>): NodeJS.ReadWriteStream;
+export function watchify(glob: string | string[], options: boolean | Partial<WatchifyOptions>): NodeJS.ReadWriteStream {
+    let stream = gulp.src(glob);
     options = parse(options);
-    if (!options.watch)
-        return gulp.src(glob);
+    if (options.watch) {
+        const callbacks = [logFileEvent];
+        if (options.callback)
+            callbacks.push(options.callback);
 
-    const watchOptions = {ignoreInitial: false};
-    const callbacks = [logFileEvent];
-    if (options.callback)
-        callbacks.push(options.callback);
-
-    const files: Set<string> = new Set();
-    return watch(glob, watchOptions, function (file) {
-        if (files.has(file.path)) {
+        function onModify(file: WatchFile) {
             for (const callback of callbacks) {
                 try {
                     callback(file);
@@ -35,10 +33,10 @@ export function watchify(glob: string | string[], options?: boolean | Partial<Wa
                     logger.error(new PluginError("watchify", error));
                 }
             }
-        } else {
-            files.add(file.path);
         }
-    });
+        stream = stream.pipe(watch(glob, {ignoreInitial: true}, onModify));
+    }
+    return stream;
 }
 
 function parse(options: boolean | Partial<WatchifyOptions>): WatchifyOptions {
@@ -61,6 +59,7 @@ type FileEvent = "add" | "change" | "unlink";
 type WatchFile = File & { event: FileEvent };
 
 function logFileEvent(file: WatchFile) {
+    if (!file.event) return;
     const chalk = colors[file.event] || colors.default;
     const action = actions[file.event] || file.event;
     const relativePath = path.relative(file.cwd, file.path);

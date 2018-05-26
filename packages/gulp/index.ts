@@ -1,10 +1,16 @@
 import gulp from "gulp";
+import {watcher} from "./watcher";
 import {watchify} from "./watchify";
 
-interface Gulp {
-    watchify: typeof watchify;
+export * from "./watcher";
+export * from "./watchify";
+
+type Gulp = typeof gulp & {
+    watcher: typeof watcher
+    watchify: typeof watchify
 }
 
-const enhance: Gulp & typeof gulp = gulp as any;
+const enhance: Gulp = Object.create(gulp);
+enhance.watcher = watcher;
 enhance.watchify = watchify;
 export default enhance;
