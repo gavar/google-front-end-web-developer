@@ -1,17 +1,17 @@
 import cli from "@cli";
 import gulp from "@gulp";
-import {Action} from "@syntax";
+import {Action, Callback} from "@syntax";
 import {spawn} from "child_process";
 import del from "del";
+import {TaskFunction} from "gulp";
 import rollup from "gulp-better-rollup";
-import rename from "gulp-rename";
 import replace from "gulp-replace";
 import ts from "gulp-typescript";
-import Rollup from "rollup";
-import typescript from "rollup-plugin-typescript2";
+import {InputOptions, OutputOptions} from "rollup";
 
 function clean() {
     return del([
+        "./tmp",
         "./dist",
     ]);
 }
@@ -44,11 +44,12 @@ function css() {
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
-function compile() {
+function compile(done: Callback) {
     const args = cli.options.udacity().parse();
-    return args.udacity ? es6() : webpack();
+    args.udacity ? es6()(done) : webpack;
 }
 
+gulp.name("compile-ts", webpack);
 function webpack() {
     const argv = [
         "-r", "ts-node/register",
@@ -62,6 +63,7 @@ function webpack() {
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
+gulp.name("dev-server", devServer);
 function devServer() {
     const argv = [
         "-r", "ts-node/register",
@@ -74,42 +76,61 @@ function devServer() {
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
-namespace devServer {
-    export const displayName = "dev-server";
-}
-
-function es6() {
-    gulp.watcher.add([
+function es6(): TaskFunction {
+    const glob = [
         "src/ts/**/*.ts",
         "src/js/**/*.js",
-    ], compile);
+    ];
+    gulp.watcher.add(glob, es6);
 
-    const input: Partial<Rollup.InputOptions> = {
-        treeshake: false,
-        plugins: [
-            es6.ts as any,
-        ],
-    };
+    const task = gulp.series(
+        es6.stageJS,
+        es6.stageTS,
+        es6.compile,
+    );
 
-    const output: Rollup.OutputOptions = {
-        indent: true,
-        strict: false,
-        format: "cjs",
-    };
-
-    return gulp.src("src/js/**/*.js") // sources
-        .pipe(rollup(input, output))
-        .pipe(rename(path => path.extname = ".js"))
-        .pipe(gulp.dest("./dist/js"));
+    task.name = "es6";
+    return task;
 }
 
 namespace es6 {
-    export const ts = typescript({
-        clean: true,
-        abortOnError: !cli.options.common().parse().watch,
-        typescript: require("typescript"),
-        tsconfig: require.resolve("./tsconfig.json"),
+    export const tsProject = ts.createProject("tsconfig.json", {
+        module: "esnext",
     });
+
+    gulp.name("es6:stage-ts", stageTS);
+    export function stageTS() {
+        return gulp.src("./src/ts/**/*.ts")
+            .pipe(tsProject())
+            .pipe(replace("export class", "class")) // do not export classes
+            .pipe(replace(/export .*\n/g, "")) // avoid any other exports
+            .pipe(replace(/import .*\n/g, "")) // remove imports
+            .pipe(gulp.dest("./tmp/ts"));
+    }
+
+    gulp.name("es6:stage-js", stageJS);
+    export function stageJS() {
+        return gulp.src("./src/js/**/*.js")
+            .pipe(gulp.dest("./tmp/js"));
+    }
+
+    gulp.name("es6:compile", compile);
+    export function compile() {
+        const input: Partial<InputOptions> = {
+            treeshake: false,
+        };
+
+        const output: OutputOptions = {
+            indent: true,
+            strict: false,
+            format: "cjs",
+        };
+
+        return gulp.src("./tmp/js/*.js")
+            .pipe(rollup(input, output) as NodeJS.ReadWriteStream)
+            .pipe(replace(/let (.*)\$(.) = /g, "")) // for some reason rollup may assign class to variable
+            .pipe(gulp.dest("./dist/js"));
+    }
 }
 
 function watch(done: Action) {
@@ -125,6 +146,7 @@ function udacity(done: Action) {
 gulp.task(css);
 gulp.task(html);
 gulp.task(clean);
+gulp.task("es6", es6());
 gulp.task(compile);
 gulp.task(devServer);
 
