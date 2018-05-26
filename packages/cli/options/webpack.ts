@@ -69,7 +69,8 @@ export namespace webpack {
     function spyOptions(flatten: boolean = true): Dictionary<string, Options> {
         const options = {...proxy._options};
         if (flatten) {
-            for (const option of Object.values(options)) {
+            for (const key in options) {
+                const option = options[key];
                 if (isString(option.alias))
                     options[option.alias] = option;
                 else if (isArray(option.alias)) {
