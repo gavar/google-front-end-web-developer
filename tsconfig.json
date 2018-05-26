@@ -4,6 +4,7 @@
     "noImplicitAny": false, // TODO: true
     "noImplicitThis": false, // TODO: true
     "noImplicitReturns": false, // TODO: false
+    "noImplicitUseStrict": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false, // TODO: true
