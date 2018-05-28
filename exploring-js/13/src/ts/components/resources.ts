@@ -48,7 +48,6 @@ export class Resources implements Component, EventListenerObject {
 
         // create image
         this.images[name] = image = new Image();
-        image = new Image();
         image.name = name;
         image.addEventListener("load", this);
         image.addEventListener("error", this);
