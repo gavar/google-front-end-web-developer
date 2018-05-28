@@ -7,9 +7,12 @@ import {Stage} from "./stage";
  */
 export class Actor {
 
+    /** Number of actors created. */
+    private static counter: number = 0;
+
     /**
      * Name of the actor.
-     * @default "actor".
+     * @default actor
      */
     public name: string;
 
@@ -19,11 +22,19 @@ export class Actor {
      */
     public active: boolean;
 
+    /** Unique identifier of an actor for debug purposes. */
+    public readonly id: number;
+
     /** Stage to which this actor belongs to. */
     public readonly stage: Stage;
 
     /** List of this actor components. */
     public readonly components: ReadonlyArray<Component>;
+
+    /** Initialize new instance of an actor. */
+    constructor() {
+        this.id = ++Actor.counter;
+    }
 
     /**
      * Add component of the given type to an actor.
