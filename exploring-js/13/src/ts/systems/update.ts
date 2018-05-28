@@ -1,6 +1,6 @@
-import {System} from "$engine";
+import {Component, System} from "$engine";
 
-export interface Update {
+export interface Update extends Component {
     update(deltaTime: number): void;
 }
 
@@ -17,6 +17,7 @@ export class UpdateSystem extends System<Update> {
     /** @inheritDoc */
     protected process(deltaTime: number, components: ReadonlyArray<Update>): void {
         for (const component of components)
-            component.update(deltaTime);
+            if (component.actor.active)
+                component.update(deltaTime);
     }
 }
