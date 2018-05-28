@@ -23,21 +23,22 @@ export class Sprite implements Component, Draw2D {
 
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
-        if (!this.image)
-            return;
+        const {image} = this;
+        if (!image) return;
 
+        const {position} = this.transform;
         ctx.drawImage(
-            this.image,
-            this.transform.position.x,
-            this.transform.position.y,
+            image,
+            position.x,
+            position.y,
         );
 
         if (this.debug) {
             ctx.strokeRect(
-                this.transform.position.x,
-                this.transform.position.y,
-                this.image.width,
-                this.image.height,
+                position.x,
+                position.y,
+                image.width,
+                image.height,
             );
         }
     }
