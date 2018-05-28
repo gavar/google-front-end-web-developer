@@ -25,6 +25,14 @@ function html() {
         .pipe(gulp.dest("./dist"));
 }
 
+function assets() {
+    const glob = [
+        "./src/images/**/*",
+    ];
+    return gulp.watchify(glob)
+        .pipe(gulp.dest("./dist/assets"));
+}
+
 function css() {
     const argv = [
         "-r", "ts-node/register",
@@ -46,7 +54,7 @@ function css() {
 
 function compile(done: Callback) {
     const args = cli.options.udacity().parse();
-    args.udacity ? es6()(done) : webpack;
+    args.udacity ? es6.task()(done) : webpack;
 }
 
 gulp.name("compile-ts", webpack);
@@ -76,34 +84,38 @@ function devServer() {
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
-function es6(): TaskFunction {
-    const glob = [
-        "src/ts/**/*.ts",
-        "src/js/**/*.js",
-    ];
-    gulp.watcher.add(glob, es6);
-
-    const task = gulp.series(
-        es6.stageJS,
-        es6.stageTS,
-        es6.compile,
-    );
-
-    task.name = "es6";
-    return task;
-}
-
 namespace es6 {
+    export let _task: TaskFunction;
     export const tsProject = ts.createProject("tsconfig.json", {
         module: "esnext",
     });
+
+    export function task(): TaskFunction {
+
+        if (_task)
+            return _task;
+
+        const glob = [
+            "src/ts/**/*.ts",
+            "src/js/**/*.js",
+        ];
+
+        _task = gulp.series(
+            stageJS,
+            stageTS,
+            compile,
+        );
+
+        _task.name = "es6";
+        gulp.watcher.add(glob, _task);
+        return _task;
+    }
 
     gulp.name("es6:stage-ts", stageTS);
     export function stageTS() {
         return gulp.src("./src/ts/**/*.ts")
             .pipe(tsProject())
             .pipe(replace("export class", "class")) // do not export classes
-            .pipe(replace(/export .*\n/g, "")) // avoid any other exports
             .pipe(replace(/import .*\n/g, "")) // remove imports
             .pipe(gulp.dest("./tmp/ts"));
     }
@@ -129,8 +141,10 @@ namespace es6 {
         return gulp.src("./tmp/js/*.js")
             .pipe(rollup(input, output) as NodeJS.ReadWriteStream)
             .pipe(replace(/let (.*)\$(.) = /g, "")) // for some reason rollup may assign class to variable
+            .pipe(replace(/(.*)\$(\d)/g, "$1")) // for some reason rollup may assign class to variable
             .pipe(gulp.dest("./dist/js"));
     }
+
 }
 
 function watch(done: Action) {
@@ -145,8 +159,9 @@ function udacity(done: Action) {
 
 gulp.task(css);
 gulp.task(html);
+gulp.task(assets);
 gulp.task(clean);
-gulp.task("es6", es6());
+gulp.task("es6", es6.task());
 gulp.task(compile);
 gulp.task(devServer);
 
@@ -155,6 +170,7 @@ gulp.task("default", gulp.series(
     gulp.parallel(
         css,
         html,
+        assets,
         compile,
         gulp.watcher.watch,
     ),
@@ -165,6 +181,7 @@ gulp.task("serve", gulp.series(
     watch,
     gulp.parallel(
         html,
+        assets,
         devServer,
         gulp.watcher.watch,
     ),
