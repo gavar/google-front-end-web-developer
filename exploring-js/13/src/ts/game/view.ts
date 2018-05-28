@@ -7,7 +7,9 @@ import {Actor, Component} from "$engine";
 export class View implements Component {
 
     private sprite: Sprite;
-    private resources: Resources;
+
+    /** Resource loader to use. */
+    public resources: Resources;
 
     /** @inheritDoc */
     readonly actor: Actor;
