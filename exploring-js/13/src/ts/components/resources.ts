@@ -30,14 +30,15 @@ export class Resources implements Component, EventListenerObject {
     /**
      * Load a resource by a given name.
      * @param name - name of the resource to load.
+     * @param callback - callback to invoke when loading completes.
+     * @param target - target to pass as this to the callback.
      * @return promise with given resource.
      */
     load(name: string, callback?: Callback<HTMLImageElement>, target?: any): HTMLImageElement {
 
+        // invoke callback or schedule
         if (callback) {
-            // invoke callback or schedule
-            let result = this.cache[name];
-            if (result) callback.apply(target, result);
+            if (this.cache.hasOwnProperty(name)) callback.apply(target, this.cache[name]);
             else this.listeners.push({name, callback, target});
         }
 
@@ -47,8 +48,8 @@ export class Resources implements Component, EventListenerObject {
 
         // create image
         this.images[name] = image = new Image();
+        image = new Image();
         image.name = name;
-        image.onerror;
         image.addEventListener("load", this);
         image.addEventListener("error", this);
 
@@ -64,6 +65,7 @@ export class Resources implements Component, EventListenerObject {
         image.removeEventListener("error", this);
 
         // save result
+        const name = image.name;
         switch (evt.type) {
             case "load":
                 this.cache[name] = [void 0, image];
@@ -77,7 +79,7 @@ export class Resources implements Component, EventListenerObject {
         for (let i = 0; i < this.listeners.length; i++) {
             // find matching listener
             const listener = this.listeners[i];
-            if (listener.name !== image.name)
+            if (listener.name !== name)
                 continue;
 
             // fill slot with last entry
