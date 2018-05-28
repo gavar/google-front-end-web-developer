@@ -46,11 +46,8 @@ export class Game {
         this.canvas.height = terrain.height + 90;
 
         // load images
-        for (let i = 0; i < size.y; i++) {
-            this.resources.load(images[i]).then(image => {
-                terrain.setImageRow(i, image);
-            });
-        }
+        for (let i = 0; i < size.y; i++)
+            terrain.setImageRow(i, this.resources.load(images[i]));
 
         // offset for properly displaying characters
         terrain.offset.y = -40;

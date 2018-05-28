@@ -1,29 +1,20 @@
-import {Resources, Sprite} from "$components";
 import {Actor, Component} from "$engine";
+import {View} from "$game";
 
 export class Player implements Component {
 
-    private sprite: Sprite;
-    private resources: Resources;
+    private view: View;
 
     /** @inheritDoc */
-    readonly actor: Actor;
+    readonly actor?: Actor;
 
     /** @inheritDoc */
     awake() {
-        this.sprite = this.actor.add(Sprite);
+        this.view = this.actor.require(View);
     }
 
     /** @inheritDoc */
     start() {
-        this.resources = this.actor.stage.findComponentOfType(Resources);
-        this.resources.load("char-boy.png").then(image => this.sprite.image = image);
-    }
-
-    /** @inheritDoc */
-    destroy() {
-        this.actor.remove(this.sprite);
-        this.sprite = null;
+        this.view.setImage("char-boy.png");
     }
 }
-
