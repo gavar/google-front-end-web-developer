@@ -1,7 +1,6 @@
 import {MinMax, Motor, Resources, Terrain2D} from "$components";
 import {Actor, Component} from "$engine";
-import {Enemy, View} from "$game";
-import {Random} from "$game/mathf";
+import {Enemy, Random, View} from "$game";
 import {LateUpdate, Update} from "$systems";
 
 /** Spawn enemies. */
