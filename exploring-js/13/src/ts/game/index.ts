@@ -1,3 +1,4 @@
+export * from "./mathf";
 export * from "./view";
 export * from "./player";
 export * from "./player-controller";
