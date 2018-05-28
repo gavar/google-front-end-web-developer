@@ -1,7 +1,7 @@
 import {Resources, Terrain2D} from "$components";
 import {Stage} from "$engine";
-import {Player, PlayerController} from "$game";
-import {DrawSystem, UpdateSystem} from "$systems";
+import {EnemySpawn, Player, PlayerController} from "$game";
+import {DrawSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
 export class Game {
 
@@ -14,13 +14,14 @@ export class Game {
 
         this.stage = new Stage();
         this.stage.addSystem(new UpdateSystem());
+        this.stage.addSystem(new LateUpdateSystem());
         this.stage.addSystem(new DrawSystem(this.canvas));
 
         this.resources = this.stage.createActor("resources").add(Resources);
 
-        this.initTerrain();
-        this.initPlayer();
-
+        const terrain = this.initTerrain();
+        const player = this.initPlayer();
+        const enemySpawn = this.initEnemySpawn(terrain);
     }
 
     initTerrain(): Terrain2D {
@@ -50,15 +51,28 @@ export class Game {
             terrain.setImageRow(i, this.resources.load(images[i]));
 
         // offset for properly displaying characters
-        terrain.offset.y = -40;
+        terrain.offset.y = -30;
 
         return terrain;
     }
 
-    initPlayer() {
+    initPlayer(): Player {
         const actor = this.stage.createActor("player");
         const player = actor.add(Player);
         const controller = actor.add(PlayerController);
+        return player;
+    }
+
+    initEnemySpawn(terrain: Terrain2D): EnemySpawn {
+        const actor = this.stage.createActor("enemy-spawn");
+        const spawn = actor.add(EnemySpawn);
+        spawn.terrain = terrain;
+        spawn.enemyImageName = "enemy-bug.png";
+        spawn.enemyVelocity = 150;
+        spawn.enemyLimit = 10;
+        spawn.yTileRange = {min: 1, max: terrain.size.y - 2};
+        spawn.delay = 1;
+        return spawn;
     }
 
     start() {
