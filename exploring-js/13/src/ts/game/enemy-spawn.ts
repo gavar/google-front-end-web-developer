@@ -23,6 +23,9 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     /** Name of the enemy image to display. */
     public enemyImageName: string = "";
 
+    /** Enemy 'X' axis velocity. */
+    public enemyVelocity: number;
+
     /** Terrain where to spawn enemies. */
     public terrain: Terrain2D;
 
@@ -31,8 +34,6 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
     /** Delay between consequent enemy spawns. */
     public delay: number;
-
-    public enemyVelocity: number;
 
     /** @inheritDoc */
     start() {
