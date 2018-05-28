@@ -1,14 +1,14 @@
 import {Transform, Vector2} from "$components";
 import {Actor, Component} from "$engine";
 import {Draw2D} from "$systems";
+import {Dictionary} from "@syntax";
 
 export type TerrainImage = HTMLImageElement;
+export type TerrainLayer = Dictionary<number, Dictionary<number, TerrainImage>>
 
 export class Terrain2D implements Component, Draw2D {
 
-    private static empty = {};
-
-    private images: TerrainImage[][] = [];
+    private layer: TerrainLayer = {};
     private transform: Transform;
 
     private _size: Vector2 = {x: 0, y: 0};
@@ -87,17 +87,16 @@ export class Terrain2D implements Component, Draw2D {
         this._size.x = width;
         this._size.y = height;
 
-        // rows
-        while (this.images.length < height)
-            this.images.push([]);
-
-        // trim excessive rows
-        this.images.length = height;
-
-        for (let r = 0; r < height; r++) {
-            // create columns
-            this.images[r] = this.images[r] || [];
-            this.images[r].length = width;
+        for (const y in this.layer) {
+            // delete excessive rows
+            if (y as any >= height) {
+                delete this.layer[y];
+                continue;
+            }
+            // delete excessive columns
+            for (const x in this.layer[y])
+                if (x as any >= width)
+                    delete this.layer[y][x];
         }
 
         return this._size;
@@ -105,13 +104,15 @@ export class Terrain2D implements Component, Draw2D {
 
     /**
      * Set image for every on a given row.
-     * @param row - index of the row ('Y' axis).
+     * @param y - index of the row ('Y' axis).
      * @param image - image to render on a given row.
      */
-    setImageRow(row: number, image: TerrainImage) {
+    setImageRow(y: number, image: TerrainImage) {
+        const row = this.layer[y] = this.layer[y] || {};
         for (let x = 0; x < this._size.x; x++)
-            this.images[row][x] = image;
+            row[x] = image;
     }
+
     /** @inheritDoc */
     awake() {
         this.transform = this.actor.require(Transform);
@@ -119,19 +120,17 @@ export class Terrain2D implements Component, Draw2D {
 
     /** @inheritDoc */
     draw2D(context: CanvasRenderingContext2D): void {
-        const size = this._size;
         const tile = this._tile;
         const {position} = this.transform;
-        for (let x = 0; x < size.x; x++) {
-            for (let y = 0; y < size.y; y++) {
-                const image = (this.images[y] || Terrain2D.empty)[x];
-                if (!image) continue;
+
+        for (const y in this.layer)
+            for (const x in this.layer[y]) {
+                const image = this.layer[y][x];
                 context.drawImage(
                     image,
-                    position.x + x * tile.x,
-                    position.y + y * tile.y,
+                    position.x + (x as any) * tile.x,
+                    position.y + (y as any) * tile.y,
                 );
             }
-        }
     }
 }
