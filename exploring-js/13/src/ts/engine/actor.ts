@@ -13,6 +13,12 @@ export class Actor {
      */
     public name: string;
 
+    /**
+     * Whether actor is active or not.
+     * @default true
+     */
+    public active: boolean;
+
     /** Stage to which this actor belongs to. */
     public readonly stage: Stage;
 
@@ -67,3 +73,4 @@ export class Actor {
 
 // 'Actor' defaults
 Actor.prototype.name = "actor";
+Actor.prototype.active = true;
