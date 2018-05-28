@@ -1,11 +1,11 @@
-type EmptyCallback = {
+export type EmptyCallback = {
     /**
      * Notify operation successful completion.
      */
     (): void;
 }
 
-type ErrorCallback<E = Error> = {
+export type ErrorCallback<E = Error> = {
 
     /**
      * Notify operation failure.
@@ -14,7 +14,7 @@ type ErrorCallback<E = Error> = {
     (error: E);
 }
 
-type SuccessCallback<T = any, E = Error> = {
+export type SuccessCallback<T = any, E = Error> = {
     /**
      * Notify operation success.
      * @param error - ignore
