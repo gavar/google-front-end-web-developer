@@ -54,6 +54,7 @@ export class Stage {
      */
     createActor(name?: string): Actor {
         const actor = new Actor() as StageActor;
+        if (name) actor.name = name;
         this.actors.add(actor);
         actor.stage = this;
         actor.components = [];
