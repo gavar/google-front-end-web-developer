@@ -1,4 +1,4 @@
-import {Resources, Sort, Terrain2D, TerrainLayer2D} from "$components";
+import {Resources, Sort, Terrain2D} from "$components";
 import {Stage} from "$engine";
 import {EnemySpawn, Player, PlayerController} from "$game";
 import {DrawSystem, LateUpdateSystem, UpdateSystem} from "$systems";
@@ -11,7 +11,6 @@ export namespace Layer {
 
 export namespace LayerOrder {
     export const TERRAIN_PATH = 1;
-    export const TERRAIN_BOUNTY = 2;
 }
 
 export class Game {
@@ -53,7 +52,7 @@ export class Game {
         this.canvas.height = terrain.height + 90;
 
         // initialize base layer
-        const baseLayer = actor.add(TerrainLayer2D);
+        const baseLayer = terrain.createLayer();
         const baseLayerRows = [
             "stone-block.png",
             "grass-block.png",
@@ -63,16 +62,12 @@ export class Game {
             "stone-block.png",
         ];
         for (let i = 0; i < baseLayerRows.length; i++)
-            baseLayer.setRow(i, this.resources.load(baseLayerRows[i]));
+            baseLayer.setTileRow(i, this.resources.load(baseLayerRows[i]));
 
-        const pathLayer = actor.add(TerrainLayer2D);
+        const pathLayer = terrain.createLayer();
         pathLayer.order = LayerOrder.TERRAIN_PATH;
 
-        const bountyLayer = actor.add(TerrainLayer2D);
-        bountyLayer.order = LayerOrder.TERRAIN_BOUNTY;
-        bountyLayer.set(1, 1, this.resources.load("gem-blue.png"));
-
-        // offset for properly displaying characters
+        // offset for properly displaying objects
         terrain.offset.y = 30;
 
         return terrain;
@@ -82,6 +77,7 @@ export class Game {
         const actor = this.stage.createActor("player");
         const player = actor.add(Player);
         const controller = actor.add(PlayerController);
+        controller.walkable.add("stone-block.png");
 
         // layer
         const sort = actor.require(Sort);
