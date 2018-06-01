@@ -9,6 +9,7 @@ export type LayerImages = Dictionary<number, Dictionary<number, TerrainImage>>
 export class Terrain2D implements Component {
 
     private transform: Transform;
+    private layers: TerrainLayer2D[] = [];
     private _size: Vector2 = {x: 0, y: 0};
     private _tile: Vector2 = {x: 0, y: 0};
 
@@ -46,38 +47,6 @@ export class Terrain2D implements Component {
         return this._size;
     }
 
-    /**
-     * Calculate 'X' position of the tile
-     * @param x - index of the tile by 'X' axis.
-     */
-    positionX(x: number): number {
-        return this.transform.position.x + this._tile.x * x;
-    }
-
-    /**
-     * Calculate 'Y' position of the tile
-     * @param y - index of the tile by 'Y' axis.
-     */
-    positionY(y: number): number {
-        return this.transform.position.y + this._tile.y * y;
-    }
-
-    /**
-     * Get index of the tile, by evaluating 'X' position.
-     * @param x - position by 'X' axis.
-     */
-    tileX(x: number): number {
-        return (x - this.transform.position.x) / this._tile.x;
-    }
-
-    /**
-     * Get index of the tile, by evaluating 'Y' position.
-     * @param y - position by 'Y' axis.
-     */
-    tileY(y: number): number {
-        return (y - this.transform.position.y) / this._tile.y;
-    }
-
     /** Set size of the single tile. */
     setTileSize(width: number, height: number): Vector2 {
         this._tile.x = width;
@@ -98,6 +67,60 @@ export class Terrain2D implements Component {
         return this._size;
     }
 
+    /**
+     * Calculate 'X' position of the tile
+     * @param x - index of the tile by 'X' axis.
+     */
+    positionX(x: number): number {
+        return this.transform.position.x + this._tile.x * x;
+    }
+
+    /**
+     * Calculate 'Y' position of the tile
+     * @param y - index of the tile by 'Y' axis.
+     */
+    positionY(y: number): number {
+        return this.transform.position.y + this._tile.y * y;
+    }
+
+    /**
+     * Get index of the tile, by evaluating 'X' position.
+     * @param x - position by 'X' axis.
+     */
+    rowByPosX(x: number): number {
+        return (x - this.transform.position.x) / this._tile.x;
+    }
+
+    /**
+     * Get index of the tile, by evaluating 'Y' position.
+     * @param y - position by 'Y' axis.
+     */
+    colByPosY(y: number): number {
+        return (y - this.transform.position.y) / this._tile.y;
+    }
+
+    /**
+     * Raycast to terrain to get tile by given position.
+     * @param x - position by X axis.
+     * @param y - position by Y axis.
+     */
+    raycast(x: number, y: number): TerrainImage {
+        x = Math.floor(this.rowByPosX(x));
+        y = Math.floor(this.colByPosY(y));
+        this.layers.sort(Draw2D.compareByOrder);
+        for (let i = this.layers.length - 1; i >= 0; i--) {
+            const layer = this.layers[i];
+            const image = layer.getTile(x, y);
+            if (image) return image;
+        }
+    }
+
+    /** Create new layer instance. */
+    createLayer(): TerrainLayer2D {
+        const layer = this.actor.add(TerrainLayer2D);
+        this.layers.push(layer);
+        return layer;
+    }
 }
 
 export class TerrainLayer2D implements Component, Draw2D {
@@ -119,14 +142,25 @@ export class TerrainLayer2D implements Component, Draw2D {
     }
 
     /**
-     * Set image by XY coordinates.
-     * @param {number} x - index of the column.
-     * @param {number} y - index of the row.
+     * Set image by given row / column coordinates.
+     * @param x - index of the column.
+     * @param y - index of the row.
      * @param image - image to set.
      */
-    set(x: number, y: number, image?: TerrainImage) {
+    setTile(x: number, y: number, image?: TerrainImage) {
         if (image) (this.images[y] = this.images[y] || {})[x] = image;
         else this.images[y] && (this.images[y][x] = void 0);
+    }
+
+    /**
+     * Get tile image by given row / column coordinates.
+     * @param x - index of the column.
+     * @param y - index of the row.
+     * @returns image by the given row / column coordinates.
+     */
+    getTile(x: number, y: number): TerrainImage {
+        const row = this.images[y];
+        return row && row[x];
     }
 
     /**
@@ -134,11 +168,27 @@ export class TerrainLayer2D implements Component, Draw2D {
      * @param y - index of the row ('Y' axis).
      * @param image - image to render on a given row.
      */
-    setRow(y: number, image: TerrainImage) {
+    setTileRow(y: number, image: TerrainImage) {
         const {size} = this.terrain;
         const row = this.images[y] = this.images[y] || {};
         for (let x = 0; x < size.x; x++)
             row[x] = image;
+    }
+
+    /**
+     * Get row of the tile, by evaluating 'X' position.
+     * @param x - position by 'X' axis.
+     */
+    rowByPosX(x: number): number {
+        return (x - this.transform.position.x) / this.terrain.tile.x;
+    }
+
+    /**
+     * Get column of the tile, by evaluating 'Y' position.
+     * @param y - position by 'Y' axis.
+     */
+    colByPosY(y: number): number {
+        return (y - this.transform.position.y) / this.terrain.tile.y;
     }
 
     /**
