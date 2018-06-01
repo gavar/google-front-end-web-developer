@@ -16,6 +16,13 @@ export interface Draw2D extends Component {
     draw2D(ctx: CanvasRenderingContext2D): void
 }
 
+export namespace Draw2D {
+    /** Compare two draw components by {@link Draw2D.order} */
+    export function compareByOrder<T extends Draw2D>(a: T, b: T): number {
+        return ~b.order - ~a.order;
+    }
+}
+
 /**
  * System which draws components on a canvas.
  */
