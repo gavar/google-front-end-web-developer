@@ -25,6 +25,9 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     /** Enemy 'X' axis velocity. */
     public enemyVelocity: number;
 
+    /** Rendering layer to set for enemies. */
+    public enemyLayer: number = 0;
+
     /** Terrain where to spawn enemies. */
     public terrain: Terrain2D;
 
@@ -95,6 +98,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
             enemy.view = actor.add(View);
             enemy.view.resources = this.resources;
             enemy.motor = actor.add(Motor);
+            enemy.sort.layer = this.enemyLayer;
         }
 
         const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
