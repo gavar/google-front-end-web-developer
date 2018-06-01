@@ -97,7 +97,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
             enemy.motor = actor.add(Motor);
         }
 
-        const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max);
+        const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
 
         // configure
         const terrain = this.terrain;
