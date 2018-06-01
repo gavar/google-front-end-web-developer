@@ -6,17 +6,21 @@ import {Actor, Component} from "$engine";
  */
 export class PlayerController implements Component, EventListenerObject {
 
-    private terrain: Terrain2D;
-    private transform: Transform;
+    public terrain: Terrain2D;
+    public transform: Transform;
 
     /** @inheritDoc */
     readonly actor: Actor;
 
     /** @inheritDoc */
+    awake() {
+        this.transform = this.actor.require(Transform);
+    }
+
+    /** @inheritDoc */
     start() {
         document.addEventListener("keydown", this);
-        this.transform = this.actor.require(Transform);
-        this.terrain = this.actor.stage.findComponentOfType(Terrain2D);
+        this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
         this.transform.position.x = this.terrain.positionX(0);
         this.transform.position.y = this.terrain.positionY(0);
     }

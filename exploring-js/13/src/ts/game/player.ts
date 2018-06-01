@@ -3,18 +3,14 @@ import {View} from "$game";
 
 export class Player implements Component {
 
-    private view: View;
-
     /** @inheritDoc */
-    readonly actor?: Actor;
+    public readonly actor?: Actor;
 
-    /** @inheritDoc */
-    awake() {
-        this.view = this.actor.require(View);
-    }
+    public view: View;
 
     /** @inheritDoc */
     start() {
+        this.view = this.view || this.actor.require(View);
         this.view.setImage("char-boy.png");
     }
 }

@@ -12,7 +12,7 @@ export class View implements Component {
     public resources: Resources;
 
     /** @inheritDoc */
-    readonly actor: Actor;
+    public readonly actor: Actor;
 
     /**
      * Set image to display.

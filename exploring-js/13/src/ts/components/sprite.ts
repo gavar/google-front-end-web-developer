@@ -1,17 +1,20 @@
-import {Actor, Component} from "$engine";
+import {Transform} from "$components";
+import {Actor} from "$engine";
 import {Draw2D} from "$systems";
-import {Transform} from "./transform";
 
 /** Draws an image on a canvas. */
-export class Sprite implements Component, Draw2D {
+export class Sprite implements Draw2D {
 
     private transform: Transform;
 
-    /** @inheritDoc */
-    readonly actor: Actor;
-
     /** Whether to display debugging wireframe. */
     public debug: boolean;
+
+    /** Actor to whom this component belongs. */
+    public readonly actor?: Actor;
+
+    /** @inheritDoc */
+    public order: number;
 
     /** Image to draw. */
     public image: HTMLImageElement;
