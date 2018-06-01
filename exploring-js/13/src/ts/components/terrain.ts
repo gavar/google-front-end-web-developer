@@ -4,21 +4,24 @@ import {Draw2D} from "$systems";
 import {Dictionary} from "@syntax";
 
 export type TerrainImage = HTMLImageElement;
-export type TerrainLayer = Dictionary<number, Dictionary<number, TerrainImage>>
+export type LayerImages = Dictionary<number, Dictionary<number, TerrainImage>>
 
-export class Terrain2D implements Component, Draw2D {
+export class Terrain2D implements Component {
 
-    private layer: TerrainLayer = {};
     private transform: Transform;
-
     private _size: Vector2 = {x: 0, y: 0};
     private _tile: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
-    readonly actor?: Actor;
+    public readonly actor?: Actor;
 
-    /** Default offset to apply to a position calculations. */
-    offset: Vector2 = {x: 0, y: 0};
+    /** @inheritDoc */
+    awake() {
+        this.transform = this.actor.require(Transform);
+    }
+
+    /** Offset of drawing starting point. */
+    public offset: Vector2 = {x: 0, y: 0};
 
     /** Total width of the terrain. */
     get width(): number {
@@ -48,7 +51,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param x - index of the tile by 'X' axis.
      */
     positionX(x: number): number {
-        return this.offset.x + this.transform.position.x + this._tile.x * x;
+        return this.transform.position.x + this._tile.x * x;
     }
 
     /**
@@ -56,7 +59,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param y - index of the tile by 'Y' axis.
      */
     positionY(y: number): number {
-        return this.offset.y + this.transform.position.y + this._tile.y * y;
+        return this.transform.position.y + this._tile.y * y;
     }
 
     /**
@@ -64,7 +67,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param x - position by 'X' axis.
      */
     tileX(x: number): number {
-        return (x - this.offset.x - this.transform.position.x) / this._tile.x;
+        return (x - this.transform.position.x) / this._tile.x;
     }
 
     /**
@@ -72,7 +75,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param y - position by 'Y' axis.
      */
     tileY(y: number): number {
-        return (y - this.offset.y - this.transform.position.y) / this._tile.y;
+        return (y - this.transform.position.y) / this._tile.y;
     }
 
     /** Set size of the single tile. */
@@ -87,19 +90,43 @@ export class Terrain2D implements Component, Draw2D {
         this._size.x = width;
         this._size.y = height;
 
-        for (const y in this.layer) {
-            // delete excessive rows
-            if (y as any >= height) {
-                delete this.layer[y];
-                continue;
-            }
-            // delete excessive columns
-            for (const x in this.layer[y])
-                if (x as any >= width)
-                    delete this.layer[y][x];
-        }
+        // trim layers
+        for (const layer of this.actor.components)
+            if (layer instanceof TerrainLayer2D)
+                layer.trim(width, height);
 
         return this._size;
+    }
+
+}
+
+export class TerrainLayer2D implements Component, Draw2D {
+
+    private terrain: Terrain2D;
+    private transform: Transform;
+    private images: LayerImages = {};
+
+    /** Actor to whom this component belongs. */
+    public readonly actor: Actor;
+
+    /** @inheritDoc */
+    public order: number;
+
+    /** @inheritDoc */
+    awake() {
+        this.terrain = this.actor.require(Terrain2D);
+        this.transform = this.actor.require(Transform);
+    }
+
+    /**
+     * Set image by XY coordinates.
+     * @param {number} x - index of the column.
+     * @param {number} y - index of the row.
+     * @param image - image to set.
+     */
+    set(x: number, y: number, image?: TerrainImage) {
+        if (image) (this.images[y] = this.images[y] || {})[x] = image;
+        else this.images[y] && (this.images[y][x] = void 0);
     }
 
     /**
@@ -107,29 +134,49 @@ export class Terrain2D implements Component, Draw2D {
      * @param y - index of the row ('Y' axis).
      * @param image - image to render on a given row.
      */
-    setImageRow(y: number, image: TerrainImage) {
-        const row = this.layer[y] = this.layer[y] || {};
-        for (let x = 0; x < this._size.x; x++)
+    setRow(y: number, image: TerrainImage) {
+        const {size} = this.terrain;
+        const row = this.images[y] = this.images[y] || {};
+        for (let x = 0; x < size.x; x++)
             row[x] = image;
     }
 
-    /** @inheritDoc */
-    awake() {
-        this.transform = this.actor.require(Transform);
+    /**
+     * Trim layer to given dimensions.
+     * @param width - max width of the layer.
+     * @param height - max height of the layer.
+     */
+    trim(width: number, height: number) {
+        for (const y in this.images) {
+
+            // delete excessive rows
+            if (y as any >= height) {
+                delete this.images[y];
+                continue;
+            }
+
+            // delete excessive columns
+            for (const x in this.images[y])
+                if (x as any >= width)
+                    delete this.images[y][x];
+        }
     }
 
     /** @inheritDoc */
-    draw2D(context: CanvasRenderingContext2D): void {
-        const tile = this._tile;
+    draw2D(ctx: CanvasRenderingContext2D): void {
+        const {tile, offset} = this.terrain;
         const {position} = this.transform;
 
-        for (const y in this.layer)
-            for (const x in this.layer[y]) {
-                const image = this.layer[y][x];
-                context.drawImage(
+        const offsetX = position.x + offset.x;
+        const offsetY = position.y + offset.y;
+
+        for (const y in this.images)
+            for (const x in this.images[y]) {
+                const image = this.images[y][x];
+                ctx.drawImage(
                     image,
-                    position.x + (x as any) * tile.x,
-                    position.y + (y as any) * tile.y,
+                    offsetX + (x as any) * tile.x,
+                    offsetY + (y as any) * tile.y,
                 );
             }
     }
