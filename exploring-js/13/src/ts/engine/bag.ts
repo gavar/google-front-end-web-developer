@@ -1,3 +1,5 @@
+import {Compare} from "@syntax";
+
 /**
  * Unordered list of unique items using O(1) for read / write operations.
  */
@@ -33,6 +35,17 @@ export class BagSet<T = any> {
         this.indexer.set(item, this.array.length);
         this.array.push(item);
         return true;
+    }
+
+    /**
+     * Sort items in collection.
+     * @param compare - function to use for comparing items.
+     */
+    sort(compare: Compare<T>) {
+        this.indexer.clear();
+        this.array.sort(compare);
+        for (let i = 0; i < this.array.length; i++)
+            this.indexer.set(this.array[i], i);
     }
 
     /**
