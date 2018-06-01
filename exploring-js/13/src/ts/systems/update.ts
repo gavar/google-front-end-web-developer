@@ -1,4 +1,4 @@
-import {Component, System} from "$engine";
+import {Component, ComponentSystem} from "$engine";
 
 export interface Update extends Component {
     update(deltaTime: number): void;
@@ -7,7 +7,7 @@ export interface Update extends Component {
 /**
  * System which invokes 'update' on a component.
  */
-export class UpdateSystem extends System<Update> {
+export class UpdateSystem extends ComponentSystem<Update> {
 
     /** @inheritDoc */
     match(component: Update): component is Update {

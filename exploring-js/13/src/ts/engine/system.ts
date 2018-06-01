@@ -1,11 +1,41 @@
 import {BagSet} from "$engine";
 
 /**
+ * Represents system which process added components on each tick.
+ */
+export interface System<T = any> {
+
+    /**
+     * Whether system has ability to process given component.
+     * @param component - component to check.
+     */
+    match(component: T): component is T;
+
+    /**
+     * Add component to a system.
+     * @param component - component to add.
+     */
+    add(component: T): void;
+
+    /**
+     * Remove component from a system.
+     * @return component which has been removed.
+     */
+    remove(component: T): void;
+
+    /**
+     * Process each component in a system.
+     * @param deltaTime - time since last call.
+     */
+    tick(deltaTime: number): void;
+}
+
+/**
  * System that process components of particular type.
  */
-export abstract class System<T = any> {
+export abstract class ComponentSystem<T = any> {
 
-    private bag: BagSet<T> = new BagSet<T>();
+    protected bag: BagSet<T> = new BagSet<T>();
 
     /**
      * Whether system has ability to process given component.
