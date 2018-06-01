@@ -12,6 +12,9 @@ export class PlayerController implements Component, EventListenerObject {
     /** @inheritDoc */
     readonly actor: Actor;
 
+    /** Set of walkable tiles. */
+    public walkable: Set<string> = new Set<string>();
+
     /** @inheritDoc */
     awake() {
         this.transform = this.actor.require(Transform);
@@ -68,18 +71,27 @@ export class PlayerController implements Component, EventListenerObject {
         const position = transform.position;
         const size = terrain.size;
 
-        if (x) {
-            x += terrain.tileX(position.x);
-            x = Math.max(0, x);
-            x = Math.min(x, size.x - 1);
-            position.x = terrain.positionX(x);
+        // calculate next position X
+        x += terrain.rowByPosX(position.x);
+        x = Math.max(0, x);
+        x = Math.min(x, size.x - 1);
+        x = terrain.positionX(x);
+
+        // calculate next position Y
+        y += terrain.colByPosY(position.y);
+        y = Math.max(0, y);
+        y = Math.min(y, size.y - 1);
+        y = terrain.positionY(y);
+
+        // ensure tile by next position is walkable
+        if (this.walkable.size > 0) {
+            const image = terrain.raycast(x, y);
+            if (!this.walkable.has(image.name))
+                return;
         }
 
-        if (y) {
-            y += terrain.tileY(position.y);
-            y = Math.max(0, y);
-            y = Math.min(y, size.y - 1);
-            position.y = terrain.positionY(y);
-        }
+        // apply position
+        position.x = x;
+        position.y = y;
     }
 }
