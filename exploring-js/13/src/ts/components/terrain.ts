@@ -1,14 +1,13 @@
 import {Transform, Vector2} from "$components";
 import {Actor, Component} from "$engine";
 import {Draw2D} from "$systems";
-import {Dictionary} from "@syntax";
+import {Dictionary, Mutable} from "@syntax";
 
 export type TerrainImage = HTMLImageElement;
 export type LayerImages = Dictionary<number, Dictionary<number, TerrainImage>>
 
 export class Terrain2D implements Component {
 
-    private transform: Transform;
     private layers: TerrainLayer2D[] = [];
     private _size: Vector2 = {x: 0, y: 0};
     private _tile: Vector2 = {x: 0, y: 0};
@@ -16,9 +15,12 @@ export class Terrain2D implements Component {
     /** @inheritDoc */
     public readonly actor?: Actor;
 
+    /** Transform of this terrain instance. */
+    public readonly transform: Transform;
+
     /** @inheritDoc */
     awake() {
-        this.transform = this.actor.require(Transform);
+        (this as Mutable<this>).transform = this.actor.require(Transform);
     }
 
     /** Offset of drawing starting point. */
@@ -118,28 +120,24 @@ export class Terrain2D implements Component {
     /** Create new layer instance. */
     createLayer(): TerrainLayer2D {
         const layer = this.actor.add(TerrainLayer2D);
+        (layer as Mutable<TerrainLayer2D>).terrain = this;
         this.layers.push(layer);
         return layer;
     }
 }
 
-export class TerrainLayer2D implements Component, Draw2D {
+export class TerrainLayer2D implements Draw2D {
 
-    private terrain: Terrain2D;
-    private transform: Transform;
     private images: LayerImages = {};
+
+    /** Terrain to which this layer belongs. */
+    public readonly terrain: Terrain2D;
 
     /** Actor to whom this component belongs. */
     public readonly actor: Actor;
 
     /** @inheritDoc */
     public order: number;
-
-    /** @inheritDoc */
-    awake() {
-        this.terrain = this.actor.require(Terrain2D);
-        this.transform = this.actor.require(Transform);
-    }
 
     /**
      * Set image by given row / column coordinates.
@@ -180,7 +178,7 @@ export class TerrainLayer2D implements Component, Draw2D {
      * @param x - position by 'X' axis.
      */
     rowByPosX(x: number): number {
-        return (x - this.transform.position.x) / this.terrain.tile.x;
+        return (x - this.terrain.transform.position.x) / this.terrain.tile.x;
     }
 
     /**
@@ -188,7 +186,7 @@ export class TerrainLayer2D implements Component, Draw2D {
      * @param y - position by 'Y' axis.
      */
     colByPosY(y: number): number {
-        return (y - this.transform.position.y) / this.terrain.tile.y;
+        return (y - this.terrain.transform.position.y) / this.terrain.tile.y;
     }
 
     /**
@@ -212,10 +210,19 @@ export class TerrainLayer2D implements Component, Draw2D {
         }
     }
 
+    /**
+     * Remove all images from a layer.
+     */
+    clear() {
+        for (const y in this.images)
+            for (const x in this.images[y])
+                delete this.images[y][x];
+    }
+
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
-        const {tile, offset} = this.terrain;
-        const {position} = this.transform;
+        const {tile, offset, transform} = this.terrain;
+        const {position} = transform;
 
         const offsetX = position.x + offset.x;
         const offsetY = position.y + offset.y;
