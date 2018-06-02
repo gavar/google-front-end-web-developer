@@ -1,14 +1,6 @@
-import {Sort} from "$components";
-import {Component, System} from "$engine";
+import {Sortable, SortSystem} from "$systems";
 
-export interface Draw2D extends Component {
-
-    /**
-     * Sorting order of the component within same sorting layer.
-     * @see Sort#layer
-     */
-    readonly order?: number;
-
+export interface Draw2D extends Sortable {
     /**
      * Render component on a given 2D context.
      * @param ctx - 2D canvas rendering context to render on.
@@ -16,26 +8,16 @@ export interface Draw2D extends Component {
     draw2D(ctx: CanvasRenderingContext2D): void
 }
 
-export namespace Draw2D {
-    /** Compare two draw components by {@link Draw2D.order} */
-    export function compareByOrder<T extends Draw2D>(a: T, b: T): number {
-        return ~b.order - ~a.order;
-    }
-}
-
 /**
  * System which draws components on a canvas.
  */
-export class DrawSystem implements System<Draw2D> {
-
-    private size: number = 0;
-    private readonly array: DrawEntry[] = [];
-    private readonly indexer: Map<Draw2D, number> = new Map<Draw2D, number>();
+export class DrawSystem extends SortSystem<Draw2D> {
 
     private readonly canvas: HTMLCanvasElement;
     private readonly context2D: CanvasRenderingContext2D;
 
     constructor(canvas: HTMLCanvasElement) {
+        super();
         this.canvas = canvas;
         this.context2D = this.canvas.getContext("2d");
     }
@@ -46,75 +28,10 @@ export class DrawSystem implements System<Draw2D> {
     }
 
     /** @inheritDoc */
-    add(component: Draw2D): void {
-        if (this.indexer.has(component))
-            return;
-
-        const entry: DrawEntry = {
-            component,
-            sort: component.actor.require(Sort),
-            order: this.size,
-        };
-        this.indexer.set(component, this.size);
-        this.array.push(entry);
-        this.size++;
-    }
-
-    /** @inheritDoc */
-    remove(component: Draw2D): void {
-        const index = this.indexer.get(component);
-        if (typeof index === "undefined")
-            return;
-
-        this.indexer.delete(component);
-
-        // avoid array internal memory resizing
-        const last = this.array[--this.size];
-        this.array[this.size] = null;
-
-        // fill empty slot with last component
-        if (index < this.size) {
-            this.array[index] = last;
-            this.indexer.set(last.component, index);
-        }
-    }
-
-    /** @inheritDoc */
-    tick(deltaTime: number): void {
+    protected process(deltaTime: number, components: ReadonlyArray<Draw2D>): void {
         const ctx2D = this.context2D;
-
-        // sort for proper draw order
-        const items = this.array;
-        items.sort(this.compare);
-
-        // process each entry
-        for (let i = 0, size = this.size; i < size; i++) {
-            const entry = items[i];
-            const component = entry.component;
-
-            // update order if changed while sort
-            if (entry.order !== i) {
-                entry.order = i;
-                this.indexer.set(component, i);
-            }
-
-            // draw if active
+        for (const component of components)
             if (component.actor.active)
                 component.draw2D(ctx2D);
-        }
     }
-
-    /** Compare two components by sorting layer, order and z-index. */
-    private compare(a: DrawEntry, b: DrawEntry): number {
-        return a.sort.layer - b.sort.layer
-            || ~b.component.order - ~a.component.order
-            || a.order - b.order
-            ;
-    }
-}
-
-interface DrawEntry {
-    sort: Sort;
-    order: number;
-    component: Draw2D;
 }
