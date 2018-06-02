@@ -6,8 +6,9 @@ import {Dictionary, Mutable} from "@syntax";
 export type TerrainImage = HTMLImageElement;
 export type LayerImages = Dictionary<number, Dictionary<number, TerrainImage>>
 
-export class Terrain2D implements Component {
+export class Terrain2D implements Component, Draw2D {
 
+    private images: LayerImages = {};
     private layers: TerrainLayer2D[] = [];
     private _size: Vector2 = {x: 0, y: 0};
     private _tile: Vector2 = {x: 0, y: 0};
@@ -15,8 +16,14 @@ export class Terrain2D implements Component {
     /** @inheritDoc */
     public readonly actor?: Actor;
 
+    /** Whether to merge layers before rendering. */
+    public merge: boolean;
+
     /** Transform of this terrain instance. */
     public readonly transform: Transform;
+
+    /** @inheritDoc */
+    public readonly order: number;
 
     /** @inheritDoc */
     awake() {
@@ -109,7 +116,6 @@ export class Terrain2D implements Component {
     raycast(x: number, y: number): TerrainImage {
         x = Math.floor(this.rowByPosX(x));
         y = Math.floor(this.colByPosY(y));
-        this.layers.sort(Draw2D.compareByOrder);
         for (let i = this.layers.length - 1; i >= 0; i--) {
             const layer = this.layers[i];
             const image = layer.getTile(x, y);
@@ -117,27 +123,84 @@ export class Terrain2D implements Component {
         }
     }
 
+    /**
+     * Sort layers by {@link TerrainLayer2D#order}.
+     * Done automatically by {@link TerrainLayer2D#setOrder}
+     */
+    sort() {
+        this.layers.sort(TerrainLayer2D.compareByOrder);
+    }
+
     /** Create new layer instance. */
     createLayer(): TerrainLayer2D {
-        const layer = this.actor.add(TerrainLayer2D);
-        (layer as Mutable<TerrainLayer2D>).terrain = this;
+        const layer = new TerrainLayer2D(this);
         this.layers.push(layer);
         return layer;
     }
+
+    /** @inheritDoc */
+    draw2D(ctx: CanvasRenderingContext2D): void {
+        const {tile, offset, transform} = this;
+        const {position} = transform;
+
+        const offsetX = position.x + offset.x;
+        const offsetY = position.y + offset.y;
+        const images = this.merge ? this.mergeLayers() : this.images;
+
+        for (const y in images) {
+            const row = images[y];
+            for (const x in row) {
+                ctx.drawImage(
+                    row[x],
+                    offsetX + (x as any) * tile.x,
+                    offsetY + (y as any) * tile.y,
+                );
+            }
+        }
+    }
+
+    private mergeLayers(): LayerImages {
+        TerrainLayer2D.prototype.clear.apply(this);
+        const {images} = this;
+        for (const layer of this.layers) {
+            for (const y in layer.images) {
+                const row = images[y] || {};
+                Object.assign(row, layer.images[y]);
+                images[y] = row;
+            }
+        }
+        return images;
+    }
 }
 
-export class TerrainLayer2D implements Draw2D {
+// Terrain2D defaults
+Terrain2D.prototype.merge = true;
 
-    private images: LayerImages = {};
+export class TerrainLayer2D {
+
+    /** Compare terrain layers by {@link TerrainLayer2D#order}. */
+    public static compareByOrder(a: TerrainLayer2D, b: TerrainLayer2D): number {
+        return a.order - b.order;
+    }
+
+    /** @private */
+    images: LayerImages = {};
 
     /** Terrain to which this layer belongs. */
     public readonly terrain: Terrain2D;
 
-    /** Actor to whom this component belongs. */
-    public readonly actor: Actor;
+    /** Sorting order of the layer within terrain. */
+    public readonly order: number;
 
-    /** @inheritDoc */
-    public order: number;
+    constructor(terrain: Terrain2D) {
+        this.order = 0;
+        this.terrain = terrain;
+    }
+
+    setOrder(order: number) {
+        (this as Mutable<this>).order = order || 0;
+        this.terrain.sort();
+    }
 
     /**
      * Set image by given row / column coordinates.
@@ -214,27 +277,10 @@ export class TerrainLayer2D implements Draw2D {
      * Remove all images from a layer.
      */
     clear() {
-        for (const y in this.images)
-            for (const x in this.images[y])
-                delete this.images[y][x];
-    }
-
-    /** @inheritDoc */
-    draw2D(ctx: CanvasRenderingContext2D): void {
-        const {tile, offset, transform} = this.terrain;
-        const {position} = transform;
-
-        const offsetX = position.x + offset.x;
-        const offsetY = position.y + offset.y;
-
-        for (const y in this.images)
-            for (const x in this.images[y]) {
-                const image = this.images[y][x];
-                ctx.drawImage(
-                    image,
-                    offsetX + (x as any) * tile.x,
-                    offsetY + (y as any) * tile.y,
-                );
-            }
+        for (const y in this.images) {
+            const row = this.images[y];
+            for (const x in row)
+                delete row[x];
+        }
     }
 }
