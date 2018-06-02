@@ -1,6 +1,6 @@
 import {Resources, Sort, Terrain2D} from "$components";
 import {Stage} from "$engine";
-import {EnemySpawn, Player, PlayerController} from "$game";
+import {EnemySpawn, Player, PlayerController, TerrainPath} from "$game";
 import {DrawSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
 export namespace Layer {
@@ -30,7 +30,8 @@ export class Game {
         this.resources = this.stage.createActor("resources").add(Resources);
 
         const terrain = this.initTerrain();
-        const player = this.initPlayer();
+        const terrainPath = this.initTerrainPath(terrain);
+        const player = this.initPlayer(terrain);
         const enemySpawn = this.initEnemySpawn(terrain);
     }
 
@@ -64,24 +65,33 @@ export class Game {
         for (let i = 0; i < baseLayerRows.length; i++)
             baseLayer.setTileRow(i, this.resources.load(baseLayerRows[i]));
 
-        const pathLayer = terrain.createLayer();
-        pathLayer.order = LayerOrder.TERRAIN_PATH;
-
         // offset for properly displaying objects
         terrain.offset.y = 30;
 
         return terrain;
     }
 
-    initPlayer(): Player {
+    initTerrainPath(terrain: Terrain2D): TerrainPath {
+        const layer = terrain.createLayer();
+        layer.setOrder(LayerOrder.TERRAIN_PATH);
+        const terrainPath = new TerrainPath();
+        terrainPath.image = this.resources.load("stone-block.png");
+        terrainPath.layer = layer;
+        return terrainPath;
+    }
+
+    initPlayer(terrain: Terrain2D): Player {
         const actor = this.stage.createActor("player");
         const player = actor.add(Player);
-        const controller = actor.add(PlayerController);
-        controller.walkable.add("stone-block.png");
 
         // layer
         const sort = actor.require(Sort);
         sort.layer = Layer.PLAYER;
+
+        // controller
+        const controller = actor.add(PlayerController);
+        controller.terrain = terrain;
+        controller.walkable.add("stone-block.png");
 
         return player;
     }
