@@ -15,9 +15,10 @@ export namespace LayerOrder {
 
 export class Game {
 
-    readonly stage: Stage;
-    readonly canvas: HTMLCanvasElement;
-    readonly resources: Resources;
+    public stage: Stage;
+    public canvas: HTMLCanvasElement;
+    public resources: Resources;
+    public player: Player;
 
     constructor() {
         this.canvas = document.createElement("canvas");
@@ -32,12 +33,11 @@ export class Game {
 
         const terrain = this.initTerrain();
         const terrainPath = this.initTerrainPath(terrain);
-        const player = this.initPlayer(terrain);
+        this.player = this.initPlayer(terrain);
         const enemySpawn = this.initEnemySpawn(terrain);
     }
 
     initTerrain(): Terrain2D {
-
         const actor = this.stage.createActor();
         const terrain = actor.add(Terrain2D);
 
@@ -67,7 +67,7 @@ export class Game {
             baseLayer.setTileRow(i, this.resources.load(baseLayerRows[i]));
 
         // offset for properly displaying objects
-        terrain.offset.y = 30;
+        terrain.offset.y = 20;
 
         return terrain;
     }
