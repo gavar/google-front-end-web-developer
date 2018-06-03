@@ -1,5 +1,4 @@
-import {Component} from "$engine";
-import {Actor} from "$engine/actor";
+import {Actor, Component} from "$engine";
 
 /** Defines component for sorting actors on a stage. */
 export class Sort implements Component {
