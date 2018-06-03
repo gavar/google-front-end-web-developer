@@ -1,6 +1,6 @@
-import {Resources, Sort, Terrain2D} from "$components";
+import {Motor, Resources, Sort, Terrain2D, Transform} from "$components";
 import {Stage} from "$engine";
-import {EnemySpawn, Player, PlayerController, TerrainPath} from "$game";
+import {Enemy, EnemySpawn, Player, PlayerController, TerrainPath, View} from "$game";
 import {DrawSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
 export namespace Layer {
@@ -100,12 +100,27 @@ export class Game {
         const actor = this.stage.createActor("enemy-spawn");
         const spawn = actor.add(EnemySpawn);
         spawn.terrain = terrain;
-        spawn.enemyImageName = "enemy-bug.png";
         spawn.enemyVelocity = 150;
         spawn.enemyLimit = 1000;
-        spawn.enemyLayer = Layer.ENEMY;
         spawn.yTileRange = {min: 1, max: terrain.size.y - 2};
         spawn.delay = .1;
+
+        spawn.enemyFactory = () => {
+            const actor = this.stage.createActor("enemy");
+            const enemy = actor.add(Enemy);
+            enemy.view = actor.add(View);
+            enemy.view.resources = this.resources;
+            enemy.view.setImage("enemy-bug.png");
+            enemy.motor = actor.add(Motor);
+            enemy.sort.layer = Layer.ENEMY;
+
+            // collider
+            const capsule = actor.add(CapsuleCollider2D);
+            capsule.setSize(98, 66);
+            capsule.setOffset(2, 77);
+
+            return enemy;
+        };
         return spawn;
     }
 

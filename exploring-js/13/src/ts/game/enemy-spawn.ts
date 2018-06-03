@@ -1,13 +1,13 @@
-import {MinMax, Motor, Resources, Terrain2D} from "$components";
+import {MinMax, Resources, Terrain2D} from "$components";
 import {Actor, Component} from "$engine";
-import {Enemy, Random, View} from "$game";
+import {Enemy, Random} from "$game";
 import {LateUpdate, Update} from "$systems";
 
 /** Spawn enemies. */
 export class EnemySpawn implements Component, Update, LateUpdate {
 
+    private pool: Enemy[] = [];
     private enemies: Enemy[] = [];
-    private enemyPool: Enemy[] = [];
     private delayCountDown: number = 0;
 
     /** Actor to whom this component belongs. */
@@ -19,14 +19,11 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     /** Max number of enemies. */
     public enemyLimit: number = 0;
 
-    /** Name of the enemy image to display. */
-    public enemyImageName: string = "";
+    /** Factory which creates new enemy instance on request. */
+    public enemyFactory: () => Enemy;
 
     /** Enemy 'X' axis velocity. */
     public enemyVelocity: number;
-
-    /** Rendering layer to set for enemies. */
-    public enemyLayer: number = 0;
 
     /** Terrain where to spawn enemies. */
     public terrain: Terrain2D;
@@ -66,7 +63,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
     /** @inheritDoc */
     lateUpdate(deltaTime: number): void {
-        const terrain = this.terrain;
+        const {terrain} = this;
         const xMax = terrain.positionX(terrain.size.x + 1);
 
         // deactivate enemies that has gone through the whole line
@@ -76,7 +73,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
             // deactivate enemy
             enemy.actor.active = false;
-            this.enemyPool.push(enemy);
+            this.pool.push(enemy);
 
             // fill empty slot
             const last = this.enemies.pop();
@@ -87,28 +84,14 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
     private spawn(): Enemy {
         // request enemy instance
-        let enemy: Enemy;
-        if (this.enemyPool.length) {
-            enemy = this.enemyPool.pop();
-        }
-        else {
-            // instantiate
-            const actor = this.actor.stage.createActor("enemy");
-            enemy = actor.add(Enemy);
-            enemy.view = actor.add(View);
-            enemy.view.resources = this.resources;
-            enemy.motor = actor.add(Motor);
-            enemy.sort.layer = this.enemyLayer;
-        }
-
-        const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
+        const enemy = this.pool.length ? this.pool.pop() : this.enemyFactory();
 
         // configure
-        const terrain = this.terrain;
+        const {terrain} = this;
         const transform = enemy.transform;
         transform.position.x = terrain.positionX(-1.5);
+        const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
         transform.position.y = terrain.positionY(tileY);
-        enemy.view.setImage(this.enemyImageName);
 
         // velocity ±50%
         enemy.motor.velocity.x = this.enemyVelocity * Random.deviation(.5);
