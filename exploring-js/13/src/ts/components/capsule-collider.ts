@@ -14,7 +14,7 @@ export class CapsuleCollider2D implements Gizmo2D {
     public readonly actor: Actor;
 
     /** @inheritDoc */
-    public gizmo?: boolean = true;
+    public gizmo?: boolean;
 
     /** Width and height of the capsule area. */
     public size: Vector2 = {x: 0, y: 0};

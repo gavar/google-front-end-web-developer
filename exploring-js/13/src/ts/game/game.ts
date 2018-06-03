@@ -13,12 +13,21 @@ export namespace LayerOrder {
     export const TERRAIN_PATH = 1;
 }
 
+interface GizmoSettings {
+    capsule?: boolean;
+}
+
 export class Game {
 
     public stage: Stage;
     public canvas: HTMLCanvasElement;
     public resources: Resources;
     public player: Player;
+
+    /** Global gizmo rendering configuration. */
+    public readonly gizmos: GizmoSettings = {
+        capsule: false,
+    };
 
     constructor() {
         this.canvas = document.createElement("canvas");
@@ -27,8 +36,8 @@ export class Game {
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
         this.stage.addSystem(new DrawSystem(this.canvas));
-        this.stage.addSystem(new GizmoSystem(this.canvas));
 
+        this.initGizmo();
         this.resources = this.stage.createActor("resources").add(Resources);
 
         const terrain = this.initTerrain();
@@ -128,6 +137,21 @@ export class Game {
             return enemy;
         };
         return spawn;
+    }
+
+    initGizmo() {
+        if (!this.isGizmoActive())
+            return;
+
+        const {gizmos} = this;
+        this.stage.addSystem(new GizmoSystem(this.canvas));
+        CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
+    }
+
+    isGizmoActive(): boolean {
+        for (const key in this.gizmos)
+            if (this.gizmos[key])
+                return true;
     }
 
     start() {
