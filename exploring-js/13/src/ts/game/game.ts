@@ -131,9 +131,6 @@ export class Game {
     }
 }
 
-(function () {
-    const game = new Game();
-    game.start();
-}());
-
+const game = new Game();
+game.start();
 
