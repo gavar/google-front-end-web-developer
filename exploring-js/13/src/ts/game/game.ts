@@ -1,7 +1,7 @@
 import {Motor, Resources, Sort, Terrain2D, Transform} from "$components";
 import {Stage} from "$engine";
 import {Enemy, EnemySpawn, Player, PlayerController, TerrainPath, View} from "$game";
-import {DrawSystem, LateUpdateSystem, UpdateSystem} from "$systems";
+import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
 export namespace Layer {
     export const TERRAIN = 1;
@@ -26,6 +26,7 @@ export class Game {
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
         this.stage.addSystem(new DrawSystem(this.canvas));
+        this.stage.addSystem(new GizmoSystem(this.canvas));
 
         this.resources = this.stage.createActor("resources").add(Resources);
 
