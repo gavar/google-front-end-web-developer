@@ -1,4 +1,4 @@
-import {Motor, Resources, Sort, Terrain2D, Transform} from "$components";
+import {CapsuleCollider2D, Motor, Resources, Sort, Terrain2D, Transform} from "$components";
 import {Stage} from "$engine";
 import {Enemy, EnemySpawn, Player, PlayerController, TerrainPath, View} from "$game";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
