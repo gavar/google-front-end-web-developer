@@ -114,6 +114,9 @@ namespace es6 {
     gulp.name("es6:stage-ts", stageTS);
     export function stageTS() {
         return gulp.src("./src/ts/**/*.ts")
+            .pipe(replace("export namespace", "export class")) // namespaces as classes
+            .pipe(replace("export function", "public static")) // functions as static methods
+            .pipe(replace("export const", "public static readonly")) // const as static field
             .pipe(tsProject())
             .pipe(replace("export class", "class")) // do not export classes
             .pipe(replace(/import .*\n/g, "")) // remove imports
