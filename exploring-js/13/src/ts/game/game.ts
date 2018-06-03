@@ -94,6 +94,11 @@ export class Game {
         controller.terrain = terrain;
         controller.walkable.add("stone-block.png");
 
+        // collider
+        const capsule = actor.add(CapsuleCollider2D);
+        capsule.setSize(67, 76);
+        capsule.setOffset(17, 63);
+
         return player;
     }
 
