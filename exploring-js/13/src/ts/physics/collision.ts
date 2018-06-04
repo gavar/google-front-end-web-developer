@@ -31,7 +31,7 @@ export class CollisionSystem2D extends ComponentSystem<Collider2D> {
         for (const component of components) {
             component.gizmo = false;
             if (!component.actor.active) continue;
-            if (!masks[component.body.sort.layer]) continue;
+            if (!masks[component.body.layer.value]) continue;
             component.recalculate();
         }
 
@@ -39,10 +39,10 @@ export class CollisionSystem2D extends ComponentSystem<Collider2D> {
         const size = components.length;
         for (let i = 0; i < size; i++) {
             const a = components[i];
-            const mask = masks[a.body.sort.layer];
+            const mask = masks[a.body.layer.value];
             for (let j = i + 1; j < size; j++) {
                 const b = components[j];
-                if (mask & (1 << b.body.sort.layer)) {
+                if (mask & b.body.layer.mask) {
                     if (a.intersect(b)) {
                         a.gizmo = true;
                         b.gizmo = true;

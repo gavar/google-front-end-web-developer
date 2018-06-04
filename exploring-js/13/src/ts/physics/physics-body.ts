@@ -1,4 +1,4 @@
-import {Sort, Transform} from "$components";
+import {Layer, Transform} from "$components";
 import {Actor, Component} from "$engine";
 import {Mutable} from "@syntax";
 
@@ -14,11 +14,11 @@ export class PhysicsBody2D implements Component {
     public readonly transform: Transform;
 
     /** Layer of the actor for intersection checks. */
-    public readonly sort: Sort;
+    public readonly layer: Layer;
 
     /** @inheritDoc */
     awake(this: Mutable<this>) {
-        this.sort = this.actor.require(Sort);
+        this.layer = this.actor.require(Layer);
         this.transform = this.actor.require(Transform);
     }
 }

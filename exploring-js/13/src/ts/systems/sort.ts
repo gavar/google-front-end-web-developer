@@ -1,10 +1,10 @@
-import {Sort} from "$components";
+import {Layer} from "$components";
 import {Component, System} from "$engine";
 
 export interface Sortable extends Component {
     /**
-     * Sorting order of the component within same sorting layer.
-     * @see Sort#layer
+     * Sorting order of the component within the same layer.
+     * @see Layer#value
      */
     readonly order?: number;
 }
@@ -28,7 +28,7 @@ export abstract class SortSystem<T extends Sortable> implements System<T> {
 
         const entry: SortEntry<T> = {
             component,
-            sort: component.actor.require(Sort),
+            layer: component.actor.require(Layer),
             order: this.entries.length,
         };
         this.indexer.set(component, this.entries.length);
@@ -83,7 +83,7 @@ export abstract class SortSystem<T extends Sortable> implements System<T> {
 
     /** Compare two entries by sorting layer, order and z-index. */
     compare(a: SortEntry<T>, b: SortEntry<T>): number {
-        return a.sort.layer - b.sort.layer
+        return a.layer.value - b.layer.value
             || ~b.component.order - ~a.component.order
             || a.order - b.order
             ;
@@ -98,7 +98,7 @@ export abstract class SortSystem<T extends Sortable> implements System<T> {
 }
 
 export interface SortEntry<T> {
-    sort: Sort;
+    layer: Layer;
     order: number;
     component: T;
 }

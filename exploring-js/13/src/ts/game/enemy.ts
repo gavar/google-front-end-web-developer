@@ -1,21 +1,22 @@
-import {Motor, Sort, Transform} from "$components";
-import {Component} from "$engine";
-import {Actor} from "$engine/actor";
+import {Layer, Motor, Transform} from "$components";
+import {Actor, Component} from "$engine";
 import {View} from "$game";
+import {Mutable} from "@syntax";
 
 export class Enemy implements Component {
 
     /** @inheritDoc */
     readonly actor?: Actor;
 
-    public sort: Sort;
+    public readonly layer: Layer;
+    public readonly transform: Transform;
+
     public view: View;
     public motor: Motor;
-    public transform: Transform;
 
     /** @inheritDoc */
-    awake() {
-        this.sort = this.actor.require(Sort);
+    awake(this: Mutable<this>) {
+        this.layer = this.actor.require(Layer);
         this.transform = this.actor.require(Transform);
     }
 }

@@ -1,10 +1,10 @@
-import {Motor, Resources, Sort, Terrain2D, Transform} from "$components";
+import {Layer, Motor, Resources, Terrain2D, Transform} from "$components";
 import {Stage} from "$engine";
 import {Enemy, EnemySpawn, Player, PlayerController, TerrainPath, View} from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
-export namespace Layer {
+export namespace Layers {
     export const TERRAIN = 1;
     export const PLAYER = 2;
     export const ENEMY = 3;
@@ -46,9 +46,13 @@ export class Game {
         const terrainPath = this.initTerrainPath(terrain);
         this.player = this.initPlayer(terrain);
         const enemySpawn = this.initEnemySpawn(terrain);
+
+        terrainPath.generate(this.player.actor.get(Transform).position, 5);
+    }
+
     initCollisionSystem(): CollisionSystem2D {
         const collision = new CollisionSystem2D();
-        collision.enableIntersectionOf(Layer.PLAYER, Layer.ENEMY);
+        collision.enableIntersectionOf(Layers.PLAYER, Layers.ENEMY);
         return collision;
     }
 
@@ -57,8 +61,8 @@ export class Game {
         const terrain = actor.add(Terrain2D);
 
         // layer
-        const sort = actor.require(Sort);
-        sort.layer = Layer.TERRAIN;
+        const layer = actor.require(Layer);
+        layer.set(Layers.TERRAIN);
 
         // terrain size
         terrain.setTileSize(101, 83);
@@ -101,8 +105,8 @@ export class Game {
         const player = actor.add(Player);
 
         // layer
-        const sort = actor.require(Sort);
-        sort.layer = Layer.PLAYER;
+        const layer = actor.require(Layer);
+        layer.set(Layers.PLAYER);
 
         // controller
         const controller = actor.add(PlayerController);
@@ -133,7 +137,7 @@ export class Game {
             enemy.view.resources = this.resources;
             enemy.view.setImage("enemy-bug.png");
             enemy.motor = actor.add(Motor);
-            enemy.sort.layer = Layer.ENEMY;
+            enemy.layer.set(Layers.ENEMY);
 
             // collider
             const capsule = actor.add(CapsuleCollider2D);
