@@ -1,6 +1,7 @@
-import {CapsuleCollider2D, Motor, Resources, Sort, Terrain2D, Transform} from "$components";
+import {Motor, Resources, Sort, Terrain2D, Transform} from "$components";
 import {Stage} from "$engine";
 import {Enemy, EnemySpawn, Player, PlayerController, TerrainPath, View} from "$game";
+import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
 export namespace Layer {
@@ -35,6 +36,7 @@ export class Game {
         this.stage = new Stage();
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
+        this.stage.addSystem(this.initCollisionSystem());
         this.stage.addSystem(new DrawSystem(this.canvas));
 
         this.initGizmo();
@@ -44,6 +46,10 @@ export class Game {
         const terrainPath = this.initTerrainPath(terrain);
         this.player = this.initPlayer(terrain);
         const enemySpawn = this.initEnemySpawn(terrain);
+    initCollisionSystem(): CollisionSystem2D {
+        const collision = new CollisionSystem2D();
+        collision.enableIntersectionOf(Layer.PLAYER, Layer.ENEMY);
+        return collision;
     }
 
     initTerrain(): Terrain2D {
