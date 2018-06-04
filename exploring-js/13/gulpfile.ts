@@ -144,7 +144,7 @@ namespace es6 {
         return gulp.src("./tmp/js/*.js")
             .pipe(rollup(input, output) as NodeJS.ReadWriteStream)
             .pipe(replace(/let (.*)\$(.) = /g, "")) // for some reason rollup may assign class to variable
-            .pipe(replace(/(.*)\$(\d)/g, "$1")) // for some reason rollup may assign class to variable
+            .pipe(replace(/(\w)(\$\d)/g, "$1")) // for some reason rollup may assign class to variable
             .pipe(gulp.dest("./dist/js"));
     }
 
