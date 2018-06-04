@@ -1,4 +1,4 @@
-import {Sortable, SortSystem} from "$systems";
+import {Sortable, SortComposition, SortSystem} from "$systems";
 
 export interface Draw2D extends Sortable {
     /**
@@ -28,10 +28,10 @@ export class DrawSystem extends SortSystem<Draw2D> {
     }
 
     /** @inheritDoc */
-    protected process(deltaTime: number, components: ReadonlyArray<Draw2D>): void {
+    protected process(deltaTime: number, compositions: ReadonlyArray<SortComposition<Draw2D>>): void {
         const ctx2D = this.context2D;
-        for (const component of components)
-            if (component.actor.active)
-                component.draw2D(ctx2D);
+        for (const composition of compositions)
+            if (composition.component.actor.active)
+                composition.component.draw2D(ctx2D);
     }
 }

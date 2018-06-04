@@ -1,4 +1,4 @@
-import {Sortable, SortSystem} from "$systems";
+import {Sortable, SortComposition, SortSystem} from "$systems";
 
 export interface Gizmo2D extends Sortable {
 
@@ -68,10 +68,10 @@ export class GizmoSystem extends SortSystem<Gizmo2D> {
     }
 
     /** @inheritDoc */
-    protected process(deltaTime: number, components: ReadonlyArray<Gizmo2D>): void {
+    protected process(deltaTime: number, compositions: ReadonlyArray<SortComposition<Gizmo2D>>): void {
         const ctx2D = this.context2D;
-        for (const component of components)
-            if (component.gizmo && component.actor.active)
-                component.drawGizmo2D(ctx2D);
+        for (const composition of compositions)
+            if (composition.component.gizmo && composition.component.actor.active)
+                composition.component.drawGizmo2D(ctx2D);
     }
 }
