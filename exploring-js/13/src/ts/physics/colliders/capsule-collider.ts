@@ -1,20 +1,21 @@
-import {Transform, Vector2} from "$components";
+import {Vector2} from "$components";
 import {Actor} from "$engine";
 import {Gizmo2D} from "$systems";
+import {Physics2D} from "../";
+import {Collider2D} from "./collider";
 
 /**
  * Primitive collider of a capsule form.
  * Capsules are boxes with a semi-circle at each end.
  */
-export class CapsuleCollider2D implements Gizmo2D {
+export class CapsuleCollider2D extends Collider2D implements Gizmo2D {
 
-    private transform: Transform;
+    private r: number;
+    private min: Vector2 = {x: 0, y: 0};
+    private max: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
     public readonly actor: Actor;
-
-    /** @inheritDoc */
-    public gizmo?: boolean;
 
     /** Width and height of the capsule area. */
     public size: Vector2 = {x: 0, y: 0};
@@ -44,13 +45,8 @@ export class CapsuleCollider2D implements Gizmo2D {
     }
 
     /** @inheritDoc */
-    awake() {
-        this.transform = this.actor.require(Transform);
-    }
-
-    /** @inheritDoc */
     drawGizmo2D(ctx: CanvasRenderingContext2D): void {
-        const {position} = this.transform;
+        const {position} = this.body.transform;
         const {size, offset, pivot} = this;
         const x = position.x + offset.x + pivot.x * size.x;
         const y = position.y + offset.y + pivot.y * size.y;
@@ -59,5 +55,37 @@ export class CapsuleCollider2D implements Gizmo2D {
         Gizmo2D.x(ctx, x, y, 10);
         ctx.strokeStyle = "green";
         Gizmo2D.capsule(ctx, x, y, size.x, size.y);
+    }
+
+    /** @inheritDoc */
+    recalculate(): void {
+        const {position} = this.body.transform;
+        const {size, offset, pivot} = this;
+
+        const d = Math.min(size.x, size.y);
+        const dx = (size.x - d) * .5;
+        const dy = (size.y - d) * .5;
+
+        this.r = d * .5;
+        this.min.x = this.max.x = position.x + offset.x + pivot.x * size.x;
+        this.min.y = this.max.y = position.y + offset.y + pivot.y * size.y;
+
+        this.min.x -= dx;
+        this.min.y -= dy;
+        this.max.x += dx;
+        this.max.y += dy;
+    }
+
+    /** @inheritDoc */
+    intersect(collider: Collider2D): boolean {
+        return collider.intersectCapsule(this);
+    }
+
+    /** @inheritDoc */
+    intersectCapsule(capsule: CapsuleCollider2D): boolean {
+        return Physics2D.intersectCapsuleCapsule(
+            this.min.x, this.min.y, this.max.x, this.max.y, this.r,
+            capsule.min.x, capsule.min.y, capsule.max.x, capsule.max.y, capsule.r,
+        );
     }
 }
