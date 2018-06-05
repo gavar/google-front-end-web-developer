@@ -16,18 +16,18 @@ export class Terrain2D implements Component, Draw2D {
     /** @inheritDoc */
     public readonly actor?: Actor;
 
-    /** Whether to merge layers before rendering. */
-    public merge: boolean;
-
     /** Transform of this terrain instance. */
     public readonly transform: Transform;
 
     /** @inheritDoc */
-    public readonly order: number;
+    public order: number;
+
+    /** Whether to merge layers before rendering. */
+    public merge: boolean;
 
     /** @inheritDoc */
-    awake() {
-        (this as Mutable<this>).transform = this.actor.require(Transform);
+    awake(this: Mutable<this>) {
+        this.transform = this.actor.require(Transform);
     }
 
     /** Offset of drawing starting point. */

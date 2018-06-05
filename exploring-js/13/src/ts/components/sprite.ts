@@ -1,17 +1,19 @@
 import {Transform} from "$components";
 import {Actor} from "$engine";
-import {Draw2D} from "$systems";
+import {Draw2D, Gizmo2D} from "$systems";
+import {Mutable} from "@syntax";
 
 /** Draws an image on a canvas. */
-export class Sprite implements Draw2D {
+export class Sprite implements Draw2D, Gizmo2D {
 
-    private transform: Transform;
-
-    /** Whether to display debugging wireframe. */
-    public debug: boolean;
-
-    /** Actor to whom this component belongs. */
+    /** @inheritDoc */
     public readonly actor?: Actor;
+
+    /** Actor's transform. */
+    public readonly transform: Transform;
+
+    /** @inheritDoc */
+    public gizmo: boolean;
 
     /** @inheritDoc */
     public order: number;
@@ -20,29 +22,32 @@ export class Sprite implements Draw2D {
     public image: HTMLImageElement;
 
     /** @inheritDoc */
-    awake() {
+    awake(this: Mutable<this>) {
         this.transform = this.actor.require(Transform);
     }
 
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
         const {image} = this;
-        if (!image) return;
-
-        const {position} = this.transform;
-        ctx.drawImage(
-            image,
-            position.x,
-            position.y,
-        );
-
-        if (this.debug) {
-            ctx.strokeRect(
+        if (image) {
+            const {position} = this.transform;
+            ctx.drawImage(
+                image,
                 position.x,
                 position.y,
-                image.width,
-                image.height,
             );
         }
+    }
+
+    /** @inheritDoc */
+    drawGizmo2D(ctx: CanvasRenderingContext2D): void {
+        const {position} = this.transform;
+        const {image} = this;
+        ctx.strokeRect(
+            position.x,
+            position.y,
+            image.width || 1,
+            image.height || 1,
+        );
     }
 }
