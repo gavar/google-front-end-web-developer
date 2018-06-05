@@ -18,6 +18,9 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
     /** Array of intersection masks for each layer. */
     private readonly masks: number[] = new Array(32);
 
+    /** Whether to show intersected colliders gizmos. */
+    public gizmo: boolean;
+
     /**
      * Configure system to track collision between specified layers (excluding self layer).
      * To enable self layer collision pass value of the layer twice.
@@ -53,7 +56,6 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
         // recalculate colliders
         for (const composition of compositions) {
             const collider = composition.component;
-            collider.gizmo = false;
             if (!collider.actor.active) continue;
             if (!masks[collider.body.layer.value]) continue;
             collider.recalculate();
@@ -66,13 +68,9 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
             const m = masks[a.component.body.layer.value];
             for (let j = i + 1; j < size; j++) {
                 const b = compositions[j];
-                if (m & b.component.body.layer.mask) {
-                    if (a.component.intersect(b.component)) {
-                        a.component.gizmo = true;
-                        b.component.gizmo = true;
+                if (m & b.component.body.layer.mask)
+                    if (a.component.intersect(b.component))
                         a.next.push(b.component);
-                    }
-                }
             }
         }
 
@@ -106,6 +104,19 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
                 composition.next = prev;
                 composition.next.length = 0;
                 buffer.clear(); // should be empty, just for safety
+            }
+        }
+
+        // show gizmo?
+        if (this.gizmo) {
+            // disable all gizmos
+            for (const composition of compositions)
+                composition.component.gizmo = false;
+
+            // enable gizmos on collisions
+            for (const composition of compositions) {
+                for (const collider of composition.prev)
+                    composition.component.gizmo = collider.gizmo = true;
             }
         }
     }
