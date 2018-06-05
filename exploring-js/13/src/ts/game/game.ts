@@ -15,7 +15,9 @@ export namespace LayerOrder {
 }
 
 interface GizmoSettings {
+    enable: boolean;
     capsule?: boolean;
+    collision?: boolean;
 }
 
 export class Game {
@@ -27,7 +29,9 @@ export class Game {
 
     /** Global gizmo rendering configuration. */
     public readonly gizmos: GizmoSettings = {
+        enable: false,
         capsule: false,
+        collision: true,
     };
 
     constructor() {
@@ -155,7 +159,8 @@ export class Game {
 
         const {gizmos} = this;
         this.stage.addSystem(new GizmoSystem(this.canvas));
-        CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
+        if (gizmos.capsule) CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
+        if (gizmos.collision) CollisionSystem2D.prototype.gizmo = gizmos.collision;
     }
 
     isGizmoActive(): boolean {
