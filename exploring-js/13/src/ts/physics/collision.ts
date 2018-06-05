@@ -19,12 +19,17 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
     private readonly masks: number[] = new Array(32);
 
     /**
-     * Configure system to track intersection of the given layers.
+     * Configure system to track collision between specified layers (excluding self layer).
+     * To enable self layer collision pass value of the layer twice.
      * Layer value should be in range: [0;32)
      */
-    enableIntersectionOf(layer1: number, layer2: number) {
-        this.masks[layer1] |= 1 << layer2;
-        this.masks[layer2] |= 1 << layer1;
+    enableLayerCollision(...layers: number[]) {
+        for (let i = 0; i < layers.length; i++) {
+            for (let j = i + 1; j < layers.length; j++) {
+                this.masks[layers[i]] |= 1 << layers[j];
+                this.masks[layers[j]] |= 1 << layers[i];
+            }
+        }
     }
 
     /** @inheritDoc */

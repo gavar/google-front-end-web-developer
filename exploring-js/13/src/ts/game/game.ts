@@ -52,7 +52,7 @@ export class Game {
 
     initCollisionSystem(): CollisionSystem2D {
         const collision = new CollisionSystem2D();
-        collision.enableIntersectionOf(Layers.PLAYER, Layers.ENEMY);
+        collision.enableLayerCollision(Layers.PLAYER, Layers.ENEMY);
         return collision;
     }
 
