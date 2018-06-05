@@ -18,14 +18,6 @@ export abstract class Collider2D implements Component, Gizmo2D {
     /** @inheritDoc */
     public gizmo?: boolean;
 
-    /** @inheritDoc */
-    awake(this: Mutable<this>) {
-        this.body = this.actor.require(PhysicsBody2D);
-    }
-
-    /** @inheritDoc */
-    abstract drawGizmo2D(ctx: CanvasRenderingContext2D);
-
     /** Warm-up collider for collision calculations. */
     abstract recalculate(): void;
 
@@ -40,4 +32,12 @@ export abstract class Collider2D implements Component, Gizmo2D {
      * @param capsule - capsule collider to test against.
      */
     abstract intersectCapsule(capsule: CapsuleCollider2D): boolean;
+
+    /** @inheritDoc */
+    awake(this: Mutable<this>) {
+        this.body = this.actor.require(PhysicsBody2D);
+    }
+
+    /** @inheritDoc */
+    abstract drawGizmo2D(ctx: CanvasRenderingContext2D);
 }
