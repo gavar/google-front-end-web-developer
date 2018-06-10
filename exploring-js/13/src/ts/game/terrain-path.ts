@@ -120,7 +120,7 @@ export class TerrainPath {
         const {layer} = this;
         const {size} = layer.terrain;
         const x = this.now.x + delta;
-        return x >= 0 && x < size.x;
+        return x >= 1 && x < size.x -1;
     }
 }
 
