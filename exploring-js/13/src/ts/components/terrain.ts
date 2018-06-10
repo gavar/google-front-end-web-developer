@@ -1,17 +1,15 @@
-import {Transform, Vector2} from "$components";
+import {Rect, Transform, Vector2} from "$components";
 import {Actor, Component} from "$engine";
-import {Draw2D} from "$systems";
+import {Draw2D, Gizmo2D} from "$systems";
 import {Dictionary, Mutable} from "@syntax";
 
 export type TerrainImage = HTMLImageElement;
 export type LayerImages = Dictionary<number, Dictionary<number, TerrainImage>>
 
-export class Terrain2D implements Component, Draw2D {
+export class Terrain2D implements Component, Draw2D, Gizmo2D {
 
     private images: LayerImages = {};
     private layers: TerrainLayer2D[] = [];
-    private _size: Vector2 = {x: 0, y: 0};
-    private _tile: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
     public readonly actor?: Actor;
@@ -22,58 +20,64 @@ export class Terrain2D implements Component, Draw2D {
     /** @inheritDoc */
     public order: number;
 
-    /** Whether to merge layers before rendering. */
-    public merge: boolean;
+    /** @inheritDoc */
+    public gizmo?: boolean;
 
     /** @inheritDoc */
     awake(this: Mutable<this>) {
         this.transform = this.actor.require(Transform);
     }
 
-    /** Offset of drawing starting point. */
-    public offset: Vector2 = {x: 0, y: 0};
-
     /** Total width of the terrain. */
     get width(): number {
-        return this._size.x * this._tile.x;
+        return this.size.x * this.tile.width;
     }
 
     /** Total height of the terrain. */
     get height(): number {
-        return this._size.y * this._tile.y;
-    }
-
-    /** Get size of the single tile. */
-    get tile(): Vector2 {
-        return this._tile;
+        return this.size.y * this.tile.height;
     }
 
     /**
-     * Get size of the terrain grid.
-     * Number of tiles by X and Y.
+     * Rect of the single tile.
+     * {@link Rect#xMin} {@link Rect#yMin} define offset from top-left corner of the image by X and Y axes respectively.
+     * {@link Rect#width} {@link Rect#height} define size of the tile by X and Y axes respectively.
      */
-    get size(): Vector2 {
-        return this._size;
+    public readonly tile: Rect = Rect.minMax(0, 0, 0, 0);
+
+    /**
+     * Set rectangle of the single tile.
+     * @param x - tile offset by 'X' axis from the top-left corner of the image.
+     * @param y - tile offset by 'Y' axis from the top-left corner of the image.
+     * @param width - tile width.
+     * @param height - tile height.
+     */
+    setTileRect(x: number, y: number, width: number, height: number): Rect {
+        const {tile} = this;
+        tile.xMin = x;
+        tile.xMax = x + width;
+        tile.yMin = y;
+        tile.yMax = y + height;
+        return tile;
     }
 
-    /** Set size of the single tile. */
-    setTileSize(width: number, height: number): Vector2 {
-        this._tile.x = width;
-        this._tile.y = height;
-        return this._tile;
-    }
+    /**
+     * Size of the terrain grid.
+     * Number of tiles by X and Y.
+     */
+    public readonly size: Vector2 = {x: 0, y: 0};
 
     /** Set number of terrain tiles by X and Y. */
     setGridSize(width: number, height: number): Vector2 {
-        this._size.x = width;
-        this._size.y = height;
+        this.size.x = width;
+        this.size.y = height;
 
         // trim layers
         for (const layer of this.actor.components)
             if (layer instanceof TerrainLayer2D)
                 layer.trim(width, height);
 
-        return this._size;
+        return this.size;
     }
 
     /**
@@ -81,7 +85,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param x - index of the tile by 'X' axis.
      */
     positionX(x: number): number {
-        return this.transform.position.x + this._tile.x * x;
+        return this.transform.position.x + this.tile.width * x;
     }
 
     /**
@@ -89,7 +93,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param y - index of the tile by 'Y' axis.
      */
     positionY(y: number): number {
-        return this.transform.position.y + this._tile.y * y;
+        return this.transform.position.y + this.tile.height * y;
     }
 
     /**
@@ -97,7 +101,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param x - position by 'X' axis.
      */
     rowByPosX(x: number): number {
-        return (x - this.transform.position.x) / this._tile.x;
+        return (x - this.transform.position.x) / this.tile.width;
     }
 
     /**
@@ -105,7 +109,7 @@ export class Terrain2D implements Component, Draw2D {
      * @param y - position by 'Y' axis.
      */
     colByPosY(y: number): number {
-        return (y - this.transform.position.y) / this._tile.y;
+        return (y - this.transform.position.y) / this.tile.height;
     }
 
     /**
@@ -140,22 +144,45 @@ export class Terrain2D implements Component, Draw2D {
 
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
-        const {tile, offset, transform} = this;
+        const {tile, transform} = this;
         const {position} = transform;
+        const width = tile.width;
+        const height = tile.height;
 
-        const offsetX = position.x + offset.x;
-        const offsetY = position.y + offset.y;
-        const images = this.merge ? this.mergeLayers() : this.images;
+        const offsetX = position.x;
+        const offsetY = position.y;
+        const images = this.mergeLayers();
 
         for (const y in images) {
             const row = images[y];
             for (const x in row) {
                 ctx.drawImage(
                     row[x],
-                    offsetX + (x as any) * tile.x,
-                    offsetY + (y as any) * tile.y,
+                    offsetX + (x as any) * width,
+                    offsetY + (y as any) * height,
                 );
             }
+        }
+    }
+
+    /** @inheritDoc */
+    drawGizmo2D(ctx: CanvasRenderingContext2D): void {
+        const {size, tile} = this;
+        const {position} = this.transform;
+        const offsetX = position.x + tile.xMin;
+        const offsetY = position.y + tile.yMin;
+        ctx.strokeStyle = "blue";
+        for (let i = 0; i <= size.x; i++) {
+            ctx.beginPath();
+            ctx.moveTo(this.positionX(i) + offsetX, this.positionY(0) + offsetY);
+            ctx.lineTo(this.positionX(i) + offsetX, this.positionY(size.y) + offsetY);
+            ctx.stroke();
+        }
+        for (let i = 0; i <= size.y; i++) {
+            ctx.beginPath();
+            ctx.moveTo(this.positionX(0) + offsetX, this.positionY(i) + offsetY);
+            ctx.lineTo(this.positionX(size.x) + offsetX, this.positionY(i) + offsetY);
+            ctx.stroke();
         }
     }
 
@@ -171,10 +198,8 @@ export class Terrain2D implements Component, Draw2D {
         }
         return images;
     }
-}
 
-// Terrain2D defaults
-Terrain2D.prototype.merge = true;
+}
 
 export class TerrainLayer2D {
 
@@ -241,7 +266,7 @@ export class TerrainLayer2D {
      * @param x - position by 'X' axis.
      */
     rowByPosX(x: number): number {
-        return (x - this.terrain.transform.position.x) / this.terrain.tile.x;
+        return (x - this.terrain.transform.position.x) / this.terrain.tile.width;
     }
 
     /**
@@ -249,7 +274,7 @@ export class TerrainLayer2D {
      * @param y - position by 'Y' axis.
      */
     colByPosY(y: number): number {
-        return (y - this.terrain.transform.position.y) / this.terrain.tile.y;
+        return (y - this.terrain.transform.position.y) / this.terrain.tile.height;
     }
 
     /**
