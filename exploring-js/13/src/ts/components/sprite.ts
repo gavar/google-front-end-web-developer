@@ -1,4 +1,4 @@
-import {Transform} from "$components";
+import {Transform, Vector2} from "$components";
 import {Actor} from "$engine";
 import {Draw2D, Gizmo2D} from "$systems";
 import {Mutable} from "@syntax";
@@ -11,6 +11,9 @@ export class Sprite implements Draw2D, Gizmo2D {
 
     /** Actor's transform. */
     public readonly transform: Transform;
+
+    /** Image rendering offset. */
+    public readonly offset: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
     public gizmo: boolean;
@@ -28,24 +31,24 @@ export class Sprite implements Draw2D, Gizmo2D {
 
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
-        const {image} = this;
+        const {image, offset} = this;
         if (image) {
             const {position} = this.transform;
             ctx.drawImage(
                 image,
-                position.x,
-                position.y,
+                position.x + offset.x,
+                position.y + offset.y,
             );
         }
     }
 
     /** @inheritDoc */
     drawGizmo2D(ctx: CanvasRenderingContext2D): void {
+        const {image, offset} = this;
         const {position} = this.transform;
-        const {image} = this;
         ctx.strokeRect(
-            position.x,
-            position.y,
+            position.x + offset.x,
+            position.y + offset.y,
             image.width || 1,
             image.height || 1,
         );
