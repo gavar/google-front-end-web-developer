@@ -69,28 +69,27 @@ export class Game {
         layer.set(Layers.TERRAIN);
 
         // terrain size
-        terrain.setTileSize(101, 83);
-        const size = terrain.setGridSize(6, 6);
-
-        // canvas size
-        this.canvas.width = terrain.width;
-        this.canvas.height = terrain.height + 90;
-
-        // initialize base layer
-        const baseLayer = terrain.createLayer();
         const baseLayerRows = [
             "stone-block.png",
             "grass-block.png",
             "grass-block.png",
             "grass-block.png",
             "grass-block.png",
+            "grass-block.png",
             "stone-block.png",
         ];
+        terrain.setTileRect(0, 51, 101, 83);
+        terrain.setGridSize(baseLayerRows.length, baseLayerRows.length);
+
+        // canvas size
+        this.canvas.width = terrain.width;
+        this.canvas.height = terrain.size.y * 171;
+
+        // initialize base layer
+        const baseLayer = terrain.createLayer();
+
         for (let i = 0; i < baseLayerRows.length; i++)
             baseLayer.setTileRow(i, this.resources.load(baseLayerRows[i]));
-
-        // offset for properly displaying objects
-        terrain.offset.y = 20;
 
         return terrain;
     }
