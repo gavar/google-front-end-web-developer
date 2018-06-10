@@ -1,3 +1,4 @@
+export * from "./rect";
 export * from "./vector";
 export * from "./min-max";
 export * from "./transform";
