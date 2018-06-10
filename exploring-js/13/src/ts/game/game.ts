@@ -118,8 +118,8 @@ export class Game {
 
         // collider
         const capsule = actor.add(CapsuleCollider2D);
-        capsule.setSize(67, 76);
-        capsule.setOffset(17, 63);
+        capsule.setSize(60, 50);
+        capsule.setOffset(20.5, 65);
 
         return player;
     }
@@ -144,8 +144,8 @@ export class Game {
 
             // collider
             const capsule = actor.add(CapsuleCollider2D);
-            capsule.setSize(98, 66);
-            capsule.setOffset(2, 77);
+            capsule.setSize(98, 50);
+            capsule.setOffset(2, 65);
 
             return enemy;
         };
