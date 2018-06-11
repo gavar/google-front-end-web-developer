@@ -64,7 +64,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     /** @inheritDoc */
     lateUpdate(deltaTime: number): void {
         const {terrain} = this;
-        const xMax = terrain.positionX(terrain.size.x + 1);
+        const xMax = terrain.positionX(terrain.size.x);
 
         // deactivate enemies that has gone through the whole line
         for (let i = 0; i < this.enemies.length; i++) {
@@ -89,7 +89,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
         // configure
         const {terrain} = this;
         const transform = enemy.transform;
-        transform.position.x = terrain.positionX(-1.5);
+        transform.position.x = terrain.positionX(-1);
         const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
         transform.position.y = terrain.positionY(tileY);
 
