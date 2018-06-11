@@ -83,27 +83,53 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
                 for (const collider of prev)
                     buffer.add(collider);
 
-                for (const collider of next)
-                    if (buffer.delete(collider)) {
-                        component.body.stay(collider);
-                        collider.body.stay(component);
-                    }
-                    else {
-                        component.body.enter(collider);
-                        collider.body.enter(component);
+                let destroyed: boolean;
+                for (let i = 0; i < next.length; i++) {
+                    const collider = next[i];
+                    const stay = buffer.delete(collider);
+
+                    // stay / enter
+                    if (stay) component.body.stay(collider);
+                    else component.body.enter(collider);
+
+                    // self destroy?
+                    if (component.actor.stage.isComponentDestroyed(component)) {
+                        destroyed = true;
+                        break;
                     }
 
+                    // collider destroy?
+                    if (collider.actor.stage.isComponentDestroyed(collider)) {
+                        const last = next.pop();
+                        if (i < next.length)
+                            next[i--] = last;
+
+                        prev.push(collider);
+                        buffer.add(collider);
+                    }
+                }
+
+                // exit from previous
                 for (const collider of prev)
-                    if (buffer.delete(collider)) {
+                    if (destroyed || buffer.delete(collider)) {
                         component.body.exit(collider);
                         collider.body.exit(component);
                     }
 
-            } finally {
+                // exit from all if destroyed
+                if (destroyed) {
+                    for (const collider of next) {
+                        component.body.exit(collider);
+                        collider.body.exit(component);
+                    }
+                }
+
+            }
+            finally {
                 composition.prev = next;
                 composition.next = prev;
                 composition.next.length = 0;
-                buffer.clear(); // should be empty, just for safety
+                buffer.clear();
             }
         }
 
