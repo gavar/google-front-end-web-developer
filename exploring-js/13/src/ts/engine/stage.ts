@@ -14,13 +14,17 @@ export class Stage {
     private ticker: FrameRequestCallback;
 
     private readonly queue: BagSet<Component>;
-    private readonly actors: BagSet<StageActor>;
+    private readonly actors: BagSet<Mutable<Actor>>;
     private readonly systems: BagSet<System>;
+    private readonly destroyActors: BagSet<Actor>;
+    private readonly destroyComponents: BagSet<Component>;
 
     constructor() {
         this.queue = new BagSet<Component>();
-        this.actors = new BagSet<StageActor>();
+        this.actors = new BagSet<Mutable<Actor>>();
         this.systems = new BagSet<System>();
+        this.destroyActors = new BagSet<Actor>();
+        this.destroyComponents = new BagSet<Component>();
         this.stepTime = 1 / 60; // 60 FPS
     }
 
@@ -53,12 +57,12 @@ export class Stage {
      * @returns - new actor instance.
      */
     createActor(name?: string): Actor {
-        const actor = new Actor() as StageActor;
+        const actor = new Actor() as Mutable<Actor>;
         if (name) actor.name = name;
         this.actors.add(actor);
         actor.stage = this;
         actor.components = [];
-        return actor;
+        return actor as Actor;
     }
 
     /**
@@ -68,9 +72,12 @@ export class Stage {
      * @return component instance that was added.
      */
     addComponent<T>(actor: Actor, type: Newable<T>): T {
+        if (this.destroyActors.has(actor))
+            throw new Error("trying to add component to destroyed actor");
+
         // create component
         const component = new type() as T & Mutable<Component>;
-        (actor as StageActor).components.push(component);
+        (actor.components as Component[]).push(component);
         this.queue.add(component);
 
         // activate component
@@ -85,9 +92,12 @@ export class Stage {
      * @param component - component to remove.
      */
     destroyComponent(actor: Actor, component: Component): void {
-        const components = (actor as StageActor).components;
+        // check if already destroying
+        if (!this.destroyComponents.add(component))
+            return;
 
         // find
+        const components = actor.components as Component[];
         const index = components.indexOf(component);
         if (index < 0)
             throw new Error("component does not belong to given actor");
@@ -106,7 +116,6 @@ export class Stage {
 
         // destroy
         Stage.invoke(component, "destroy");
-        (component as StageComponent).actor = null;
     }
 
     /**
@@ -114,12 +123,12 @@ export class Stage {
      * @param actor - actor to remove.
      */
     destroyActor(actor: Actor) {
-        // do not allow to access components anymore
-        const components = actor.components as StageComponent[];
-        (actor as Mutable<Actor>).components = null;
+        // check if already destroying
+        if (!this.destroyActors.add(actor))
+            return;
 
-        // destroy components
-        for (const component of components) {
+        // callbacks
+        for (const component of actor.components) {
             // remove from queue if it's there
             this.queue.remove(component);
 
@@ -129,11 +138,28 @@ export class Stage {
 
             // destroy component
             Stage.invoke(component, "destroy");
-            (component as StageComponent).actor = null;
         }
+    }
 
-        // destroy actor
-        (actor as Mutable<Actor>).stage = null;
+    /**
+     * Whether {@link Actor} is destroyed or is going to be destroyed.
+     * @param actor - actor to test.
+     */
+    isActorDestroyed(actor: Actor): boolean {
+        return !actor.stage
+            || this.destroyActors.has(actor)
+            ;
+    }
+
+    /**
+     * Whether {@link Component} is destroyed or is going to be destroyed.
+     * @param component - component to test.
+     */
+    isComponentDestroyed(component: Component): boolean {
+        return !component.actor
+            || this.destroyComponents.has(component)
+            || this.isActorDestroyed(component.actor)
+            ;
     }
 
     /**
@@ -169,6 +195,22 @@ export class Stage {
         // tick systems
         for (const system of systems)
             system.tick(deltaTime);
+
+        // destroy components
+        for (const component of this.destroyComponents.items)
+            (component as Mutable<Component>).actor = null;
+
+        // destroy actors
+        for (const actor of this.destroyActors.items) {
+            for (const component of actor.components)
+                (component as Mutable<Component>).actor = null;
+
+            (actor as Mutable<Actor>).stage = null;
+            (actor.components as Component[]).length = 0;
+        }
+
+        this.destroyActors.clear();
+        this.destroyComponents.clear();
     }
 
     /**
@@ -185,13 +227,4 @@ export class Stage {
             console.log(e);
         }
     }
-}
-
-interface StageActor extends Mutable<Actor> {
-    /** List of actor components. */
-    components: Component[];
-}
-
-interface StageComponent extends Mutable<Component> {
-
 }

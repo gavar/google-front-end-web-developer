@@ -32,6 +32,13 @@ export class Actor extends EventEmitter {
     /** List of this actor components. */
     public readonly components: ReadonlyArray<Component>;
 
+    /** Whether actor has been destroyed. */
+    public get destroyed(): boolean {
+        return !this.stage
+            || this.stage.isActorDestroyed(this)
+            ;
+    }
+
     /** Initialize new instance of an actor. */
     constructor() {
         super();
@@ -72,8 +79,7 @@ export class Actor extends EventEmitter {
      * @param component - component to remove.
      */
     remove(component: Component): void {
-        if (this.components)
-            this.stage.destroyComponent(this, component);
+        this.stage.destroyComponent(this, component);
     }
 
     /**
