@@ -7,3 +7,4 @@ export * from "./sprite";
 export * from "./motor";
 export * from "./terrain";
 export * from "./resources";
+export * from "./canvas-scaler";

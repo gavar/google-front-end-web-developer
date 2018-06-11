@@ -1,3 +1,4 @@
+import {Vector2} from "$components";
 import {Sortable, SortComposition, SortSystem} from "$systems";
 
 export interface Gizmo2D extends Sortable {
@@ -53,13 +54,19 @@ export namespace Gizmo2D {
  */
 export class GizmoSystem extends SortSystem<Gizmo2D> {
 
+    private readonly scale: Readonly<Vector2>;
     private readonly canvas: HTMLCanvasElement;
     private readonly context2D: CanvasRenderingContext2D;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, scale: Readonly<Vector2> = Vector2.one) {
         super();
+        this.scale = scale;
         this.canvas = canvas;
         this.context2D = this.canvas.getContext("2d");
+        this.context2D.imageSmoothingEnabled = false;
+        this.context2D.oImageSmoothingEnabled = false;
+        this.context2D.mozImageSmoothingEnabled = false;
+        this.context2D.webkitImageSmoothingEnabled = false;
     }
 
     /** @inheritDoc */
@@ -70,6 +77,7 @@ export class GizmoSystem extends SortSystem<Gizmo2D> {
     /** @inheritDoc */
     protected process(deltaTime: number, compositions: ReadonlyArray<SortComposition<Gizmo2D>>): void {
         const ctx2D = this.context2D;
+        ctx2D.scale(this.scale.x, this.scale.y);
         for (const composition of compositions)
             if (composition.component.gizmo && composition.component.actor.active)
                 composition.component.drawGizmo2D(ctx2D);

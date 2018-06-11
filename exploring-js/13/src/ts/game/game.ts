@@ -1,4 +1,4 @@
-import {Layer, Motor, Resources, Terrain2D} from "$components";
+import {CanvasScaler, Layer, Motor, Resources, Terrain2D} from "$components";
 import {Stage} from "$engine";
 import {
     Bounty,
@@ -34,7 +34,7 @@ interface GizmoSettings {
 export class Game {
 
     public stage: Stage;
-    public canvas: HTMLCanvasElement;
+    public scaler: CanvasScaler;
     public resources: Resources;
     public player: Player;
     public terrain: Terrain2D;
@@ -51,13 +51,16 @@ export class Game {
     };
 
     constructor() {
-        this.canvas = document.createElement("canvas");
-
         this.stage = new Stage();
+
+        this.scaler = this.stage.createActor("canvas-scale").add(CanvasScaler);
+        this.scaler.canvas = document.createElement("canvas");
+        this.scaler.padding.x = 20;
+
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
         this.stage.addSystem(this.initCollisionSystem());
-        this.stage.addSystem(new DrawSystem(this.canvas));
+        this.stage.addSystem(new DrawSystem(this.scaler.canvas, this.scaler.scale));
 
         this.initGizmo();
         this.resources = this.stage.createActor("resources").add(Resources);
@@ -93,14 +96,15 @@ export class Game {
             "grass-block.png",
             "grass-block.png",
             "grass-block.png",
+            "grass-block.png",
             "stone-block.png",
         ];
         terrain.setTileRect(0, 51, 101, 83);
-        terrain.setGridSize(baseLayerRows.length, baseLayerRows.length);
+        terrain.setGridSize(5, baseLayerRows.length);
 
         // canvas size
-        this.canvas.width = terrain.width;
-        this.canvas.height = terrain.height + terrain.tile.yMin;
+        this.scaler.size.x = terrain.width;
+        this.scaler.size.y = terrain.height + terrain.tile.yMin + 40;
 
         // initialize base layer
         const baseLayer = terrain.createLayer();
@@ -133,7 +137,7 @@ export class Game {
         controller.terrain = terrain;
         controller.walkable.add("stone-block.png");
         controller.player = player;
-        controller.canvas = this.canvas;
+        controller.canvasScale = this.scaler;
 
         // collider
         const capsule = actor.add(CapsuleCollider2D);
@@ -207,7 +211,7 @@ export class Game {
             return;
 
         const {gizmos} = this;
-        this.stage.addSystem(new GizmoSystem(this.canvas));
+        this.stage.addSystem(new GizmoSystem(this.scaler.canvas, this.scaler.scale));
         if (gizmos.capsule) CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
         if (gizmos.collision) CollisionSystem2D.prototype.gizmo = gizmos.collision;
     }
@@ -219,11 +223,10 @@ export class Game {
     }
 
     start() {
-        document.body.appendChild(this.canvas);
+        document.body.appendChild(this.scaler.canvas);
         this.stage.start();
     }
 }
 
 const game = new Game();
 game.start();
-

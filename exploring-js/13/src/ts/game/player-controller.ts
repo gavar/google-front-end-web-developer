@@ -1,4 +1,4 @@
-import {Terrain2D} from "$components";
+import {CanvasScaler, Terrain2D} from "$components";
 import {Actor, Component} from "$engine";
 import {Player} from "$game";
 
@@ -8,8 +8,8 @@ import {Player} from "$game";
 export class PlayerController implements Component, EventListenerObject {
 
     public player: Player;
-    public canvas: HTMLCanvasElement;
     public terrain: Terrain2D;
+    public canvasScale: CanvasScaler;
 
     /** @inheritDoc */
     readonly actor: Actor;
@@ -20,6 +20,7 @@ export class PlayerController implements Component, EventListenerObject {
     /** @inheritDoc */
     start() {
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
+        this.canvasScale = this.canvasScale || this.actor.stage.findComponentOfType(CanvasScaler);
         document.addEventListener("click", this);
         document.addEventListener("keydown", this);
         document.addEventListener("dblclick", this);
@@ -36,7 +37,8 @@ export class PlayerController implements Component, EventListenerObject {
 
     /** @inheritDoc */
     handleEvent(e: Event): void {
-        const rect = this.canvas.getBoundingClientRect() as DOMRect;
+        const rect = this.canvasScale.canvas.getBoundingClientRect() as DOMRect;
+
         switch (e.type) {
             case "click":
             case "dblclick":
@@ -86,6 +88,10 @@ export class PlayerController implements Component, EventListenerObject {
 
     private onClick(x: number, y: number) {
         const {terrain, player} = this;
+        const {scale} = this.canvasScale;
+
+        x /= scale.x;
+        y /= scale.y;
 
         x -= terrain.tile.xMin;
         y -= terrain.tile.yMin;
