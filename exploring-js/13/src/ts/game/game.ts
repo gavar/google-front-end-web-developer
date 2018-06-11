@@ -132,6 +132,8 @@ export class Game {
         const controller = actor.add(PlayerController);
         controller.terrain = terrain;
         controller.walkable.add("stone-block.png");
+        controller.player = player;
+        controller.canvas = this.canvas;
 
         // collider
         const capsule = actor.add(CapsuleCollider2D);
