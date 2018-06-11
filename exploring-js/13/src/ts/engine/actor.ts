@@ -1,3 +1,4 @@
+import {EventEmitter} from "$engine";
 import {Newable} from "@syntax";
 import {Component} from "./component";
 import {Stage} from "./stage";
@@ -5,7 +6,7 @@ import {Stage} from "./stage";
 /**
  * Stage actor that can have behavioural components.
  */
-export class Actor {
+export class Actor extends EventEmitter {
 
     /** Number of actors created. */
     private static counter: number = 0;
@@ -33,6 +34,7 @@ export class Actor {
 
     /** Initialize new instance of an actor. */
     constructor() {
+        super();
         this.id = ++Actor.counter;
     }
 
