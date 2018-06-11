@@ -87,6 +87,7 @@ export class Actor extends EventEmitter {
      */
     destroy() {
         this.stage.destroyActor(this);
+        this.removeAllListeners();
     }
 }
 
