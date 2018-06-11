@@ -38,6 +38,14 @@ export class BagSet<T = any> {
     }
 
     /**
+     * Whether given item exists in the bag.
+     * @param item - item to check.
+     */
+    has(item: T): boolean {
+        return this.indexer.has(item);
+    }
+
+    /**
      * Sort items in collection.
      * @param compare - function to use for comparing items.
      */
