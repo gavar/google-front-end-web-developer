@@ -1,13 +1,24 @@
-import {Layer, Motor, Resources, Terrain2D, Transform} from "$components";
+import {Layer, Motor, Resources, Terrain2D} from "$components";
 import {Stage} from "$engine";
-import {Enemy, EnemySpawn, Player, PlayerController, TerrainPath, View} from "$game";
+import {
+    Bounty,
+    BountySpawn,
+    Enemy,
+    EnemySpawn,
+    GameController,
+    Player,
+    PlayerController,
+    TerrainPath,
+    View,
+} from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
 
 export namespace Layers {
     export const TERRAIN = 1;
-    export const PLAYER = 2;
-    export const ENEMY = 3;
+    export const BOUNTY = 2;
+    export const PLAYER = 3;
+    export const ENEMY = 4;
 }
 
 export namespace LayerOrder {
@@ -26,6 +37,11 @@ export class Game {
     public canvas: HTMLCanvasElement;
     public resources: Resources;
     public player: Player;
+    public terrain: Terrain2D;
+    public terrainPath: TerrainPath;
+    public gameController: GameController;
+    public enemySpawn: EnemySpawn;
+    public bountySpawn: BountySpawn;
 
     /** Global gizmo rendering configuration. */
     public readonly gizmos: GizmoSettings = {
@@ -46,17 +62,18 @@ export class Game {
         this.initGizmo();
         this.resources = this.stage.createActor("resources").add(Resources);
 
-        const terrain = this.initTerrain();
-        const terrainPath = this.initTerrainPath(terrain);
-        this.player = this.initPlayer(terrain);
-        const enemySpawn = this.initEnemySpawn(terrain);
-
-        terrainPath.generate(this.player.actor.get(Transform).position, 5);
+        this.terrain = this.initTerrain();
+        this.terrainPath = this.initTerrainPath(this.terrain);
+        this.player = this.initPlayer(this.terrain);
+        this.enemySpawn = this.initEnemySpawn(this.terrain);
+        this.bountySpawn = this.initBountySpawn();
+        this.gameController = this.initGameController();
     }
 
     initCollisionSystem(): CollisionSystem2D {
         const collision = new CollisionSystem2D();
         collision.enableLayerCollision(Layers.PLAYER, Layers.ENEMY);
+        collision.enableLayerCollision(Layers.PLAYER, Layers.BOUNTY);
         return collision;
     }
 
@@ -83,7 +100,7 @@ export class Game {
 
         // canvas size
         this.canvas.width = terrain.width;
-        this.canvas.height = terrain.size.y * 171;
+        this.canvas.height = terrain.height + terrain.tile.yMin;
 
         // initialize base layer
         const baseLayer = terrain.createLayer();
@@ -129,9 +146,9 @@ export class Game {
         const spawn = actor.add(EnemySpawn);
         spawn.terrain = terrain;
         spawn.enemyVelocity = 150;
-        spawn.enemyLimit = 1000;
+        spawn.enemyLimit = 20;
         spawn.yTileRange = {min: 1, max: terrain.size.y - 2};
-        spawn.delay = .1;
+        spawn.delay = 1;
 
         spawn.enemyFactory = () => {
             const actor = this.stage.createActor("enemy");
@@ -150,6 +167,37 @@ export class Game {
             return enemy;
         };
         return spawn;
+    }
+
+    initBountySpawn(): BountySpawn {
+        const actor = this.stage.createActor("bounty-spawn");
+        const bountySpawn = actor.add(BountySpawn);
+        bountySpawn.bountyFactory = () => {
+            const {tile} = this.terrain;
+            const actor = this.stage.createActor("bounty");
+            const bounty = actor.add(Bounty);
+            bounty.layer.set(Layers.BOUNTY);
+            const collider = actor.add(CapsuleCollider2D);
+            collider.setSize(20, 20);
+            collider.setPivot(0, 0);
+            collider.setOffset(tile.xMin + tile.width * .5, tile.yMin + tile.height * .5);
+
+            bounty.highlight.imageName = "selector.png";
+            bounty.highlight.view.sprite.offset.y = -40;
+            bounty.highlight.view.sprite.order = -1;
+            return bounty;
+        };
+        return bountySpawn;
+    }
+
+    initGameController(): GameController {
+        const actor = this.stage.createActor("game");
+        const controller = actor.add(GameController);
+        controller.player = this.player;
+        controller.terrain = this.terrain;
+        controller.terrainPath = this.terrainPath;
+        controller.bountySpawn = this.bountySpawn;
+        return controller;
     }
 
     initGizmo() {

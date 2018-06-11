@@ -24,8 +24,6 @@ export class PlayerController implements Component, EventListenerObject {
     start() {
         document.addEventListener("keydown", this);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
-        this.transform.position.x = this.terrain.positionX(0);
-        this.transform.position.y = this.terrain.positionY(0);
     }
 
     /** @inheritDoc */

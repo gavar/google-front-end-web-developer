@@ -1,5 +1,6 @@
 import {TerrainImage, TerrainLayer2D, Vector2} from "$components";
 import {Random} from "$game";
+import {Mutable} from "@syntax";
 
 /** Terrain path generator. */
 export class TerrainPath {
@@ -13,8 +14,8 @@ export class TerrainPath {
 
     private toY: number;
     private now: Vector2 = {x: 0, y: 0};
-    private from: Readonly<Vector2>;
     private ways: Array<Readonly<Vector2>> = [];
+    private from: Readonly<Vector2> = {x: 0, y: 0};
     private direction: Readonly<Vector2>;
 
     /** Layer to use for path rendering. */
@@ -25,17 +26,17 @@ export class TerrainPath {
 
     /**
      * Generate random path from point to a given Y line.
-     * @param from - path starting position.
+     * @param fromX - path starting X position.
+     * @param fromY - path starting Y position.
      * @param toY - path destination Y axis.
-     * @returns path finish position.
+     * @return finish position, that should be copied for future use.
      */
-    public generate(from: Vector2, toY: number): Vector2 {
+    public generate(fromX: number, fromY: number, toY: number): Readonly<Vector2> {
         this.toY = toY;
-        this.from = from;
-        this.now.x = from.x;
-        this.now.y = from.y;
+        (this.from as Mutable<Vector2>).x = this.now.x = fromX;
+        (this.from as Mutable<Vector2>).y = this.now.y = fromY;
         this.layer.clear();
-        this.direction = toY > from.y ? Vector2.up : Vector2.down;
+        this.direction = toY > fromY ? Vector2.up : Vector2.down;
 
         // draw image on current tile
         this.moveBy(Vector2.zero);
@@ -50,11 +51,8 @@ export class TerrainPath {
 
         // last move to final tile
         this.moveBy(this.direction);
-
-        return {
-            x: this.now.x,
-            y: this.now.y,
-        };
+        this.moveBy(this.direction);
+        return this.now;
     }
 
     private next(): Readonly<Vector2> {
@@ -120,7 +118,7 @@ export class TerrainPath {
         const {layer} = this;
         const {size} = layer.terrain;
         const x = this.now.x + delta;
-        return x >= 1 && x < size.x -1;
+        return x >= 1 && x < size.x - 1;
     }
 }
 
