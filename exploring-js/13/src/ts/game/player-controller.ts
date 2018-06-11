@@ -25,6 +25,7 @@ export class PlayerController implements Component, EventListenerObject {
         document.addEventListener("keydown", this);
         document.addEventListener("dblclick", this);
         document.addEventListener("touchend", this);
+        document.addEventListener("touchmove", this);
     }
 
     /** @inheritDoc */
@@ -33,6 +34,7 @@ export class PlayerController implements Component, EventListenerObject {
         document.removeEventListener("keydown", this);
         document.removeEventListener("dblclick", this);
         document.removeEventListener("touchend", this);
+        document.removeEventListener("touchmove", this);
     }
 
     /** @inheritDoc */
@@ -43,6 +45,7 @@ export class PlayerController implements Component, EventListenerObject {
             case "click":
             case "dblclick":
             case "touchend":
+            case "touchmove":
                 e.preventDefault();
                 break;
         }
