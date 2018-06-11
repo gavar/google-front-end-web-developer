@@ -9,6 +9,7 @@ export interface Vector2 {
 
 export namespace Vector2 {
     export const zero: Readonly<Vector2> = {x: 0, y: 0};
+    export const one: Readonly<Vector2> = {x: 1, y: 1};
     export const up: Readonly<Vector2> = {x: 0, y: 1};
     export const down: Readonly<Vector2> = {x: 0, y: -1};
     export const left: Readonly<Vector2> = {x: -1, y: 0};
