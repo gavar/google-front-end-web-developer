@@ -34,9 +34,12 @@ export class BountySpawn implements Component {
     spawn(x: number, y: number): Bounty {
         const {terrain} = this.bonusPathLayer;
         const bounty = this.bountyFactory();
-        const {transform} = bounty;
-        transform.position.x = terrain.positionX(x);
-        transform.position.y = terrain.positionY(y);
+        const {position} = bounty.transform;
+        const {sprite} = bounty.view;
+        position.x = terrain.positionX(x);
+        position.y = terrain.positionY(y);
+        sprite.setScale(.5, .5);
+        sprite.setPivot(.5, .5);
         return bounty;
     }
 
