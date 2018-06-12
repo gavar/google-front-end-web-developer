@@ -23,6 +23,7 @@ export namespace Layers {
 
 export namespace LayerOrder {
     export const TERRAIN_PATH = 1;
+    export const BONUS_PATH_LAYER = 2;
 }
 
 interface GizmoSettings {
@@ -177,6 +178,16 @@ export class Game {
     initBountySpawn(): BountySpawn {
         const actor = this.stage.createActor("bounty-spawn");
         const bountySpawn = actor.add(BountySpawn);
+        bountySpawn.terrainPath = this.terrainPath;
+        bountySpawn.bonusPathLayer = this.terrain.createLayer();
+        bountySpawn.bonusPathLayer.setOrder(LayerOrder.BONUS_PATH_LAYER);
+
+        const {size} = this.terrain;
+        bountySpawn.spots.push({x: 0, y: 2});
+        bountySpawn.spots.push({x: 0, y: size.y - 3});
+        bountySpawn.spots.push({x: size.x - 1, y: 2});
+        bountySpawn.spots.push({x: size.x - 1, y: size.y - 3});
+
         bountySpawn.bountyFactory = () => {
             const {tile} = this.terrain;
             const actor = this.stage.createActor("bounty");

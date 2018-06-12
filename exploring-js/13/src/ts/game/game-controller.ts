@@ -23,20 +23,25 @@ export class GameController implements Component {
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
+
+        // player events
+        const {player} = this;
+        player.actor.on(GameEvents.PLAYER_HIT_BY, this.onHitBy, this);
+        player.actor.on(GameEvents.PLAYER_COLLECT_BOUNTY, this.onCollectBounty, this);
+
         this.play();
     }
 
     play(): void {
         const {player, terrain} = this;
 
-        // player events
-        player.actor.on(GameEvents.PLAYER_HIT_BY, this.onHitBy, this);
-        player.actor.on(GameEvents.PLAYER_COLLECT_BOUNTY, this.onCollectBounty, this);
+        // initial values
+        this.bountySpawn.chance = .25; // 25% bonus chance
 
         // initial player position
         player.applyPosition(
             terrain.positionX(Math.floor(terrain.size.x * .5)),
-            terrain.positionY(0)
+            terrain.positionY(0),
         );
 
         // generate first path
@@ -48,9 +53,17 @@ export class GameController implements Component {
     }
 
     private onCollectBounty(bounty: Bounty) {
-        console.log("collect bounty", bounty);
+        const image = bounty.view.sprite.image;
+        if (image) {
+            // bonus
+        }
+        else {
+            // checkpoint
+            this.bountySpawn.gamble();
+            this.nextPath(this.player.position.y);
+        }
+
         bounty.actor.destroy();
-        this.nextPath(this.player.position.y);
     }
 
     private nextPath(fromY: number) {
@@ -67,9 +80,7 @@ export class GameController implements Component {
         this.toTile.y = finish.y;
 
         // generate bounty
-        temporary.x = terrain.positionX(finish.x);
-        temporary.y = terrain.positionY(finish.y);
-        const bounty = this.bountySpawn.spawn(temporary);
+        const bounty = this.bountySpawn.spawn(finish.x, finish.y);
         bounty.highlight.setHighlightActive(true);
     }
 }
