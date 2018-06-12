@@ -15,6 +15,9 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Image rendering offset. */
     public readonly offset: Vector2 = {x: 0, y: 0};
 
+    /** Image dimensions scale. */
+    public readonly scale: Vector2 = {x: 1, y: 1};
+
     /** @inheritDoc */
     public gizmo: boolean;
 
@@ -31,14 +34,25 @@ export class Sprite implements Draw2D, Gizmo2D {
 
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
-        const {image, offset} = this;
-        if (image) {
-            const {position} = this.transform;
-            ctx.drawImage(
-                image,
-                position.x + offset.x,
-                position.y + offset.y,
-            );
+        const {image} = this;
+        if (!image) return;
+
+        const {scale, offset} = this;
+        const {position} = this.transform;
+        const {width, height} = image;
+
+        let x = (position.x + offset.x) * scale.x;
+        let y = (position.y + offset.y) * scale.y;
+        if (scale.x < 0) x += width * scale.x;
+        if (scale.y < 0) y += height * scale.y;
+
+        try {
+            ctx.save();
+            ctx.scale(scale.x, scale.y);
+            ctx.drawImage(image, x, y, width, height);
+        }
+        finally {
+            ctx.restore();
         }
     }
 
