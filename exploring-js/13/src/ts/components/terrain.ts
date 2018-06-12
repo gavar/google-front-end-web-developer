@@ -222,6 +222,7 @@ export class TerrainLayer2D {
         this.terrain = terrain;
     }
 
+    /** Set value of the {@link order} property. */
     setOrder(order: number) {
         (this as Mutable<this>).order = order || 0;
         this.terrain.sort();
@@ -235,7 +236,7 @@ export class TerrainLayer2D {
      */
     setTile(x: number, y: number, image?: TerrainImage) {
         if (image) (this.images[y] = this.images[y] || {})[x] = image;
-        else this.images[y] && (this.images[y][x] = void 0);
+        else this.images[y] && delete this.images[y][x];
     }
 
     /**
