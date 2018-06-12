@@ -30,6 +30,17 @@ export class Random {
     public static deviation(tolerance: number): number {
         return 1 + (Math.random() - 0.5) * 2 * tolerance;
     }
+
+    /** Shuffle array of items. */
+    public static shuffle<T>(array: T[]) {
+        let temp, j;
+        for (let i = array.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
 }
 
 /**
