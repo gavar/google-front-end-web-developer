@@ -64,12 +64,18 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     /** @inheritDoc */
     lateUpdate(deltaTime: number): void {
         const {terrain} = this;
+        const xMin = terrain.positionX(-1);
         const xMax = terrain.positionX(terrain.size.x);
 
         // deactivate enemies that has gone through the whole line
         for (let i = 0; i < this.enemies.length; i++) {
             const enemy = this.enemies[i];
-            if (enemy.transform.position.x < xMax) continue;
+
+            // check enemy is within terran range
+            const {position} = enemy.transform;
+            if (xMax - position.x > 1)
+                if (position.x - xMin > 1)
+                    continue;
 
             // deactivate enemy
             enemy.actor.active = false;
@@ -86,15 +92,28 @@ export class EnemySpawn implements Component, Update, LateUpdate {
         // request enemy instance
         const enemy = this.pool.length ? this.pool.pop() : this.enemyFactory();
 
+        // select direction
+        const leftToRight = Math.random() < 0.5;
+
         // configure
         const {terrain} = this;
-        const transform = enemy.transform;
-        transform.position.x = terrain.positionX(-1);
         const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
-        transform.position.y = terrain.positionY(tileY);
+        enemy.transform.position.y = terrain.positionY(tileY);
 
         // velocity ±50%
-        enemy.motor.velocity.x = this.enemyVelocity * Random.deviation(.5);
+        const velocity = this.enemyVelocity * Random.deviation(.5);
+
+        // setup direction
+        if (leftToRight) {
+            enemy.motor.velocity.x = velocity;
+            enemy.view.sprite.scale.x = 1;
+            enemy.transform.position.x = terrain.positionX(-1);
+        }
+        else {
+            enemy.motor.velocity.x = -velocity;
+            enemy.view.sprite.scale.x = -1;
+            enemy.transform.position.x = terrain.positionX(terrain.size.x);
+        }
 
         return enemy;
     }
