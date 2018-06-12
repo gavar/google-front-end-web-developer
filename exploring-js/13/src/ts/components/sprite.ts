@@ -12,10 +12,13 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Actor's transform. */
     public readonly transform: Transform;
 
-    /** Image rendering offset. */
+    /** Local offset of the image. */
     public readonly offset: Vector2 = {x: 0, y: 0};
 
-    /** Image dimensions scale. */
+    /** Local pivot of the image. */
+    public readonly pivot: Vector2 = {x: 0, y: 0};
+
+    /** Local scale of the image. */
     public readonly scale: Vector2 = {x: 1, y: 1};
 
     /** @inheritDoc */
@@ -27,6 +30,24 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Image to draw. */
     public image: HTMLImageElement;
 
+    /** Set value of {@link offset}. */
+    setOffset(x: number, y: number) {
+        this.offset.x = x;
+        this.offset.y = y;
+    }
+
+    /** Set value of {@link pivot}. */
+    setPivot(x: number, y: number) {
+        this.pivot.x = x;
+        this.pivot.y = y;
+    }
+
+    /** Set value of {@link scale}. */
+    setScale(x: number, y: number) {
+        this.scale.x = x;
+        this.scale.y = y;
+    }
+
     /** @inheritDoc */
     awake(this: Mutable<this>) {
         this.transform = this.actor.require(Transform);
@@ -37,14 +58,17 @@ export class Sprite implements Draw2D, Gizmo2D {
         const {image} = this;
         if (!image) return;
 
-        const {scale, offset} = this;
+        const {scale, offset, pivot} = this;
         const {position} = this.transform;
         const {width, height} = image;
 
-        let x = (position.x + offset.x) * scale.x;
-        let y = (position.y + offset.y) * scale.y;
+        let x = (position.x + offset.x) / scale.x;
         if (scale.x < 0) x += width * scale.x;
+        x += width * pivot.x;
+
+        let y = (position.y + offset.y) / scale.y;
         if (scale.y < 0) y += height * scale.y;
+        y += height * pivot.y;
 
         try {
             ctx.save();
