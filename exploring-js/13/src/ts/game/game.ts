@@ -108,7 +108,6 @@ export class Game {
 
         // initialize base layer
         const baseLayer = terrain.createLayer();
-
         for (let i = 0; i < baseLayerRows.length; i++)
             baseLayer.setTileRow(i, this.resources.load(baseLayerRows[i]));
 
@@ -199,7 +198,6 @@ export class Game {
     initGameController(): GameController {
         const actor = this.stage.createActor("game");
         const controller = actor.add(GameController);
-        controller.player = this.player;
         controller.terrain = this.terrain;
         controller.terrainPath = this.terrainPath;
         controller.bountySpawn = this.bountySpawn;

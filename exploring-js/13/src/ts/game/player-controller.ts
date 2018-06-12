@@ -1,21 +1,35 @@
-import {CanvasScaler, Terrain2D} from "$components";
+import {CanvasScaler, Terrain2D, Vector2} from "$components";
 import {Actor, Component} from "$engine";
 import {Player} from "$game";
+import {LateUpdate} from "$systems";
 
 /**
  * Controls the player movement, by reacting on input events.
  */
-export class PlayerController implements Component, EventListenerObject {
+export class PlayerController implements Component, EventListenerObject, LateUpdate {
+
+    private velocity: Vector2 = {x: 0, y: 0};
+    public position: Vector2 = {x: 0, y: 0};
 
     public player: Player;
     public terrain: Terrain2D;
     public canvasScale: CanvasScaler;
+    public smoothTime: number = 0.15;
 
     /** @inheritDoc */
     readonly actor: Actor;
 
     /** Set of walkable tiles. */
     public walkable: Set<string> = new Set<string>();
+
+    /**
+     * Set player's position immediately.
+     */
+    applyPosition(x: number, y: number) {
+        this.player.transform.position.x = this.position.x = x;
+        this.player.transform.position.y = this.position.y = y;
+        this.velocity.x = this.velocity.y = 0;
+    }
 
     /** @inheritDoc */
     start() {
@@ -26,6 +40,15 @@ export class PlayerController implements Component, EventListenerObject {
         document.addEventListener("dblclick", this);
         document.addEventListener("touchend", this);
         document.addEventListener("touchmove", this);
+
+        this.position.x = this.player.transform.position.x;
+        this.position.y = this.player.transform.position.y;
+        this.velocity.x = this.velocity.y = 0;
+    }
+
+    /** @inheritDoc */
+    lateUpdate(deltaTime: number): void {
+        Vector2.smooth(this.player.transform.position, this.position, this.velocity, this.smoothTime, deltaTime);
     }
 
     /** @inheritDoc */
@@ -116,8 +139,7 @@ export class PlayerController implements Component, EventListenerObject {
         if (!x && !y)
             return false;
 
-        const {terrain} = this;
-        const {position} = this.player.transform;
+        const {terrain, position} = this;
         const {size} = terrain;
 
         // calculate next position X

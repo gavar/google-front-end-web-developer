@@ -1,13 +1,13 @@
 import {Terrain2D, Vector2} from "$components";
 import {Actor, Component} from "$engine";
-import {Bounty, BountySpawn, Enemy, GameEvents, Player, Random, TerrainPath} from "$game";
+import {Bounty, BountySpawn, Enemy, GameEvents, PlayerController, Random, TerrainPath} from "$game";
 
 export class GameController implements Component {
 
     /** @inheritDoc */
     public readonly actor?: Actor;
 
-    public player: Player;
+    public player: PlayerController;
     public terrain: Terrain2D;
     public terrainPath: TerrainPath;
     public bountySpawn: BountySpawn;
@@ -19,7 +19,7 @@ export class GameController implements Component {
     /** @inheritDoc */
     start() {
         const {stage} = this.actor;
-        this.player = this.player || stage.findComponentOfType(Player);
+        this.player = this.player || stage.findComponentOfType(PlayerController);
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
@@ -34,9 +34,10 @@ export class GameController implements Component {
         player.actor.on(GameEvents.PLAYER_COLLECT_BOUNTY, this.onCollectBounty, this);
 
         // initial player position
-        const playerPosition = player.transform.position;
-        playerPosition.x = terrain.positionX(Math.floor(terrain.size.x * .5));
-        playerPosition.y = terrain.positionY(0);
+        player.applyPosition(
+            terrain.positionX(Math.floor(terrain.size.x * .5)),
+            terrain.positionY(0)
+        );
 
         // generate first path
         this.nextPath(0);
@@ -49,7 +50,7 @@ export class GameController implements Component {
     private onCollectBounty(bounty: Bounty) {
         console.log("collect bounty", bounty);
         bounty.actor.destroy();
-        this.nextPath(this.player.transform.position.y);
+        this.nextPath(this.player.position.y);
     }
 
     private nextPath(fromY: number) {
