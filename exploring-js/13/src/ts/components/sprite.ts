@@ -6,6 +6,9 @@ import {Mutable} from "@syntax";
 /** Draws an image on a canvas. */
 export class Sprite implements Draw2D, Gizmo2D {
 
+    private x: number;
+    private y: number;
+
     /** @inheritDoc */
     public readonly actor?: Actor;
 
@@ -54,17 +57,10 @@ export class Sprite implements Draw2D, Gizmo2D {
         const {image} = this;
         if (!image) return;
 
-        const {offset, pivot} = this;
-        const {position, scale} = this.transform;
+        this.recalculate();
+        const {x, y} = this;
+        const {scale} = this.transform;
         const {width, height} = image;
-
-        let x = (position.x + offset.x) / scale.x;
-        if (scale.x < 0) x += width * scale.x;
-        x += width * pivot.x;
-
-        let y = (position.y + offset.y) / scale.y;
-        if (scale.y < 0) y += height * scale.y;
-        y += height * pivot.y;
 
         try {
             ctx.save();
@@ -78,13 +74,44 @@ export class Sprite implements Draw2D, Gizmo2D {
 
     /** @inheritDoc */
     drawGizmo2D(ctx: CanvasRenderingContext2D): void {
-        const {image, offset} = this;
-        const {position} = this.transform;
-        ctx.strokeRect(
-            position.x + offset.x,
-            position.y + offset.y,
-            image.width || 1,
-            image.height || 1,
-        );
+        const {image} = this;
+        if (!image) return;
+
+        this.recalculate();
+        const {x, y} = this;
+        const {scale} = this.transform;
+        const {width, height} = image;
+
+        try {
+            ctx.save();
+            ctx.scale(scale.x, scale.y);
+            ctx.strokeRect(x, y, width, height);
+        }
+        finally {
+            ctx.restore();
+        }
     }
+
+    private recalculate() {
+        if (this.image) {
+            const {offset, pivot} = this;
+            const {position, scale} = this.transform;
+            const {width, height} = this.image;
+
+            let x = (position.x + offset.x) / scale.x;
+            if (scale.x < 0) x += width * scale.x;
+            x += width * pivot.x;
+            this.x = x;
+
+            let y = (position.y + offset.y) / scale.y;
+            if (scale.y < 0) y += height * scale.y;
+            y += height * pivot.y;
+            this.y = y;
+        }
+        else {
+            this.x = 0;
+            this.y = 0;
+        }
+    }
+
 }
