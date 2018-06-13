@@ -1,4 +1,4 @@
-import {CanvasScaler} from "$components";
+import {Canvas} from "$components";
 import {Sortable, SortComposition, SortSystem} from "$systems";
 
 export interface Draw2D extends Sortable {
@@ -14,13 +14,13 @@ export interface Draw2D extends Sortable {
  */
 export class DrawSystem extends SortSystem<Draw2D> {
 
-    private readonly root: CanvasScaler;
+    private readonly canvas: Canvas;
     private readonly ctx2D: CanvasRenderingContext2D;
 
-    constructor(root: CanvasScaler) {
+    constructor(canvas: Canvas) {
         super();
-        this.root = root;
-        this.ctx2D = this.root.canvas.getContext("2d");
+        this.canvas = canvas;
+        this.ctx2D = canvas.element.getContext("2d");
         this.ctx2D.imageSmoothingEnabled = false;
         this.ctx2D.oImageSmoothingEnabled = false;
         this.ctx2D.mozImageSmoothingEnabled = false;
@@ -35,7 +35,7 @@ export class DrawSystem extends SortSystem<Draw2D> {
     /** @inheritDoc */
     protected process(deltaTime: number, compositions: ReadonlyArray<SortComposition<Draw2D>>): void {
         const {ctx2D} = this;
-        const {scale} = this.root.transform;
+        const {scale} = this.canvas.transform;
         try {
             ctx2D.save();
             ctx2D.scale(scale.x, scale.y);

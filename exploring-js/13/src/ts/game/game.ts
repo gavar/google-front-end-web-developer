@@ -1,4 +1,4 @@
-import {CanvasScaler, Layer, Motor, Resources, Terrain2D} from "$components";
+import {Canvas, Layer, Motor, Resources, Sprite, Terrain2D} from "$components";
 import {Stage} from "$engine";
 import {
     Bounty,
@@ -35,7 +35,7 @@ interface GizmoSettings {
 export class Game {
 
     public stage: Stage;
-    public root: CanvasScaler;
+    public canvas: Canvas;
     public resources: Resources;
     public player: Player;
     public terrain: Terrain2D;
@@ -54,14 +54,13 @@ export class Game {
     constructor() {
         this.stage = new Stage();
 
-        this.root = this.stage.createActor("canvas").add(CanvasScaler);
-        this.root.canvas = document.createElement("canvas");
-        this.root.padding.x = 20;
+        this.canvas = this.stage.createActor("canvas").add(Canvas);
+        this.canvas.element = document.createElement("canvas");
 
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
         this.stage.addSystem(this.initCollisionSystem());
-        this.stage.addSystem(new DrawSystem(this.root));
+        this.stage.addSystem(new DrawSystem(this.canvas));
 
         this.initGizmo();
         this.resources = this.stage.createActor("resources").add(Resources);
@@ -104,8 +103,8 @@ export class Game {
         terrain.setGridSize(5, baseLayerRows.length);
 
         // canvas size
-        this.root.size.x = terrain.width;
-        this.root.size.y = terrain.height + terrain.tile.yMin + 40;
+        this.canvas.size.x = terrain.width;
+        this.canvas.size.y = terrain.height + terrain.tile.yMin + 40;
 
         // initialize base layer
         const baseLayer = terrain.createLayer();
@@ -137,7 +136,7 @@ export class Game {
         controller.terrain = terrain;
         controller.walkable.add("stone-block.png");
         controller.player = player;
-        controller.root = this.root;
+        controller.canvas = this.canvas;
 
         // collider
         const capsule = actor.add(CapsuleCollider2D);
@@ -232,7 +231,7 @@ export class Game {
     }
 
     start() {
-        document.body.appendChild(this.root.canvas);
+        document.body.appendChild(this.canvas.element);
         this.stage.start();
     }
 }

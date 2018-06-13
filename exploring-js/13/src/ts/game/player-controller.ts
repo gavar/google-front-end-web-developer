@@ -1,4 +1,4 @@
-import {CanvasScaler, Terrain2D, Vector2} from "$components";
+import {Canvas, Terrain2D, Vector2} from "$components";
 import {Actor, Component} from "$engine";
 import {Player} from "$game";
 import {LateUpdate} from "$systems";
@@ -13,7 +13,7 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     public player: Player;
     public terrain: Terrain2D;
-    public root: CanvasScaler;
+    public canvas: Canvas;
     public smoothTime: number = 0.15;
 
     /** @inheritDoc */
@@ -33,7 +33,7 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     /** @inheritDoc */
     start() {
-        this.root = this.root || this.actor.stage.findComponentOfType(CanvasScaler);
+        this.canvas = this.canvas || this.actor.stage.findComponentOfType(Canvas);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
         document.addEventListener("click", this);
         document.addEventListener("keydown", this);
@@ -62,7 +62,7 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     /** @inheritDoc */
     handleEvent(e: Event): void {
-        const rect = this.root.canvas.getBoundingClientRect() as DOMRect;
+        const rect = this.canvas.element.getBoundingClientRect() as DOMRect;
 
         switch (e.type) {
             case "click":
@@ -114,7 +114,7 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     private onClick(x: number, y: number) {
         const {terrain, player} = this;
-        const {scale} = this.root.transform;
+        const {scale} = this.canvas.transform;
 
         x /= scale.x;
         y /= scale.y;
