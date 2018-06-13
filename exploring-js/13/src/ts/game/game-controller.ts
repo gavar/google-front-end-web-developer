@@ -77,7 +77,7 @@ export class GameController implements Component, Update, Draw2D {
 
     private outlineLayout() {
         const {inner, outer, terrain, canvas} = this;
-        const offsetY = terrain.tile.yMin / canvas.transform.scale.y;
+        const offsetY = terrain.tile.yMin * canvas.transform.scale.y;
 
         outer.style.top = `${offsetY + 2}px`;
         outer.style.left = `${canvas.element.offsetLeft}px`;
