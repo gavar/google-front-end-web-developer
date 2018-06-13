@@ -23,6 +23,7 @@ canvas {
   -ms-interpolation-mode: nearest-neighbor;
 }
 
+/* GAME */
 .outer {
   z-index: -1;
 }
@@ -41,7 +42,13 @@ canvas {
   animation-name: inner-hit;
 }
 
-/* animations */
+/* HUD */
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: #fff url('/img/background.png');
+}
+
+/* ANIMATIONS */
 @keyframes outer-hit {
   from {
     box-shadow: 0 0 2.5em 0.7em #af111c;
