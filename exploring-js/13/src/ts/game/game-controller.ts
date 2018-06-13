@@ -14,7 +14,6 @@ export class GameController implements Component {
 
     private readonly fromTile: Vector2 = {x: 0, y: 0};
     private readonly toTile: Vector2 = {x: 0, y: 0};
-    private readonly temporary: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
     start() {
@@ -67,7 +66,7 @@ export class GameController implements Component {
     }
 
     private nextPath(fromY: number) {
-        const {terrain, terrainPath, fromTile, temporary} = this;
+        const {terrain, terrainPath, fromTile} = this;
 
         // update from tile
         fromTile.x = Random.rangeInt(1, terrain.size.x - 1);
