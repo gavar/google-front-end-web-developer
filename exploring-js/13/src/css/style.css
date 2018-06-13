@@ -54,6 +54,7 @@ canvas {
 @keyframes inner-hit {
   from {
     box-shadow: inset 0 0 40vw 0 #af111c;
+    border-radius: 5px;
   }
   to {
     box-shadow: none;

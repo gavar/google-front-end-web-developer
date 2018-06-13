@@ -87,7 +87,7 @@ export class GameController implements Component, Update, Draw2D {
         inner.style.top = `${offsetY - 2}px`;
         inner.style.left = `${canvas.element.offsetLeft}px`;
         inner.style.width = `${canvas.element.width}px`;
-        inner.style.height = `${canvas.element.height - offsetY}px`;
+        inner.style.height = `${canvas.element.height - offsetY - 1}px`;
     }
 
     private onHitBy(enemy: Enemy) {
