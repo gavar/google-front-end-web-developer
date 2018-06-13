@@ -57,7 +57,7 @@ export class Game {
     constructor() {
         this.stage = new Stage();
 
-        this.main = document.createElement("main");
+        this.main = document.getElementsByTagName("main")[0] as HTMLElement;
         this.canvas = this.stage.createActor("canvas").add(Canvas);
         this.canvas.element = document.createElement("canvas");
         this.main.appendChild(this.canvas.element);
