@@ -35,7 +35,7 @@ interface GizmoSettings {
 export class Game {
 
     public stage: Stage;
-    public scaler: CanvasScaler;
+    public root: CanvasScaler;
     public resources: Resources;
     public player: Player;
     public terrain: Terrain2D;
@@ -54,14 +54,14 @@ export class Game {
     constructor() {
         this.stage = new Stage();
 
-        this.scaler = this.stage.createActor("canvas-scale").add(CanvasScaler);
-        this.scaler.canvas = document.createElement("canvas");
-        this.scaler.padding.x = 20;
+        this.root = this.stage.createActor("canvas").add(CanvasScaler);
+        this.root.canvas = document.createElement("canvas");
+        this.root.padding.x = 20;
 
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
         this.stage.addSystem(this.initCollisionSystem());
-        this.stage.addSystem(new DrawSystem(this.scaler.canvas, this.scaler.scale));
+        this.stage.addSystem(new DrawSystem(this.root));
 
         this.initGizmo();
         this.resources = this.stage.createActor("resources").add(Resources);
@@ -104,8 +104,8 @@ export class Game {
         terrain.setGridSize(5, baseLayerRows.length);
 
         // canvas size
-        this.scaler.size.x = terrain.width;
-        this.scaler.size.y = terrain.height + terrain.tile.yMin + 40;
+        this.root.size.x = terrain.width;
+        this.root.size.y = terrain.height + terrain.tile.yMin + 40;
 
         // initialize base layer
         const baseLayer = terrain.createLayer();
@@ -137,7 +137,7 @@ export class Game {
         controller.terrain = terrain;
         controller.walkable.add("stone-block.png");
         controller.player = player;
-        controller.canvasScale = this.scaler;
+        controller.root = this.root;
 
         // collider
         const capsule = actor.add(CapsuleCollider2D);
@@ -220,7 +220,7 @@ export class Game {
             return;
 
         const {gizmos} = this;
-        this.stage.addSystem(new GizmoSystem(this.scaler.canvas, this.scaler.scale));
+        this.stage.addSystem(new GizmoSystem(this.root));
         if (gizmos.capsule) CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
         if (gizmos.collision) CollisionSystem2D.prototype.gizmo = gizmos.collision;
     }
@@ -232,7 +232,7 @@ export class Game {
     }
 
     start() {
-        document.body.appendChild(this.scaler.canvas);
+        document.body.appendChild(this.root.canvas);
         this.stage.start();
     }
 }

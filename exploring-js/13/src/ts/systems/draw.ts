@@ -1,4 +1,4 @@
-import {Vector2} from "$components";
+import {CanvasScaler} from "$components";
 import {Sortable, SortComposition, SortSystem} from "$systems";
 
 export interface Draw2D extends Sortable {
@@ -14,19 +14,17 @@ export interface Draw2D extends Sortable {
  */
 export class DrawSystem extends SortSystem<Draw2D> {
 
-    private readonly scale: Readonly<Vector2>;
-    private readonly canvas: HTMLCanvasElement;
-    private readonly context2D: CanvasRenderingContext2D;
+    private readonly root: CanvasScaler;
+    private readonly ctx2D: CanvasRenderingContext2D;
 
-    constructor(canvas: HTMLCanvasElement, scale: Readonly<Vector2> = Vector2.one) {
+    constructor(root: CanvasScaler) {
         super();
-        this.scale = scale;
-        this.canvas = canvas;
-        this.context2D = this.canvas.getContext("2d");
-        this.context2D.imageSmoothingEnabled = false;
-        this.context2D.oImageSmoothingEnabled = false;
-        this.context2D.mozImageSmoothingEnabled = false;
-        this.context2D.webkitImageSmoothingEnabled = false;
+        this.root = root;
+        this.ctx2D = this.root.canvas.getContext("2d");
+        this.ctx2D.imageSmoothingEnabled = false;
+        this.ctx2D.oImageSmoothingEnabled = false;
+        this.ctx2D.mozImageSmoothingEnabled = false;
+        this.ctx2D.webkitImageSmoothingEnabled = false;
     }
 
     /** @inheritDoc */
@@ -36,8 +34,9 @@ export class DrawSystem extends SortSystem<Draw2D> {
 
     /** @inheritDoc */
     protected process(deltaTime: number, compositions: ReadonlyArray<SortComposition<Draw2D>>): void {
-        const ctx2D = this.context2D;
-        ctx2D.scale(this.scale.x, this.scale.y);
+        const {ctx2D} = this;
+        const {scale} = this.root.transform;
+        ctx2D.scale(scale.x, scale.y);
         for (const composition of compositions)
             if (composition.component.actor.active)
                 composition.component.draw2D(ctx2D);

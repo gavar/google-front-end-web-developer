@@ -35,11 +35,8 @@ export class BountySpawn implements Component {
         const {terrain} = this.bonusPathLayer;
         const bounty = this.bountyFactory();
         const {position} = bounty.transform;
-        const {sprite} = bounty.view;
         position.x = terrain.positionX(x);
         position.y = terrain.positionY(y);
-        sprite.setScale(.5, .5);
-        sprite.setPivot(.5, .5);
         return bounty;
     }
 
@@ -62,6 +59,11 @@ export class BountySpawn implements Component {
     private bonus(x: number, y: number) {
         const {bonusPathLayer, bonuses, terrainPath} = this;
         const bounty = this.spawn(x, y);
+
+        const {sprite} = bounty.view;
+        sprite.setScale(.5, .5);
+        sprite.setPivot(.5, .5);
+
         const bonus = bonuses[Random.rangeInt(0, bonuses.length)];
         bounty.view.setImage(bonus);
         bounty.actor.on(Actor.DESTROYING, this.onBonusDestroy, this);

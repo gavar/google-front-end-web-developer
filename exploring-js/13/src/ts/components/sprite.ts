@@ -18,9 +18,6 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Local pivot of the image. */
     public readonly pivot: Vector2 = {x: 0, y: 0};
 
-    /** Local scale of the image. */
-    public readonly scale: Vector2 = {x: 1, y: 1};
-
     /** @inheritDoc */
     public gizmo: boolean;
 
@@ -44,8 +41,7 @@ export class Sprite implements Draw2D, Gizmo2D {
 
     /** Set value of {@link scale}. */
     setScale(x: number, y: number) {
-        this.scale.x = x;
-        this.scale.y = y;
+        this.transform.setScale(x, y);
     }
 
     /** @inheritDoc */
@@ -58,8 +54,8 @@ export class Sprite implements Draw2D, Gizmo2D {
         const {image} = this;
         if (!image) return;
 
-        const {scale, offset, pivot} = this;
-        const {position} = this.transform;
+        const {offset, pivot} = this;
+        const {position, scale} = this.transform;
         const {width, height} = image;
 
         let x = (position.x + offset.x) / scale.x;

@@ -106,12 +106,12 @@ export class EnemySpawn implements Component, Update, LateUpdate {
         // setup direction
         if (leftToRight) {
             enemy.motor.velocity.x = velocity;
-            enemy.view.sprite.scale.x = 1;
+            enemy.transform.scale.x = 1;
             enemy.transform.position.x = terrain.positionX(-1);
         }
         else {
             enemy.motor.velocity.x = -velocity;
-            enemy.view.sprite.scale.x = -1;
+            enemy.transform.scale.x = -1;
             enemy.transform.position.x = terrain.positionX(terrain.size.x);
         }
 
