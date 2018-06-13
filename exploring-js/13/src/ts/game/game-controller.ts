@@ -1,8 +1,9 @@
-import {Terrain2D, Vector2} from "$components";
+import {Canvas, Terrain2D, Vector2} from "$components";
 import {Actor, Component} from "$engine";
 import {Bounty, BountySpawn, Enemy, GameEvents, PlayerController, Random, TerrainPath} from "$game";
+import {Draw2D, Update} from "$systems";
 
-export class GameController implements Component {
+export class GameController implements Component, Update, Draw2D {
 
     /** @inheritDoc */
     public readonly actor?: Actor;
@@ -11,13 +12,19 @@ export class GameController implements Component {
     public terrain: Terrain2D;
     public terrainPath: TerrainPath;
     public bountySpawn: BountySpawn;
+    public canvas: Canvas;
 
-    private readonly fromTile: Vector2 = {x: 0, y: 0};
+    private outer: HTMLElement;
+    private inner: HTMLElement;
+    private outlines: HTMLElement[];
+
     private readonly toTile: Vector2 = {x: 0, y: 0};
+    private readonly fromTile: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
     start() {
         const {stage} = this.actor;
+        this.canvas = this.canvas || stage.findComponentOfType(Canvas);
         this.player = this.player || stage.findComponentOfType(PlayerController);
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
@@ -28,6 +35,19 @@ export class GameController implements Component {
         player.actor.on(GameEvents.PLAYER_HIT_BY, this.onHitBy, this);
         player.actor.on(GameEvents.PLAYER_COLLECT_BOUNTY, this.onCollectBounty, this);
 
+        // outer outline
+        this.outer = document.createElement("div");
+        this.outer.classList.add("outer");
+        this.outer.style.position = "absolute";
+        this.canvas.element.parentElement.appendChild(this.outer);
+
+        // inner outline
+        this.inner = document.createElement("div");
+        this.inner.classList.add("inner");
+        this.inner.style.position = "absolute";
+        this.canvas.element.parentElement.appendChild(this.inner);
+
+        this.outlines = [this.outer, this.inner];
         this.play();
     }
 
@@ -45,10 +65,40 @@ export class GameController implements Component {
 
         // generate first path
         this.nextPath(0);
+    /** @inheritDoc */
+    update(deltaTime: number): void {
+
+    }
+
+    /** @inheritDoc */
+    draw2D(ctx: CanvasRenderingContext2D): void {
+        this.outlineLayout();
+    }
+
+    private outlineLayout() {
+        const {inner, outer, terrain, canvas} = this;
+        const offsetY = terrain.tile.yMin / canvas.transform.scale.y;
+
+        outer.style.top = `${offsetY + 2}px`;
+        outer.style.left = `${canvas.element.offsetLeft}px`;
+        outer.style.width = `${canvas.element.width}px`;
+        outer.style.height = `${canvas.element.height - offsetY - 8}px`;
+
+        inner.style.top = `${offsetY - 2}px`;
+        inner.style.left = `${canvas.element.offsetLeft}px`;
+        inner.style.width = `${canvas.element.width}px`;
+        inner.style.height = `${canvas.element.height - offsetY}px`;
     }
 
     private onHitBy(enemy: Enemy) {
-        console.log("player hit by", enemy);
+        // hit effect
+        for (const outline of this.outlines) {
+            outline.classList.remove("hit");
+            outline.style.animation = "none";
+            outline.offsetHeight; // reflow
+            outline.style.animation = null;
+            outline.classList.add("hit");
+        }
     }
 
     private onCollectBounty(bounty: Bounty) {
