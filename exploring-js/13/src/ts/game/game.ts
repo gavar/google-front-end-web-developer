@@ -70,6 +70,7 @@ export class Game {
 
         this.initGizmo();
         this.resources = this.stage.createActor("resources").add(Resources);
+        this.resources.baseUrl = "img";
 
         this.terrain = this.initTerrain();
         this.terrainPath = this.initTerrainPath(this.terrain);

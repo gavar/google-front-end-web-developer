@@ -25,12 +25,12 @@ function html() {
         .pipe(gulp.dest("./dist"));
 }
 
-function assets() {
+function images() {
     const glob = [
-        "./src/images/**/*",
+        "./src/img/**/*",
     ];
     return gulp.watchify(glob)
-        .pipe(gulp.dest("./dist/assets"));
+        .pipe(gulp.dest("./dist/img"));
 }
 
 function css() {
@@ -162,7 +162,7 @@ function udacity(done: Action) {
 
 gulp.task(css);
 gulp.task(html);
-gulp.task(assets);
+gulp.task(images);
 gulp.task(clean);
 gulp.task("es6", es6.task());
 gulp.task(compile);
@@ -173,7 +173,7 @@ gulp.task("default", gulp.series(
     gulp.parallel(
         css,
         html,
-        assets,
+        images,
         compile,
         gulp.watcher.watch,
     ),
@@ -184,7 +184,7 @@ gulp.task("serve", gulp.series(
     watch,
     gulp.parallel(
         html,
-        assets,
+        images,
         devServer,
         gulp.watcher.watch,
     ),
