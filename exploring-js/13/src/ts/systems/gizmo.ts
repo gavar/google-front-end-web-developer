@@ -76,9 +76,15 @@ export class GizmoSystem extends SortSystem<Gizmo2D> {
     protected process(deltaTime: number, compositions: ReadonlyArray<SortComposition<Gizmo2D>>): void {
         const {ctx2D} = this;
         const {scale} = this.root.transform;
-        ctx2D.scale(scale.x, scale.y);
-        for (const composition of compositions)
-            if (composition.component.gizmo && composition.component.actor.active)
-                composition.component.drawGizmo2D(ctx2D);
+        try {
+            ctx2D.save();
+            ctx2D.scale(scale.x, scale.y);
+            for (const composition of compositions)
+                if (composition.component.gizmo && composition.component.actor.active)
+                    composition.component.drawGizmo2D(ctx2D);
+        }
+        finally {
+            ctx2D.restore();
+        }
     }
 }
