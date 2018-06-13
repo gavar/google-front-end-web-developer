@@ -2,6 +2,11 @@ html, body {
   overflow-x: hidden;
 }
 
+main {
+  width: 100%;
+  height: 100%;
+}
+
 body, canvas {
   text-align: center;
   padding: 0;
@@ -16,4 +21,41 @@ canvas {
   image-rendering: -o-crisp-edges;
   image-rendering: optimize-contrast;
   -ms-interpolation-mode: nearest-neighbor;
+}
+
+.outer {
+  z-index: -1;
+}
+
+.outer.hit {
+  animation-duration: 1.5s;
+  animation-name: outer-hit;
+}
+
+.inner {
+  z-index: 1;
+}
+
+.inner.hit {
+  animation-duration: 1.5s;
+  animation-name: inner-hit;
+}
+
+/* animations */
+@keyframes outer-hit {
+  from {
+    box-shadow: 0 0 2.5em 0.7em #af111c;
+  }
+  to {
+    box-shadow: none;
+  }
+}
+
+@keyframes inner-hit {
+  from {
+    box-shadow: inset 0 0 40vw 0 #af111c;
+  }
+  to {
+    box-shadow: none;
+  }
 }
