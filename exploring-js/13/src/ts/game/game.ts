@@ -35,6 +35,7 @@ interface GizmoSettings {
 
 export class Game {
 
+    public main: HTMLElement;
     public stage: Stage;
     public canvas: Canvas;
     public resources: Resources;
@@ -56,8 +57,11 @@ export class Game {
     constructor() {
         this.stage = new Stage();
 
+        this.main = document.createElement("main");
         this.canvas = this.stage.createActor("canvas").add(Canvas);
         this.canvas.element = document.createElement("canvas");
+        this.main.appendChild(this.canvas.element);
+        document.body.appendChild(this.main);
 
         this.stage.addSystem(new UpdateSystem());
         this.stage.addSystem(new LateUpdateSystem());
@@ -234,7 +238,6 @@ export class Game {
     }
 
     start() {
-        document.body.appendChild(this.canvas.element);
         this.stage.start();
     }
 }
