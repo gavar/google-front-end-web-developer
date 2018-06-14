@@ -9,6 +9,7 @@ export * from "./bounty";
 export * from "./bounty-spawn";
 export * from "./terrain-path";
 export * from "./player";
+export * from "./player-stats";
 export * from "./player-controller";
 export * from "./game-controller";
 export * from "./game";
