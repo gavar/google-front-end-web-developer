@@ -33,8 +33,10 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     /** @inheritDoc */
     start() {
+        this.player = this.player || this.actor.stage.findComponentOfType(Player);
         this.canvas = this.canvas || this.actor.stage.findComponentOfType(Canvas);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
+
         document.addEventListener("click", this);
         document.addEventListener("keydown", this);
         document.addEventListener("dblclick", this);
