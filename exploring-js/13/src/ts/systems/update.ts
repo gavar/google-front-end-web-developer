@@ -17,7 +17,7 @@ export class UpdateSystem extends ComponentSystem<Update> {
     /** @inheritDoc */
     protected process(deltaTime: number, components: ReadonlyArray<Update>): void {
         for (const component of components)
-            if (component.actor.active)
+            if (component.enabled && component.actor.active)
                 component.update(deltaTime);
     }
 }

@@ -79,9 +79,11 @@ export class GizmoSystem extends SortSystem<Gizmo2D> {
         try {
             ctx2D.save();
             ctx2D.scale(scale.x, scale.y);
-            for (const composition of compositions)
-                if (composition.component.gizmo && composition.component.actor.active)
-                    composition.component.drawGizmo2D(ctx2D);
+            for (const composition of compositions) {
+                const {component} = composition;
+                if (component.gizmo && component.enabled && component.actor.active)
+                    component.drawGizmo2D(ctx2D);
+            }
         }
         finally {
             ctx2D.restore();
