@@ -1,18 +1,34 @@
 import {Canvas, Terrain2D, Vector2} from "$components";
 import {Actor, Component} from "$engine";
-import {Bounty, BountySpawn, Enemy, GameEvents, PlayerController, Random, TerrainPath} from "$game";
-import {Draw2D, Update} from "$systems";
+import {
+    Bounty,
+    BountySpawn,
+    Enemy,
+    GameEvents,
+    GameSettings,
+    Player,
+    PlayerController,
+    Random,
+    TerrainPath,
+} from "$game";
+import {PhysicsBody2D} from "$physics";
+import {Draw2D} from "$systems";
+import {Mutable} from "@syntax";
 
-export class GameController implements Component, Update, Draw2D {
+export class GameController implements Component, Draw2D {
 
     /** @inheritDoc */
     public readonly actor?: Actor;
 
-    public player: PlayerController;
+    /** @inheritDoc */
+    public readonly settings: GameSettings;
+
+    public canvas: Canvas;
+    public player: Player;
+    public controls: PlayerController;
     public terrain: Terrain2D;
     public terrainPath: TerrainPath;
     public bountySpawn: BountySpawn;
-    public canvas: Canvas;
 
     private outer: HTMLElement;
     private inner: HTMLElement;
@@ -22,18 +38,25 @@ export class GameController implements Component, Update, Draw2D {
     private readonly fromTile: Vector2 = {x: 0, y: 0};
 
     /** @inheritDoc */
+    awake(this: Mutable<this>) {
+        this.settings = this.actor.require(GameSettings);
+    }
+
+    /** @inheritDoc */
     start() {
         const {stage} = this.actor;
         this.canvas = this.canvas || stage.findComponentOfType(Canvas);
-        this.player = this.player || stage.findComponentOfType(PlayerController);
+        this.player = this.player || stage.findComponentOfType(Player);
+        this.controls = this.controls || stage.findComponentOfType(PlayerController);
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
 
         // player events
         const {player} = this;
-        player.actor.on(GameEvents.PLAYER_HIT_BY, this.onHitBy, this);
-        player.actor.on(GameEvents.PLAYER_COLLECT_BOUNTY, this.onCollectBounty, this);
+        player.actor.on(GameEvents.PLAYER_DIE, this.die, this);
+        player.actor.on(GameEvents.PLAYER_ENEMY_COLLISION, this.hitByEnemy, this);
+        player.actor.on(GameEvents.PLAYER_BOUNTY_COLLISION, this.collectBounty, this);
 
         // outer outline
         this.outer = document.createElement("div");
@@ -51,23 +74,23 @@ export class GameController implements Component, Update, Draw2D {
         this.play();
     }
 
+    /** Play the game. */
     play(): void {
-        const {player, terrain} = this;
+        const {controls, terrain, player, settings, bountySpawn} = this;
 
         // initial values
-        this.bountySpawn.chance = .25; // 25% bonus chance
+        bountySpawn.chance = .25; // 25% bonus chance
+        player.stats.reset();
+        player.stats.set("lives", settings.lives);
 
         // initial player position
-        player.applyPosition(
+        controls.applyPosition(
             terrain.positionX(Math.floor(terrain.size.x * .5)),
             terrain.positionY(0),
         );
 
-        // generate first path
-        this.nextPath(0);
-    /** @inheritDoc */
-    update(deltaTime: number): void {
-
+        // initial path
+        this.continuePath(0);
     }
 
     /** @inheritDoc */
@@ -90,8 +113,38 @@ export class GameController implements Component, Update, Draw2D {
         inner.style.height = `${canvas.element.height - offsetY - 1}px`;
     }
 
-    private onHitBy(enemy: Enemy) {
-        // hit effect
+    /** Player steps on an enemy. */
+    private hitByEnemy(enemy: Enemy) {
+        this.playHitGfx();
+        this.player.hit();
+        // TODO: enable ghost mode for 5 sec when receives hit
+    }
+
+    /** Player steps on a bounty. */
+    private collectBounty(bounty: Bounty) {
+        const image = bounty.view.sprite.image;
+        if (image) {
+            // bonus
+            // TODO: give bonus
+        }
+        else {
+            // checkpoint
+            this.bountySpawn.gamble();
+            this.continuePath(this.controls.position.y);
+        }
+
+        bounty.actor.destroy();
+    }
+
+    /** Players dies */
+    private die() {
+        const {controls, player} = this;
+        Component.disable(controls); // disable controls
+        Component.disable(player.actor.get(PhysicsBody2D)); // disable collision
+    }
+
+    /** Player player hit GFX. */
+    private playHitGfx() {
         for (const outline of this.outlines) {
             outline.classList.remove("hit");
             outline.style.animation = "none";
@@ -101,21 +154,7 @@ export class GameController implements Component, Update, Draw2D {
         }
     }
 
-    private onCollectBounty(bounty: Bounty) {
-        const image = bounty.view.sprite.image;
-        if (image) {
-            // bonus
-        }
-        else {
-            // checkpoint
-            this.bountySpawn.gamble();
-            this.nextPath(this.player.position.y);
-        }
-
-        bounty.actor.destroy();
-    }
-
-    private nextPath(fromY: number) {
+    private continuePath(fromY: number) {
         const {terrain, terrainPath, fromTile} = this;
 
         // update from tile

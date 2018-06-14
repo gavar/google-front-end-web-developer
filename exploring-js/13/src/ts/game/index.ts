@@ -11,5 +11,6 @@ export * from "./terrain-path";
 export * from "./player";
 export * from "./player-stats";
 export * from "./player-controller";
+export * from "./game-settings";
 export * from "./game-controller";
 export * from "./game";
