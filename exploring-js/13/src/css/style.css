@@ -48,6 +48,29 @@ body {
   background: #fff url('/img/background.png');
 }
 
+.stats {
+  position: absolute;
+  display: flex;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.stats > * {
+  flex-basis: 50%;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.lives {
+  color: #af111c;
+}
+
 /* ANIMATIONS */
 @keyframes outer-hit {
   from {

@@ -13,6 +13,7 @@ import {
 } from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
+import {StatsView} from "$ui";
 
 export namespace Layers {
     export const TERRAIN = 1;
@@ -78,6 +79,7 @@ export class Game {
         this.enemySpawn = this.initEnemySpawn(this.terrain);
         this.bountySpawn = this.initBountySpawn();
         this.gameController = this.initGameController();
+        this.initUI();
     }
 
     initCollisionSystem(): CollisionSystem2D {
@@ -219,6 +221,16 @@ export class Game {
         controller.terrainPath = this.terrainPath;
         controller.bountySpawn = this.bountySpawn;
         return controller;
+    }
+
+    initUI(): void {
+        this.initStatsView();
+    }
+
+    initStatsView(): StatsView {
+        const actor = this.stage.createActor("stats-view");
+        const view = actor.add(StatsView);
+        return view;
     }
 
     initGizmo() {
