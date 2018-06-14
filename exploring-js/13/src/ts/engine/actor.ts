@@ -1,5 +1,5 @@
 import {EventEmitter, EventType} from "$engine";
-import {Newable} from "@syntax";
+import {Mutable, Newable} from "@syntax";
 import {Component} from "./component";
 import {Stage} from "./stage";
 
@@ -24,7 +24,7 @@ export class Actor extends EventEmitter {
      * Whether actor is active or not.
      * @default true
      */
-    public active: boolean;
+    public readonly active: boolean;
 
     /** Unique identifier of an actor for debug purposes. */
     public readonly id: number;
@@ -36,16 +36,30 @@ export class Actor extends EventEmitter {
     public readonly components: ReadonlyArray<Component>;
 
     /** Whether actor has been destroyed. */
-    public get destroyed(): boolean {
-        return !this.stage
-            || this.stage.isActorDestroyed(this)
-            ;
-    }
+    public readonly destroyed;
 
     /** Initialize new instance of an actor. */
     constructor() {
         super();
         this.id = ++Actor.counter;
+    }
+
+    /**
+     * Modify actor {@link active} state.
+     * @param value - whether to set active or inactive.
+     * @return true if state changed; false already has provided state.
+     */
+    setActive(this: Mutable<Actor>, value: boolean): boolean {
+        if (this.active === value)
+            return false;
+
+        this.active = value;
+        for (const component of this.components)
+            value
+                ? Component.enable(component)
+                : Component.disable(component);
+
+        return true;
     }
 
     /**
@@ -98,4 +112,3 @@ export class Actor extends EventEmitter {
 
 // 'Actor' defaults
 Actor.prototype.name = "actor";
-Actor.prototype.active = true;

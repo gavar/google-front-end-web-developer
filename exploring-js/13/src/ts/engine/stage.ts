@@ -9,6 +9,8 @@ import {System} from "./system";
  */
 export class Stage {
 
+    private static readonly buffer: any[] = [];
+
     private lastTime: number;
     private stepTime: number;
     private ticker: FrameRequestCallback;
@@ -61,6 +63,7 @@ export class Stage {
         if (name) actor.name = name;
         this.actors.add(actor);
         actor.stage = this;
+        actor.active = true;
         actor.components = [];
         return actor as Actor;
     }
@@ -102,6 +105,9 @@ export class Stage {
         if (index < 0)
             throw new Error("component does not belong to given actor");
 
+        // flags
+        (component as Mutable<Component>).destroyed = true;
+
         // fill empty component slot
         const last = components.pop();
         if (last !== component)
@@ -113,6 +119,12 @@ export class Stage {
         // remove from systems
         for (const system of this.systems.items)
             system.remove(component);
+
+        // disable
+        if (component.enabled) {
+            (component as Mutable<Component>).enabled = false;
+            Stage.invoke(component, "disable");
+        }
 
         // destroy
         Stage.invoke(component, "destroy");
@@ -127,6 +139,10 @@ export class Stage {
         if (!this.destroyActors.add(actor))
             return;
 
+        // flags
+        (actor as Mutable<Actor>).active = false;
+        (actor as Mutable<Actor>).destroyed = true;
+
         // callbacks
         for (const component of actor.components) {
             // remove from queue if it's there
@@ -136,30 +152,18 @@ export class Stage {
             for (const system of this.systems.items)
                 system.remove(component);
 
-            // destroy component
+            // flags
+            (component as Mutable<Component>).destroyed = true;
+
+            // disable
+            if (component.enabled) {
+                (component as Mutable<Component>).enabled = false;
+                Stage.invoke(component, "disable");
+            }
+
+            // destroy
             Stage.invoke(component, "destroy");
         }
-    }
-
-    /**
-     * Whether {@link Actor} is destroyed or is going to be destroyed.
-     * @param actor - actor to test.
-     */
-    isActorDestroyed(actor: Actor): boolean {
-        return !actor.stage
-            || this.destroyActors.has(actor)
-            ;
-    }
-
-    /**
-     * Whether {@link Component} is destroyed or is going to be destroyed.
-     * @param component - component to test.
-     */
-    isComponentDestroyed(component: Component): boolean {
-        return !component.actor
-            || this.destroyComponents.has(component)
-            || this.isActorDestroyed(component.actor)
-            ;
     }
 
     /**
@@ -176,21 +180,38 @@ export class Stage {
 
     private tick(deltaTime: number) {
 
-        const systems = this.systems.items;
         const queue = this.queue.items;
+        const systems = this.systems.items;
 
-        // activate components
-        for (const component of queue)
-            Stage.invoke(component, "start");
+        try {
+            const delay = Stage.buffer;
+            // activate components
+            for (const component of queue) {
+                // disabled before first update?
+                if (component.enabled === false) {
+                    delay.push(component);
+                }
+                else {
+                    (component as Mutable<Component>).enabled = true;
+                    Stage.invoke(component, "enable");
+                    Stage.invoke(component, "start");
+                }
+            }
 
-        // register components to systems
-        for (const component of queue)
-            for (const system of systems)
-                if (system.match(component))
-                    system.add(component);
+            // register components to systems
+            for (const component of queue)
+                for (const system of systems)
+                    if (component.enabled && system.match(component))
+                        system.add(component);
 
-        // clear queue
-        this.queue.clear();
+            // refresh queue
+            this.queue.clear();
+            for (const component of delay)
+                this.queue.add(component);
+        }
+        finally {
+            Stage.buffer.length = 0;
+        }
 
         // tick systems
         for (const system of systems)
