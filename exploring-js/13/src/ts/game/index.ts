@@ -1,6 +1,7 @@
 export * from "./mathf";
 export * from "./game-events";
 export * from "./view";
+export * from "./reactive";
 export * from "./highlight";
 export * from "./enemy";
 export * from "./enemy-spawn";
