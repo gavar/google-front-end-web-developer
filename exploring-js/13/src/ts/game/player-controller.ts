@@ -5,19 +5,23 @@ import {LateUpdate} from "$systems";
 
 /**
  * Controls the player movement, by reacting on input events.
+ * // TODO: rename to PlayerControls
  */
 export class PlayerController implements Component, EventListenerObject, LateUpdate {
 
     private velocity: Vector2 = {x: 0, y: 0};
     public position: Vector2 = {x: 0, y: 0};
 
-    public player: Player;
+    public player: Player; // TODO: replace with transform
     public terrain: Terrain2D;
     public canvas: Canvas;
     public smoothTime: number = 0.15;
 
     /** @inheritDoc */
     readonly actor: Actor;
+
+    /** @inheritDoc */
+    readonly enabled?: boolean;
 
     /** Set of walkable tiles. */
     public walkable: Set<string> = new Set<string>();
@@ -64,7 +68,6 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     /** @inheritDoc */
     handleEvent(e: Event): void {
-        const rect = this.canvas.element.getBoundingClientRect() as DOMRect;
 
         switch (e.type) {
             case "click":
@@ -75,6 +78,11 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
                 break;
         }
 
+        // suspended?
+        if (!this.enabled)
+            return;
+
+        const rect = this.canvas.element.getBoundingClientRect() as DOMRect;
         switch (e.type) {
             case "keydown":
                 this.onKeyDown(e as KeyboardEvent);
