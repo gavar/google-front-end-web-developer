@@ -16,7 +16,13 @@ export abstract class Collider2D implements Component, Gizmo2D {
     public readonly body: PhysicsBody2D;
 
     /** @inheritDoc */
-    public gizmo?: boolean;
+    public gizmo: boolean;
+
+    /** @inheritDoc */
+    readonly enabled: boolean;
+
+    /** @inheritDoc */
+    readonly destroyed: boolean;
 
     /** Warm-up collider for collision calculations. */
     abstract recalculate(): void;

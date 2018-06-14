@@ -1,3 +1,4 @@
+import {PhysicsBody2D} from "$physics";
 import {CompositeSystem, Composition} from "$systems";
 import {Collider2D} from "./colliders";
 
@@ -6,6 +7,8 @@ export interface CollisionComposition extends Composition<Collider2D> {
     prev: Collider2D[];
     /** Active intersections. */
     next: Collider2D[];
+    /** Whether this collider can participate in collisions. */
+    active?: boolean;
 }
 
 /**
@@ -14,6 +17,13 @@ export interface CollisionComposition extends Composition<Collider2D> {
 export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComposition> {
 
     private static readonly buffer = new Set<Collider2D>();
+
+    private static isActive(component: Collider2D, body: PhysicsBody2D, masks: number[]) {
+        return body.enabled  // physics body enabled
+            && component.enabled // collider enabled
+            && masks[body.layer.value] as any // has collision with any other layer
+            ;
+    }
 
     /** Array of intersection masks for each layer. */
     private readonly masks: number[] = new Array(32);
@@ -51,23 +61,28 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
 
     /** @inheritDoc */
     protected process(deltaTime: number, compositions: ReadonlyArray<CollisionComposition>): void {
+        const {isActive} = CollisionSystem2D;
         const {masks} = this;
 
         // recalculate colliders
-        for (const composition of compositions) {
-            const collider = composition.component;
-            if (!collider.actor.active) continue;
-            if (!masks[collider.body.layer.value]) continue;
-            collider.recalculate();
+        for (const item of compositions) {
+            const {component} = item;
+            // check if active
+            item.active = isActive(component, component.body, masks);
+            // recalculate
+            if (item.active)
+                component.recalculate();
         }
 
         // detect collisions
         const size = compositions.length;
         for (let i = 0; i < size; i++) {
             const a = compositions[i];
+            if (!a.active) continue;
             const m = masks[a.component.body.layer.value];
             for (let j = i + 1; j < size; j++) {
                 const b = compositions[j];
+                if (!a.active) continue;
                 if (m & b.component.body.layer.mask)
                     if (a.component.intersect(b.component))
                         a.next.push(b.component);
@@ -75,15 +90,13 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
         }
 
         // enter / stay / exit
-        for (const composition of compositions) {
+        for (const item of compositions) {
             const {buffer} = CollisionSystem2D;
-            const {prev, next} = composition;
-            const {component} = composition;
+            const {prev, next, component} = item;
             try {
                 for (const collider of prev)
                     buffer.add(collider);
 
-                let destroyed: boolean;
                 for (let i = 0; i < next.length; i++) {
                     const collider = next[i];
                     const stay = buffer.delete(collider);
@@ -92,14 +105,13 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
                     if (stay) component.body.stay(collider);
                     else component.body.enter(collider);
 
-                    // self destroy?
-                    if (component.actor.stage.isComponentDestroyed(component)) {
-                        destroyed = true;
+                    // self disable / destroy after callback?
+                    item.active = isActive(component, component.body, masks);
+                    if (!item.active)
                         break;
-                    }
 
-                    // collider destroy?
-                    if (collider.actor.stage.isComponentDestroyed(collider)) {
+                    // collider disable / destroy?
+                    if (!isActive(collider, collider.body, masks)) {
                         const last = next.pop();
                         if (i < next.length)
                             next[i--] = last;
@@ -111,13 +123,13 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
 
                 // exit from previous
                 for (const collider of prev)
-                    if (destroyed || buffer.delete(collider)) {
+                    if (!item.active || buffer.delete(collider)) {
                         component.body.exit(collider);
                         collider.body.exit(component);
                     }
 
                 // exit from all if destroyed
-                if (destroyed) {
+                if (!item.active) {
                     for (const collider of next) {
                         component.body.exit(collider);
                         collider.body.exit(component);
@@ -126,9 +138,9 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
 
             }
             finally {
-                composition.prev = next;
-                composition.next = prev;
-                composition.next.length = 0;
+                item.prev = next;
+                item.next = prev;
+                item.next.length = 0;
                 buffer.clear();
             }
         }
@@ -136,13 +148,13 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
         // show gizmo?
         if (this.gizmo) {
             // disable all gizmos
-            for (const composition of compositions)
-                composition.component.gizmo = false;
+            for (const item of compositions)
+                item.component.gizmo = false;
 
             // enable gizmos on collisions
-            for (const composition of compositions) {
-                for (const collider of composition.prev)
-                    composition.component.gizmo = collider.gizmo = true;
+            for (const item of compositions) {
+                for (const collider of item.prev)
+                    item.component.gizmo = collider.gizmo = true;
             }
         }
     }

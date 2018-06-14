@@ -11,6 +11,12 @@ export class PhysicsBody2D implements Component {
     /** @inheritDoc */
     public readonly actor: Actor;
 
+    /** @inheritDoc */
+    public readonly enabled: boolean;
+
+    /** @inheritDoc */
+    public readonly destroyed: boolean;
+
     /** Transformation of this body. */
     public readonly transform: Transform;
 
@@ -25,6 +31,7 @@ export class PhysicsBody2D implements Component {
 
     /** Trigger entering into collider. */
     enter(collider: Collider2D): void {
+        this.validate();
         for (const component of this.actor.components)
             (component as PhysicsListener2D).triggerEnter2D &&
             (component as PhysicsListener2D).triggerEnter2D(collider);
@@ -32,6 +39,7 @@ export class PhysicsBody2D implements Component {
 
     /** Trigger staying in touch with collider. */
     stay(collider: Collider2D): void {
+        this.validate();
         for (const component of this.actor.components)
             (component as PhysicsListener2D).triggerStay2D &&
             (component as PhysicsListener2D).triggerStay2D(collider);
@@ -39,9 +47,18 @@ export class PhysicsBody2D implements Component {
 
     /** Trigger leaving collider. */
     exit(collider: Collider2D): void {
+        // allow to exit from disabled / destroyed physics body
         for (const component of this.actor.components)
             (component as PhysicsListener2D).triggerExit2D &&
             (component as PhysicsListener2D).triggerExit2D(collider);
+    }
+
+    private validate() {
+        if (!this.enabled)
+            throw new Error("physics body is disabled!");
+
+        if (this.destroyed)
+            throw new Error("physics body is destroyed!");
     }
 }
 
