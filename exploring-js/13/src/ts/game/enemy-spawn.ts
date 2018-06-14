@@ -54,7 +54,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
         // spawn enemy
         const enemy = this.spawn();
-        enemy.actor.active = true;
+        enemy.actor.setActive(true);
         this.enemies.push(enemy);
 
         // delay ±50%
@@ -78,7 +78,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
                     continue;
 
             // deactivate enemy
-            enemy.actor.active = false;
+            enemy.actor.setActive(false);
             this.pool.push(enemy);
 
             // fill empty slot
