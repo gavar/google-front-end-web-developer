@@ -53,4 +53,10 @@ export namespace Component {
             component.disable && component.disable();
         }
     }
+
+    /** Enabled and disable component in one frame. */
+    export function restart(component: Mutable<Component>) {
+        Component.disable(component);
+        Component.enable(component);
+    }
 }
