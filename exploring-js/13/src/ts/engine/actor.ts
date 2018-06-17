@@ -49,11 +49,14 @@ export class Actor extends EventEmitter {
      * @param value - whether to set active or inactive.
      * @return true if state changed; false already has provided state.
      */
-    setActive(this: Mutable<Actor>, value: boolean): boolean {
+    setActive(value: boolean): boolean {
         if (this.active === value)
             return false;
 
-        this.active = value;
+        if (value)
+            this.alive();
+
+        (this as Mutable<this>).active = value;
         for (const component of this.components)
             value
                 ? Component.enable(component)
@@ -68,6 +71,7 @@ export class Actor extends EventEmitter {
      * @returns - instance of added component.
      */
     add<T>(type: Newable<T>): T & Component {
+        this.alive();
         return this.stage.addComponent(this, type);
     }
 
@@ -103,10 +107,17 @@ export class Actor extends EventEmitter {
      * Destroy this actor and all of its components.
      */
     destroy() {
+        if (this.destroyed) return;
         this.emit(Actor.DESTROYING, this);
         this.stage.destroyActor(this);
         this.emit(Actor.DESTROYED, this);
         this.removeAllListeners();
+    }
+
+    /** Assert that this actor is alive. */
+    private alive() {
+        if (this.destroyed)
+            throw new Error("actor is destroyed!");
     }
 }
 
