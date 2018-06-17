@@ -27,7 +27,7 @@ export namespace LayerOrder {
     export const BONUS_PATH_LAYER = 2;
 }
 
-const DEBUG = true;
+const DEBUG = document.location.pathname.includes("localhost");
 
 interface GizmoSettings {
     enable: boolean;
