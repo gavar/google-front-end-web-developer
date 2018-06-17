@@ -21,6 +21,15 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Local pivot of the image. */
     public readonly pivot: Vector2 = {x: 0, y: 0};
 
+    /**
+     * Canvas filter to apply.
+     * Experimental feature, may not work in all browsers.
+     */
+    public filter: string;
+
+    /** Opacity of the image. */
+    public opacity: number = 1;
+
     /** @inheritDoc */
     public gizmo: boolean;
 
@@ -58,12 +67,14 @@ export class Sprite implements Draw2D, Gizmo2D {
         if (!image) return;
 
         this.recalculate();
-        const {x, y} = this;
+        const {x, y, opacity, filter} = this;
         const {scale} = this.transform;
         const {width, height} = image;
 
         try {
             ctx.save();
+            (ctx as any).filter = filter;
+            ctx.globalAlpha = opacity;
             ctx.scale(scale.x, scale.y);
             ctx.drawImage(image, x, y, width, height);
         }
