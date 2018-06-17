@@ -4,6 +4,8 @@ import {Bounty, Random, TerrainPath} from "$game";
 
 export class BountySpawn implements Component {
 
+    private readonly actors: Set<Actor> = new Set<Actor>();
+
     /** @inheritDoc */
     public readonly actor?: Actor;
 
@@ -35,6 +37,13 @@ export class BountySpawn implements Component {
         this.terrainPath = this.terrainPath || this.actor.stage.findComponentOfType(TerrainPath);
     }
 
+    /** @inheritDoc */
+    disable() {
+        for (const actor of this.actors)
+            if (!actor.destroyed)
+                actor.destroy();
+    }
+
     /** Spawn bounty on the given position. */
     spawn(x: number, y: number): Bounty {
         const {terrain} = this.bonusPathLayer;
@@ -42,6 +51,7 @@ export class BountySpawn implements Component {
         const {position} = bounty.transform;
         position.x = terrain.positionX(x);
         position.y = terrain.positionY(y);
+        this.actors.add(bounty.actor);
         return bounty;
     }
 
@@ -76,6 +86,7 @@ export class BountySpawn implements Component {
     }
 
     private onBonusDestroy(actor: Actor) {
+        this.actors.delete(actor);
         const {bonusPathLayer} = this;
         const {terrain} = bonusPathLayer;
         const transform = actor.get(Transform);

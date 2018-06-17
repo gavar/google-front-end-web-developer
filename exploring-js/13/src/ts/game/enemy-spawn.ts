@@ -56,6 +56,11 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     }
 
     /** @inheritDoc */
+    enable() {
+        this.delayCountDown = 0;
+    }
+
+    /** @inheritDoc */
     update(deltaTime: number): void {
         const enemyLimit = this.enemyLimit();
 
@@ -101,6 +106,15 @@ export class EnemySpawn implements Component, Update, LateUpdate {
             const last = this.enemies.pop();
             if (i < this.enemies.length)
                 this.enemies[i--] = last;
+        }
+    }
+
+    /** @inheritDoc */
+    disable() {
+        while (this.enemies.length > 0) {
+            const enemy = this.enemies.pop();
+            enemy.actor.setActive(false);
+            this.pool.push(enemy);
         }
     }
 

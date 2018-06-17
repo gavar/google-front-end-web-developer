@@ -87,6 +87,7 @@ export class GameController implements Component, Draw2D {
         this.enemySpawn.enemyLimit = () => this.difficulty.enemyLimit;
         this.enemySpawn.enemyVelocity = () => this.difficulty.enemyVelocity;
 
+        // finally can start the game
         this.play();
     }
 
@@ -94,9 +95,17 @@ export class GameController implements Component, Draw2D {
     play(): void {
         const {controls, terrain, player, difficulty, settings} = this;
 
-        // initial values
-        difficulty.reset();
+        // discard previous game state
         player.stats.reset();
+        difficulty.reset();
+
+        // warm-up components
+        Component.disable(this.player.actor.get(Ghost));
+        Component.restart(this.controls);
+        Component.restart(this.enemySpawn);
+        Component.restart(this.bountySpawn);
+
+        // initial values
         player.stats.set("lives", settings.lives);
 
         // initial player position
@@ -174,6 +183,10 @@ export class GameController implements Component, Draw2D {
         const {controls, player} = this;
         Component.disable(controls); // disable controls
         Component.disable(player.actor.get(PhysicsBody2D)); // disable collision
+
+    /** Play again. */
+    private replay() {
+        this.play();
     }
 
     /** Player player hit GFX. */
