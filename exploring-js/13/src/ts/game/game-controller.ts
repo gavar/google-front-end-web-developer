@@ -8,6 +8,7 @@ import {
     GameDifficulty,
     GameEvents,
     GameSettings,
+    Ghost,
     Player,
     PlayerController,
     Random,
@@ -132,7 +133,14 @@ export class GameController implements Component, Draw2D {
     private hitByEnemy(enemy: Enemy) {
         this.playHitGfx();
         this.player.hit();
-        // TODO: enable ghost mode for 5 sec when receives hit
+
+        // ghost mode
+        const {player, settings} = this;
+        const {dead} = player.stats;
+        const ghost = player.actor.require(Ghost);
+        ghost.blink = !dead;
+        ghost.duration = dead ? Number.POSITIVE_INFINITY : settings.invulnerabilityDuration;
+        Component.enable(ghost);
     }
 
     /** Player steps on a bounty. */

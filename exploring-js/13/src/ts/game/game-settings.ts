@@ -18,6 +18,9 @@ export class GameSettings extends Reactive {
     /** Velocity of the enemies by 'X' axis. */
     public enemyVelocity: number = 50;
 
+    /** How much time player is invulnerable to damage after being hit. */
+    public invulnerabilityDuration: number = 5;
+
     /** Scoring per each type of bounty. */
     public scores: Dictionary<string, number> = {
         "checkpoint": 100,
