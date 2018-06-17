@@ -12,6 +12,7 @@ export class StatsView extends BaseView implements LateUpdate {
 
     private score: HTMLElement;
     private lives: HTMLElement;
+    private level: HTMLElement;
 
     public root: HTMLElement;
     public stats: PlayerStats;
@@ -27,6 +28,7 @@ export class StatsView extends BaseView implements LateUpdate {
         this.root = this.root || document.querySelector(".stats");
         this.score = this.root.querySelector(".score");
         this.lives = this.root.querySelector(".lives");
+        this.level = this.root.querySelector(".level");
         this.listen("stats", PlayerStats);
     }
 
@@ -40,6 +42,7 @@ export class StatsView extends BaseView implements LateUpdate {
     protected render(): void {
         const {stats, settings} = this;
         this.score.innerText = stats.score as any;
+        this.level.innerText = stats.level + 1 as any;
         this.lives.innerText = StatsView.livesToHearts(stats.lives, settings.lives);
     }
 

@@ -156,6 +156,7 @@ export class GameController implements Component, Draw2D {
                 this.bountySpawn.gamble();
                 this.continuePath(this.controls.position.y);
                 this.difficulty.advance();
+                this.player.stats.set("level", this.difficulty.level);
                 break;
         }
     }
