@@ -121,21 +121,28 @@ export class CollisionSystem2D extends CompositeSystem<Collider2D, CollisionComp
                     }
                 }
 
-                // exit from previous
-                for (const collider of prev)
-                    if (!item.active || buffer.delete(collider)) {
+                if (item.active) {
+                    // exit from previous
+                    for (const collider of prev) {
+                        if (buffer.delete(collider)) {
+                            component.body.exit(collider);
+                            collider.body.exit(component);
+                        }
+                    }
+                }
+                else {
+                    // exit from all if deactivated
+                    for (const collider of prev) {
                         component.body.exit(collider);
                         collider.body.exit(component);
                     }
-
-                // exit from all if destroyed
-                if (!item.active) {
                     for (const collider of next) {
                         component.body.exit(collider);
                         collider.body.exit(component);
                     }
+                    prev.length = 0;
+                    next.length = 0;
                 }
-
             }
             finally {
                 item.prev = next;
