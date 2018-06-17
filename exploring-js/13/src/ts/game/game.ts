@@ -13,7 +13,7 @@ import {
 } from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
-import {StatsView} from "$ui";
+import {DifficultyView, StatsView} from "$ui";
 
 export namespace Layers {
     export const TERRAIN = 1;
@@ -26,6 +26,8 @@ export namespace LayerOrder {
     export const TERRAIN_PATH = 1;
     export const BONUS_PATH_LAYER = 2;
 }
+
+const DEBUG = true;
 
 interface GizmoSettings {
     enable: boolean;
@@ -222,12 +224,18 @@ export class Game {
 
     initUI(): void {
         this.initStatsView();
+        if (DEBUG) this.initDebugView();
     }
 
     initStatsView(): StatsView {
         const actor = this.stage.createActor("stats-view");
         const view = actor.add(StatsView);
         return view;
+    }
+
+    initDebugView(): void {
+        const actor = this.stage.createActor("debug-view");
+        const view = actor.add(DifficultyView);
     }
 
     initGizmo() {
