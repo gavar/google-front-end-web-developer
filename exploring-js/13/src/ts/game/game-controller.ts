@@ -122,18 +122,26 @@ export class GameController implements Component, Draw2D {
 
     /** Player steps on a bounty. */
     private collectBounty(bounty: Bounty) {
-        const image = bounty.view.sprite.image;
-        if (image) {
-            // bonus
-            // TODO: give bonus
-        }
-        else {
-            // checkpoint
-            this.bountySpawn.gamble();
-            this.continuePath(this.controls.position.y);
-        }
+        const {player, settings} = this;
 
+        const bountyType = this.resolveBountyType(bounty);
         bounty.actor.destroy();
+
+        // TODO: complexity multiplier
+        // scores
+        const score = settings.scores[bountyType];
+        player.stats.modify("score", score);
+
+        // specials
+        switch (bountyType) {
+            case "heart":
+                player.stats.modify("lives", 1);
+                break;
+            case "checkpoint":
+                this.bountySpawn.gamble();
+                this.continuePath(this.controls.position.y);
+                break;
+        }
     }
 
     /** Players dies */
@@ -170,5 +178,12 @@ export class GameController implements Component, Draw2D {
         // generate bounty
         const bounty = this.bountySpawn.spawn(finish.x, finish.y);
         bounty.highlight.setHighlightActive(true);
+    }
+
+    private resolveBountyType(bounty: Bounty) {
+        const image = bounty.view.sprite.image;
+        const name = image && image.name || "checkpoint";
+        const index = name.lastIndexOf(".");
+        return index >= 0 ? name.slice(0, index) : name;
     }
 }
