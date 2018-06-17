@@ -17,13 +17,13 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     public resources: Resources;
 
     /** Max number of enemies. */
-    public enemyLimit: number = 0;
+    public enemyLimit: () => number;
 
     /** Factory which creates new enemy instance on request. */
     public enemyFactory: () => Enemy;
 
     /** Enemy 'X' axis velocity. */
-    public enemyVelocity: number;
+    public enemyVelocity: () => number;
 
     /** Terrain where to spawn enemies. */
     public terrain: Terrain2D;
@@ -32,7 +32,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     public yTileRange: MinMax;
 
     /** Delay between consequent enemy spawns. */
-    public delay: number;
+    public delay: () => number;
 
     /** @inheritDoc */
     start() {
@@ -42,6 +42,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
     /** @inheritDoc */
     update(deltaTime: number): void {
+        const enemyLimit = this.enemyLimit();
 
         // delay between spawns
         this.delayCountDown -= deltaTime;
@@ -49,7 +50,7 @@ export class EnemySpawn implements Component, Update, LateUpdate {
             return;
 
         // are more enemies required?
-        if (this.enemies.length >= this.enemyLimit)
+        if (this.enemies.length >= enemyLimit)
             return;
 
         // spawn enemy
@@ -57,8 +58,8 @@ export class EnemySpawn implements Component, Update, LateUpdate {
         enemy.actor.setActive(true);
         this.enemies.push(enemy);
 
-        // delay ±50%
-        this.delayCountDown = this.delay * Random.deviation(.5);
+        // delay ±25%
+        this.delayCountDown = this.delay() * Random.deviation(.25);
     }
 
     /** @inheritDoc */
@@ -100,8 +101,8 @@ export class EnemySpawn implements Component, Update, LateUpdate {
         const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
         enemy.transform.position.y = terrain.positionY(tileY);
 
-        // velocity ±50%
-        const velocity = this.enemyVelocity * Random.deviation(.5);
+        // velocity ±25%
+        const velocity = this.enemyVelocity() * Random.deviation(.25);
 
         // setup direction
         if (leftToRight) {

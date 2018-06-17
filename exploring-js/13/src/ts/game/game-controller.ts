@@ -4,6 +4,7 @@ import {
     Bounty,
     BountySpawn,
     Enemy,
+    GameDifficulty,
     GameEvents,
     GameSettings,
     Player,
@@ -20,8 +21,11 @@ export class GameController implements Component, Draw2D {
     /** @inheritDoc */
     public readonly actor?: Actor;
 
-    /** @inheritDoc */
+    /** Game settings. */
     public readonly settings: GameSettings;
+
+    /** Game difficulty. */
+    public readonly difficulty: GameDifficulty;
 
     public canvas: Canvas;
     public player: Player;
@@ -40,6 +44,8 @@ export class GameController implements Component, Draw2D {
     /** @inheritDoc */
     awake(this: Mutable<this>) {
         this.settings = this.actor.require(GameSettings);
+        this.difficulty = this.actor.require(GameDifficulty);
+        this.difficulty.settings = this.settings;
     }
 
     /** @inheritDoc */
@@ -49,8 +55,8 @@ export class GameController implements Component, Draw2D {
         this.player = this.player || stage.findComponentOfType(Player);
         this.controls = this.controls || stage.findComponentOfType(PlayerController);
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
-        this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
+        this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
 
         // player events
         const {player} = this;
@@ -63,23 +69,29 @@ export class GameController implements Component, Draw2D {
         this.outer.classList.add("outer");
         this.outer.style.position = "absolute";
         this.canvas.element.parentElement.appendChild(this.outer);
-
         // inner outline
         this.inner = document.createElement("div");
         this.inner.classList.add("inner");
         this.inner.style.position = "absolute";
         this.canvas.element.parentElement.appendChild(this.inner);
-
+        // outlines list
         this.outlines = [this.outer, this.inner];
+
+        // difficulty
+        this.bountySpawn.chance = () => this.difficulty.bonusChance;
+        this.enemySpawn.delay = () => this.difficulty.enemyDelay;
+        this.enemySpawn.enemyLimit = () => this.difficulty.enemyLimit;
+        this.enemySpawn.enemyVelocity = () => this.difficulty.enemyVelocity;
+
         this.play();
     }
 
     /** Play the game. */
     play(): void {
-        const {controls, terrain, player, settings, bountySpawn} = this;
+        const {controls, terrain, player, difficulty, settings} = this;
 
         // initial values
-        bountySpawn.chance = .25; // 25% bonus chance
+        difficulty.reset();
         player.stats.reset();
         player.stats.set("lives", settings.lives);
 
@@ -127,7 +139,6 @@ export class GameController implements Component, Draw2D {
         const bountyType = this.resolveBountyType(bounty);
         bounty.actor.destroy();
 
-        // TODO: complexity multiplier
         // scores
         const score = settings.scores[bountyType];
         player.stats.modify("score", score);
@@ -140,6 +151,7 @@ export class GameController implements Component, Draw2D {
             case "checkpoint":
                 this.bountySpawn.gamble();
                 this.continuePath(this.controls.position.y);
+                this.difficulty.advance();
                 break;
         }
     }

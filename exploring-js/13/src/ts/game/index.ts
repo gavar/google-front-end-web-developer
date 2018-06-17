@@ -12,5 +12,6 @@ export * from "./player";
 export * from "./player-stats";
 export * from "./player-controller";
 export * from "./game-settings";
+export * from "./game-difficulty";
 export * from "./game-controller";
 export * from "./game";

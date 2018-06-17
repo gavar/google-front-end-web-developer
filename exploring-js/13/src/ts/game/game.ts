@@ -159,10 +159,7 @@ export class Game {
         const actor = this.stage.createActor("enemy-spawn");
         const spawn = actor.add(EnemySpawn);
         spawn.terrain = terrain;
-        spawn.enemyVelocity = 150;
-        spawn.enemyLimit = 20;
         spawn.yTileRange = {min: 1, max: terrain.size.y - 2};
-        spawn.delay = 1;
 
         spawn.enemyFactory = () => {
             const actor = this.stage.createActor("enemy");

@@ -27,8 +27,13 @@ export class BountySpawn implements Component {
     /** Factory which creates new {@link Bounty} instance on request. */
     public bountyFactory: () => Bounty;
 
-    /** Chance to spawn a bonus. */
-    public chance: number;
+    /** Bonus chance calculation func. */
+    public chance: () => number;
+
+    /** @inheritDoc */
+    start() {
+        this.terrainPath = this.terrainPath || this.actor.stage.findComponentOfType(TerrainPath);
+    }
 
     /** Spawn bounty on the given position. */
     spawn(x: number, y: number): Bounty {
@@ -43,7 +48,7 @@ export class BountySpawn implements Component {
     /** Randomly generate special bonus. */
     gamble() {
         // success if in (0; chance] range
-        if (Math.random() > this.chance)
+        if (Math.random() > this.chance())
             return;
 
         const {bonusPathLayer} = this;
