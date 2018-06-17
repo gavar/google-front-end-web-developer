@@ -1,3 +1,6 @@
+/*
+ * COMMON
+ */
 html, body {
   overflow-x: hidden;
 }
@@ -14,6 +17,11 @@ body, canvas {
   overflow: hidden;
 }
 
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: #fff url('/img/background.png');
+}
+
 canvas {
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
@@ -21,6 +29,19 @@ canvas {
   image-rendering: -o-crisp-edges;
   image-rendering: optimize-contrast;
   -ms-interpolation-mode: nearest-neighbor;
+}
+
+button {
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+dialog {
+  border: none;
+  background-color: transparent;
+  border-radius: 10px;
 }
 
 /* GAME */
@@ -40,12 +61,6 @@ canvas {
 .inner.hit {
   animation-duration: 1.5s;
   animation-name: inner-hit;
-}
-
-/* HUD */
-body {
-  font-family: 'Open Sans', sans-serif;
-  background: #fff url('/img/background.png');
 }
 
 .stats {
@@ -85,6 +100,38 @@ body {
   animation-duration: .4s;
 }
 
+/* OVERLAY */
+.overlay {
+  display: flex;
+  background-color: rgba(0, 0, 0, .7);
+  border-radius: 10px;
+  align-items: center;
+  position: absolute;
+  z-index: 100;
+}
+
+dialog:not([open]),
+.overlay:not([open]) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+dialog[open],
+.overlay[open] {
+  animation-name: dialog-open;
+  animation-duration: 1s;
+}
+
+dialog[close],
+.overlay[close] {
+  animation-name: dialog-close;
+  animation-duration: 0.5s;
+}
+
+.overlay > * {
+  flex: 1;
+}
+
 /* ANIMATIONS */
 @keyframes outer-hit {
   from {
@@ -115,5 +162,27 @@ body {
 @keyframes scale {
   50% {
     transform: scale(1.25);
+  }
+}
+
+@keyframes dialog-open {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes dialog-close {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
   }
 }

@@ -13,7 +13,7 @@ import {
 } from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
-import {DifficultyView, StatsView} from "$ui";
+import {DifficultyView, OverlayView, StatsView} from "$ui";
 
 export namespace Layers {
     export const TERRAIN = 1;
@@ -224,12 +224,19 @@ export class Game {
 
     initUI(): void {
         this.initStatsView();
+        this.initOverlayView();
         if (DEBUG) this.initDebugView();
     }
 
     initStatsView(): StatsView {
         const actor = this.stage.createActor("stats-view");
         const view = actor.add(StatsView);
+        return view;
+    }
+
+    initOverlayView(): OverlayView {
+        const actor = this.stage.createActor("overlay-view");
+        const view = actor.add(OverlayView);
         return view;
     }
 

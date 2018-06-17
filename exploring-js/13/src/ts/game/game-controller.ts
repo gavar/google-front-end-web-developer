@@ -16,6 +16,7 @@ import {
 } from "$game";
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
+import {OverlayView} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -37,6 +38,7 @@ export class GameController implements Component, Draw2D {
     public enemySpawn: EnemySpawn;
     public bountySpawn: BountySpawn;
 
+    public overlay: OverlayView;
     private outer: HTMLElement;
     private inner: HTMLElement;
     private outlines: HTMLElement[];
@@ -62,6 +64,7 @@ export class GameController implements Component, Draw2D {
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
 
+        this.overlay = this.overlay || stage.findComponentOfType(OverlayView);
         // player events
         const {player} = this;
         player.actor.on(GameEvents.PLAYER_DIE, this.die, this);
@@ -93,9 +96,10 @@ export class GameController implements Component, Draw2D {
 
     /** Play the game. */
     play(): void {
-        const {controls, terrain, player, difficulty, settings} = this;
+        const {controls, terrain, player, difficulty, settings, overlay} = this;
 
         // discard previous game state
+        overlay.close();
         player.stats.reset();
         difficulty.reset();
 
@@ -121,6 +125,16 @@ export class GameController implements Component, Draw2D {
     /** @inheritDoc */
     draw2D(ctx: CanvasRenderingContext2D): void {
         this.outlineLayout();
+        this.overlayLayout();
+    }
+
+    private overlayLayout() {
+        const {overlay, canvas} = this;
+        const {root} = overlay;
+        root.style.top = `${canvas.element.offsetTop}px`;
+        root.style.left = `${canvas.element.offsetLeft}px`;
+        root.style.width = `${canvas.element.width}px`;
+        root.style.height = `${canvas.element.height}px`;
     }
 
     private outlineLayout() {
