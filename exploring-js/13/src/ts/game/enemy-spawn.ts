@@ -34,6 +34,21 @@ export class EnemySpawn implements Component, Update, LateUpdate {
     /** Delay between consequent enemy spawns. */
     public delay: () => number;
 
+    /**
+     * Speed-up all enemies by given factor.
+     * @param f - enemy speed multiplication.
+     * @param min - min speed of the enemy.
+     */
+    speedup(f: number = 3, min: number = 300) {
+        this.delayCountDown = 0;
+        for (const enemy of this.enemies) {
+            const velocity = enemy.motor.velocity;
+            const sign = velocity.x >= 0 ? 1 : -1;
+            const vx = Math.max(Math.abs(velocity.x) * f, min);
+            velocity.x = vx * sign;
+        }
+    }
+
     /** @inheritDoc */
     start() {
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);

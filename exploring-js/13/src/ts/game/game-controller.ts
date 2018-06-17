@@ -4,6 +4,7 @@ import {
     Bounty,
     BountySpawn,
     Enemy,
+    EnemySpawn,
     GameDifficulty,
     GameEvents,
     GameSettings,
@@ -32,6 +33,7 @@ export class GameController implements Component, Draw2D {
     public controls: PlayerController;
     public terrain: Terrain2D;
     public terrainPath: TerrainPath;
+    public enemySpawn: EnemySpawn;
     public bountySpawn: BountySpawn;
 
     private outer: HTMLElement;
@@ -55,6 +57,7 @@ export class GameController implements Component, Draw2D {
         this.player = this.player || stage.findComponentOfType(Player);
         this.controls = this.controls || stage.findComponentOfType(PlayerController);
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
+        this.enemySpawn = this.enemySpawn || stage.findComponentOfType(EnemySpawn);
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
 
@@ -149,6 +152,7 @@ export class GameController implements Component, Draw2D {
                 player.stats.modify("lives", 1);
                 break;
             case "checkpoint":
+                this.enemySpawn.speedup();
                 this.bountySpawn.gamble();
                 this.continuePath(this.controls.position.y);
                 this.difficulty.advance();
