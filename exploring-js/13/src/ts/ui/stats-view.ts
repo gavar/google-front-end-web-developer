@@ -41,9 +41,9 @@ export class StatsView extends BaseView implements LateUpdate {
     /** @inheritDoc */
     protected render(): void {
         const {stats, settings} = this;
-        this.score.innerText = stats.score as any;
-        this.level.innerText = stats.level + 1 as any;
-        this.lives.innerText = StatsView.livesToHearts(stats.lives, settings.lives);
+        this.setInnerText(this.score, stats.score);
+        this.setInnerText(this.level, stats.level + 1);
+        this.setInnerText(this.lives, StatsView.livesToHearts(stats.lives, settings.lives));
     }
 
     protected static livesToHearts(now: number, init: number): string {
@@ -58,5 +58,20 @@ export class StatsView extends BaseView implements LateUpdate {
         finally {
             buffer.length = 0;
         }
+    }
+
+    private setInnerText(element: HTMLElement, value: string | number) {
+        const prev = element.innerText;
+        if (prev == value) return;
+        element.innerText = value as any;
+        this.playGfx(element, "change");
+    }
+
+    private playGfx(element: HTMLElement, gfx: string) {
+        element.classList.remove(gfx);
+        element.style.animation = "none";
+        element.offsetHeight; // reflow
+        element.style.animation = null;
+        element.classList.add(gfx);
     }
 }

@@ -71,6 +71,20 @@ body {
   color: #af111c;
 }
 
+.change,
+.change,
+.change {
+  animation-name: positive-change;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+}
+
+.lives.change {
+  transform-origin: right center;
+  animation-name: scale;
+  animation-duration: .4s;
+}
+
 /* ANIMATIONS */
 @keyframes outer-hit {
   from {
@@ -88,5 +102,18 @@ body {
   }
   to {
     box-shadow: none;
+  }
+}
+
+@keyframes positive-change {
+  from {
+    font-weight: bolder;
+    color: springgreen;
+  }
+}
+
+@keyframes scale {
+  50% {
+    transform: scale(1.25);
   }
 }
