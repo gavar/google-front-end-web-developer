@@ -63,6 +63,7 @@ dialog {
   animation-name: inner-hit;
 }
 
+/* HUD STATS */
 .stats {
   position: absolute;
   display: flex;
@@ -74,20 +75,14 @@ dialog {
   flex-basis: 50%;
 }
 
-.left {
+.stats .left {
   text-align: left;
 }
 
-.right {
+.stats .right {
   text-align: right;
 }
 
-.lives {
-  color: #af111c;
-}
-
-.change,
-.change,
 .change {
   animation-name: positive-change;
   animation-duration: 1s;
