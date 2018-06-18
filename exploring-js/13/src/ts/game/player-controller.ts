@@ -94,6 +94,10 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
             case "touchcancel":
                 this.moveCountDown = 0;
                 this.touches = (e as TouchEvent).touches;
+                break;
+        }
+        switch (e.type) {
+            case "touchmove":
                 e.preventDefault();
                 break;
         }
