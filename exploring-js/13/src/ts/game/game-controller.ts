@@ -175,7 +175,7 @@ export class GameController implements Component, Draw2D {
 
     /** Player steps on a bounty. */
     private collectBounty(bounty: Bounty) {
-        const {player, settings} = this;
+        const {terrain, player, settings} = this;
 
         const bountyType = this.resolveBountyType(bounty);
         bounty.actor.destroy();
@@ -192,7 +192,10 @@ export class GameController implements Component, Draw2D {
             case "checkpoint":
                 this.enemySpawn.speedup();
                 this.bountySpawn.gamble();
-                this.continuePath(player.position.y);
+
+                const y = player.position.y <= terrain.positionY(1) ? 0 : terrain.size.y - 1;
+                this.continuePath(terrain.positionY(y));
+
                 this.difficulty.advance();
                 this.player.stats.set("level", this.difficulty.level);
                 break;
@@ -229,7 +232,7 @@ export class GameController implements Component, Draw2D {
         // update from tile
         fromTile.x = Random.rangeInt(1, terrain.size.x - 1);
         fromTile.y = terrain.colByPosY(fromY);
-        const toY = fromTile.y > 0 ? 0 : terrain.size.y - 1;
+        const toY = fromTile.y > 1 ? 0 : terrain.size.y - 1;
 
         // generate path
         const finish = terrainPath.generate(fromTile.x, fromTile.y, toY);
