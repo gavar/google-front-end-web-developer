@@ -16,8 +16,7 @@ import {
 } from "$game";
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
-import {OverlayView} from "$ui";
-import {GameOverDialog} from "$ui";
+import {GameOverDialog, OverlayView} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -121,7 +120,7 @@ export class GameController implements Component, Draw2D {
         player.stats.set("lives", settings.lives);
 
         // initial player position
-        controls.applyPosition(
+        player.applyPosition(
             terrain.positionX(Math.floor(terrain.size.x * .5)),
             terrain.positionY(0),
         );
@@ -193,7 +192,7 @@ export class GameController implements Component, Draw2D {
             case "checkpoint":
                 this.enemySpawn.speedup();
                 this.bountySpawn.gamble();
-                this.continuePath(this.controls.position.y);
+                this.continuePath(player.position.y);
                 this.difficulty.advance();
                 this.player.stats.set("level", this.difficulty.level);
                 break;

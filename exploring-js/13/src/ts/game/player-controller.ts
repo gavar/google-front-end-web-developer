@@ -17,10 +17,7 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
     private moveDelay = 0.02; // 20 ms;
     private moveCountDown = 0;
 
-    public position: Vector2 = {x: 0, y: 0};
-    private velocity: Vector2 = {x: 0, y: 0};
-
-    public player: Player; // TODO: replace with transform
+    public player: Player;
     public terrain: Terrain2D;
     public canvas: Canvas;
     public smoothTime: number = 0.15;
@@ -33,15 +30,6 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
 
     /** Set of walkable tiles. */
     public walkable: Set<string> = new Set<string>();
-
-    /**
-     * Set player's position immediately.
-     */
-    applyPosition(x: number, y: number) {
-        this.player.transform.position.x = this.position.x = x;
-        this.player.transform.position.y = this.position.y = y;
-        this.velocity.x = this.velocity.y = 0;
-    }
 
     /** @inheritDoc */
     start() {
@@ -65,10 +53,6 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
         // keys
         document.addEventListener("keydown", this, OPTIONS);
         document.addEventListener("keyup", this, OPTIONS);
-
-        this.position.x = this.player.transform.position.x;
-        this.position.y = this.player.transform.position.y;
-        this.velocity.x = this.velocity.y = 0;
     }
 
     /** @inheritDoc */
@@ -79,7 +63,7 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
             this.move();
         }
 
-        Vector2.smooth(this.player.transform.position, this.position, this.velocity, this.smoothTime, deltaTime);
+        this.player.smooth(this.smoothTime, deltaTime);
     }
 
     /** @inheritDoc */
@@ -318,8 +302,8 @@ export class PlayerController implements Component, EventListenerObject, LateUpd
         }
 
         // apply position
-        this.position.x = x;
-        this.position.y = y;
+        this.player.position.x = x;
+        this.player.position.y = y;
         return true;
     }
 }
