@@ -56,17 +56,21 @@ export class Mathf {
      * @param velocityKey - name of the property in container to use for storing velocity value.
      * @param smoothTime - approx time of achieving destination value.
      * @param deltaTime - time since last call of this function.
+     * @param velocityLimit - maximum velocity.
      * @return value to apply to current value.
      * @see https://github.com/Unity-Technologies/UnityCsReference/blob/11bcfd801fccd2a52b09bb6fd636c1ddcc9f1705/Runtime/Export/Mathf.cs#L303
      */
-    public static smooth(now: number, to: number, velocityObject: object, velocityKey: string, smoothTime: number, deltaTime: number): number {
+    public static smooth(now: number, to: number, velocityObject: object, velocityKey: string, smoothTime: number, deltaTime: number, velocityLimit: number = Number.POSITIVE_INFINITY): number {
         const o = 2 / smoothTime;
         const x = o * deltaTime;
         const e = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
 
-        const delta = now - to;
+        let delta = now - to;
         const destination = to;
 
+        const max = velocityLimit * smoothTime;
+        delta = Math.max(-max, delta);
+        delta = Math.min(delta, max);
         to = now - delta;
 
         let velocity = velocityObject[velocityKey];
@@ -81,5 +85,17 @@ export class Mathf {
 
         velocityObject[velocityKey] = velocity;
         return next;
+    }
+
+    /**
+     * Clamp value between min and max values.
+     * @param value - value to clamp.
+     * @param min - value lower limit.
+     * @param max - value upper limit.
+     */
+    public static clamp(value: number, min: number, max: number): number {
+        if (value >= max) return max;
+        if (value <= min) return min;
+        return value;
     }
 }
