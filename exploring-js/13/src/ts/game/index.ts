@@ -11,7 +11,7 @@ export * from "./bounty-spawn";
 export * from "./terrain-path";
 export * from "./player";
 export * from "./player-stats";
-export * from "./player-controller";
+export * from "./player-controls";
 export * from "./game-settings";
 export * from "./game-difficulty";
 export * from "./game-controller";

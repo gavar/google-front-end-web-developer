@@ -7,7 +7,7 @@ import {
     EnemySpawn,
     GameController,
     Player,
-    PlayerController,
+    PlayerControls,
     TerrainPath,
     View,
 } from "$game";
@@ -144,7 +144,7 @@ export class Game {
         layer.set(Layers.PLAYER);
 
         // controller
-        const controller = actor.add(PlayerController);
+        const controller = actor.add(PlayerControls);
         controller.terrain = terrain;
         controller.walkable.add("stone-block.png");
         controller.player = player;

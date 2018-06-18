@@ -10,7 +10,7 @@ import {
     GameSettings,
     Ghost,
     Player,
-    PlayerController,
+    PlayerControls,
     Random,
     TerrainPath,
 } from "$game";
@@ -32,7 +32,7 @@ export class GameController implements Component, Draw2D {
 
     public canvas: Canvas;
     public player: Player;
-    public controls: PlayerController;
+    public controls: PlayerControls;
     public terrain: Terrain2D;
     public terrainPath: TerrainPath;
     public enemySpawn: EnemySpawn;
@@ -60,7 +60,7 @@ export class GameController implements Component, Draw2D {
         const {stage} = this.actor;
         this.canvas = this.canvas || stage.findComponentOfType(Canvas);
         this.player = this.player || stage.findComponentOfType(Player);
-        this.controls = this.controls || stage.findComponentOfType(PlayerController);
+        this.controls = this.controls || stage.findComponentOfType(PlayerControls);
         this.terrain = this.terrain || stage.findComponentOfType(Terrain2D);
         this.enemySpawn = this.enemySpawn || stage.findComponentOfType(EnemySpawn);
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);

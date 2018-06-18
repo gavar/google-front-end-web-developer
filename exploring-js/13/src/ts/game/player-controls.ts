@@ -5,9 +5,8 @@ import {LateUpdate} from "$systems";
 
 /**
  * Controls the player movement, by reacting on input events.
- * TODO: rename to PlayerControls
  */
-export class PlayerController implements Component, EventListenerObject, LateUpdate {
+export class PlayerControls implements Component, EventListenerObject, LateUpdate {
 
     private touches: TouchList;
     private mouse: MouseEvent;
