@@ -127,6 +127,53 @@ dialog[close],
   flex: 1;
 }
 
+/* GAME OVER */
+#game-over {
+  height: 100%;
+}
+
+#game-over .text-shadow {
+  text-shadow: -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+#game-over .title {
+  color: #cd1818;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  text-transform: uppercase;
+  font-size: 10vw;
+  font-family: 'Press Start 2P', cursive;
+}
+
+#game-over .bloody {
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 6.5vw;
+  text-transform: lowercase;
+  color: #b41818;
+}
+
+#game-over p {
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 5vw;
+  text-transform: lowercase;
+  color: #b41818;
+}
+
+#game-over button {
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 5vw;
+  background-color: forestgreen;
+  margin-top: 10%;
+}
+
+#game-over .score,
+#game-over .level {
+  color: greenyellow;
+}
+
 /* ANIMATIONS */
 @keyframes outer-hit {
   from {
@@ -179,5 +226,24 @@ dialog[close],
   to {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+/* OPTIMAL SIZE */
+@media screen and (min-width: 500px) {
+  #game-over .title {
+    font-size: 3em;
+  }
+
+  #game-over .bloody {
+    font-size: 2.5em;
+  }
+
+  #game-over p {
+    font-size: 2em;
+  }
+
+  #game-over button {
+    font-size: 2em;
   }
 }

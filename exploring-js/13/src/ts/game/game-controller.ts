@@ -17,6 +17,7 @@ import {
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
 import {OverlayView} from "$ui";
+import {GameOverDialog} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -39,6 +40,8 @@ export class GameController implements Component, Draw2D {
     public bountySpawn: BountySpawn;
 
     public overlay: OverlayView;
+    public gameOver: GameOverDialog;
+
     private outer: HTMLElement;
     private inner: HTMLElement;
     private outlines: HTMLElement[];
@@ -65,6 +68,8 @@ export class GameController implements Component, Draw2D {
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
 
         this.overlay = this.overlay || stage.findComponentOfType(OverlayView);
+        this.gameOver = this.gameOver || stage.findComponentOfType(GameOverDialog);
+
         // player events
         const {player} = this;
         player.actor.on(GameEvents.PLAYER_DIE, this.die, this);
@@ -89,6 +94,9 @@ export class GameController implements Component, Draw2D {
         this.enemySpawn.delay = () => this.difficulty.enemyDelay;
         this.enemySpawn.enemyLimit = () => this.difficulty.enemyLimit;
         this.enemySpawn.enemyVelocity = () => this.difficulty.enemyVelocity;
+
+        // ui
+        this.gameOver.actor.on("play-again", this.replay, this);
 
         // finally can start the game
         this.play();
@@ -197,6 +205,8 @@ export class GameController implements Component, Draw2D {
         const {controls, player} = this;
         Component.disable(controls); // disable controls
         Component.disable(player.actor.get(PhysicsBody2D)); // disable collision
+        this.overlay.show(this.gameOver); // show game-over dialog
+    }
 
     /** Play again. */
     private replay() {

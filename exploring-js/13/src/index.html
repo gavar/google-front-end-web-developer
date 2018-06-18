@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Effective JavaScript: Frogger</title>
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Press+Start+2P" rel="stylesheet">
 </head>
 <body>
   <main>
@@ -20,6 +21,18 @@
       </div>
     </section>
     <section class="overlay">
+      <dialog id="game-over">
+        <h1 class="title text-shadow">Game Over</h1>
+        <h4 class="bloody text-shadow">
+          One bug in the head<br/>
+          now player is dead
+        </h4>
+        <p class="text-shadow">
+          eaten by bugs on level <span class="level">#1</span><br/>
+          with <span class="score">1</span> final score
+        </p>
+        <button class="play-again">Play Again</button>
+      </dialog>
     </section>
   </main>
   <script src="js/engine.js"></script>
