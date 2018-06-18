@@ -13,6 +13,11 @@ export abstract class BaseView implements Component, Draw2D {
     /** @inheritDoc */
     public readonly actor: Actor;
 
+    /** @inheritDoc */
+    enable() {
+        this.dirty = true;
+    }
+
     /** Mark view as dirty to repaint in next frame. */
     setDirty(): void {
         this.dirty = true;
