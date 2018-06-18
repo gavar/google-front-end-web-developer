@@ -1,13 +1,9 @@
-import {Actor, Component} from "$engine";
-import {OverlayView} from "$ui";
+import {BaseView, OverlayView} from "$ui";
 
 /** Base class for in-game dialogs.*/
-export abstract class DialogView implements Component {
+export abstract class DialogView extends BaseView {
 
     private initialized: boolean;
-
-    /** Actor to whom this component belongs. */
-    public readonly actor?: Actor;
 
     /** Overlay tho whom this dialog belongs. */
     public overlay: OverlayView;
@@ -17,9 +13,11 @@ export abstract class DialogView implements Component {
 
     /** @inheritDoc */
     enable() {
+        super.enable();
         if (!this.initialized) return;
         this.overlay.show(this);
         this.activate(true);
+        this.render();
     }
 
     /** @inheritDoc */
@@ -28,6 +26,7 @@ export abstract class DialogView implements Component {
         this.root = this.initialize();
         this.overlay = this.overlay || this.actor.stage.findComponentOfType(OverlayView);
         this.activate(true);
+        this.render();
     }
 
     /** @inheritDoc */

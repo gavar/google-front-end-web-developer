@@ -20,6 +20,7 @@ export class OverlayView implements Component {
     /** Notify that dialog has been shown. */
     show(dialog: DialogView) {
         if (this.dialogs.add(dialog)) {
+            dialog.setDirty();
             Component.enable(dialog);
             this.modified();
         }
