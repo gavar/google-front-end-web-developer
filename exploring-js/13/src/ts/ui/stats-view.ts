@@ -1,12 +1,11 @@
 import {Canvas, Terrain2D} from "$components";
 import {GameSettings, PlayerStats} from "$game";
-import {LateUpdate} from "$systems";
-import {BaseView} from "$ui";
+import {DialogView} from "$ui";
 
 /**
  * Renders player stats, like scores and lives.
  */
-export class StatsView extends BaseView implements LateUpdate {
+export class StatsView extends DialogView {
 
     private static readonly buffer = [];
 
@@ -14,28 +13,22 @@ export class StatsView extends BaseView implements LateUpdate {
     private lives: HTMLElement;
     private level: HTMLElement;
 
-    public root: HTMLElement;
     public stats: PlayerStats;
     public settings: GameSettings;
     public canvas: Canvas;
     public terrain: Terrain2D;
 
     /** @inheritDoc */
-    start() {
+    protected initialize(): HTMLElement {
         this.canvas = this.canvas || this.actor.stage.findComponentOfType(Canvas);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
         this.settings = this.settings || this.actor.stage.findComponentOfType(GameSettings);
-        this.root = this.root || document.querySelector(".stats");
-        this.score = this.root.querySelector(".score");
-        this.lives = this.root.querySelector(".lives");
-        this.level = this.root.querySelector(".level");
+        const root = document.querySelector<HTMLElement>("#player-stats");
+        this.score = root.querySelector(".score");
+        this.lives = root.querySelector(".lives");
+        this.level = root.querySelector(".level");
         this.listen("stats", PlayerStats);
-    }
-
-    /** @inheritDoc */
-    lateUpdate(deltaTime: number): void {
-        this.root.style.left = `${this.canvas.element.offsetLeft}px`;
-        this.root.style.width = `${this.canvas.element.width}px`;
+        return root;
     }
 
     /** @inheritDoc */

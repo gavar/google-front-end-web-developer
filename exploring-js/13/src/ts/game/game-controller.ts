@@ -16,7 +16,7 @@ import {
 } from "$game";
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
-import {GameOverDialog, OverlayView} from "$ui";
+import {GameOverDialog, OverlayView, StatsView} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -39,6 +39,7 @@ export class GameController implements Component, Draw2D {
     public bountySpawn: BountySpawn;
 
     public overlay: OverlayView;
+    public statsView: StatsView;
     public gameOver: GameOverDialog;
 
     private outer: HTMLElement;
@@ -66,8 +67,10 @@ export class GameController implements Component, Draw2D {
         this.bountySpawn = this.bountySpawn || stage.findComponentOfType(BountySpawn);
         this.terrainPath = this.terrainPath || stage.findComponentOfType(TerrainPath);
 
+        // ui
         this.overlay = this.overlay || stage.findComponentOfType(OverlayView);
         this.gameOver = this.gameOver || stage.findComponentOfType(GameOverDialog);
+        this.statsView = this.statsView || stage.findComponentOfType(StatsView);
 
         // player events
         const {player} = this;
@@ -127,6 +130,9 @@ export class GameController implements Component, Draw2D {
 
         // initial path
         this.continuePath(0);
+
+        // ui
+        this.overlay.show(this.statsView);
     }
 
     /** @inheritDoc */

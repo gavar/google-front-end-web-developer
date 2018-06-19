@@ -64,33 +64,35 @@ dialog {
   animation-name: inner-hit;
 }
 
-/* HUD STATS */
-.stats {
+/* PLAYER STATS */
+#player-stats {
+  top: 0;
+  width: 100%;
   position: absolute;
   display: flex;
   font-weight: bold;
   font-size: 1.5em;
 }
 
-.stats > * {
+#player-stats > * {
   flex-basis: 50%;
 }
 
-.stats .left {
+#player-stats .left {
   text-align: left;
 }
 
-.stats .right {
+#player-stats .right {
   text-align: right;
 }
 
-.change {
+#player-stats .change {
   animation-name: positive-change;
   animation-duration: 1s;
   animation-timing-function: ease-in-out;
 }
 
-.lives.change {
+#player-stats .lives.change {
   transform-origin: right center;
   animation-name: scale;
   animation-duration: .4s;
