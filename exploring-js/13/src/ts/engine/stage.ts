@@ -4,25 +4,33 @@ import {BagSet} from "./bag";
 import {Component} from "./component";
 import {System} from "./system";
 
+/** Component queue state. */
+interface QueueState {
+
+    /** Whether component has been enabled for the first time? */
+    enabled: boolean;
+
+    /** Whether component has been started before first update. */
+    started: boolean;
+}
+
 /**
  * Main object of the ECS system which manages actors, components and systems.
  */
 export class Stage {
 
-    private static readonly buffer: any[] = [];
-
     private lastTime: number;
     private stepTime: number;
     private ticker: FrameRequestCallback;
 
-    private readonly queue: BagSet<Component>;
+    private readonly queue: Map<Component, QueueState>;
     private readonly actors: BagSet<Mutable<Actor>>;
     private readonly systems: BagSet<System>;
     private readonly destroyActors: BagSet<Actor>;
     private readonly destroyComponents: BagSet<Component>;
 
     constructor() {
-        this.queue = new BagSet<Component>();
+        this.queue = new Map<Component, QueueState>();
         this.actors = new BagSet<Mutable<Actor>>();
         this.systems = new BagSet<System>();
         this.destroyActors = new BagSet<Actor>();
@@ -81,7 +89,7 @@ export class Stage {
         // create component
         const component = new type() as T & Mutable<Component>;
         (actor.components as Component[]).push(component);
-        this.queue.add(component);
+        this.queue.set(component, {enabled: false, started: false});
 
         // activate component
         component.actor = actor;
@@ -114,7 +122,7 @@ export class Stage {
             components[index] = last;
 
         // remove from queue if it's there
-        this.queue.remove(component);
+        this.queue.delete(component);
 
         // remove from systems
         for (const system of this.systems.items)
@@ -146,7 +154,7 @@ export class Stage {
         // callbacks
         for (const component of actor.components) {
             // remove from queue if it's there
-            this.queue.remove(component);
+            this.queue.delete(component);
 
             // remove from systems
             for (const system of this.systems.items)
@@ -180,38 +188,10 @@ export class Stage {
 
     private tick(deltaTime: number) {
 
-        const queue = this.queue.items;
         const systems = this.systems.items;
 
-        try {
-            const delay = Stage.buffer;
-            // activate components
-            for (const component of queue) {
-                // disabled before first update?
-                if (component.enabled === false) {
-                    delay.push(component);
-                }
-                else {
-                    (component as Mutable<Component>).enabled = true;
-                    Stage.invoke(component, "enable");
-                    Stage.invoke(component, "start");
-                }
-            }
-
-            // register components to systems
-            for (const component of queue)
-                for (const system of systems)
-                    if (component.enabled && system.match(component))
-                        system.add(component);
-
-            // refresh queue
-            this.queue.clear();
-            for (const component of delay)
-                this.queue.add(component);
-        }
-        finally {
-            Stage.buffer.length = 0;
-        }
+        // process components in queue
+        this.queue.forEach(this.forEachInQueue, this);
 
         // tick systems
         for (const system of systems)
@@ -232,6 +212,39 @@ export class Stage {
 
         this.destroyActors.clear();
         this.destroyComponents.clear();
+    }
+
+    private forEachInQueue(state: QueueState, component: Component, queue: Map<Component, QueueState>) {
+        // disabled just after awake or previously?
+        if (component.enabled === false)
+            return;
+
+        // first enable?
+        if (!state.enabled) {
+            state.enabled = true;
+            (component as Mutable<Component>).enabled = true;
+
+            // submit to systems before enabling
+            for (const system of this.systems.items)
+                if (system.match(component))
+                    system.add(component);
+
+            Stage.invoke(component, "enable");
+        }
+
+        // disabled while 'enable' callback?
+        if (!component.enabled)
+            return;
+
+        // first tick?
+        if (!state.started) {
+            state.started = true;
+            Stage.invoke(component, "start");
+        }
+
+        // check if can be removed from queue
+        if (state.enabled && state.started)
+            queue.delete(state);
     }
 
     /**
