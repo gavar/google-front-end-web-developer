@@ -1,8 +1,10 @@
+import {Component} from "$engine";
 import {BaseView, OverlayView} from "$ui";
 
 /** Base class for in-game dialogs.*/
 export abstract class DialogView extends BaseView {
 
+    private active: boolean;
     private initialized: boolean;
 
     /** Overlay tho whom this dialog belongs. */
@@ -14,10 +16,11 @@ export abstract class DialogView extends BaseView {
     /** @inheritDoc */
     enable() {
         super.enable();
-        if (!this.initialized) return;
-        this.overlay.show(this);
-        this.activate(true);
-        this.render();
+        if (this.initialized) {
+            this.overlay.show(this);
+            this.activate(true);
+            this.render();
+        }
     }
 
     /** @inheritDoc */
@@ -25,8 +28,7 @@ export abstract class DialogView extends BaseView {
         this.initialized = true;
         this.root = this.initialize();
         this.overlay = this.overlay || this.actor.stage.findComponentOfType(OverlayView);
-        this.activate(true);
-        this.render();
+        this.activate(this.active);
     }
 
     /** @inheritDoc */
@@ -43,16 +45,28 @@ export abstract class DialogView extends BaseView {
 
     /**
      * Set this dialog to be shown or hidden.
-     * @param open - whether to show dialog; hide otherwise.
+     * @param value - whether to show dialog; hide otherwise.
      */
-    protected activate(open: boolean): void {
-        if (open) {
-            this.root.setAttribute("open", "");
-            this.root.removeAttribute("close");
-        }
-        else {
-            this.root.setAttribute("close", "");
-            this.root.removeAttribute("open");
+    public activate(value: boolean): void {
+
+        // enable / disable component
+        if (value) Component.enable(this);
+        else Component.disable(this);
+
+        // update state
+        this.active = value;
+        if (value) this.setDirty();
+
+        // update attributes
+        if (this.root) {
+            if (value) {
+                this.root.setAttribute("open", "");
+                this.root.removeAttribute("close");
+            }
+            else {
+                this.root.setAttribute("close", "");
+                this.root.removeAttribute("open");
+            }
         }
     }
 }

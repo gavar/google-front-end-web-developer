@@ -20,8 +20,7 @@ export class OverlayView implements Component {
     /** Notify that dialog has been shown. */
     show(dialog: DialogView) {
         if (this.dialogs.add(dialog)) {
-            dialog.setDirty();
-            Component.enable(dialog);
+            dialog.activate(true);
             this.modified();
         }
     }
@@ -29,7 +28,7 @@ export class OverlayView implements Component {
     /** Notify that dialog has been hidden. */
     hide(dialog: DialogView) {
         if (this.dialogs.delete(dialog)) {
-            Component.disable(dialog);
+            dialog.activate(false);
             this.modified();
         }
     }
