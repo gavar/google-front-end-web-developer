@@ -6,14 +6,7 @@ export class GameOverDialog extends DialogView {
     public replay: HTMLElement;
     public level: HTMLElement;
     public score: HTMLElement;
-
     public stats: PlayerStats;
-
-    /** @inheritDoc */
-    start(): void {
-        this.stats = this.stats || this.actor.stage.findComponentOfType(PlayerStats);
-        super.start();
-    }
 
     /** @inheritDoc */
     protected initialize(): HTMLElement {
@@ -22,6 +15,7 @@ export class GameOverDialog extends DialogView {
         this.level = root.querySelector(".level");
         this.score = root.querySelector(".score");
         this.replay.addEventListener("click", () => this.actor.emit("play-again"));
+        this.listen("stats", PlayerStats);
         return root;
     }
 
