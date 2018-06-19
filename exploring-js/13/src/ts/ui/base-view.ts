@@ -14,6 +14,9 @@ export abstract class BaseView implements Component, Draw2D {
     public readonly actor: Actor;
 
     /** @inheritDoc */
+    public readonly enabled: boolean;
+
+    /** @inheritDoc */
     enable() {
         this.dirty = true;
     }
