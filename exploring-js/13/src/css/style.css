@@ -45,6 +45,48 @@ dialog {
   border-radius: 10px;
 }
 
+figure {
+  margin: 0;
+  overflow: hidden;
+}
+
+figure img {
+  display: block;
+}
+
+/* DIALOGS */
+dialog {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+dialog:not([open]),
+.overlay:not([open]) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+dialog[open],
+.overlay[open] {
+  animation-name: dialog-open;
+  animation-duration: 1s;
+}
+
+dialog[close],
+.overlay[close] {
+  animation-name: dialog-close;
+  animation-duration: 0.5s;
+}
+
+/* REUSABLE */
+.text-shadow {
+  text-shadow: -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
 /* GAME */
 .outer {
   z-index: -1;
@@ -62,6 +104,19 @@ dialog {
 .inner.hit {
   animation-duration: 1.5s;
   animation-name: inner-hit;
+}
+
+/* OVERLAY */
+.overlay {
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  position: absolute;
+  z-index: 100;
+}
+
+.overlay > * {
+  flex: 1;
 }
 
 /* PLAYER STATS */
@@ -98,48 +153,10 @@ dialog {
   animation-duration: .4s;
 }
 
-/* OVERLAY */
-.overlay {
-  display: flex;
-  background-color: rgba(0, 0, 0, .7);
-  border-radius: 10px;
-  align-items: center;
-  position: absolute;
-  z-index: 100;
-}
-
-dialog:not([open]),
-.overlay:not([open]) {
-  opacity: 0;
-  visibility: hidden;
-}
-
-dialog[open],
-.overlay[open] {
-  animation-name: dialog-open;
-  animation-duration: 1s;
-}
-
-dialog[close],
-.overlay[close] {
-  animation-name: dialog-close;
-  animation-duration: 0.5s;
-}
-
-.overlay > * {
-  flex: 1;
-}
-
 /* GAME OVER */
 #game-over {
   height: 100%;
-}
-
-#game-over .text-shadow {
-  text-shadow: -1px -1px 0 #000,
-  1px -1px 0 #000,
-  -1px 1px 0 #000,
-  1px 1px 0 #000;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 #game-over .title {
@@ -175,6 +192,24 @@ dialog[close],
 #game-over .score,
 #game-over .level {
   color: greenyellow;
+}
+
+@media screen and (min-width: 500px) {
+  #game-over .title {
+    font-size: 3em;
+  }
+
+  #game-over .bloody {
+    font-size: 2.5em;
+  }
+
+  #game-over p {
+    font-size: 2em;
+  }
+
+  #game-over button {
+    font-size: 2em;
+  }
 }
 
 /* ANIMATIONS */
@@ -232,21 +267,3 @@ dialog[close],
   }
 }
 
-/* OPTIMAL SIZE */
-@media screen and (min-width: 500px) {
-  #game-over .title {
-    font-size: 3em;
-  }
-
-  #game-over .bloody {
-    font-size: 2.5em;
-  }
-
-  #game-over p {
-    font-size: 2em;
-  }
-
-  #game-over button {
-    font-size: 2em;
-  }
-}
