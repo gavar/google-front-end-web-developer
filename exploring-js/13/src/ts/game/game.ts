@@ -13,7 +13,7 @@ import {
 } from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
-import {DifficultyView, GameOverDialog, OverlayView, StatsView} from "$ui";
+import {DifficultyView, GameOverDialog, HowToPlayDialog, OverlayView, StatsView} from "$ui";
 
 export namespace Layers {
     export const TERRAIN = 1;
@@ -226,6 +226,7 @@ export class Game {
         this.initStatsView();
         this.initOverlayView();
         this.initGameOverDialog();
+        this.initHowToPlayDialog();
         if (DEBUG) this.initDebugView();
     }
 
@@ -244,6 +245,12 @@ export class Game {
     initGameOverDialog(): GameOverDialog {
         const actor = this.stage.createActor("game-over-dialog");
         const view = actor.add(GameOverDialog);
+        return view;
+    }
+
+    initHowToPlayDialog(): HowToPlayDialog {
+        const actor = this.stage.createActor("how-to-play-dialog");
+        const view = actor.add(HowToPlayDialog);
         return view;
     }
 

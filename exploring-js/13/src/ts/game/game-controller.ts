@@ -16,7 +16,7 @@ import {
 } from "$game";
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
-import {GameOverDialog, OverlayView, StatsView} from "$ui";
+import {GameOverDialog, HowToPlayDialog, OverlayView, StatsView} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -41,6 +41,7 @@ export class GameController implements Component, Draw2D {
     public overlay: OverlayView;
     public statsView: StatsView;
     public gameOver: GameOverDialog;
+    public howToPlay: HowToPlayDialog;
 
     private outer: HTMLElement;
     private inner: HTMLElement;
@@ -70,6 +71,7 @@ export class GameController implements Component, Draw2D {
         // ui
         this.overlay = this.overlay || stage.findComponentOfType(OverlayView);
         this.gameOver = this.gameOver || stage.findComponentOfType(GameOverDialog);
+        this.howToPlay = this.howToPlay || stage.findComponentOfType(HowToPlayDialog);
         this.statsView = this.statsView || stage.findComponentOfType(StatsView);
 
         // player events
@@ -99,9 +101,10 @@ export class GameController implements Component, Draw2D {
 
         // ui
         this.gameOver.actor.on("play-again", this.replay, this);
+        this.howToPlay.actor.on("play", this.play, this);
 
-        // finally can start the game
-        this.play();
+        // show first screen
+        this.overlay.show(this.howToPlay);
     }
 
     /** Play the game. */
