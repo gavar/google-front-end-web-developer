@@ -106,7 +106,7 @@ export class GameController implements Component, Draw2D {
 
     /** Play the game. */
     play(): void {
-        const {controls, terrain, player, difficulty, settings, overlay} = this;
+        const {terrain, player, difficulty, settings, overlay} = this;
 
         // discard previous game state
         overlay.close();

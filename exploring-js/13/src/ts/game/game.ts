@@ -13,8 +13,7 @@ import {
 } from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
-import {DifficultyView, OverlayView, StatsView} from "$ui";
-import {GameOverDialog} from "$ui/game-over-dialog";
+import {DifficultyView, GameOverDialog, OverlayView, StatsView} from "$ui";
 
 export namespace Layers {
     export const TERRAIN = 1;
