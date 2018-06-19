@@ -11,10 +11,13 @@ main {
   height: 100%;
 }
 
-body, canvas {
-  text-align: center;
+html, body, main, canvas, dialog, figure {
   padding: 0;
   margin: 0;
+}
+
+body, canvas {
+  text-align: center;
   user-select: none;
 }
 
@@ -46,8 +49,7 @@ dialog {
 }
 
 figure {
-  margin: 0;
-  overflow: hidden;
+  height: 100%;
 }
 
 figure img {
@@ -56,8 +58,7 @@ figure img {
 
 /* DIALOGS */
 dialog {
-  margin: 0;
-  padding: 0;
+  position: absolute;
   width: 100%;
 }
 
