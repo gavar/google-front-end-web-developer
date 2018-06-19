@@ -120,6 +120,218 @@ dialog[close],
   flex: 1;
 }
 
+/* HOW TO PLAY */
+#how-to-play {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+#how-to-play h1,
+#how-to-play h2,
+#how-to-play h3,
+#how-to-play figcaption {
+  color: #cd1818;
+  text-transform: uppercase;
+  font-family: 'Bowlby One SC', cursive;
+  text-shadow: -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+#how-to-play h1 {
+  font-size: 2.5em;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+#how-to-play h2 {
+  font-size: 2em;
+  margin: 0 0 25px;
+}
+
+#how-to-play h3 {
+  font-weight: normal;
+  color: #f9fafb;
+}
+
+#how-to-play figcaption {
+  font-weight: normal;
+  color: yellowgreen;
+  text-transform: none;
+  transform: translateY(-20%);
+}
+
+#how-to-play img {
+  max-height: 100%;
+  margin: auto;
+}
+
+#how-to-play button {
+  position: absolute;
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 2em;
+  background-color: crimson;
+  border-radius: 20px;
+}
+
+#how-to-play .instructions {
+  margin: auto;
+  width: 90%;
+}
+
+#how-to-play .instruction {
+  display: flex;
+  max-height: 100px;
+  padding: 5px;
+  margin: 10px 0;
+  background-color: rgba(0, 0, 0, .2);
+  border-radius: 20px;
+}
+
+#how-to-play .instruction .left {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#how-to-play .instruction .right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#how-to-play .controls {
+  display: flex;
+}
+
+#how-to-play .controls .column {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#how-to-play .controls .column figure {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+#how-to-play .controls .column img {
+  width: auto;
+  height: 55px;
+}
+
+#how-to-play .controls .column + .column {
+  border-left: #f9fafb 2px solid;
+}
+
+#how-to-play .controls .key {
+  width: 25px;
+  height: 25px;
+  margin: 1px;
+  display: inline-block;
+  text-transform: uppercase;
+  text-align: center;
+  vertical-align: middle;
+  color: #f9fafb;
+  border: #f9fafb 2px solid;
+  font-family: 'Bowlby One SC', cursive;
+}
+
+#how-to-play .controls .wasd .key {
+  padding-right: 1px;
+}
+
+#how-to-play .bonuses {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#how-to-play .bonus {
+  width: 20%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#how-to-play .bonus figure {
+  height: 100%;
+}
+
+#how-to-play .bonus img {
+  width: 100%;
+}
+
+#how-to-play .play {
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 50px;
+}
+
+#how-to-play .instruction img {
+  max-height: 100%;
+}
+
+#how-to-play img.enemy-bug {
+  margin-top: 15px;
+}
+
+#how-to-play img.enemy-bug.one {
+  transform: rotateZ(30deg);
+}
+
+#how-to-play img.enemy-bug.two {
+  transform: scaleX(-1) rotateZ(-20deg);
+}
+
+/* HOW TO PLAY */
+@media screen and (max-width: 500px) {
+  #how-to-play h1 {
+    font-size: 8vw;
+    margin-bottom: 3vw;
+  }
+
+  #how-to-play h2 {
+    font-size: 6vw;
+    margin: 0 0 5vw;
+  }
+
+  #how-to-play h3 {
+    font-size: 3.5vw;
+  }
+
+  #how-to-play figcaption {
+    font-size: 3vw;
+  }
+
+  #how-to-play .controls .column + .column {
+    border: none;
+  }
+
+  #how-to-play .controls .wasd,
+  #how-to-play .controls .arrows {
+    display: none;
+  }
+
+  #how-to-play .instruction {
+    padding: 1vw;
+    height: 18vw;
+    border-radius: 4vw;
+  }
+
+  #how-to-play img.enemy-bug {
+    margin-top: 1vw;
+  }
+
+  #how-to-play .play {
+    font-size: 5vw;
+    bottom: 10vw;
+  }
+}
+
 /* PLAYER STATS */
 #player-stats {
   top: 0;
