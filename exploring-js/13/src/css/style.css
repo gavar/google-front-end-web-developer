@@ -62,10 +62,12 @@ dialog {
 }
 
 main:not([ready]),
+menu:not([ready]),
 dialog:not([ready]) {
   display: none;
 }
 
+menu:not([open]),
 dialog:not([open]) {
   display: block;
   visibility: hidden;
@@ -73,12 +75,14 @@ dialog:not([open]) {
 }
 
 main[open],
+menu[open],
 dialog[open] {
   animation-name: dialog-show;
   animation-duration: 1s;
 }
 
 main[hide],
+menu[hide],
 dialog[hide] {
   animation-name: dialog-hide;
   animation-duration: .35s;

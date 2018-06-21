@@ -16,4 +16,10 @@ export class HowToPlayDialog extends DialogView {
     protected render(): void {
         // nothing to do here
     }
+
+    /** @inheritDoc */
+    activate(active: boolean): void {
+        super.activate(active);
+        DialogView.setStateAttributes(active, this.root.parentElement);
+    }
 }

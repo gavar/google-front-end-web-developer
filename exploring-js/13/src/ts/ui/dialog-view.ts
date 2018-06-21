@@ -13,6 +13,9 @@ export abstract class DialogView extends BaseView {
     /** Dialog root HTML element. */
     public root: HTMLElement;
 
+    /** List of elements to replicate same attributes state. */
+    public slaves: HTMLElement[];
+
     /** @inheritDoc */
     enable() {
         super.enable();
@@ -45,29 +48,32 @@ export abstract class DialogView extends BaseView {
 
     /**
      * Set this dialog to be shown or hidden.
-     * @param value - whether to show dialog; hide otherwise.
+     * @param active - whether to show dialog; hide otherwise.
      */
-    public activate(value: boolean): void {
+    public activate(active: boolean): void {
+
+        // update attributes
+        DialogView.setStateAttributes(active, this.root);
 
         // enable / disable component
-        if (value) Component.enable(this);
+        if (active) Component.enable(this);
         else Component.disable(this);
 
         // update state
-        this.active = value;
-        if (value) this.setDirty();
+        this.active = active;
+        if (active) this.setDirty();
+    }
 
-        // update attributes
-        const {root} = this;
-        if (root) {
+    public static setStateAttributes(value: boolean, element: HTMLElement) {
+        if (element) {
             if (value) {
-                root.setAttribute("ready", "");
-                root.setAttribute("open", "");
-                root.removeAttribute("hide");
+                element.setAttribute("ready", "");
+                element.setAttribute("open", "");
+                element.removeAttribute("hide");
             }
-            else if (root.hasAttribute("ready")) {
-                root.setAttribute("hide", "");
-                root.removeAttribute("open");
+            else if (element.hasAttribute("ready")) {
+                element.setAttribute("hide", "");
+                element.removeAttribute("open");
             }
         }
     }

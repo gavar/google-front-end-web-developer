@@ -45,20 +45,12 @@ export class OverlayView implements Component {
 
     /**
      * Set this overlay to be shown or hidden.
-     * @param open - whether to show dialog; hide otherwise.
+     * @param active - whether to show dialog; hide otherwise.
      */
-    protected activate(open: boolean): void {
+    protected activate(active: boolean): void {
         const {root, main} = this;
-        if (open) {
-            main.setAttribute("ready", "");
-            root.setAttribute("ready", "");
-            root.setAttribute("open", "");
-            root.removeAttribute("hide");
-        }
-        else if (root.hasAttribute("ready")) {
-            root.setAttribute("hide", "");
-            root.removeAttribute("open");
-        }
+        DialogView.setStateAttributes(active, root);
+        DialogView.setStateAttributes(active, main);
     }
 
     private modified() {
