@@ -474,37 +474,30 @@ menu {
 /* GAME OVER */
 #game-over {
   height: 100%;
-  background-color: rgba(0, 0, 0, .7);
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
 }
 
-#game-over .title {
-  color: #cd1818;
-  padding-top: 10%;
-  padding-bottom: 10%;
-  text-transform: uppercase;
-  font-size: 10vw;
-  font-family: 'Press Start 2P', cursive;
+#game-over .game-title {
+  font-size: 3.5em;
+  margin-top: 55px;
 }
 
 #game-over .bloody {
-  font-family: 'Bowlby One SC', cursive;
-  font-size: 6vw;
+  font-family: 'Nosifer', cursive;
+  font-size: 2.5em;
   text-transform: lowercase;
-  color: #b41818;
+  color: #cd1818;
 }
 
 #game-over p {
+  top: 50%;
+  position: absolute;
   font-family: 'Bowlby One SC', cursive;
-  font-size: 5vw;
+  font-size: 2.5em;
+  line-height: 1.2;
   text-transform: lowercase;
-  color: #b41818;
-}
-
-#game-over button {
-  font-family: 'Bowlby One SC', cursive;
-  font-size: 5vw;
-  background-color: forestgreen;
-  margin-top: 10%;
+  transform: translateY(-50%);
+  color: #cd1818;
 }
 
 #game-over .score,
@@ -512,21 +505,18 @@ menu {
   color: greenyellow;
 }
 
-@media screen and (min-width: 500px) {
-  #game-over .title {
-    font-size: 3em;
+@media screen and (max-width: 500px) {
+  #game-over .game-title {
+    font-size: 11.5vw;
+    margin-top: 11vw;
   }
 
   #game-over .bloody {
-    font-size: 2.5em;
+    font-size: 8vw;
   }
 
   #game-over p {
-    font-size: 2em;
-  }
-
-  #game-over button {
-    font-size: 2em;
+    font-size: 8vw;
   }
 }
 
