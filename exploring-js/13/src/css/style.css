@@ -43,6 +43,7 @@ button {
 }
 
 dialog {
+  user-select: none;
   border: none;
   background-color: transparent;
   border-radius: 10px;
