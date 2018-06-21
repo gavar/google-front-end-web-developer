@@ -7,6 +7,9 @@ export class Transform {
     /** World position of an actor. */
     public position: Vector3 = {x: 0, y: 0, z: 0};
 
+    /** World Euler rotation of the transform. */
+    public rotation: Vector3 = {x: 0, y: 0, z: 0};
+
     /** World scale of an actor. */
     public scale: Vector3 = {x: 1, y: 1, z: 1};
 

@@ -206,7 +206,7 @@ export class Game {
             collider.setOffset(tile.xMin + tile.width * .5, tile.yMin + tile.height * .5);
 
             bounty.highlight.imageName = "selector.png";
-            bounty.highlight.view.sprite.offset.y = -40;
+            bounty.highlight.view.sprite.offset.y = -0.23;
             bounty.highlight.view.sprite.order = -1;
             return bounty;
         };

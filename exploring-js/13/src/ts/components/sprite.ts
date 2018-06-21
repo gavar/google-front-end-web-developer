@@ -6,20 +6,20 @@ import {Mutable} from "@syntax";
 /** Draws an image on a canvas. */
 export class Sprite implements Draw2D, Gizmo2D {
 
-    private x: number;
-    private y: number;
-
     /** @inheritDoc */
     public readonly actor?: Actor;
 
     /** Actor's transform. */
     public readonly transform: Transform;
 
-    /** Local offset of the image. */
+    /** Additional translation to transform coordinates. */
+    public readonly translate: Vector2 = {x: 0, y: 0};
+
+    /** Defines origin offset from the transform position multiplied by image size. */
     public readonly offset: Vector2 = {x: 0, y: 0};
 
-    /** Local pivot of the image. */
-    public readonly pivot: Vector2 = {x: 0, y: 0};
+    /** Rotation pivot of the image. */
+    public readonly pivot: Vector2 = {x: .5, y: .5};
 
     /**
      * Canvas filter to apply.
@@ -39,12 +39,6 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Image to draw. */
     public image: HTMLImageElement;
 
-    /** Set value of {@link offset}. */
-    setOffset(x: number, y: number) {
-        this.offset.x = x;
-        this.offset.y = y;
-    }
-
     /** Set value of {@link pivot}. */
     setPivot(x: number, y: number) {
         this.pivot.x = x;
@@ -54,6 +48,54 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** Set value of {@link scale}. */
     setScale(x: number, y: number) {
         this.transform.setScale(x, y);
+    }
+
+    /** Set value of {@link offset}. */
+    setOffset(x: number, y: number) {
+        this.offset.x = x;
+        this.offset.y = y;
+    }
+
+    /**
+     * X point of the sprite OOBB.
+     * @param pivot - pivot point of the image, defaults to {@link pivot}.
+     */
+    x(pivot?: number) {
+        if (arguments.length < 1)
+            pivot = this.pivot.x;
+
+        const {image} = this;
+        const {offset, translate} = this;
+        const {position, rotation, scale} = this.transform;
+        const size = (image && image.width || 0) * Math.abs(scale.x);
+
+        // TODO: consider rotation
+        return position.x
+            + translate.x
+            + offset.x * size
+            + pivot * size
+            ;
+    }
+
+    /**
+     * Y point of the sprite OOBB.
+     * @param pivot - pivot point of the image, defaults to {@link pivot}.
+     */
+    y(pivot?: number) {
+        if (arguments.length < 1)
+            pivot = this.pivot.y;
+
+        const {image} = this;
+        const {offset, translate} = this;
+        const {position, rotation, scale} = this.transform;
+        const size = (image && image.height || 0) * Math.abs(scale.y);
+
+        // TODO: consider rotation
+        return position.y
+            + translate.y
+            + offset.y * size
+            + pivot * size
+            ;
     }
 
     /** @inheritDoc */
@@ -66,17 +108,26 @@ export class Sprite implements Draw2D, Gizmo2D {
         const {image} = this;
         if (!image) return;
 
-        this.recalculate();
-        const {x, y, opacity, filter} = this;
-        const {scale} = this.transform;
+        const {offset, translate, pivot, opacity, filter} = this;
+        const {position, rotation, scale} = this.transform;
         const {width, height} = image;
+
+        const w = width * Math.abs(scale.x);
+        const h = height * Math.abs(scale.y);
 
         try {
             ctx.save();
             (ctx as any).filter = filter;
             ctx.globalAlpha = opacity;
-            ctx.scale(scale.x, scale.y);
-            ctx.drawImage(image, x, y, width, height);
+            ctx.translate(position.x, position.y);
+            ctx.translate(translate.x, translate.y);
+            ctx.translate(offset.x * width, offset.y * height);
+            const dx = pivot.x * w;
+            const dy = pivot.y * h;
+            ctx.translate(dx, dy);
+            ctx.rotate(rotation.z * Math.PI / 180);
+            ctx.scale(scale.x >= 0 ? 1 : -1, scale.y >= 0 ? 1 : -1);
+            ctx.drawImage(image, -dx, -dy, w, h);
         }
         finally {
             ctx.restore();
@@ -86,43 +137,49 @@ export class Sprite implements Draw2D, Gizmo2D {
     /** @inheritDoc */
     drawGizmo2D(ctx: CanvasRenderingContext2D): void {
         const {image} = this;
-        if (!image) return;
+        if (image) {
+            this.drawOOBB(ctx, image);
+        }
+    }
 
-        this.recalculate();
-        const {x, y} = this;
-        const {scale} = this.transform;
+    /**
+     * Draw image as object oriented bounding box (OOBB).
+     */
+    private drawOOBB(ctx: CanvasRenderingContext2D, image: HTMLImageElement): void {
+        const {translate, offset, pivot} = this;
+        const {position, rotation, scale} = this.transform;
         const {width, height} = image;
+
+        const w = width * Math.abs(scale.x);
+        const h = height * Math.abs(scale.y);
 
         try {
             ctx.save();
-            ctx.scale(scale.x, scale.y);
-            ctx.strokeRect(x, y, width, height);
+
+            // position point
+            ctx.translate(position.x, position.y);
+            ctx.translate(translate.x, translate.y);
+            ctx.strokeStyle = "black";
+            Gizmo2D.x(ctx, 0, 0, 10);
+
+            // origin point
+            ctx.translate(offset.x * width, offset.y * height);
+
+            // pivot point
+            const dx = pivot.x * w;
+            const dy = pivot.y * h;
+            ctx.translate(dx, dy);
+            ctx.strokeStyle = "blue";
+            Gizmo2D.x(ctx, 0, 0, 10);
+            ctx.rotate(rotation.z * Math.PI / 180);
+
+            // object oriented bounding box
+            ctx.strokeStyle = "red";
+            ctx.scale(scale.x >= 0 ? 1 : -1, scale.y >= 0 ? 1 : -1);
+            ctx.strokeRect(-dx, -dy, w, h);
         }
         finally {
             ctx.restore();
         }
     }
-
-    private recalculate() {
-        if (this.image) {
-            const {offset, pivot} = this;
-            const {position, scale} = this.transform;
-            const {width, height} = this.image;
-
-            let x = (position.x + offset.x) / scale.x;
-            if (scale.x < 0) x += width * scale.x;
-            x += width * pivot.x;
-            this.x = x;
-
-            let y = (position.y + offset.y) / scale.y;
-            if (scale.y < 0) y += height * scale.y;
-            y += height * pivot.y;
-            this.y = y;
-        }
-        else {
-            this.x = 0;
-            this.y = 0;
-        }
-    }
-
 }

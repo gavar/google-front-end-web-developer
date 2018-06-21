@@ -77,7 +77,7 @@ export class BountySpawn implements Component {
 
         const {sprite} = bounty.view;
         sprite.setScale(.5, .5);
-        sprite.setPivot(.5, .5);
+        sprite.setOffset(.25, .25);
 
         const bonus = bonuses[Random.rangeInt(0, bonuses.length)];
         bounty.view.setImage(bonus);
