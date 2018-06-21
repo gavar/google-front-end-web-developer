@@ -247,6 +247,7 @@ export class GameController implements Component, Draw2D {
         const {controls, player} = this;
         Component.disable(controls); // disable controls
         Component.disable(player.actor.get(PhysicsBody2D)); // disable collision
+        this.overlay.close(); // close HUD
         this.overlay.show(this.gameOver); // show game-over dialog
     }
 
