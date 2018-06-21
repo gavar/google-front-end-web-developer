@@ -11,7 +11,7 @@ export class UpdateSystem extends ComponentSystem<Update> {
 
     /** @inheritDoc */
     match(component: Update): component is Update {
-        return component.update as any;
+        return !!component.update;
     }
 
     /** @inheritDoc */

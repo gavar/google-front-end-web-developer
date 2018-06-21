@@ -11,7 +11,7 @@ export class LateUpdateSystem extends ComponentSystem<LateUpdate> {
 
     /** @inheritDoc */
     match(component: LateUpdate): component is LateUpdate {
-        return component.lateUpdate as any;
+        return !!component.lateUpdate;
     }
 
     /** @inheritDoc */

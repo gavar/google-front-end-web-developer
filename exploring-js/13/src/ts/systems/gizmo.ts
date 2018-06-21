@@ -69,7 +69,7 @@ export class GizmoSystem extends SortSystem<Gizmo2D> {
 
     /** @inheritDoc */
     match(component: Gizmo2D): component is Gizmo2D {
-        return component.drawGizmo2D as any;
+        return !!component.drawGizmo2D;
     }
 
     /** @inheritDoc */

@@ -29,7 +29,7 @@ export class DrawSystem extends SortSystem<Draw2D> {
 
     /** @inheritDoc */
     match(component: Draw2D): component is Draw2D {
-        return component.draw2D as any;
+        return !!component.draw2D;
     }
 
     /** @inheritDoc */
