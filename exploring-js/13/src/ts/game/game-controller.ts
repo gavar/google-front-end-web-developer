@@ -16,7 +16,7 @@ import {
 } from "$game";
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
-import {CinematicScene, GameOverDialog, HowToPlayDialog, OverlayView, StatsView} from "$ui";
+import {CinematicScene, GameOverDialog, HowToPlayDialog, MainMenuDialog, OverlayView, StatsView} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -42,6 +42,7 @@ export class GameController implements Component, Draw2D {
     public statsView: StatsView;
     public gameOver: GameOverDialog;
     public howToPlay: HowToPlayDialog;
+    public mainMenu: MainMenuDialog;
     public cinematicScene: CinematicScene;
 
     private outer: HTMLElement;
@@ -72,6 +73,7 @@ export class GameController implements Component, Draw2D {
         // ui
         this.overlay = this.overlay || stage.findComponentOfType(OverlayView);
         this.gameOver = this.gameOver || stage.findComponentOfType(GameOverDialog);
+        this.mainMenu = this.mainMenu || stage.findComponentOfType(MainMenuDialog);
         this.howToPlay = this.howToPlay || stage.findComponentOfType(HowToPlayDialog);
         this.statsView = this.statsView || stage.findComponentOfType(StatsView);
         this.cinematicScene = this.cinematicScene || stage.findComponentOfType(CinematicScene);
@@ -102,11 +104,16 @@ export class GameController implements Component, Draw2D {
         this.enemySpawn.enemyVelocity = () => this.difficulty.enemyVelocity;
 
         // ui
-        this.gameOver.actor.on("play-again", this.replay, this);
-        this.howToPlay.actor.on("play", this.play, this);
+        this.mainMenu.actor.on("how-to-play", this.showHowToPlay, this);
+        this.mainMenu.actor.on("play", this.play, this);
+        this.howToPlay.actor.on("back", this.showMainMenu, this);
+        this.gameOver.actor.on("play", this.play, this);
+
+        // initial state
+        Component.disable(this.controls);
 
         // show first screen
-        this.overlay.show(this.howToPlay);
+        window.setTimeout(() => this.showMainMenu(), 100);
     }
 
     /** Play the game. */
@@ -168,6 +175,16 @@ export class GameController implements Component, Draw2D {
         inner.style.left = `${canvas.element.offsetLeft}px`;
         inner.style.width = `${canvas.element.width}px`;
         inner.style.height = `${canvas.element.height - offsetY - 1}px`;
+    }
+
+    private showMainMenu(): void {
+        this.overlay.close();
+        this.overlay.show(this.mainMenu);
+    }
+
+    private showHowToPlay(): void {
+        this.overlay.close();
+        this.overlay.show(this.howToPlay);
     }
 
     /** Player steps on an enemy. */

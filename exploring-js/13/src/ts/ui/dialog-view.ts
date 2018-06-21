@@ -58,14 +58,16 @@ export abstract class DialogView extends BaseView {
         if (value) this.setDirty();
 
         // update attributes
-        if (this.root) {
+        const {root} = this;
+        if (root) {
             if (value) {
-                this.root.setAttribute("open", "");
-                this.root.removeAttribute("close");
+                root.setAttribute("ready", "");
+                root.setAttribute("open", "");
+                root.removeAttribute("hide");
             }
-            else {
-                this.root.setAttribute("close", "");
-                this.root.removeAttribute("open");
+            else if (root.hasAttribute("ready")) {
+                root.setAttribute("hide", "");
+                root.removeAttribute("open");
             }
         }
     }

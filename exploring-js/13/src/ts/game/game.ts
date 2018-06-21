@@ -13,7 +13,15 @@ import {
 } from "$game";
 import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
 import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
-import {CinematicScene, DifficultyView, GameOverDialog, HowToPlayDialog, OverlayView, StatsView} from "$ui";
+import {
+    CinematicScene,
+    DifficultyView,
+    GameOverDialog,
+    HowToPlayDialog,
+    MainMenuDialog,
+    OverlayView,
+    StatsView,
+} from "$ui";
 
 export namespace Layers {
     export const TERRAIN = 1;
@@ -228,6 +236,7 @@ export class Game {
         this.initGameOverDialog();
         this.initHowToPlayDialog();
         this.initCinematicScene();
+        this.initMainMenuDialog();
         if (DEBUG) this.initDebugView();
     }
 
@@ -240,6 +249,12 @@ export class Game {
     initOverlayView(): OverlayView {
         const actor = this.stage.createActor("overlay-view");
         const view = actor.add(OverlayView);
+        return view;
+    }
+
+    initMainMenuDialog(): MainMenuDialog {
+        const actor = this.stage.createActor("main-menu-dialog");
+        const view = actor.add(MainMenuDialog);
         return view;
     }
 

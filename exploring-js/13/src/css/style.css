@@ -1,8 +1,15 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+}
+
 /*
  * COMMON
  */
 html, body {
   overflow: hidden;
+  text-align: center;
 }
 
 main {
@@ -11,22 +18,13 @@ main {
   height: 100%;
 }
 
-* {
-  padding: 0;
-  margin: 0;
-}
-
-body, canvas {
-  text-align: center;
-  user-select: none;
-}
-
 body {
   font-family: 'Open Sans', sans-serif;
   background: #fff url('/img/background.png');
 }
 
 canvas {
+  user-select: none;
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
@@ -57,27 +55,60 @@ figure img {
 }
 
 /* DIALOGS */
+menu,
 dialog {
   position: absolute;
   width: 100%;
 }
 
-dialog:not([open]),
-.overlay:not([open]) {
-  opacity: 0;
-  visibility: hidden;
+main:not([ready]),
+dialog:not([ready]) {
+  display: none;
 }
 
-dialog[open],
-.overlay[open] {
-  animation-name: dialog-open;
+dialog:not([open]) {
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+main[open],
+dialog[open] {
+  animation-name: dialog-show;
   animation-duration: 1s;
 }
 
-dialog[close],
-.overlay[close] {
-  animation-name: dialog-close;
-  animation-duration: 0.5s;
+main[hide],
+dialog[hide] {
+  animation-name: dialog-hide;
+  animation-duration: .35s;
+}
+
+@keyframes dialog-show {
+  from {
+    opacity: 0;
+    pointer-events: none;
+  }
+  50% {
+    pointer-events: auto;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes dialog-hide {
+  from {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 /* REUSABLE */
@@ -88,9 +119,10 @@ dialog[close],
   1px 1px 0 #000;
 }
 
-/* GAME */
+/* EFFECTS */
 .outer {
   z-index: -1;
+  pointer-events: none;
 }
 
 .outer.hit {
@@ -100,6 +132,7 @@ dialog[close],
 
 .inner {
   z-index: 1;
+  pointer-events: none;
 }
 
 .inner.hit {
@@ -109,15 +142,9 @@ dialog[close],
 
 /* OVERLAY */
 .overlay {
-  display: flex;
-  border-radius: 10px;
-  align-items: center;
   position: absolute;
+  border-radius: 10px;
   z-index: 100;
-}
-
-.overlay > * {
-  flex: 1;
 }
 
 /* MENU BUTTONS */
@@ -181,8 +208,13 @@ dialog[close],
 }
 
 /* MAIN MENU */
+menu {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
+}
+
 #main-menu {
-  background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .2));
   height: 100%;
   width: 100%;
 }
@@ -221,10 +253,8 @@ dialog[close],
 #how-to-play {
   height: 100%;
   width: 100%;
-  background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .2));
 }
 
-#how-to-play h1,
 #how-to-play h2,
 #how-to-play h3,
 #how-to-play figcaption {
@@ -239,7 +269,7 @@ dialog[close],
 
 #how-to-play h2 {
   font-size: 2em;
-  margin: 0 0 25px;
+  margin: 100px 0 0;
 }
 
 #how-to-play h3 {
@@ -292,6 +322,10 @@ dialog[close],
 }
 
 #how-to-play .controls .column {
+  /*flex: 1;*/
+  /*margin: 5px;*/
+  margin-top: 5px;
+  margin-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -368,7 +402,7 @@ dialog[close],
 @media screen and (max-width: 500px) {
   #how-to-play h2 {
     font-size: 6vw;
-    margin: 0 0 5vw;
+    margin: 20vw 0 0;
   }
 
   #how-to-play h3 {
@@ -525,25 +559,5 @@ dialog[close],
   }
 }
 
-@keyframes dialog-open {
-  from {
-    opacity: 0;
-    visibility: hidden;
-  }
-  to {
-    opacity: 1;
-    visibility: visible;
-  }
-}
 
-@keyframes dialog-close {
-  from {
-    opacity: 1;
-    visibility: visible;
-  }
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
 

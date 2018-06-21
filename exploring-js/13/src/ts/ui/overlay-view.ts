@@ -10,10 +10,14 @@ export class OverlayView implements Component {
     public readonly actor?: Actor;
 
     /** Overlay root HTML element. */
+    public main: HTMLElement;
+
+    /** Overlay root HTML element. */
     public root: HTMLElement;
 
     /** @inheritDoc */
     awake() {
+        this.main = document.querySelector("main");
         this.root = document.querySelector(".overlay");
     }
 
@@ -36,7 +40,7 @@ export class OverlayView implements Component {
     /** Hide all dialogs. */
     close() {
         for (const dialog of this.dialogs)
-            Component.disable(dialog);
+            this.hide(dialog);
     }
 
     /**
@@ -44,13 +48,16 @@ export class OverlayView implements Component {
      * @param open - whether to show dialog; hide otherwise.
      */
     protected activate(open: boolean): void {
+        const {root, main} = this;
         if (open) {
-            this.root.setAttribute("open", "");
-            this.root.removeAttribute("close");
+            main.setAttribute("ready", "");
+            root.setAttribute("ready", "");
+            root.setAttribute("open", "");
+            root.removeAttribute("hide");
         }
-        else {
-            this.root.setAttribute("close", "");
-            this.root.removeAttribute("open");
+        else if (root.hasAttribute("ready")) {
+            root.setAttribute("hide", "");
+            root.removeAttribute("open");
         }
     }
 
