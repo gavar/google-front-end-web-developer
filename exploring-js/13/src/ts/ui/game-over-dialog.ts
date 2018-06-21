@@ -22,7 +22,6 @@ export class GameOverDialog extends DialogView {
     /** @inheritDoc */
     protected render() {
         const {stats} = this;
-        console.log(this.score);
         this.level.innerText = `#${stats.level + 1}`;
         this.score.innerText = `${stats.score}`;
     }
