@@ -108,6 +108,7 @@ export class GameController implements Component, Draw2D {
         this.mainMenu.actor.on("play", this.play, this);
         this.howToPlay.actor.on("back", this.showMainMenu, this);
         this.gameOver.actor.on("play", this.play, this);
+        this.gameOver.actor.on("back", this.showMainMenu, this);
 
         // initial state
         Component.disable(this.controls);
@@ -118,15 +119,17 @@ export class GameController implements Component, Draw2D {
 
     /** Play the game. */
     play(): void {
-        const {terrain, player, difficulty, settings, overlay} = this;
+        const {terrain, player, settings, overlay, difficulty} = this;
 
         // discard previous game state
+        this.clean();
         overlay.close();
-        player.stats.reset();
         difficulty.reset();
+        player.stats.reset();
+        Component.disable(this.cinematicScene);
+        Component.disable(this.player.actor.get(Ghost));
 
         // warm-up components
-        Component.disable(this.player.actor.get(Ghost));
         Component.restart(this.controls);
         Component.restart(this.enemySpawn);
         Component.restart(this.bountySpawn);
@@ -145,6 +148,13 @@ export class GameController implements Component, Draw2D {
 
         // ui
         this.overlay.show(this.statsView);
+    }
+
+    /** Cleanup scene. */
+    clean() {
+        this.terrainPath.layer.clear();
+        Component.disable(this.enemySpawn);
+        Component.disable(this.bountySpawn);
     }
 
     /** @inheritDoc */
@@ -178,8 +188,10 @@ export class GameController implements Component, Draw2D {
     }
 
     private showMainMenu(): void {
+        this.clean();
         this.overlay.close();
         this.overlay.show(this.mainMenu);
+        Component.enable(this.cinematicScene);
     }
 
     private showHowToPlay(): void {
