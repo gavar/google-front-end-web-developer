@@ -62,7 +62,7 @@ export class Game {
         enable: false,
         sprite: false,
         capsule: false,
-        collision: true,
+        collision: false,
     };
 
     constructor() {
@@ -281,8 +281,8 @@ export class Game {
         const view = actor.add(DifficultyView);
     }
 
-    initGizmo() {
-        if (!this.isGizmoActive())
+    initGizmo(force?: boolean) {
+        if (!this.isGizmoActive() && !force)
             return;
 
         const {gizmos} = this;
