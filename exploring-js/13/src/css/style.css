@@ -188,7 +188,7 @@ dialog[hide] {
   }
 
   .bottom.buttons {
-    bottom: 10vw;
+    bottom: 9vw;
   }
 }
 
@@ -298,6 +298,7 @@ menu {
 }
 
 #how-to-play figcaption {
+  line-height: 1;
   font-weight: normal;
   color: yellowgreen;
   text-transform: none;
@@ -305,7 +306,7 @@ menu {
 }
 
 #how-to-play img {
-  max-height: 100%;
+  max-height: calc(100% - 10px);
   margin: auto;
 }
 
@@ -342,8 +343,6 @@ menu {
 }
 
 #how-to-play .controls .column {
-  /*flex: 1;*/
-  /*margin: 5px;*/
   margin-top: 5px;
   margin-bottom: 5px;
   padding-left: 5px;
@@ -382,6 +381,10 @@ menu {
   padding-right: 1px;
 }
 
+#how-to-play .controls .arrows .key {
+  font-family: cursive;
+}
+
 #how-to-play .bonuses {
   height: 100%;
   display: flex;
@@ -402,19 +405,19 @@ menu {
   width: 100%;
 }
 
-#how-to-play .instruction img {
-  max-height: 100%;
+#how-to-play .enemy-bug {
+  width: fit-content;
 }
 
-#how-to-play img.enemy-bug {
+#how-to-play .enemy-bug img {
   margin-top: 15px;
 }
 
-#how-to-play img.enemy-bug.one {
+#how-to-play .enemy-bug.one img {
   transform: rotateZ(30deg);
 }
 
-#how-to-play img.enemy-bug.two {
+#how-to-play .enemy-bug.two img {
   transform: scaleX(-1) rotateZ(-20deg);
 }
 
@@ -448,7 +451,7 @@ menu {
     border-radius: 4vw;
   }
 
-  #how-to-play img.enemy-bug {
+  #how-to-play .enemy-bug img {
     margin-top: 1vw;
   }
 }
