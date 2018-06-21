@@ -5,3 +5,4 @@ export * from "./stats-view";
 export * from "./difficulty-view";
 export * from "./how-to-play-dialog";
 export * from "./game-over-dialog";
+export * from "./cinematic-scene";

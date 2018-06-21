@@ -16,7 +16,7 @@ import {
 } from "$game";
 import {PhysicsBody2D} from "$physics";
 import {Draw2D} from "$systems";
-import {GameOverDialog, HowToPlayDialog, OverlayView, StatsView} from "$ui";
+import {CinematicScene, GameOverDialog, HowToPlayDialog, OverlayView, StatsView} from "$ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {
@@ -42,6 +42,7 @@ export class GameController implements Component, Draw2D {
     public statsView: StatsView;
     public gameOver: GameOverDialog;
     public howToPlay: HowToPlayDialog;
+    public cinematicScene: CinematicScene;
 
     private outer: HTMLElement;
     private inner: HTMLElement;
@@ -73,6 +74,7 @@ export class GameController implements Component, Draw2D {
         this.gameOver = this.gameOver || stage.findComponentOfType(GameOverDialog);
         this.howToPlay = this.howToPlay || stage.findComponentOfType(HowToPlayDialog);
         this.statsView = this.statsView || stage.findComponentOfType(StatsView);
+        this.cinematicScene = this.cinematicScene || stage.findComponentOfType(CinematicScene);
 
         // player events
         const {player} = this;
