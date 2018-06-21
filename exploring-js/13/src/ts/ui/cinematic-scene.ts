@@ -20,16 +20,23 @@ export class CinematicScene implements Component {
     public terrain: Terrain2D;
     public player: Player;
 
+    private initialized: boolean;
+    private readonly look: Vector2 = {x: 0, y: 0};
+
     /** @inheritDoc */
     enable() {
+        if (this.initialized)
+            this.initPlayerPosition();
         this.activate(true);
     }
 
     /** @inheritDoc */
     start() {
+        this.initialized = true;
         this.player = this.player || this.actor.stage.findComponentOfType(Player);
         this.loader = this.loader || this.actor.stage.findComponentOfType(Resources);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
+        this.initPlayerPosition();
         this.initialize();
     }
 
@@ -38,20 +45,24 @@ export class CinematicScene implements Component {
         this.activate(false);
     }
 
+    private initPlayerPosition() {
+        const {player, terrain, look} = this;
+        look.x = terrain.positionX(2.5);
+        look.y = terrain.positionY(1.0);
+        player.applyPosition(
+            terrain.positionX(2.0),
+            terrain.positionY(0),
+        );
+    }
+
     /** Spawn scene actors. */
     private initialize() {
-        // return;
-        const {terrain} = this;
+        const {terrain, look} = this;
 
         const size = 9;
         const min = Math.PI * .31;
         const max = Math.PI - min;
         const step = (max - min) / (size - 1);
-        const look: Vector2 = {
-            x: terrain.positionX(2.5),
-            y: terrain.positionY(1.0),
-        };
-
         const yMin = Math.sin(min);
         for (let i = 0; i < size; i++) {
             const a = min + step * i;
