@@ -58,7 +58,34 @@ export class Stage {
      * @param system - system to add.
      */
     addSystem(system: System) {
+        // check system already exists
+        if (this.systems.has(system))
+            return;
+
+        // ensure there's no duplicate systems of the same type
+        for (const existing of this.systems.items)
+            if (system.constructor === existing.constructor)
+                throw new Error(`trying to add duplicate system of type '${system.constructor.name}'`);
+
+        // submit system
         this.systems.add(system);
+
+        // initialized?
+        if (!this.ticker)
+            return;
+
+        // attach existing actors
+        for (const actor of this.actors.items) {
+            for (const component of actor.components) {
+                // skip components in queue
+                if (this.queue.has(component))
+                    continue;
+
+                // try to submit component
+                if (system.match(component))
+                    system.add(component);
+            }
+        }
     }
 
     /**
