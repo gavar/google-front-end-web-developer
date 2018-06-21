@@ -169,7 +169,7 @@ export class GameController implements Component, Draw2D {
         root.style.top = `${canvas.element.offsetTop}px`;
         root.style.left = `${canvas.element.offsetLeft}px`;
         root.style.width = `${canvas.element.width}px`;
-        root.style.height = `${canvas.element.height}px`;
+        root.style.height = `${canvas.element.height - 2}px`;
     }
 
     private outlineLayout() {
