@@ -174,6 +174,9 @@ export class Stage {
         if (!this.destroyActors.add(actor))
             return;
 
+        // remove from active actors
+        this.actors.remove(actor);
+
         // flags
         (actor as Mutable<Actor>).active = false;
         (actor as Mutable<Actor>).destroyed = true;
@@ -214,14 +217,11 @@ export class Stage {
     }
 
     private tick(deltaTime: number) {
-
-        const systems = this.systems.items;
-
         // process components in queue
         this.queue.forEach(this.forEachInQueue, this);
 
         // tick systems
-        for (const system of systems)
+        for (const system of this.systems.items)
             system.tick(deltaTime);
 
         // destroy components
@@ -229,10 +229,16 @@ export class Stage {
             (component as Mutable<Component>).actor = null;
 
         // destroy actors
+        const {actors} = this;
         for (const actor of this.destroyActors.items) {
+            // remove from an actor list
+            actors.remove(actor);
+
+            // set component refs to null
             for (const component of actor.components)
                 (component as Mutable<Component>).actor = null;
 
+            // set stage refs to null
             (actor as Mutable<Actor>).stage = null;
             (actor.components as Component[]).length = 0;
         }
@@ -271,7 +277,7 @@ export class Stage {
 
         // check if can be removed from queue
         if (state.enabled && state.started)
-            queue.delete(state);
+            queue.delete(component);
     }
 
     /**
