@@ -4,10 +4,10 @@
 export interface Vector2 {
     x: number;
     y: number;
-
 }
 
 export namespace Vector2 {
+
     export const zero: Readonly<Vector2> = {x: 0, y: 0};
     export const one: Readonly<Vector2> = {x: 1, y: 1};
     export const up: Readonly<Vector2> = {x: 0, y: 1};
@@ -71,6 +71,12 @@ export namespace Vector2 {
         now.y = ry;
     }
 
+    /** Calculate length of a vector - square root of (x * x + y * y). */
+    export function magnitude(vector: Vector2): number {
+        const {x, y} = vector;
+        return Math.sqrt(x * x + y * y);
+    }
+
     /**
      * Limit vector's magnitude to a given value.
      * @param vector - vector to clamp.
@@ -96,6 +102,16 @@ export namespace Vector2 {
         vector.y /= length;
     }
 
+    /**
+     * Calculate unsigned angle between two vectors in degrees.
+     * Smaller of the two possible angles between the two vectors is used.
+     */
+    export function angle(a: Readonly<Vector2>, b: Readonly<Vector2>): number {
+        const f1 = Math.sqrt(a.x * a.x + a.y * a.y); // length of A
+        const f2 = Math.sqrt(b.x * b.x + b.y * b.y); // length of B
+        const dot = (a.x / f1) * (b.x / f2) + (a.y / f1) * (b.y / f2);
+        return Math.acos(dot) / Math.PI * 180;
+    }
 }
 
 /**
