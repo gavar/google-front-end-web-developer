@@ -258,7 +258,7 @@ export class Stage {
             if (instance[key])
                 instance[key].apply(instance, args);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 }
