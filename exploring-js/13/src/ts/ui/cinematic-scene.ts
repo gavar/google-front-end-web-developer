@@ -1,6 +1,6 @@
 import {Layer, Resources, Sprite, Terrain2D, Transform, Vector2} from "$components";
 import {Actor, Component} from "$engine";
-import {Player, View} from "$game";
+import {Ghost, Player, View} from "$game";
 import {Gizmo2D, LateUpdate} from "$systems";
 
 /**
@@ -26,7 +26,7 @@ export class CinematicScene implements Component {
     /** @inheritDoc */
     enable() {
         if (this.initialized)
-            this.initPlayerPosition();
+            this.initPlayer();
         this.activate(true);
     }
 
@@ -36,7 +36,7 @@ export class CinematicScene implements Component {
         this.player = this.player || this.actor.stage.findComponentOfType(Player);
         this.loader = this.loader || this.actor.stage.findComponentOfType(Resources);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
-        this.initPlayerPosition();
+        this.initPlayer();
         this.initialize();
     }
 
@@ -45,7 +45,12 @@ export class CinematicScene implements Component {
         this.activate(false);
     }
 
-    private initPlayerPosition() {
+    private initPlayer() {
+        const ghost = this.player.actor.require(Ghost);
+        ghost.duration = Number.POSITIVE_INFINITY;
+        ghost.blink = false;
+        Component.enable(ghost);
+
         const {player, terrain, look} = this;
         look.x = terrain.positionX(2.5);
         look.y = terrain.positionY(1.0);
