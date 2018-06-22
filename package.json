@@ -30,11 +30,14 @@
     "typescript": "^2.8.3",
     "use-yarn": "^2.2.0"
   },
-  "workspaces": [
-    "packages/*",
-    "exploring-js/*",
-    "web-programming/*",
-    "web-foundations/*",
-    "responsive-images/*"
-  ]
+  "workspaces": {
+    "nohoist": ["**/$"],
+    "packages": [
+      "packages/*",
+      "exploring-js/*",
+      "web-programming/*",
+      "web-foundations/*",
+      "responsive-images/*"
+    ]
+  }
 }
