@@ -1,1 +1,1 @@
-import "../ts/systems/index"
+import "../ts/systems/index";

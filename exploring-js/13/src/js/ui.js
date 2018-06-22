@@ -1,1 +1,1 @@
-import "../ts/ui/index"
+import "../ts/ui/index";

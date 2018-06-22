@@ -1,1 +1,1 @@
-import "../ts/game/index"
+import "../ts/game/index";
