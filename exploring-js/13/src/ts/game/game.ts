@@ -1,4 +1,4 @@
-import {Canvas, Layer, Motor, Resources, Sprite, Terrain2D} from "$components";
+import {Canvas, FPS, Layer, Motor, Resources, Sprite, Terrain2D} from "$components";
 import {Stage} from "$engine";
 import {
     Bounty,
@@ -80,6 +80,7 @@ export class Game {
         this.stage.addSystem(new DrawSystem(this.canvas));
 
         this.initGizmo();
+        this.stage.createActor("FPS").add(FPS);
         this.resources = this.stage.createActor("resources").add(Resources);
         this.resources.baseUrl = "img";
 
