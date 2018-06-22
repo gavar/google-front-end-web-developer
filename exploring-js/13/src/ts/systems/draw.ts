@@ -39,12 +39,14 @@ export class DrawSystem extends SortSystem<Draw2D> {
         try {
             ctx2D.save();
             ctx2D.scale(scale.x, scale.y);
+            Canvas.active = this.canvas;
             for (const composition of compositions) {
                 const {component} = composition;
                 if (component.enabled && component.actor.active)
                     component.draw2D(ctx2D);
             }
         } finally {
+            Canvas.active = null;
             ctx2D.restore();
         }
     }

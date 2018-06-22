@@ -8,6 +8,9 @@ import {Mutable} from "@syntax";
  */
 export class Canvas implements Component, LateUpdate {
 
+    /** Currently active canvas. */
+    public static active: Canvas;
+
     /** @inheritDoc */
     public readonly actor: Actor;
 
