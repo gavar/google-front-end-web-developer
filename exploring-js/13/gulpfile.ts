@@ -27,10 +27,11 @@ function html() {
 
 function images() {
     const glob = [
-        "./src/img/**/*",
+        "./src/**/*.png",
+        "./src/**/*.ico",
     ];
     return gulp.watchify(glob)
-        .pipe(gulp.dest("./dist/img"));
+        .pipe(gulp.dest("./dist"));
 }
 
 function css() {
