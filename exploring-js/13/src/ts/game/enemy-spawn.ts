@@ -1,5 +1,5 @@
 import {MinMax, Resources, Terrain2D} from "$components";
-import {Actor, Component} from "$engine";
+import {Actor, Bag, Component} from "$engine";
 import {Enemy, Random} from "$game";
 import {LateUpdate, Update} from "$systems";
 
@@ -94,8 +94,8 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
             // check enemy is within terran range
             const {position} = enemy.transform;
-            if (xMax - position.x > 1)
-                if (position.x - xMin > 1)
+            if (position.x <= xMax)
+                if (position.x >= xMin)
                     continue;
 
             // deactivate enemy
@@ -109,16 +109,16 @@ export class EnemySpawn implements Component, Update, LateUpdate {
 
     /** @inheritDoc */
     disable() {
-        while (this.enemies.length > 0) {
-            const enemy = this.enemies.pop();
+        for (const enemy of this.enemies)
             enemy.actor.setActive(false);
-            this.pool.push(enemy);
-        }
+
+        this.pool.push.apply(this.pool, this.enemies);
+        this.enemies.length = 0;
     }
 
     private spawn(): Enemy {
         // request enemy instance
-        const enemy = this.pool.length ? this.pool.pop() : this.enemyFactory();
+        const enemy = this.pool.length > 0 ? this.pool.pop() : this.enemyFactory();
 
         // select direction
         const leftToRight = Math.random() < 0.5;
