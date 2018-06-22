@@ -1,5 +1,25 @@
 import {Compare} from "@syntax";
 
+export namespace Bag {
+
+    /**
+     * Remove item from a bag-like array.
+     * When last item removed, returns false.
+     * Otherwise, places a last item to a given index and returns true.
+     *
+     * @param items - bag-like array.
+     * @param index - zero-based index of the item to remove.
+     */
+    export function removeAt<T>(items: T[], index: number): boolean {
+        const last = items.pop();
+        if (index >= items.length)
+            return false;
+
+        items[index] = last;
+        return true;
+    }
+}
+
 /**
  * Unordered list of unique items using O(1) for read / write operations.
  */
@@ -66,14 +86,12 @@ export class BagSet<T = any> {
         if (typeof index === "undefined")
             return false;
 
+        // remove from indexer
         this.indexer.delete(item);
 
         // fill empty slot with last component
-        const last = this.array.pop();
-        if (last !== item) {
-            this.array[index] = last;
-            this.indexer.set(last, index);
-        }
+        if (Bag.removeAt(this.array, index))
+            this.indexer.set(this.array[index], index);
 
         return true;
     }

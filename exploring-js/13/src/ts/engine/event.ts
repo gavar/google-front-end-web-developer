@@ -1,3 +1,5 @@
+import {Bag} from "$engine";
+
 /**
  * Event signature definition.
  */
@@ -93,11 +95,10 @@ export class EventEmitter {
     }
 
     private cleanup() {
-        for (let i = 0; i < this.bindings.length; i++) {
-            if (this.bindings[i]) continue;
-            const last = this.bindings.pop();
-            if (i < this.bindings.length)
-                this.bindings[i] = last;
+        const {bindings} = this;
+        for (let i = 0; i < bindings.length; i++) {
+            if (bindings[i]) continue;
+            if (Bag.removeAt(bindings, i)) i--;
         }
     }
 }

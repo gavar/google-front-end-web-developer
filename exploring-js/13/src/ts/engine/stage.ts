@@ -1,6 +1,6 @@
 import {Mutable, Newable, With} from "@syntax";
 import {Actor} from "./actor";
-import {BagSet} from "./bag";
+import {Bag, BagSet} from "./bag";
 import {Component} from "./component";
 import {System} from "./system";
 
@@ -144,9 +144,7 @@ export class Stage {
         (component as Mutable<Component>).destroyed = true;
 
         // fill empty component slot
-        const last = components.pop();
-        if (last !== component)
-            components[index] = last;
+        Bag.removeAt(components, index);
 
         // remove from queue if it's there
         this.queue.delete(component);
