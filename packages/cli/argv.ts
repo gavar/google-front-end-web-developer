@@ -1,7 +1,9 @@
 import * as yargs from "yargs";
 import {Arguments, Options, ParseCallback} from "yargs";
 
-export interface Argv<T = void> extends yargs.Argv {
+export type Argv<T = void> = yargs.Argv & Proxy<T>
+
+interface Proxy<T = void> {
     (): T;
     (args: string[], cwd?: string): T;
 

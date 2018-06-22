@@ -25,7 +25,7 @@ function options(this: ProxyYargs) {
     }
 }
 
-function intercept<K extends string>(key: K, target: Partial<Record<K, Function>>, hook: Function) {
+function intercept<K extends string>(key: K, target: Record<K, Function>, hook: Function) {
     const func = target[key];
     target[key] = function () {
         hook.apply(this, arguments);

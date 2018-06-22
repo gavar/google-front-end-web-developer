@@ -1,4 +1,4 @@
-import {Mutable, Newable, With} from "@syntax";
+import {Mutable, Newable} from "@syntax";
 import {Actor} from "./actor";
 import {Bag, BagSet} from "./bag";
 import {Component} from "./component";
@@ -271,14 +271,14 @@ export class Stage {
 
     /**
      * Safely invoke function on a given instance.
-     * @param instance - instance that optionally has function to invoke.
+     * @param object - instance that optionally has function to invoke.
      * @param key - name of the function.
      * @param args - arguments to pass to a function.
      */
-    private static invoke<K extends string>(instance: Partial<With<K, Function>>, key: K, ...args: any[]) {
+    private static invoke<K extends string>(object: {[P in K]?: Function}, key: K, ...args: any[]) {
         try {
-            if (instance[key])
-                instance[key].apply(instance, args);
+            if (object[key])
+                object[key].apply(object, args);
         } catch (e) {
             console.error(e);
         }

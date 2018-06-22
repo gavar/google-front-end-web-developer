@@ -106,7 +106,7 @@ namespace es6 {
             compile,
         );
 
-        _task.name = "es6";
+        gulp.name("es6", _task);
         gulp.watcher.add(glob, _task);
         return _task;
     }
