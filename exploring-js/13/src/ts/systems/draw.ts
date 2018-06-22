@@ -5,8 +5,9 @@ export interface Draw2D extends Sortable {
     /**
      * Render component on a given 2D context.
      * @param ctx - 2D canvas rendering context to render on.
+     * @param deltaTime - time since last frame.
      */
-    draw2D(ctx: CanvasRenderingContext2D): void
+    draw2D(ctx: CanvasRenderingContext2D, deltaTime: number): void
 }
 
 /**
@@ -43,7 +44,7 @@ export class DrawSystem extends SortSystem<Draw2D> {
             for (const composition of compositions) {
                 const {component} = composition;
                 if (component.enabled && component.actor.active)
-                    component.draw2D(ctx2D);
+                    component.draw2D(ctx2D, deltaTime);
             }
         } finally {
             Canvas.active = null;
