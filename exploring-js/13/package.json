@@ -12,5 +12,8 @@
     "gulp": "gulp",
     "rollup": "rollup",
     "webpack": "webpack"
+  },
+  "devDependencies": {
+    "$": "link:./src/ts"
   }
 }
