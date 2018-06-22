@@ -1,9 +1,9 @@
 import {Bag, Component} from "$/engine";
-import {Callback, Dictionary} from "@syntax";
+import {Dictionary, Nodify} from "@syntax";
 
 interface Listener {
     name: string;
-    callback: Callback<HTMLImageElement>;
+    func: Nodify<HTMLImageElement>;
     target: any;
 }
 
@@ -34,12 +34,12 @@ export class Resources implements Component, EventListenerObject {
      * @param target - target to pass as this to the callback.
      * @return promise with given resource.
      */
-    load(name: string, callback?: Callback<HTMLImageElement>, target?: any): HTMLImageElement {
+    load(name: string, callback?: Nodify<HTMLImageElement>, target?: any): HTMLImageElement {
 
         // invoke callback or schedule
         if (callback) {
             if (this.cache.hasOwnProperty(name)) callback.apply(target, this.cache[name]);
-            else this.listeners.push({name, callback, target});
+            else this.listeners.push({name, func: callback, target});
         }
 
         // check image cache
@@ -85,7 +85,7 @@ export class Resources implements Component, EventListenerObject {
                 i--;
 
             // invoke
-            listener.callback.apply(listener.target, this.cache[name]);
+            listener.func.apply(listener.target, this.cache[name]);
         }
     }
 }

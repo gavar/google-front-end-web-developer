@@ -1,6 +1,6 @@
 import cli from "@cli";
 import gulp from "@gulp";
-import {Action, ErrorCallback} from "@syntax";
+import {Action, Done} from "@syntax";
 import {spawn} from "child_process";
 import del from "del";
 import {TaskFunction} from "gulp";
@@ -52,7 +52,7 @@ function css() {
     return spawn(exe, argv, {shell: true, stdio: "inherit"});
 }
 
-function compile(done: ErrorCallback) {
+function compile(done: Done) {
     const args = cli.options.udacity().parse();
     args.udacity ? es6.task()(done) : webpack;
 }

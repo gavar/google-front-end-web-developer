@@ -1,8 +1,8 @@
-import * as fs from "fs-extra";
-import * as im from "imagemagick";
+import fs from "fs-extra";
+import im from "imagemagick";
 import {JSDOM} from "jsdom";
-import * as path from "path";
-import * as File from "vinyl";
+import path from "path";
+import File from "vinyl";
 import {TransformStream} from "../core";
 
 function resolveWebPath(file: File, basePath: string, resource: string): string {
