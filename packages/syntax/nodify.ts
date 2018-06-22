@@ -1,5 +1,5 @@
 /**
- * Node style completion notificaition.
+ * Node style completion notification.
  */
 export interface Done<T = any, E = Error> {
 
