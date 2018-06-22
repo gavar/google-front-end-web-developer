@@ -174,15 +174,15 @@ export class Game {
 
         spawn.enemyFactory = () => {
             const actor = this.stage.createActor("enemy");
-            const enemy = actor.add(Enemy);
-            enemy.view = actor.add(View);
+            const enemy = actor.require(Enemy);
+            enemy.view = actor.require(View);
             enemy.view.resources = this.resources;
             enemy.view.setImage("enemy-bug.png");
-            enemy.motor = actor.add(Motor);
+            enemy.motor = actor.require(Motor);
             enemy.layer.set(Layers.ENEMY);
 
             // collider
-            const capsule = actor.add(CapsuleCollider2D);
+            const capsule = actor.require(CapsuleCollider2D);
             capsule.setSize(98, 50);
             capsule.setOffset(2, 65);
 
