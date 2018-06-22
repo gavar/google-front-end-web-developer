@@ -539,6 +539,24 @@ menu {
   }
 }
 
+/* COPYRIGHT */
+.copyright {
+  user-select: none;
+  position: absolute;
+  bottom: 0;
+  font-size: .8em;
+  text-decoration: none;
+  margin-bottom: 5px;
+  color: #b4b4b4;
+}
+
+@media screen and (max-width: 500px) {
+  .copyright {
+    transform: none;
+    margin-bottom: 5px;
+  }
+}
+
 /* ANIMATIONS */
 @keyframes outer-hit {
   from {
