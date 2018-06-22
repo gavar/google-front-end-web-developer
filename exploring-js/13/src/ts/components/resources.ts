@@ -1,4 +1,4 @@
-import {Component} from "$engine";
+import {Bag, Component} from "$engine";
 import {Callback, Dictionary} from "@syntax";
 
 interface Listener {
@@ -81,10 +81,8 @@ export class Resources implements Component, EventListenerObject {
             if (listener.name !== name)
                 continue;
 
-            // fill slot with last entry
-            const last = this.listeners.pop();
-            if (i < this.listeners.length)
-                this.listeners[i--] = last;
+            if (Bag.removeAt(this.listeners, i))
+                i--;
 
             // invoke
             listener.callback.apply(listener.target, this.cache[name]);

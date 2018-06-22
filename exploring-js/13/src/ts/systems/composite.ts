@@ -1,4 +1,4 @@
-import {System} from "$engine";
+import {Bag, System} from "$engine";
 
 /** Represents component composition. */
 export interface Composition<T> {
@@ -30,18 +30,18 @@ export abstract class CompositeSystem<T, C extends Composition<T>> implements Sy
 
     /** @inheritDoc */
     remove(component: T): void {
-        const index = this.indexer.get(component);
+        const {indexer} = this;
+        const index = indexer.get(component);
         if (typeof index === "undefined")
             return;
 
-        this.indexer.delete(component);
+        // remove from indexer
+        indexer.delete(component);
 
         // fill empty slot with last component
-        const last = this.compositions.pop();
-        if (index < this.compositions.length) {
-            this.compositions[index] = last;
-            this.indexer.set(last.component, index);
-        }
+        const {compositions} = this;
+        if (Bag.removeAt(compositions, index))
+            indexer.set(compositions[index].component, index);
     }
 
     /** @inheritDoc */

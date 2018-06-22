@@ -102,10 +102,8 @@ export class EnemySpawn implements Component, Update, LateUpdate {
             enemy.actor.setActive(false);
             this.pool.push(enemy);
 
-            // fill empty slot
-            const last = this.enemies.pop();
-            if (i < this.enemies.length)
-                this.enemies[i--] = last;
+            if (Bag.removeAt(this.enemies, i))
+                i--;
         }
     }
 
