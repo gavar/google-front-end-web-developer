@@ -1,4 +1,4 @@
-import {Component, ComponentSystem} from "$engine";
+import {Component, ComponentSystem} from "$/engine";
 
 export interface LateUpdate extends Component {
     lateUpdate(deltaTime: number): void;

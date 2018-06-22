@@ -1,6 +1,6 @@
-import {Vector2} from "$components";
-import {Actor} from "$engine";
-import {Gizmo2D} from "$systems";
+import {Vector2} from "$/components";
+import {Actor} from "$/engine";
+import {Gizmo2D} from "$/systems";
 import {Physics2D} from "../";
 import {Collider2D} from "./collider";
 

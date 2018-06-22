@@ -1,6 +1,6 @@
-import {Actor, Component} from "$engine";
-import {GameEvents} from "$game";
-import {Draw2D} from "$systems";
+import {Actor, Component} from "$/engine";
+import {GameEvents} from "$/game";
+import {Draw2D} from "$/systems";
 import {Newable} from "@syntax";
 
 /**

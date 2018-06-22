@@ -1,6 +1,6 @@
-import {Transform, Vector2} from "$components";
-import {Actor, Component} from "$engine";
-import {LateUpdate} from "$systems";
+import {Transform, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
+import {LateUpdate} from "$/systems";
 import {Mutable} from "@syntax";
 
 /**

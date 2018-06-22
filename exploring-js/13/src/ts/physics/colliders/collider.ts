@@ -1,6 +1,6 @@
-import {Actor, Component} from "$engine";
-import {PhysicsBody2D} from "$physics";
-import {Gizmo2D} from "$systems";
+import {Actor, Component} from "$/engine";
+import {PhysicsBody2D} from "$/physics";
+import {Gizmo2D} from "$/systems";
 import {Mutable} from "@syntax";
 import {CapsuleCollider2D} from "./capsule-collider";
 

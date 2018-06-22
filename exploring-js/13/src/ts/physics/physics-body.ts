@@ -1,5 +1,5 @@
-import {Layer, Transform} from "$components";
-import {Actor, Component} from "$engine";
+import {Layer, Transform} from "$/components";
+import {Actor, Component} from "$/engine";
 import {Mutable} from "@syntax";
 import {Collider2D} from "./colliders";
 

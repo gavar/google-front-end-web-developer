@@ -1,6 +1,6 @@
-import {Transform, Vector2} from "$components";
-import {Actor} from "$engine";
-import {Draw2D, Gizmo2D} from "$systems";
+import {Transform, Vector2} from "$/components";
+import {Actor} from "$/engine";
+import {Draw2D, Gizmo2D} from "$/systems";
 import {Mutable} from "@syntax";
 
 /** Draws an image on a canvas. */

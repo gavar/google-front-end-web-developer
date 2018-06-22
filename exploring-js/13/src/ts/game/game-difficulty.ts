@@ -1,5 +1,5 @@
-import {Actor, Component} from "$engine";
-import {GameSettings} from "$game";
+import {Actor, Component} from "$/engine";
+import {GameSettings} from "$/game";
 import {Mutable} from "@syntax";
 
 export class GameDifficulty implements Component {

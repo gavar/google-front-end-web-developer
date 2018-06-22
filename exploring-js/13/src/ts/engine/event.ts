@@ -1,4 +1,4 @@
-import {Bag} from "$engine";
+import {Bag} from "$/engine";
 
 /**
  * Event signature definition.

@@ -1,6 +1,6 @@
-import {Actor, Component} from "$engine";
-import {GameDifficulty} from "$game";
-import {LateUpdate} from "$systems";
+import {Actor, Component} from "$/engine";
+import {GameDifficulty} from "$/game";
+import {LateUpdate} from "$/systems";
 
 /**
  * Renders debug information about current game difficulty.

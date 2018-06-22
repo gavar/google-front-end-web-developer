@@ -1,7 +1,7 @@
-import {MinMax, Resources, Terrain2D} from "$components";
-import {Actor, Bag, Component} from "$engine";
-import {Enemy, Random} from "$game";
-import {LateUpdate, Update} from "$systems";
+import {MinMax, Resources, Terrain2D} from "$/components";
+import {Actor, Bag, Component} from "$/engine";
+import {Enemy, Random} from "$/game";
+import {LateUpdate, Update} from "$/systems";
 
 /** Spawn enemies. */
 export class EnemySpawn implements Component, Update, LateUpdate {

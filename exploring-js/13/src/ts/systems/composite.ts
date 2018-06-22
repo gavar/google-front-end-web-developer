@@ -1,4 +1,4 @@
-import {Bag, System} from "$engine";
+import {Bag, System} from "$/engine";
 
 /** Represents component composition. */
 export interface Composition<T> {

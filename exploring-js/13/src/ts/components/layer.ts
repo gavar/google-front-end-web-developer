@@ -1,4 +1,4 @@
-import {Actor, Component} from "$engine";
+import {Actor, Component} from "$/engine";
 import {Mutable} from "@syntax";
 
 /**

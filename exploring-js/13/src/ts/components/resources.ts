@@ -1,4 +1,4 @@
-import {Bag, Component} from "$engine";
+import {Bag, Component} from "$/engine";
 import {Callback, Dictionary} from "@syntax";
 
 interface Listener {

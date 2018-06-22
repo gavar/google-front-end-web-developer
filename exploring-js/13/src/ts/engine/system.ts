@@ -1,4 +1,4 @@
-import {BagSet} from "$engine";
+import {BagSet} from "$/engine";
 
 /**
  * Represents system which process added components on each tick.

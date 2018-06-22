@@ -1,7 +1,7 @@
-import {Layer, Resources, Sprite, Terrain2D, Transform, Vector2} from "$components";
-import {Actor, Component} from "$engine";
-import {Ghost, Player, View} from "$game";
-import {Gizmo2D, LateUpdate} from "$systems";
+import {Layer, Resources, Sprite, Terrain2D, Transform, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
+import {Ghost, Player, View} from "$/game";
+import {Gizmo2D, LateUpdate} from "$/systems";
 
 /**
  * Scene containing main menu cinematic.

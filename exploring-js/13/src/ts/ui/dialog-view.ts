@@ -1,5 +1,5 @@
-import {Component} from "$engine";
-import {BaseView, OverlayView} from "$ui";
+import {Component} from "$/engine";
+import {BaseView, OverlayView} from "$/ui";
 
 /** Base class for in-game dialogs.*/
 export abstract class DialogView extends BaseView {

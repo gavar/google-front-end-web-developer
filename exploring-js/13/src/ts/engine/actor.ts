@@ -1,4 +1,4 @@
-import {EventEmitter, EventType} from "$engine";
+import {EventEmitter, EventType} from "$/engine";
 import {Mutable, Newable} from "@syntax";
 import {Component} from "./component";
 import {Stage} from "./stage";

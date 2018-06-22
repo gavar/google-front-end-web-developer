@@ -1,5 +1,5 @@
-import {Actor, Component} from "$engine";
-import {DialogView} from "$ui";
+import {Actor, Component} from "$/engine";
+import {DialogView} from "$/ui";
 
 export class OverlayView implements Component {
 

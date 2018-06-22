@@ -1,7 +1,7 @@
-import {Transform, Vector2} from "$components";
-import {Actor, Component} from "$engine";
-import {Bounty, Enemy, GameEvents, PlayerStats, View} from "$game";
-import {Collider2D, PhysicsListener2D} from "$physics";
+import {Transform, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
+import {Bounty, Enemy, GameEvents, PlayerStats, View} from "$/game";
+import {Collider2D, PhysicsListener2D} from "$/physics";
 import {Mutable} from "@syntax";
 
 export class Player implements Component, PhysicsListener2D {

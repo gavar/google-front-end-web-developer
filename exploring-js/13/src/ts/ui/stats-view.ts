@@ -1,6 +1,6 @@
-import {Canvas, Terrain2D} from "$components";
-import {GameSettings, PlayerStats} from "$game";
-import {DialogView} from "$ui";
+import {Canvas, Terrain2D} from "$/components";
+import {GameSettings, PlayerStats} from "$/game";
+import {DialogView} from "$/ui";
 
 /**
  * Renders player stats, like scores and lives.

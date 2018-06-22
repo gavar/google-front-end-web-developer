@@ -1,4 +1,4 @@
-import {Reactive} from "$game";
+import {Reactive} from "$/game";
 
 export class PlayerStats extends Reactive {
 

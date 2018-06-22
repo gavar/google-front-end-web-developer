@@ -1,6 +1,6 @@
-import {TerrainLayer2D, Transform, Vector2} from "$components";
-import {Actor, Component} from "$engine";
-import {Bounty, Random, TerrainPath} from "$game";
+import {TerrainLayer2D, Transform, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
+import {Bounty, Random, TerrainPath} from "$/game";
 
 export class BountySpawn implements Component {
 

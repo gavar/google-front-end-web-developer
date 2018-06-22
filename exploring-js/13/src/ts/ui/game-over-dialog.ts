@@ -1,5 +1,5 @@
-import {PlayerStats} from "$game";
-import {DialogView} from "$ui";
+import {PlayerStats} from "$/game";
+import {DialogView} from "$/ui";
 
 export class GameOverDialog extends DialogView {
 

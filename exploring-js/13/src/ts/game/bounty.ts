@@ -1,6 +1,6 @@
-import {Layer, Transform} from "$components";
-import {Actor, Component} from "$engine";
-import {Highlight, View} from "$game";
+import {Layer, Transform} from "$/components";
+import {Actor, Component} from "$/engine";
+import {Highlight, View} from "$/game";
 import {Mutable} from "@syntax";
 
 export class Bounty implements Component {

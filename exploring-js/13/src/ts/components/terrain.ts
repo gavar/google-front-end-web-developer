@@ -1,6 +1,6 @@
-import {Rect, Transform, Vector2} from "$components";
-import {Actor, Component} from "$engine";
-import {Draw2D, Gizmo2D} from "$systems";
+import {Rect, Transform, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
+import {Draw2D, Gizmo2D} from "$/systems";
 import {Dictionary, Mutable} from "@syntax";
 
 export type TerrainImage = HTMLImageElement;

@@ -1,7 +1,7 @@
-import {Canvas, Terrain2D, Vector2} from "$components";
-import {Actor, Component} from "$engine";
-import {Mathf, Player} from "$game";
-import {LateUpdate} from "$systems";
+import {Canvas, Terrain2D, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
+import {Mathf, Player} from "$/game";
+import {LateUpdate} from "$/systems";
 
 /**
  * Controls the player movement, by reacting on input events.

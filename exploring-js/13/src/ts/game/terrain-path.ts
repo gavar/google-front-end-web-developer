@@ -1,5 +1,5 @@
-import {TerrainImage, TerrainLayer2D, Vector2} from "$components";
-import {Random} from "$game";
+import {TerrainImage, TerrainLayer2D, Vector2} from "$/components";
+import {Random} from "$/game";
 import {Mutable} from "@syntax";
 
 /** Terrain path generator. */

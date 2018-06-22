@@ -1,6 +1,6 @@
-import {Layer} from "$components";
-import {Component} from "$engine";
-import {CompositeSystem, Composition} from "$systems";
+import {Layer} from "$/components";
+import {Component} from "$/engine";
+import {CompositeSystem, Composition} from "$/systems";
 import {Mutable} from "@syntax";
 
 export interface Sortable extends Component {

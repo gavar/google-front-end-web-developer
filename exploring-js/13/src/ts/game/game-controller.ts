@@ -1,5 +1,5 @@
-import {Canvas, Terrain2D, Vector2} from "$components";
-import {Actor, Component} from "$engine";
+import {Canvas, Terrain2D, Vector2} from "$/components";
+import {Actor, Component} from "$/engine";
 import {
     Bounty,
     BountySpawn,
@@ -13,10 +13,10 @@ import {
     PlayerControls,
     Random,
     TerrainPath,
-} from "$game";
-import {PhysicsBody2D} from "$physics";
-import {Draw2D} from "$systems";
-import {CinematicScene, GameOverDialog, HowToPlayDialog, MainMenuDialog, OverlayView, StatsView} from "$ui";
+} from "$/game";
+import {PhysicsBody2D} from "$/physics";
+import {Draw2D} from "$/systems";
+import {CinematicScene, GameOverDialog, HowToPlayDialog, MainMenuDialog, OverlayView, StatsView} from "$/ui";
 import {Mutable} from "@syntax";
 
 export class GameController implements Component, Draw2D {

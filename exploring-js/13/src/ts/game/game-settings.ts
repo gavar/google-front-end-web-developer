@@ -1,4 +1,4 @@
-import {Reactive} from "$game";
+import {Reactive} from "$/game";
 import {Dictionary} from "@syntax";
 
 export class GameSettings extends Reactive {

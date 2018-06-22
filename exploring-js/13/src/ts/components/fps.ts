@@ -1,6 +1,6 @@
-import {Canvas, Layer} from "$components";
-import {Actor} from "$engine";
-import {Draw2D} from "$systems";
+import {Canvas, Layer} from "$/components";
+import {Actor} from "$/engine";
+import {Draw2D} from "$/systems";
 
 export class FPS implements Draw2D {
 

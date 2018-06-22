@@ -1,4 +1,4 @@
-import {Component, ComponentSystem} from "$engine";
+import {Component, ComponentSystem} from "$/engine";
 
 export interface Update extends Component {
     update(deltaTime: number): void;

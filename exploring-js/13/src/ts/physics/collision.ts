@@ -1,5 +1,5 @@
-import {PhysicsBody2D} from "$physics";
-import {CompositeSystem, Composition} from "$systems";
+import {PhysicsBody2D} from "$/physics";
+import {CompositeSystem, Composition} from "$/systems";
 import {Collider2D} from "./colliders";
 
 export interface CollisionComposition extends Composition<Collider2D> {

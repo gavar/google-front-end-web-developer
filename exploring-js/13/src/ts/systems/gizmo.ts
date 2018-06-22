@@ -1,5 +1,5 @@
-import {Canvas} from "$components";
-import {Sortable, SortComposition, SortSystem} from "$systems";
+import {Canvas} from "$/components";
+import {Sortable, SortComposition, SortSystem} from "$/systems";
 
 export interface Gizmo2D extends Sortable {
 

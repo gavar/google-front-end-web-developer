@@ -1,5 +1,5 @@
-import {Canvas, FPS, Layer, Motor, Resources, Sprite, Terrain2D} from "$components";
-import {Stage} from "$engine";
+import {Canvas, FPS, Layer, Motor, Resources, Sprite, Terrain2D} from "$/components";
+import {Stage} from "$/engine";
 import {
     Bounty,
     BountySpawn,
@@ -10,9 +10,9 @@ import {
     PlayerControls,
     TerrainPath,
     View,
-} from "$game";
-import {CapsuleCollider2D, CollisionSystem2D} from "$physics";
-import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$systems";
+} from "$/game";
+import {CapsuleCollider2D, CollisionSystem2D} from "$/physics";
+import {DrawSystem, GizmoSystem, LateUpdateSystem, UpdateSystem} from "$/systems";
 import {
     CinematicScene,
     DifficultyView,
@@ -21,7 +21,7 @@ import {
     MainMenuDialog,
     OverlayView,
     StatsView,
-} from "$ui";
+} from "$/ui";
 
 export namespace Layers {
     export const TERRAIN = 1;

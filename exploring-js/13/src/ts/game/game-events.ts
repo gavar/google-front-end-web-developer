@@ -1,5 +1,5 @@
-import {EventType} from "$engine";
-import {Bounty, Enemy, Player} from "$game";
+import {EventType} from "$/engine";
+import {Bounty, Enemy, Player} from "$/game";
 
 // TODO: move events to related classes
 export namespace GameEvents {

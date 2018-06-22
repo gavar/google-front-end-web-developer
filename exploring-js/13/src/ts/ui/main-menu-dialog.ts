@@ -1,4 +1,4 @@
-import {DialogView} from "$ui";
+import {DialogView} from "$/ui";
 
 export class MainMenuDialog extends DialogView {
 

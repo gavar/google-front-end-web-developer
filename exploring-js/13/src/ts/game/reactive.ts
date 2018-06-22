@@ -1,5 +1,5 @@
-import {Actor, Component} from "$engine";
-import {GameEvents} from "$game";
+import {Actor, Component} from "$/engine";
+import {GameEvents} from "$/game";
 
 export class Reactive implements Component {
 

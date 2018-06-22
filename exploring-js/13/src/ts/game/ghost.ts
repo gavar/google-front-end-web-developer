@@ -1,7 +1,7 @@
-import {Sprite} from "$components";
-import {Actor, Component} from "$engine";
-import {PhysicsBody2D} from "$physics";
-import {LateUpdate} from "$systems";
+import {Sprite} from "$/components";
+import {Actor, Component} from "$/engine";
+import {PhysicsBody2D} from "$/physics";
+import {LateUpdate} from "$/systems";
 
 export class Ghost implements Component, LateUpdate {
 

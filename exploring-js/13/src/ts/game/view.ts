@@ -1,5 +1,5 @@
-import {Resources, Sprite} from "$components";
-import {Actor, Component} from "$engine";
+import {Resources, Sprite} from "$/components";
+import {Actor, Component} from "$/engine";
 import {Mutable} from "@syntax";
 
 /**
