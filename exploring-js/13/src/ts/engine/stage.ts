@@ -19,10 +19,6 @@ interface QueueState {
  */
 export class Stage {
 
-    private lastTime: number;
-    private stepTime: number;
-    private ticker: FrameRequestCallback;
-
     private readonly queue: Map<Component, QueueState>;
     private readonly actors: BagSet<Mutable<Actor>>;
     private readonly systems: BagSet<System>;
@@ -35,22 +31,21 @@ export class Stage {
         this.systems = new BagSet<System>();
         this.destroyActors = new BagSet<Actor>();
         this.destroyComponents = new BagSet<Component>();
-        this.stepTime = 1 / 60; // 60 FPS
     }
 
     /** Start stage updates. */
     start(): void {
-        this.lastTime = Date.now();
-        this.ticker = () => {
-            const now = Date.now();
-            const deltaTime = (now - this.lastTime) * 0.001;
-            if (deltaTime >= this.stepTime) {
-                this.lastTime = now;
-                this.tick(deltaTime);
-            }
-            window.requestAnimationFrame(this.ticker);
+        let lastTime;
+        const stage: FrameRequestCallback = (time: number) => {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+            this.tick(deltaTime / 1000);
+            window.requestAnimationFrame(stage);
         };
-        window.requestAnimationFrame(this.ticker);
+        window.requestAnimationFrame((time: number) => {
+            lastTime = time;
+            window.requestAnimationFrame(stage);
+        });
     }
 
     /**
@@ -69,10 +64,6 @@ export class Stage {
 
         // submit system
         this.systems.add(system);
-
-        // initialized?
-        if (!this.ticker)
-            return;
 
         // attach existing actors
         for (const actor of this.actors.items) {
