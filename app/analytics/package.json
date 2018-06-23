@@ -1,0 +1,22 @@
+{
+  "name": "analytics-servlet",
+  "version": "1.0.0",
+  "description": "Analytics proxy server",
+  "main": "index.js",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.16.0",
+    "@types/express-useragent": "^0.2.21",
+    "@types/query-string": "^6.1.0",
+    "@types/request": "^2.47.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-useragent": "^1.0.12",
+    "query-string": "^6.1.0",
+    "request": "^2.87.0",
+    "uuid": "^3.2.1"
+  }
+}
