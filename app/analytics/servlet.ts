@@ -6,7 +6,7 @@ import useragent from "express-useragent";
 import request, {CoreOptions} from "request";
 import uuid from "uuid/v4";
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(useragent.express());
 app.use(cookieParser());
