@@ -6,6 +6,9 @@
   "author": "Max Stankevich <max.stankevich.me@gmail.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "ts-node ./boot"
+  },
   "dependencies": {
     "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.16.0",
