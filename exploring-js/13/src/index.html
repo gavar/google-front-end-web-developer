@@ -6,8 +6,27 @@
   <title>Silent Bugs</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Nosifer" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-121195540-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "UA-121195540-2");
+  </script>
+  <script>
+    // tracking pixel for ad-blocker
+    window.addEventListener("load", function () {
+      if (window.ga && ga.create) return;
+      const pixel = document.getElementById("pixel");
+      const div = document.createElement("div");
+      div.innerHTML = pixel.innerHTML.trim();
+    });
+  </script>
 </head>
 <body>
+  <noscript id="pixel">
+    <img src="https://gavar-analytics.herokuapp.com?t=pageview&tid=UA-121195540-2">
+  </noscript>
   <main>
     <section class="overlay">
       <dialog id="game-over" class="horror">
