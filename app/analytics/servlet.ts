@@ -1,24 +1,22 @@
 import cookieParser from "cookie-parser";
-import express, {Request, Response} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import useragent from "express-useragent";
 import {AddressInfo} from "net";
-import request, {CoreOptions} from "request";
+import got from "got";
 import uuid from "uuid/v4";
 
 const PORT = process.env.PORT || 8000;
 const app = express();
+app.enable("trust proxy");
 app.use(useragent.express());
 app.use(cookieParser());
-app.get("/", function (req: Request, res: Response) {
-    try {
-        track(req, res);
-    }
-    catch (e) {
-        console.log("error", e);
-    }
-    finally {
-        res.sendStatus(204);
-    }
+app.get("/", function (req: Request, res: Response, next: NextFunction) {
+    track(req, res)
+        .then(x => {
+            res.status(204).send();
+            console.log(x);
+        })
+        .catch(next);
 });
 
 function track(req: Request, res: Response) {
@@ -30,41 +28,16 @@ function track(req: Request, res: Response) {
         res.cookie("cid", cid, {httpOnly: true});
     }
 
-    // required params
-    const params = [
-        "v", "1",
-        "tid", query["tid"],
-        "t", query["t"],
-        "cid", cid,
-    ];
-    delete query["t"];
-    delete query["tid"];
-
-    // extra parameters
-    for (const key in query)
-        if (query.hasOwnProperty(key))
-            params.push(key, query[key]);
-
-    // info
-    params.push("ua", req.useragent.source);
-
-    // escape values
-    for (let i = 0; i < params.length; i++)
-        params[i] = escape(params[i]);
-
-    // tokenize
-    const tokens = [];
-    for (let i = 0; i < params.length; i = i + 2)
-        tokens.push(params[i] + "=" + params[i + 1]);
-
-    const options: CoreOptions = {
-        body: tokens.join("&"),
+    // analytics params
+    const data = {
+        v: 1,
+        cid,
+        ...query,
+        ua: req.useragent.source,
     };
 
-    console.log(options.body);
-    request.post("https://www.google-analytics.com/collect", options, (err, res) => {
-        if (err) console.error(err);
-        else console.log(res.toJSON());
+    return got.post("http://www.google-analytics.com/collect", {
+        form: data,
     });
 }
 
