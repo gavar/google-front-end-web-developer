@@ -1,8 +1,7 @@
-// https://medium.freecodecamp.org/save-your-analytics-from-content-blockers-7ee08c6ec7ee
-
 import cookieParser from "cookie-parser";
 import express, {Request, Response} from "express";
 import useragent from "express-useragent";
+import {AddressInfo} from "net";
 import request, {CoreOptions} from "request";
 import uuid from "uuid/v4";
 
@@ -21,9 +20,6 @@ app.get("/", function (req: Request, res: Response) {
         res.sendStatus(204);
     }
 });
-
-app.listen(PORT);
-console.log(`Web application ready on http://localhost:${PORT}`);
 
 function track(req: Request, res: Response) {
     const {query, cookies} = req;
@@ -70,4 +66,26 @@ function track(req: Request, res: Response) {
         if (err) console.error(err);
         else console.log(res.toJSON());
     });
+}
+
+const server = app.listen(PORT);
+server.on("error", error);
+server.on("listening", listening);
+
+function listening() {
+    const {address, port} = server.address() as AddressInfo;
+    const host = address == "::" ? "localhost" : address;
+    console.log(`Web application ready on http://${host}:${port}`);
+}
+
+function error(e: any & Error) {
+    switch (e.code) {
+        case "EADDRINUSE":
+            const {address, port} = e;
+            console.error(`address is already in use: ${address}:${port}`);
+            break;
+        default:
+            console.error(e);
+            break;
+    }
 }
