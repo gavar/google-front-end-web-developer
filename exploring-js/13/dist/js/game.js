@@ -1115,7 +1115,6 @@ class Game {
         this.stage.addSystem(this.initCollisionSystem());
         this.stage.addSystem(new DrawSystem(this.canvas));
         this.initGizmo();
-        this.stage.createActor("FPS").add(FPS);
         this.resources = this.stage.createActor("resources").add(Resources);
         this.resources.baseUrl = "img";
         this.terrain = this.initTerrain();
@@ -1249,8 +1248,10 @@ class Game {
         this.initHowToPlayDialog();
         this.initCinematicScene();
         this.initMainMenuDialog();
-        if (DEBUG)
+        if (DEBUG) {
             this.initDebugView();
+            this.initFPS();
+        }
     }
     initStatsView() {
         const actor = this.stage.createActor("stats-view");
@@ -1297,6 +1298,9 @@ class Game {
             CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
         if (gizmos.collision)
             CollisionSystem2D.prototype.gizmo = gizmos.collision;
+    }
+    initFPS() {
+        return this.stage.createActor("FPS").add(FPS);
     }
     isGizmoActive() {
         for (const key in this.gizmos)
