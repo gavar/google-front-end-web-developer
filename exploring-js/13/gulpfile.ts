@@ -1,5 +1,6 @@
 import cli from "@cli";
 import gulp from "@gulp";
+import envify from "gulp-envify";
 import {Action, Done} from "@syntax";
 import {spawn} from "child_process";
 import del from "del";
@@ -8,6 +9,9 @@ import rollup from "gulp-better-rollup";
 import replace from "gulp-replace";
 import ts from "gulp-typescript";
 import {InputOptions, OutputOptions} from "rollup";
+
+process.env["ANALYTICS_PROTOCOL"] = "https";
+process.env["ANALYTICS_HOST"] = "gavar-analytics.herokuapp.com/ga";
 
 function clean() {
     return del([
@@ -105,6 +109,7 @@ namespace es6 {
             stageJS,
             stageTS,
             compile,
+            $envify,
         );
 
         gulp.name("es6", _task);
@@ -146,6 +151,15 @@ namespace es6 {
             .pipe(rollup(input, output) as NodeJS.ReadWriteStream)
             .pipe(replace(/let (.*)\$(.) = /g, "")) // for some reason rollup may assign class to variable
             .pipe(replace(/(\w)(\$\d)/g, "$1")) // for some reason rollup may assign class to variable
+            .pipe(gulp.dest("./dist/js"));
+    }
+
+    gulp.name("es6:envify", $envify);
+    export function $envify() {
+        return gulp.src([
+            "./dist/js/ga.js",
+        ])
+            .pipe(envify())
             .pipe(gulp.dest("./dist/js"));
     }
 

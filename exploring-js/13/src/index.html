@@ -17,8 +17,6 @@
     // tracking for ad-blocker
     window.addEventListener("load", function () {
       if (window.ga && ga.create) return;
-      window.ANALYTICS_PROTOCOL = "https";
-      window.ANALYTICS_HOST = "gavar-analytics.herokuapp.com/ga";
       const script = document.createElement("script");
       script.async = true;
       script.src = "js/gtag.js";
