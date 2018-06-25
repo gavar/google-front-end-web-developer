@@ -42,6 +42,8 @@ export class StatsView extends DialogView {
     protected static livesToHearts(now: number, init: number): string {
         const {buffer} = StatsView;
         try {
+            if (now > init)
+                return `${now} x ❤️`; // 'N' x ❤ Red Heart
             for (let i = 0; i < now; i++)
                 buffer.push("❤️"); // ❤ Red Heart
             while (buffer.length < init)
