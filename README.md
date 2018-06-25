@@ -16,6 +16,7 @@ Responsive Images  | Images with Markup: Project Part 2                    |  [l
 Responsive Images  | Full Responsiveness: Project Part 3                   |  [link][E1-L04#10-code]  |  [view][E1-L04#10-view]  |
 Web Programming JS | Exercise: Pixel Art Maker                             |  [link][U2-L22#02-code]  |  [view][U2-L22#02-view]  |
 Web Programming JS | **Project: Memory Game**                              |**[link][U2-L24#03-code]**|**[view][U2-L24#03-view]**|
+Exploring JS       | **Project: Classic Arcade Game Clone**                |**[link][U3-L13#05-code]**|**[view][U3-L13#05-view]**|
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -55,21 +56,23 @@ Web Programming JS | **Project: Memory Game**                              |**[l
 - [x] Web Programming JS: Working with Browser Events (2h)
 - [x] Web Programming JS: Exercise: Pixel Art Maker (45m)
 - [x] Web Programming JS: Performance (2h)
+#### week #11: 30.04 - 06.05
 - [x] Web Programming JS: Memory Game (project)
+#### week #12: 07.05 - 13.05
+- [x] Exploring JS: Accessibility Overview (1h)
+- [x] Exploring JS: Focus (1h 15m)
+- [x] Exploring JS: Semantics Basics (1h 15m)
+- [x] Exploring JS: Navigating Content (1h)
+- [x] Exploring JS: ARIA (1h 15m)
+- [x] Exploring JS: Style (1h 15m)
+- [x] Exploring JS: Objects in Depth (2h)
+- [x] Exploring JS: Functions at Runtime (2h)
+- [x] Exploring JS: Classes and Objects (3h)
+- [x] Exploring JS: Functions (2h)
+- [x] Exploring JS: Built-ins (2h)
+- [x] Exploring JS: Professional Developer-fu (1h 30m)
 #### Upcoming
-- [ ] Exploring JS: Accessibility Overview (1h)
-- [ ] Exploring JS: Focus (1h 15m)
-- [ ] Exploring JS: Semantics Basics (1h 15m)
-- [ ] Exploring JS: Navigating Content (1h)
-- [ ] Exploring JS: ARIA (1h 15m)
-- [ ] Exploring JS: Style (1h 15m)
-- [ ] Exploring JS: Objects in Depth (2h)
-- [ ] Exploring JS: Functions at Runtime (2h)
-- [ ] Exploring JS: Classes and Objects (3h)
-- [ ] Exploring JS: Functions (2h)
-- [ ] Exploring JS: Built-ins (2h)
-- [ ] Exploring JS: Professional Developer-fu (1h 30m)
-- [ ] Exploring JS: PRoject: Classic Arcade Game Clone
+- [ ] Exploring JS: Project: Classic Arcade Game Clone
 - [ ] Exploring JS: Introducing Web Tooling and Automation (35m)
 - [ ] Exploring JS: Productive Editing (12m)
 - [ ] Exploring JS: Powerful Builds (13m)
@@ -123,3 +126,6 @@ Web Programming JS | **Project: Memory Game**                              |**[l
 
 [U2-L24#03-code]: web-programming/24.03
 [U2-L24#03-view]: https://gavar.github.io/google-front-end-web-developer/web-programming/24.03/dist
+
+[U3-L13#05-code]: exploring-js/13
+[U3-L13#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/13/dist

@@ -1,8 +1,8 @@
 import {Callback} from "@syntax";
-import * as fs from "fs-extra";
-import * as path from "path";
+import fs from "fs-extra";
+import path from "path";
 import {Transform} from "stream";
-import * as File from "vinyl";
+import File from "vinyl";
 
 function resolveWebPath(file: File, basePath: string, resource: string): string {
     switch (resource[0]) {

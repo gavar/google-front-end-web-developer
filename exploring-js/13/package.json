@@ -1,0 +1,19 @@
+{
+  "name": "arcade-game",
+  "version": "1.0.0",
+  "description": "Arcade Game",
+  "main": "index.js",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "serve": "gulp serve",
+    "tsc": "tsc",
+    "gulp": "gulp",
+    "rollup": "rollup",
+    "webpack": "webpack"
+  },
+  "devDependencies": {
+    "$": "link:./src/ts"
+  }
+}

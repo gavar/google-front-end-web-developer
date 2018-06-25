@@ -1,4 +1,4 @@
-import {Callback} from "@syntax";
+import {Done} from "@syntax";
 import {Transform} from "stream";
 import File from "vinyl";
 
@@ -9,17 +9,17 @@ export class TransformStream extends Transform {
     }
 
     /** @inheritDoc */
-    _transform(file: File, encoding: string, callback: Callback<File>): void {
+    _transform(file: File, encoding: string, done: Done<File>): void {
         try {
             if (file.isStream())
-                return setFileContents(file, this.transformStream(file.contents, file), callback);
+                return setFileContents(file, this.transformStream(file.contents, file), done);
 
             if (file.isBuffer())
-                return setFileContents(file, this.transformBuffer(file.contents, file), callback);
+                return setFileContents(file, this.transformBuffer(file.contents, file), done);
 
-            callback(void 0, file);
+            done(void 0, file);
         } catch (error) {
-            callback(error);
+            done(error);
         }
     }
 
@@ -32,16 +32,16 @@ export class TransformStream extends Transform {
     }
 }
 
-function setFileContents<T extends Buffer | NodeJS.ReadableStream>(file: File, contents: T | Promise<T>, callback: Callback<File>): void {
+function setFileContents<T extends Buffer | NodeJS.ReadableStream>(file: File, contents: T | Promise<T>, done: Done<File>): void {
 
     if (isPromiseLike(contents)) {
         contents.then(function (modified) {
             file.contents = modified;
-            callback(void 0, file);
-        }, callback);
+            done(void 0, file);
+        }, done);
     } else {
         file.contents = contents;
-        callback(void 0, file);
+        done(void 0, file);
     }
 }
 

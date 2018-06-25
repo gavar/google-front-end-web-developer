@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "strictNullChecks": false, // TODO: true
-    "noImplicitAny": false, // TODO: true
-    "noImplicitThis": false, // TODO: true
-    "noImplicitReturns": false, // TODO: false
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false, // TODO: true
+    "noUnusedParameters": false,
     "preserveConstEnums": true,
-    "allowUnusedLabels": true, // TODO: false
+    "allowUnusedLabels": true,
     "allowUnreachableCode": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -23,6 +23,7 @@
     "isolatedModules": false,
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "noResolve": false,
     "removeComments": false,
     "sourceMap": true,
@@ -39,7 +40,6 @@
     "**/#*", // all files where names starts with #
     "**/out", // all 'out' directories
     "**/tmp", // all 'tmp' directories
-    "**/dist", // all 'dist' directories
-    "**/node_modules"  // all 'node_modules' directories
+    "**/dist" // all 'dist' directories
   ]
 }

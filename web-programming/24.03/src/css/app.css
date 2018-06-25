@@ -20,7 +20,7 @@ body {
 }
 
 body {
-  background: #fff url('/img/geometry2.png'); /* Background pattern from Subtle Patterns */
+  background: #fff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
   font-family: 'Coda', cursive;
 }
 

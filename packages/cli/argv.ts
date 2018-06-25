@@ -1,23 +1,53 @@
-import {Dictionary} from "@syntax";
 import * as yargs from "yargs";
-import {Arguments, Options} from "yargs";
+import {Arguments, Options, ParseCallback} from "yargs";
+
+export type Argv<T = void> = yargs.Argv & Proxy<T>
+
+interface Proxy<T = void> {
+    (): T;
+    (args: string[], cwd?: string): T;
+
+    /** @inheritDoc */
+    parse(): T & Arguments;
+
+    /** @inheritDoc */
+    parse(args: string | string[], context?: object, callback?: ParseCallback): T & Arguments;
+
+    /** @inheritDoc */
+    option(key: keyof T, options: Options): this;
+
+    /** @inheritDoc */
+    option(options: {[P in keyof T]: Options}): this;
+}
 
 export interface CommonArguments extends Arguments {
     watch: boolean;
     flags: string[];
 }
 
-const options: Dictionary<string, Options> = {
+const options = yargs.options({
     watch: {alias: "w", type: "boolean"},
-};
+});
 
-export function flags(): string[] {
-    return process.argv.filter(x => x.startsWith("-"));
+const extras: string[] = [];
+
+export function extra(...argv: string[]) {
+    extras.push(...argv);
+}
+
+export function flags(argv: string[]): string[] {
+    argv = argv.filter((value, index, array) => value.startsWith("-"));
+    argv = argv.filter((value, index, array) => array.indexOf(value) === index);
+    return argv;
 }
 
 export function argv(): CommonArguments {
-    const args: CommonArguments = {...yargs.options(options).argv} as any;
-    args.flags = flags();
+    const argv = [
+        ...extras,
+        ...process.argv,
+    ];
+    const args = options.parse(argv) as CommonArguments;
+    args.flags = flags(argv);
     return args;
 }
 

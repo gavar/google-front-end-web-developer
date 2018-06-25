@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <title>Silent Bugs</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Nosifer" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-121195540-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "UA-121195540-2");
+  </script>
+  <script>
+    // tracking for ad-blocker
+    window.addEventListener("load", function () {
+      if (window.ga && ga.create) return;
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "js/gtag.js";
+      document.body.appendChild(script);
+    });
+  </script>
+</head>
+<body>
+  <noscript id="pixel">
+    <img src="https://gavar-analytics.herokuapp.com/ga/collect?t=pageview&tid=UA-121195540-2">
+  </noscript>
+  <main>
+    <section class="overlay">
+      <dialog id="game-over" class="horror">
+        <h1 class="game-title">Game Over</h1>
+        <!--<h4 class="bloody text-shadow">-->
+        <!--One bug in the head<br/>-->
+        <!--now player is dead-->
+        <!--</h4>-->
+        <p class="text-shadow">
+          eaten by bugs<br/>
+          on level <span class="level">#1</span><br/>
+          <span class="score">1</span> points
+        </p>
+        <div class="bottom buttons">
+          <button class="menu back">Okay</button>
+        </div>
+      </dialog>
+      <dialog id="player-stats">
+        <div class="left">
+          <div>Level <span class="level">0</span></div>
+        </div>
+        <div class="center">
+          <div class="score">0</div>
+        </div>
+        <div class="right">
+          <div class="lives">❤️❤️❤️</div>
+        </div>
+      </dialog>
+      <menu class="horror">
+        <dialog id="how-to-play">
+          <div class="instructions">
+            <h2>how to play</h2>
+            <!-- move character-->
+            <div class="instruction">
+              <div class="left">
+                <h3>move character</h3>
+              </div>
+              <div class="right">
+                <div class="controls text-shadow">
+                  <div class="column wasd">
+                    <div class="top">
+                      <div class="key">W</div>
+                    </div>
+                    <div class="bottom">
+                      <div class="key">A</div>
+                      <div class="key">S</div>
+                      <div class="key">D</div>
+                    </div>
+                  </div>
+                  <div class="column arrows">
+                    <div class="top">
+                      <div class="key">⯅</div>
+                    </div>
+                    <div class="bottom">
+                      <div class="key">⯇</div>
+                      <div class="key">⯆</div>
+                      <div class="key">⯈</div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <figure>
+                      <img src="img/icon/cursor.png">
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- reach checkpoint -->
+            <div class="instruction">
+              <div class="left">
+                <h3>reach checkpoint</h3>
+              </div>
+              <div class="right">
+                <figure>
+                  <img class="selector" src="img/icon/selector.png">
+                  <figcaption>100 points</figcaption>
+                </figure>
+              </div>
+            </div>
+            <!-- avoid bugs -->
+            <div class="instruction">
+              <div class="left">
+                <h3>avoid<br/>bugs</h3>
+              </div>
+              <div class="right">
+                <figure class="enemy-bug one">
+                  <img src="img/icon/enemy-bug.png">
+                </figure>
+                <figure class="enemy-bug two">
+                  <img src="img/icon/enemy-bug.png">
+                </figure>
+              </div>
+            </div>
+            <!-- collect bonuses -->
+            <div class="instruction">
+              <div class="left">
+                <h3>collect bonuses</h3>
+              </div>
+              <div class="right">
+                <div class="bonuses">
+                  <div class="bonus">
+                    <figure>
+                      <img class="gem" src="img/icon/gem-blue.png">
+                      <figcaption>300 points</figcaption>
+                    </figure>
+                  </div>
+                  <div class="bonus">
+                    <figure>
+                      <img class="gem" src="img/icon/gem-green.png">
+                      <figcaption>400 points</figcaption>
+                    </figure>
+                  </div>
+                  <div class="bonus">
+                    <figure>
+                      <img class="gem" src="img/icon/gem-orange.png">
+                      <figcaption>500 points</figcaption>
+                    </figure>
+                  </div>
+                  <div class="bonus">
+                    <figure>
+                      <img class="gem" src="img/icon/heart.png">
+                      <figcaption>extra<br/>life</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bottom buttons">
+            <button class="back">Back</button>
+          </div>
+        </dialog>
+        <dialog id="main-menu">
+          <h1 class="game-title">Silent Bugs</h1>
+          <div class="bottom buttons">
+            <button class="menu how-to-play">How To Play?</button>
+            <button class="play">Play</button>
+          </div>
+        </dialog>
+        <a class="copyright" href="https://github.com/gavar" target="_blank">
+          © 2018 by Max Stankevich
+        </a>
+      </menu>
+    </section>
+  </main>
+  <script src="js/engine.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/systems.js"></script>
+  <script src="js/physics.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
