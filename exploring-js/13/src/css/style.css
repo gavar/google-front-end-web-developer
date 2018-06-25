@@ -22,7 +22,7 @@ main {
 
 body {
   font-family: 'Open Sans', sans-serif;
-  background: #fff url('/img/background.png');
+  background: #fff url('../img/background.png');
 }
 
 canvas {

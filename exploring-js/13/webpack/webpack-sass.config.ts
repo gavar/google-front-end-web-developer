@@ -27,7 +27,7 @@ export default function (env: WebpackEnv, argv: WebpackArgv): Configuration {
                     loader: "url-loader",
                     options: {
                         limit: urlLoader.limit || undefined,
-                        name: "img/[name].[ext]",
+                        name: "../img/[name].[ext]",
                     },
                 },
                 {
