@@ -1,0 +1,687 @@
+/* RESET */
+* {
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * COMMON
+ */
+html, body {
+  overflow: hidden;
+  text-align: center;
+}
+
+main {
+  top: 50%;
+  position: fixed;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: #fff url(../img/background.png);
+}
+
+canvas {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+button {
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+dialog {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  border: none;
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+figure {
+  height: 100%;
+}
+
+figure img {
+  display: block;
+}
+
+/* DIALOGS */
+menu,
+dialog {
+  position: absolute;
+  width: 100%;
+}
+
+main:not([ready]),
+menu:not([ready]),
+dialog:not([ready]) {
+  display: none;
+}
+
+menu:not([open]),
+dialog:not([open]) {
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+main[open],
+menu[open],
+dialog[open] {
+  -webkit-animation-name: dialog-show;
+          animation-name: dialog-show;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+}
+
+main[hide],
+menu[hide],
+dialog[hide] {
+  -webkit-animation-name: dialog-hide;
+          animation-name: dialog-hide;
+  -webkit-animation-duration: .35s;
+          animation-duration: .35s;
+}
+
+@-webkit-keyframes dialog-show {
+  from {
+    opacity: 0;
+    pointer-events: none;
+  }
+  50% {
+    pointer-events: auto;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes dialog-show {
+  from {
+    opacity: 0;
+    pointer-events: none;
+  }
+  50% {
+    pointer-events: auto;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@-webkit-keyframes dialog-hide {
+  from {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@keyframes dialog-hide {
+  from {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* REUSABLE */
+.text-shadow {
+  text-shadow: -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+/* EFFECTS */
+.outer {
+  z-index: -1;
+  pointer-events: none;
+}
+
+.outer.hit {
+  -webkit-animation-duration: 1.5s;
+          animation-duration: 1.5s;
+  -webkit-animation-name: outer-hit;
+          animation-name: outer-hit;
+}
+
+.inner {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.inner.hit {
+  -webkit-animation-duration: 1.5s;
+          animation-duration: 1.5s;
+  -webkit-animation-name: inner-hit;
+          animation-name: inner-hit;
+}
+
+/* OVERLAY */
+.overlay {
+  position: absolute;
+  border-radius: 10px;
+  z-index: 100;
+}
+
+/* MENU BUTTONS */
+.buttons {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+
+.buttons > button {
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 2em;
+  background-color: crimson;
+  border-radius: 20px;
+}
+
+.buttons > button + button {
+  margin-top: 20px;
+}
+
+.bottom.buttons {
+  bottom: 50px;
+}
+
+@media screen and (max-width: 500px) {
+  .buttons > button {
+    font-size: 5.2vw;
+  }
+
+  .buttons > button + button {
+    margin-top: 4vw;
+  }
+
+  .bottom.buttons {
+    bottom: 9vw;
+  }
+}
+
+/* GAME TITLE */
+.game-title {
+  line-height: 1.3;
+  font-weight: normal;
+  font-size: 5em;
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: #cd1818;
+  font-family: 'Nosifer', cursive;
+  text-shadow: -1px -1px 0 #000,
+  1px 4px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+@media screen and (max-width: 500px) {
+  .game-title {
+    font-size: 15vw;
+    margin-bottom: 3vw;
+  }
+}
+
+.horror {
+  background: radial-gradient(circle at bottom, rgba(0, 0, 0, .3), rgba(0, 0, 0, .8) 745px, transparent 755px);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+@media screen and (max-width: 500px) {
+  .horror {
+    background: radial-gradient(circle at bottom, rgba(0, 0, 0, .3), rgba(0, 0, 0, .8) 146vw, transparent 151vw);
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+  }
+}
+
+/* MAIN MENU */
+menu {
+  width: 100%;
+  height: 100%;
+}
+
+#main-menu {
+  height: 100%;
+  width: 100%;
+}
+
+#main-menu h2,
+#main-menu h3,
+#main-menu figcaption {
+  color: crimson;
+  text-transform: uppercase;
+  font-family: 'Bowlby One SC', cursive;
+  text-shadow: -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+#main-menu .game-title {
+  top: 50%;
+  position: absolute;
+  -webkit-transform: translateY(-35%);
+          transform: translateY(-35%);
+  width: 100%;
+}
+
+#main-menu .how-to-play {
+  font-size: 1.5em;
+  background-color: #6500a0;
+}
+
+@media screen and (max-width: 500px) {
+  #main-menu .how-to-play {
+    font-size: 3.75vw;
+  }
+}
+
+/* HOW TO PLAY */
+#how-to-play {
+  height: 100%;
+  width: 100%;
+}
+
+#how-to-play h2,
+#how-to-play h3,
+#how-to-play figcaption {
+  color: #cd1818;
+  text-transform: uppercase;
+  font-family: 'Bowlby One SC', cursive;
+  text-shadow: -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+#how-to-play h2 {
+  font-size: 2em;
+  margin: 100px 0 0;
+}
+
+#how-to-play h3 {
+  font-weight: normal;
+  color: #f9fafb;
+}
+
+#how-to-play figcaption {
+  line-height: 1;
+  font-weight: normal;
+  color: yellowgreen;
+  text-transform: none;
+  -webkit-transform: translateY(-20%);
+          transform: translateY(-20%);
+}
+
+#how-to-play img {
+  max-height: calc(100% - 10px);
+  margin: auto;
+}
+
+#how-to-play .instructions {
+  margin: auto;
+  width: 90%;
+}
+
+#how-to-play .instruction {
+  display: flex;
+  max-height: 100px;
+  padding: 5px;
+  margin: 10px 0;
+  background-color: rgba(0, 0, 0, .2);
+  border-radius: 20px;
+}
+
+#how-to-play .instruction .left {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#how-to-play .instruction .right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#how-to-play .controls {
+  display: flex;
+}
+
+#how-to-play .controls .column {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#how-to-play .controls .column figure {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+#how-to-play .controls .column img {
+  width: auto;
+  height: 55px;
+}
+
+#how-to-play .controls .column + .column {
+  border-left: #f9fafb 2px solid;
+}
+
+#how-to-play .controls .key {
+  width: 25px;
+  height: 25px;
+  margin: 1px;
+  display: inline-block;
+  text-transform: uppercase;
+  text-align: center;
+  vertical-align: middle;
+  color: #f9fafb;
+  border: #f9fafb 2px solid;
+  font-family: 'Bowlby One SC', cursive;
+}
+
+#how-to-play .controls .wasd .key {
+  padding-right: 1px;
+}
+
+#how-to-play .controls .arrows .key {
+  font-family: cursive;
+}
+
+#how-to-play .bonuses {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#how-to-play .bonus {
+  width: 20%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#how-to-play .bonus figure {
+  height: 100%;
+}
+
+#how-to-play .bonus img {
+  width: 100%;
+}
+
+#how-to-play .enemy-bug {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+#how-to-play .enemy-bug img {
+  margin-top: 15px;
+}
+
+#how-to-play .enemy-bug.one img {
+  -webkit-transform: rotateZ(30deg);
+          transform: rotateZ(30deg);
+}
+
+#how-to-play .enemy-bug.two img {
+  -webkit-transform: scaleX(-1) rotateZ(-20deg);
+          transform: scaleX(-1) rotateZ(-20deg);
+}
+
+/* HOW TO PLAY */
+@media screen and (max-width: 500px) {
+  #how-to-play h2 {
+    font-size: 6vw;
+    margin: 20vw 0 0;
+  }
+
+  #how-to-play h3 {
+    font-size: 3.5vw;
+  }
+
+  #how-to-play figcaption {
+    font-size: 3vw;
+  }
+
+  #how-to-play .controls .column + .column {
+    border: none;
+  }
+
+  #how-to-play .controls .wasd,
+  #how-to-play .controls .arrows {
+    display: none;
+  }
+
+  #how-to-play .instruction {
+    padding: 1vw;
+    height: 18vw;
+    border-radius: 4vw;
+  }
+
+  #how-to-play .enemy-bug img {
+    margin-top: 1vw;
+  }
+}
+
+/* PLAYER STATS */
+#player-stats {
+  top: 0;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#player-stats > * {
+  flex-basis: 50%;
+}
+
+#player-stats .left {
+  text-align: left;
+}
+
+#player-stats .right {
+  text-align: right;
+}
+
+#player-stats .change {
+  -webkit-animation-name: positive-change;
+          animation-name: positive-change;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in-out;
+          animation-timing-function: ease-in-out;
+}
+
+#player-stats .lives.change {
+  -webkit-transform-origin: right center;
+          transform-origin: right center;
+  -webkit-animation-name: scale;
+          animation-name: scale;
+  -webkit-animation-duration: .4s;
+          animation-duration: .4s;
+}
+
+/* GAME OVER */
+#game-over {
+  height: 100%;
+  background: radial-gradient(circle at bottom, rgba(0, 0, 0, .2), rgba(0, 0, 0, .8) 745px, transparent 755px);
+}
+
+#game-over .game-title {
+  font-size: 3.5em;
+  margin-top: 55px;
+}
+
+#game-over .bloody {
+  font-family: 'Nosifer', cursive;
+  font-size: 2.5em;
+  text-transform: lowercase;
+  color: #cd1818;
+}
+
+#game-over p {
+  top: 50%;
+  position: absolute;
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 2.5em;
+  line-height: 1.2;
+  text-transform: lowercase;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  color: #cd1818;
+}
+
+#game-over .score,
+#game-over .level {
+  color: greenyellow;
+}
+
+@media screen and (max-width: 500px) {
+  #game-over .game-title {
+    font-size: 11.5vw;
+    margin-top: 11vw;
+  }
+
+  #game-over .bloody {
+    font-size: 8vw;
+  }
+
+  #game-over p {
+    font-size: 8vw;
+  }
+}
+
+/* COPYRIGHT */
+.copyright {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
+  bottom: 0;
+  font-size: .8em;
+  text-decoration: none;
+  margin-bottom: 5px;
+  color: #b4b4b4;
+}
+
+@media screen and (max-width: 500px) {
+  .copyright {
+    -webkit-transform: none;
+            transform: none;
+    margin-bottom: 5px;
+  }
+}
+
+/* ANIMATIONS */
+@-webkit-keyframes outer-hit {
+  from {
+    box-shadow: 0 0 2.5em 0.7em #af111c;
+  }
+  to {
+    box-shadow: none;
+  }
+}
+@keyframes outer-hit {
+  from {
+    box-shadow: 0 0 2.5em 0.7em #af111c;
+  }
+  to {
+    box-shadow: none;
+  }
+}
+
+@-webkit-keyframes inner-hit {
+  from {
+    box-shadow: inset 0 0 40vw 0 #af111c;
+    border-radius: 5px;
+  }
+  to {
+    box-shadow: none;
+  }
+}
+
+@keyframes inner-hit {
+  from {
+    box-shadow: inset 0 0 40vw 0 #af111c;
+    border-radius: 5px;
+  }
+  to {
+    box-shadow: none;
+  }
+}
+
+@-webkit-keyframes positive-change {
+  from {
+    font-weight: bolder;
+    color: springgreen;
+  }
+}
+
+@keyframes positive-change {
+  from {
+    font-weight: bolder;
+    color: springgreen;
+  }
+}
+
+@-webkit-keyframes scale {
+  50% {
+    -webkit-transform: scale(1.25);
+            transform: scale(1.25);
+  }
+}
+
+@keyframes scale {
+  50% {
+    -webkit-transform: scale(1.25);
+            transform: scale(1.25);
+  }
+}
+
+
+
