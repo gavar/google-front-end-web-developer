@@ -10,7 +10,6 @@ class Random {
     static range(min, max) {
         return min + (max - min) * Math.random();
     }
-
     /**
      * Get random integer number within given range.
      * @param min - minimum number inclusive.
@@ -21,7 +20,6 @@ class Random {
         max = Math.floor(max);
         return min + Math.floor((max - min) * Math.random());
     }
-
     /**
      * Get random deviation within given tolerance.
      * @param {number} tolerance - maximum offset from 1.
@@ -29,7 +27,6 @@ class Random {
     static deviation(tolerance) {
         return 1 + (Math.random() - 0.5) * 2 * tolerance;
     }
-
     /** Shuffle array of items. */
     static shuffle(array) {
         let temp, j;
@@ -41,7 +38,6 @@ class Random {
         }
     }
 }
-
 /**
  * Math functions library.
  */
@@ -79,7 +75,6 @@ class Mathf {
         velocityObject[velocityKey] = velocity;
         return next;
     }
-
     /**
      * Clamp value between min and max values.
      * @param value - value to clamp.
@@ -98,7 +93,6 @@ class Mathf {
 // TODO: move events to related classes
 class GameEvents {
 }
-
 GameEvents.PROPERTY_CHANGED = "property-changed";
 GameEvents.PLAYER_DIE = "player-die";
 GameEvents.PLAYER_HIT = "player-hit";
@@ -122,18 +116,15 @@ class View {
             this.sprite.image = null;
         }
     }
-
     /** @inheritDoc */
     awake() {
         this.sprite = this.actor.add(Sprite);
     }
-
     /** @inheritDoc */
     destroy() {
         this.actor.remove(this.sprite);
         this.sprite = null;
     }
-
     onImageLoaded(error, image) {
         this.sprite.image = image;
     }
@@ -153,7 +144,6 @@ class Reactive {
         this.actor.emit(GameEvents.PROPERTY_CHANGED, this);
         return true;
     }
-
     /**
      * Modify property of this object by applying delta value and emit {@link GameEvents#PROPERTY_CHANGED} if its value has been changed.
      * @param key - name of the property to modify.
@@ -174,7 +164,6 @@ class Highlight {
     awake() {
         this.view = this.actor.add(View);
     }
-
     setHighlightActive(active) {
         this.view.setImage(active ? this.imageName : null);
     }
@@ -190,14 +179,12 @@ class Ghost {
         this.sprite.opacity = .5;
         Component.disable(this.body);
     }
-
     /** @inheritDoc */
     disable() {
         this.sprite.opacity = 1;
         this.sprite.filter = null;
         Component.enable(this.body);
     }
-
     /** @inheritDoc */
     lateUpdate(deltaTime) {
         // accumulate time
@@ -233,7 +220,6 @@ class EnemySpawn {
         this.enemies = [];
         this.delayCountDown = 0;
     }
-
     /**
      * Speed-up all enemies by given factor.
      * @param f - enemy speed multiplication.
@@ -248,18 +234,15 @@ class EnemySpawn {
             velocity.x = vx * sign;
         }
     }
-
     /** @inheritDoc */
     start() {
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
         this.resources = this.resources || this.actor.stage.findComponentOfType(Resources);
     }
-
     /** @inheritDoc */
     enable() {
         this.delayCountDown = 0;
     }
-
     /** @inheritDoc */
     update(deltaTime) {
         const enemyLimit = this.enemyLimit();
@@ -277,17 +260,16 @@ class EnemySpawn {
         // delay ±25%
         this.delayCountDown = this.delay() * Random.deviation(.25);
     }
-
     /** @inheritDoc */
     lateUpdate(deltaTime) {
-        const {terrain} = this;
+        const { terrain } = this;
         const xMin = terrain.positionX(-1);
         const xMax = terrain.positionX(terrain.size.x);
         // deactivate enemies that has gone through the whole line
         for (let i = 0; i < this.enemies.length; i++) {
             const enemy = this.enemies[i];
             // check enemy is within terran range
-            const {position} = enemy.transform;
+            const { position } = enemy.transform;
             if (position.x <= xMax)
                 if (position.x >= xMin)
                     continue;
@@ -298,7 +280,6 @@ class EnemySpawn {
                 i--;
         }
     }
-
     /** @inheritDoc */
     disable() {
         for (const enemy of this.enemies)
@@ -306,14 +287,13 @@ class EnemySpawn {
         this.pool.push.apply(this.pool, this.enemies);
         this.enemies.length = 0;
     }
-
     spawn() {
         // request enemy instance
         const enemy = this.pool.length > 0 ? this.pool.pop() : this.enemyFactory();
         // select direction
         const leftToRight = Math.random() < 0.5;
         // configure
-        const {terrain} = this;
+        const { terrain } = this;
         const tileY = Random.rangeInt(this.yTileRange.min, this.yTileRange.max + 1);
         enemy.transform.position.y = terrain.positionY(tileY);
         // velocity ±25%
@@ -356,36 +336,32 @@ class BountySpawn {
             "gem-orange.png",
         ];
     }
-
     /** @inheritDoc */
     start() {
         this.terrainPath = this.terrainPath || this.actor.stage.findComponentOfType(TerrainPath);
     }
-
     /** @inheritDoc */
     disable() {
         for (const actor of this.actors)
             if (!actor.destroyed)
                 actor.destroy();
     }
-
     /** Spawn bounty on the given position. */
     spawn(x, y) {
-        const {terrain} = this.bonusPathLayer;
+        const { terrain } = this.bonusPathLayer;
         const bounty = this.bountyFactory();
-        const {position} = bounty.transform;
+        const { position } = bounty.transform;
         position.x = terrain.positionX(x);
         position.y = terrain.positionY(y);
         this.actors.add(bounty.actor);
         return bounty;
     }
-
     /** Randomly generate special bonus. */
     gamble() {
         // success if in (0; chance] range
         if (Math.random() > this.chance())
             return;
-        const {bonusPathLayer} = this;
+        const { bonusPathLayer } = this;
         Random.shuffle(this.spots);
         for (const spot of this.spots) {
             if (!bonusPathLayer.getTile(spot.x, spot.y)) {
@@ -394,11 +370,10 @@ class BountySpawn {
             }
         }
     }
-
     bonus(x, y) {
-        const {bonusPathLayer, bonuses, terrainPath} = this;
+        const { bonusPathLayer, bonuses, terrainPath } = this;
         const bounty = this.spawn(x, y);
-        const {sprite} = bounty.view;
+        const { sprite } = bounty.view;
         sprite.setScale(.5, .5);
         sprite.setOffset(.25, .25);
         const bonus = bonuses[Random.rangeInt(0, bonuses.length)];
@@ -406,11 +381,10 @@ class BountySpawn {
         bounty.actor.on(Actor.DESTROYING, this.onBonusDestroy, this);
         bonusPathLayer.setTile(x, y, terrainPath.image);
     }
-
     onBonusDestroy(actor) {
         this.actors.delete(actor);
-        const {bonusPathLayer} = this;
-        const {terrain} = bonusPathLayer;
+        const { bonusPathLayer } = this;
+        const { terrain } = bonusPathLayer;
         const transform = actor.get(Transform);
         const row = terrain.rowByPosX(transform.position.x);
         const col = terrain.colByPosY(transform.position.y);
@@ -421,11 +395,10 @@ class BountySpawn {
 /** Terrain path generator. */
 class TerrainPath {
     constructor() {
-        this.now = {x: 0, y: 0};
+        this.now = { x: 0, y: 0 };
         this.ways = [];
-        this.from = {x: 0, y: 0};
+        this.from = { x: 0, y: 0 };
     }
-
     /**
      * Generate random path from point to a given Y line.
      * @param fromX - path starting X position.
@@ -453,7 +426,6 @@ class TerrainPath {
         this.moveBy(this.direction);
         return this.now;
     }
-
     next() {
         try {
             // select possible ways
@@ -470,13 +442,11 @@ class TerrainPath {
             this.ways.length = 0;
         }
     }
-
     moveBy(delta) {
         this.now.x += delta.x;
         this.now.y += delta.y;
         this.layer.setTile(this.now.x, this.now.y, this.image);
     }
-
     canMoveBy(delta) {
         if (!this.canMoveByX(delta.x))
             return false;
@@ -493,7 +463,6 @@ class TerrainPath {
                 return false;
         return true;
     }
-
     canMoveByY(delta) {
         const y = this.now.y + delta;
         // down?
@@ -503,15 +472,13 @@ class TerrainPath {
         if (this.toY < this.from.y)
             return delta <= 0 && y > this.toY;
     }
-
     canMoveByX(delta) {
-        const {layer} = this;
-        const {size} = layer.terrain;
+        const { layer } = this;
+        const { size } = layer.terrain;
         const x = this.now.x + delta;
         return x >= 1 && x < size.x - 1;
     }
 }
-
 TerrainPath.directions = [
     Vector2.up,
     Vector2.down,
@@ -526,38 +493,33 @@ class Player {
          * Use this value for logic calculations instead of transforms portion
          * since transform can be used to smoothly move player over time.
          */
-        this.position = {x: 0, y: 0};
+        this.position = { x: 0, y: 0 };
         /** Smooth movement velocity, which can be used to store value of {@link Mathf#smooth}. */
-        this.velocity = {x: 0, y: 0};
+        this.velocity = { x: 0, y: 0 };
     }
-
     /** @inheritDoc */
     awake() {
         this.view = this.actor.require(View);
         this.stats = this.actor.require(PlayerStats);
         this.transform = this.actor.require(Transform);
     }
-
     /** @inheritDoc */
     enable() {
         this.position.x = this.transform.position.x;
         this.position.y = this.transform.position.y;
         this.velocity.x = this.velocity.y = 0;
     }
-
     /** @inheritDoc */
     start() {
         // TODO: select char
         this.view.setImage("char-boy.png");
     }
-
     /** Apply {@link position} value to a {@link transform}. */
     applyPosition(x, y) {
         this.transform.position.x = this.position.x = x;
         this.transform.position.y = this.position.y = y;
         this.velocity.x = this.velocity.y = 0;
     }
-
     /**
      * Smoothly move player.
      * @param smoothTime - approx time of achieving destination value.
@@ -566,10 +528,9 @@ class Player {
     smooth(smoothTime, deltaTime) {
         Vector2.smooth(this.transform.position, this.position, this.velocity, smoothTime, deltaTime);
     }
-
     /** Hit player. */
     hit() {
-        const {stats} = this;
+        const { stats } = this;
         if (stats.dead)
             throw new Error("player is already dead!");
         // take out life
@@ -579,7 +540,6 @@ class Player {
         if (stats.lives <= 0)
             this.kill();
     }
-
     /** Kill player. */
     kill() {
         if (this.stats.dead)
@@ -587,7 +547,6 @@ class Player {
         this.stats.set("dead", true); // death flag
         this.actor.emit(GameEvents.PLAYER_DIE, this); // die event
     }
-
     /** @inheritDoc */
     triggerEnter2D(collider) {
         const bounty = collider.actor.get(Bounty);
@@ -597,7 +556,6 @@ class Player {
         if (enemy)
             this.actor.emit(GameEvents.PLAYER_ENEMY_COLLISION, enemy);
     }
-
     /** @inheritDoc */
     triggerExit2D(collider) {
         console.log("exit", collider.actor.name, collider.actor.id);
@@ -609,7 +567,6 @@ class PlayerStats extends Reactive {
     awake() {
         this.reset();
     }
-
     /** Reset stats to initial value. */
     reset() {
         this.set("score", 0);
@@ -626,20 +583,19 @@ class PlayerStats extends Reactive {
 class PlayerControls {
     constructor() {
         this.keys = new Set();
-        this.direction = {x: 0, y: 0};
+        this.direction = { x: 0, y: 0 };
         this.moveDelay = 0.02; // 20 ms;
         this.moveCountDown = 0;
         this.smoothTime = 0.15;
         /** Set of walkable tiles. */
         this.walkable = new Set();
     }
-
     /** @inheritDoc */
     start() {
         this.player = this.player || this.actor.stage.findComponentOfType(Player);
         this.canvas = this.canvas || this.actor.stage.findComponentOfType(Canvas);
         this.terrain = this.terrain || this.actor.stage.findComponentOfType(Terrain2D);
-        const OPTIONS = {passive: false};
+        const OPTIONS = { passive: false };
         // touch
         document.addEventListener("touchstart", this, OPTIONS);
         document.addEventListener("touchend", this, OPTIONS);
@@ -653,7 +609,6 @@ class PlayerControls {
         document.addEventListener("keydown", this, OPTIONS);
         document.addEventListener("keyup", this, OPTIONS);
     }
-
     /** @inheritDoc */
     lateUpdate(deltaTime) {
         this.moveCountDown -= deltaTime;
@@ -663,7 +618,6 @@ class PlayerControls {
         }
         this.player.smooth(this.smoothTime, deltaTime);
     }
-
     /** @inheritDoc */
     destroy() {
         // touch
@@ -679,7 +633,6 @@ class PlayerControls {
         document.removeEventListener("keydown", this);
         document.removeEventListener("keyup", this);
     }
-
     /** @inheritDoc */
     handleEvent(e) {
         // touch?
@@ -722,7 +675,6 @@ class PlayerControls {
                 break;
         }
     }
-
     /**
      * Process key-press event.
      * @param code - key code.
@@ -759,7 +711,6 @@ class PlayerControls {
         }
         return false;
     }
-
     /**
      * Update key state in internal registry of active keys.
      * @param key - key code to add.
@@ -767,33 +718,31 @@ class PlayerControls {
      * @return true if key state modified; false otherwise.
      */
     submitKey(key, down) {
-        const {keys} = this;
+        const { keys } = this;
         return down
             ? !keys.has(key) && keys.add(key)
             : keys.delete(key);
     }
-
     /**
      * Automatically move player by any active input source.
      * @return true when moved in any direction; false otherwise.
      */
     move() {
         // move by touch?
-        const {touches} = this;
+        const { touches } = this;
         if (touches && touches.length)
             if (this.moveByCursor(touches[0]))
                 return true;
         // move by mouse?
-        const {mouse} = this;
+        const { mouse } = this;
         if (mouse && this.moveByCursor(mouse))
             return true;
         // move by key?
-        const {direction} = this;
+        const { direction } = this;
         if (this.moveByDirection(direction))
             return true;
         return false;
     }
-
     /**
      * Move character by client X, Y coordinates provided by a given cursor.
      * @param cursor - cursor providing client X, Y coordinates.
@@ -803,7 +752,6 @@ class PlayerControls {
         const rect = this.canvas.element.getBoundingClientRect();
         return this.moveToPoint(cursor.clientX - rect.x, cursor.clientY - rect.y);
     }
-
     /**
      * Move character in direction to a given world point.
      * Character can move only by a single axis at one time.
@@ -812,9 +760,9 @@ class PlayerControls {
      * @return true when moved in any direction; false otherwise.
      */
     moveToPoint(x, y) {
-        const {terrain} = this;
-        const {scale} = this.canvas.transform;
-        const {position} = this.player.transform;
+        const { terrain } = this;
+        const { scale } = this.canvas.transform;
+        const { position } = this.player.transform;
         x /= scale.x;
         y /= scale.y;
         x -= terrain.tile.xMin;
@@ -830,7 +778,6 @@ class PlayerControls {
             ? this.moveBy(dx, 0) || this.moveBy(0, dy)
             : this.moveBy(0, dy) || this.moveBy(dx, 0);
     }
-
     /**
      * Move character by direction provided by a given vector.
      * Character can move only by a single axis at one time.
@@ -839,12 +786,11 @@ class PlayerControls {
      */
     moveByDirection(direction) {
         // move only by single axis
-        const {x, y} = direction;
+        const { x, y } = direction;
         return x && y && Math.abs(x) > Math.abs(y)
             ? this.moveBy(x, 0) || this.moveBy(0, y)
             : this.moveBy(0, y) || this.moveBy(x, 0);
     }
-
     /**
      * Move character by X / Y tiles count.
      * Character can move only by single tile at one time.
@@ -858,9 +804,9 @@ class PlayerControls {
         // normalize
         x = Mathf.clamp(x, -1, 1);
         y = Mathf.clamp(y, -1, 1);
-        const {terrain} = this;
-        const {size} = terrain;
-        const {position} = this.player.transform;
+        const { terrain } = this;
+        const { size } = terrain;
+        const { position } = this.player.transform;
         // calculate next tile X
         let tileX = Math.round(terrain.rowByPosX(position.x));
         tileX = Mathf.clamp(tileX + x, 0, size.x - 1);
@@ -915,16 +861,14 @@ class GameDifficulty {
         this.level++;
         this.recalculate();
     }
-
     /** Reset game difficulty to initial values. */
     reset() {
         this.level = 0;
         this.recalculate();
     }
-
     /** Recalculate game difficulty values. */
     recalculate() {
-        const {settings, level} = this;
+        const { settings, level } = this;
         const percents = level / 100;
         this.bonusChance = settings.bonusChance * (1 + 2 * percents); // 2% increase per level
         this.bonusChance = Math.min(this.bonusChance, 1); // max 100%
@@ -938,20 +882,18 @@ class GameDifficulty {
 
 class GameController {
     constructor() {
-        this.toTile = {x: 0, y: 0};
-        this.fromTile = {x: 0, y: 0};
+        this.toTile = { x: 0, y: 0 };
+        this.fromTile = { x: 0, y: 0 };
     }
-
     /** @inheritDoc */
     awake() {
         this.settings = this.actor.require(GameSettings);
         this.difficulty = this.actor.require(GameDifficulty);
         this.difficulty.settings = this.settings;
     }
-
     /** @inheritDoc */
     start() {
-        const {stage} = this.actor;
+        const { stage } = this.actor;
         this.canvas = this.canvas || stage.findComponentOfType(Canvas);
         this.player = this.player || stage.findComponentOfType(Player);
         this.controls = this.controls || stage.findComponentOfType(PlayerControls);
@@ -967,7 +909,7 @@ class GameController {
         this.statsView = this.statsView || stage.findComponentOfType(StatsView);
         this.cinematicScene = this.cinematicScene || stage.findComponentOfType(CinematicScene);
         // player events
-        const {player} = this;
+        const { player } = this;
         player.actor.on(GameEvents.PLAYER_DIE, this.die, this);
         player.actor.on(GameEvents.PLAYER_ENEMY_COLLISION, this.hitByEnemy, this);
         player.actor.on(GameEvents.PLAYER_BOUNTY_COLLISION, this.collectBounty, this);
@@ -999,10 +941,9 @@ class GameController {
         // show first screen
         window.setTimeout(() => this.showMainMenu(), 100);
     }
-
     /** Play the game. */
     play() {
-        const {terrain, player, settings, overlay, difficulty} = this;
+        const { terrain, player, settings, overlay, difficulty } = this;
         // discard previous game state
         this.clean();
         overlay.close();
@@ -1023,31 +964,27 @@ class GameController {
         // ui
         this.overlay.show(this.statsView);
     }
-
     /** Cleanup scene. */
     clean() {
         this.terrainPath.layer.clear();
         Component.disable(this.enemySpawn);
         Component.disable(this.bountySpawn);
     }
-
     /** @inheritDoc */
     draw2D(ctx) {
         this.outlineLayout();
         this.overlayLayout();
     }
-
     overlayLayout() {
-        const {overlay, canvas} = this;
-        const {root} = overlay;
+        const { overlay, canvas } = this;
+        const { root } = overlay;
         root.style.top = `${canvas.element.offsetTop}px`;
         root.style.left = `${canvas.element.offsetLeft}px`;
         root.style.width = `${canvas.element.width}px`;
         root.style.height = `${canvas.element.height - 2}px`;
     }
-
     outlineLayout() {
-        const {inner, outer, terrain, canvas} = this;
+        const { inner, outer, terrain, canvas } = this;
         const offsetY = terrain.tile.yMin * canvas.transform.scale.y;
         outer.style.top = `${offsetY + 2}px`;
         outer.style.left = `${canvas.element.offsetLeft}px`;
@@ -1058,35 +995,31 @@ class GameController {
         inner.style.width = `${canvas.element.width}px`;
         inner.style.height = `${canvas.element.height - offsetY - 1}px`;
     }
-
     showMainMenu() {
         this.clean();
         this.overlay.close();
         this.overlay.show(this.mainMenu);
         Component.enable(this.cinematicScene);
     }
-
     showHowToPlay() {
         this.overlay.close();
         this.overlay.show(this.howToPlay);
     }
-
     /** Player steps on an enemy. */
     hitByEnemy(enemy) {
         this.playHitGfx();
         this.player.hit();
         // ghost mode
-        const {player, settings} = this;
-        const {dead} = player.stats;
+        const { player, settings } = this;
+        const { dead } = player.stats;
         const ghost = player.actor.require(Ghost);
         ghost.blink = !dead;
         ghost.duration = dead ? Number.POSITIVE_INFINITY : settings.invulnerabilityDuration;
         Component.enable(ghost);
     }
-
     /** Player steps on a bounty. */
     collectBounty(bounty) {
-        const {terrain, player, settings} = this;
+        const { terrain, player, settings } = this;
         const bountyType = this.resolveBountyType(bounty);
         bounty.actor.destroy();
         // scores
@@ -1107,21 +1040,18 @@ class GameController {
                 break;
         }
     }
-
     /** Players dies */
     die() {
-        const {controls, player} = this;
+        const { controls, player } = this;
         Component.disable(controls); // disable controls
         Component.disable(player.actor.get(PhysicsBody2D)); // disable collision
         this.overlay.close(); // close HUD
         this.overlay.show(this.gameOver); // show game-over dialog
     }
-
     /** Play again. */
     replay() {
         this.play();
     }
-
     /** Player player hit GFX. */
     playHitGfx() {
         for (const outline of this.outlines) {
@@ -1132,9 +1062,8 @@ class GameController {
             outline.classList.add("hit");
         }
     }
-
     continuePath(fromY) {
-        const {terrain, terrainPath, fromTile} = this;
+        const { terrain, terrainPath, fromTile } = this;
         // update from tile
         fromTile.x = Random.rangeInt(1, terrain.size.x - 1);
         fromTile.y = terrain.colByPosY(fromY);
@@ -1147,7 +1076,6 @@ class GameController {
         const bounty = this.bountySpawn.spawn(finish.x, finish.y);
         bounty.highlight.setHighlightActive(true);
     }
-
     resolveBountyType(bounty) {
         const image = bounty.view.sprite.image;
         const name = image && image.name || "checkpoint";
@@ -1158,19 +1086,15 @@ class GameController {
 
 class Layers {
 }
-
 Layers.TERRAIN = 1;
 Layers.BOUNTY = 2;
 Layers.PLAYER = 3;
 Layers.ENEMY = 4;
-
 class LayerOrder {
 }
-
 LayerOrder.TERRAIN_PATH = 1;
 LayerOrder.BONUS_PATH_LAYER = 2;
 const DEBUG = document.location.pathname.includes("localhost");
-
 class Game {
     constructor() {
         /** Global gizmo rendering configuration. */
@@ -1202,14 +1126,12 @@ class Game {
         this.gameController = this.initGameController();
         this.initUI();
     }
-
     initCollisionSystem() {
         const collision = new CollisionSystem2D();
         collision.enableLayerCollision(Layers.PLAYER, Layers.ENEMY);
         collision.enableLayerCollision(Layers.PLAYER, Layers.BOUNTY);
         return collision;
     }
-
     initTerrain() {
         const actor = this.stage.createActor();
         const terrain = actor.add(Terrain2D);
@@ -1238,7 +1160,6 @@ class Game {
             baseLayer.setTileRow(i, this.resources.load(baseLayerRows[i]));
         return terrain;
     }
-
     initTerrainPath(terrain) {
         const layer = terrain.createLayer();
         layer.setOrder(LayerOrder.TERRAIN_PATH);
@@ -1247,7 +1168,6 @@ class Game {
         terrainPath.layer = layer;
         return terrainPath;
     }
-
     initPlayer(terrain) {
         const actor = this.stage.createActor("player");
         const player = actor.add(Player);
@@ -1266,12 +1186,11 @@ class Game {
         capsule.setOffset(20.5, 65);
         return player;
     }
-
     initEnemySpawn(terrain) {
         const actor = this.stage.createActor("enemy-spawn");
         const spawn = actor.add(EnemySpawn);
         spawn.terrain = terrain;
-        spawn.yTileRange = {min: 1, max: terrain.size.y - 2};
+        spawn.yTileRange = { min: 1, max: terrain.size.y - 2 };
         spawn.enemyFactory = () => {
             const actor = this.stage.createActor("enemy");
             const enemy = actor.require(Enemy);
@@ -1288,20 +1207,19 @@ class Game {
         };
         return spawn;
     }
-
     initBountySpawn() {
         const actor = this.stage.createActor("bounty-spawn");
         const bountySpawn = actor.add(BountySpawn);
         bountySpawn.terrainPath = this.terrainPath;
         bountySpawn.bonusPathLayer = this.terrain.createLayer();
         bountySpawn.bonusPathLayer.setOrder(LayerOrder.BONUS_PATH_LAYER);
-        const {size} = this.terrain;
-        bountySpawn.spots.push({x: 0, y: 2});
-        bountySpawn.spots.push({x: 0, y: size.y - 3});
-        bountySpawn.spots.push({x: size.x - 1, y: 2});
-        bountySpawn.spots.push({x: size.x - 1, y: size.y - 3});
+        const { size } = this.terrain;
+        bountySpawn.spots.push({ x: 0, y: 2 });
+        bountySpawn.spots.push({ x: 0, y: size.y - 3 });
+        bountySpawn.spots.push({ x: size.x - 1, y: 2 });
+        bountySpawn.spots.push({ x: size.x - 1, y: size.y - 3 });
         bountySpawn.bountyFactory = () => {
-            const {tile} = this.terrain;
+            const { tile } = this.terrain;
             const actor = this.stage.createActor("bounty");
             const bounty = actor.add(Bounty);
             bounty.layer.set(Layers.BOUNTY);
@@ -1316,7 +1234,6 @@ class Game {
         };
         return bountySpawn;
     }
-
     initGameController() {
         const actor = this.stage.createActor("game");
         const controller = actor.add(GameController);
@@ -1325,7 +1242,6 @@ class Game {
         controller.bountySpawn = this.bountySpawn;
         return controller;
     }
-
     initUI() {
         this.initStatsView();
         this.initOverlayView();
@@ -1336,52 +1252,44 @@ class Game {
         if (DEBUG)
             this.initDebugView();
     }
-
     initStatsView() {
         const actor = this.stage.createActor("stats-view");
         const view = actor.add(StatsView);
         return view;
     }
-
     initOverlayView() {
         const actor = this.stage.createActor("overlay-view");
         const view = actor.add(OverlayView);
         return view;
     }
-
     initMainMenuDialog() {
         const actor = this.stage.createActor("main-menu-dialog");
         const view = actor.add(MainMenuDialog);
         return view;
     }
-
     initGameOverDialog() {
         const actor = this.stage.createActor("game-over-dialog");
         const view = actor.add(GameOverDialog);
         return view;
     }
-
     initHowToPlayDialog() {
         const actor = this.stage.createActor("how-to-play-dialog");
         const view = actor.add(HowToPlayDialog);
         return view;
     }
-
     initCinematicScene() {
         const actor = this.stage.createActor("cinematic-scene");
         const view = actor.add(CinematicScene);
         return view;
     }
-
     initDebugView() {
         const actor = this.stage.createActor("debug-view");
         const view = actor.add(DifficultyView);
     }
-
     initGizmo(force) {
         if (!this.isGizmoActive() && !force)
             return;
-        const {gizmos} = this;
+        const { gizmos } = this;
         this.stage.addSystem(new GizmoSystem(this.canvas));
         if (gizmos.sprite)
             Sprite.prototype.gizmo = gizmos.sprite;
@@ -1390,17 +1298,14 @@ class Game {
         if (gizmos.collision)
             CollisionSystem2D.prototype.gizmo = gizmos.collision;
     }
-
     isGizmoActive() {
         for (const key in this.gizmos)
             if (this.gizmos[key])
                 return true;
     }
-
     start() {
         this.stage.start();
     }
 }
-
 const game = new Game();
 game.start();

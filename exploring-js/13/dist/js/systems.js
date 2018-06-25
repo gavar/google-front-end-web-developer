@@ -6,7 +6,6 @@ class CompositeSystem {
         this.compositions = [];
         this.indexer = new Map();
     }
-
     /** @inheritDoc */
     add(component) {
         if (this.indexer.has(component))
@@ -16,21 +15,19 @@ class CompositeSystem {
         this.indexer.set(composition.component, index);
         this.compositions.push(composition);
     }
-
     /** @inheritDoc */
     remove(component) {
-        const {indexer} = this;
+        const { indexer } = this;
         const index = indexer.get(component);
         if (typeof index === "undefined")
             return;
         // remove from indexer
         indexer.delete(component);
         // fill empty slot with last component
-        const {compositions} = this;
+        const { compositions } = this;
         if (Bag.removeAt(compositions, index))
             indexer.set(compositions[index].component, index);
     }
-
     /** @inheritDoc */
     tick(deltaTime) {
         this.process(deltaTime, this.compositions);
@@ -44,7 +41,7 @@ class SortSystem extends CompositeSystem {
     /** @inheritDoc */
     tick(deltaTime) {
         // sort components
-        const {compositions} = this;
+        const { compositions } = this;
         compositions.sort(this.compare);
         // prepare
         for (let i = 0, size = this.compositions.length; i < size; i++) {
@@ -58,14 +55,12 @@ class SortSystem extends CompositeSystem {
         // process
         this.process(deltaTime, compositions);
     }
-
     /** Compare two entries by sorting layer, order and z-index. */
     compare(a, b) {
         return a.layer.value - b.layer.value
             || ~b.component.order - ~a.component.order
             || a.index - b.index;
     }
-
     /** @inheritDoc */
     compose(component, index) {
         return {
@@ -89,22 +84,20 @@ class DrawSystem extends SortSystem {
         this.ctx2D.mozImageSmoothingEnabled = false;
         this.ctx2D.webkitImageSmoothingEnabled = false;
     }
-
     /** @inheritDoc */
     match(component) {
         return !!component.draw2D;
     }
-
     /** @inheritDoc */
     process(deltaTime, compositions) {
-        const {ctx2D} = this;
-        const {scale} = this.canvas.transform;
+        const { ctx2D } = this;
+        const { scale } = this.canvas.transform;
         try {
             ctx2D.save();
             ctx2D.scale(scale.x, scale.y);
             Canvas.active = this.canvas;
             for (const composition of compositions) {
-                const {component} = composition;
+                const { component } = composition;
                 if (component.enabled && component.actor.active)
                     component.draw2D(ctx2D, deltaTime);
             }
@@ -124,7 +117,6 @@ class UpdateSystem extends ComponentSystem {
     match(component) {
         return !!component.update;
     }
-
     /** @inheritDoc */
     process(deltaTime, components) {
         for (const component of components)
@@ -141,7 +133,6 @@ class LateUpdateSystem extends ComponentSystem {
     match(component) {
         return !!component.lateUpdate;
     }
-
     /** @inheritDoc */
     process(deltaTime, components) {
         for (const component of components)
@@ -161,7 +152,6 @@ class Gizmo2D {
         ctx.lineTo(x + half, y - half);
         ctx.stroke();
     }
-
     /** Draw capsule wireframe. */
     static capsule(ctx, x, y, w, h) {
         ctx.beginPath();
@@ -184,7 +174,6 @@ class Gizmo2D {
         ctx.stroke();
     }
 }
-
 /**
  * System for drawing debug gizmos.
  */
@@ -198,22 +187,20 @@ class GizmoSystem extends SortSystem {
         this.ctx2D.mozImageSmoothingEnabled = false;
         this.ctx2D.webkitImageSmoothingEnabled = false;
     }
-
     /** @inheritDoc */
     match(component) {
         return !!component.drawGizmo2D;
     }
-
     /** @inheritDoc */
     process(deltaTime, compositions) {
-        const {ctx2D} = this;
-        const {scale} = this.canvas.transform;
+        const { ctx2D } = this;
+        const { scale } = this.canvas.transform;
         try {
             ctx2D.save();
             ctx2D.scale(scale.x, scale.y);
             Canvas.active = this.canvas;
             for (const composition of compositions) {
-                const {component} = composition;
+                const { component } = composition;
                 if (component.gizmo && component.enabled && component.actor.active)
                     component.drawGizmo2D(ctx2D);
             }

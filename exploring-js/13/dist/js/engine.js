@@ -15,7 +15,6 @@ class Bag {
         return true;
     }
 }
-
 /**
  * Unordered list of unique items using O(1) for read / write operations.
  */
@@ -24,17 +23,14 @@ class BagSet {
         this.array = [];
         this.indexer = new Map();
     }
-
     /** Unordered list of all items in a collection. */
     get items() {
         return this.array;
     }
-
     /** Number of items in a collection. */
     get size() {
         return this.array.length;
     }
-
     /**
      * Add item to collection.
      * @param item - item to add.
@@ -47,7 +43,6 @@ class BagSet {
         this.array.push(item);
         return true;
     }
-
     /**
      * Whether given item exists in the bag.
      * @param item - item to check.
@@ -55,7 +50,6 @@ class BagSet {
     has(item) {
         return this.indexer.has(item);
     }
-
     /**
      * Sort items in collection.
      * @param compare - function to use for comparing items.
@@ -66,7 +60,6 @@ class BagSet {
         for (let i = 0; i < this.array.length; i++)
             this.indexer.set(this.array[i], i);
     }
-
     /**
      * Remove item from collection.
      * @param item - item to remove.
@@ -83,7 +76,6 @@ class BagSet {
             this.indexer.set(this.array[index], index);
         return true;
     }
-
     /** Remove all items from a collection. */
     clear() {
         this.array.length = 0;
@@ -99,7 +91,6 @@ class EventEmitter {
         this.lock = 0;
         this.bindings = [];
     }
-
     /**
      * Adds the {@param listener} function to the end of the listeners array for for the event identified by {@param type}.
      * Multiple calls with same combination of {@param type} and {@param listener} will result in the listener being added multiple times.
@@ -108,9 +99,8 @@ class EventEmitter {
      * @param target - target to invoke listener on.
      */
     on(type, listener, target) {
-        this.bindings.push({type, listener, target});
+        this.bindings.push({ type, listener, target });
     }
-
     /**
      * Synchronously calls each of the listeners registered for the event identified by {@param type}.
      * Listener invocation occurs in the order they were registered, passing the supplied {@link event} to each.
@@ -144,7 +134,6 @@ class EventEmitter {
                 this.cleanup();
         }
     }
-
     /***
      * Removes listener previously registered for same event, callback and target.
      * @param type - identifies the event being removed.
@@ -165,14 +154,12 @@ class EventEmitter {
         if (!this.lock)
             this.cleanup();
     }
-
     /** Removes all events listeners. */
     removeAllListeners() {
         this.bindings.length = 0;
     }
-
     cleanup() {
-        const {bindings} = this;
+        const { bindings } = this;
         for (let i = 0; i < bindings.length; i++) {
             if (bindings[i])
                 continue;
@@ -193,7 +180,6 @@ class Component {
             component.enable && component.enable();
         }
     }
-
     /**
      * Disable component if it's currently enabled.
      * @param component - component to disable.
@@ -204,7 +190,6 @@ class Component {
             component.disable && component.disable();
         }
     }
-
     /** Enabled and disable component in one frame. */
     static restart(component) {
         Component.disable(component);
@@ -221,7 +206,6 @@ class Actor extends EventEmitter {
         super();
         this.id = ++Actor.counter;
     }
-
     /**
      * Modify actor {@link active} state.
      * @param value - whether to set active or inactive.
@@ -239,7 +223,6 @@ class Actor extends EventEmitter {
                 : Component.disable(component);
         return true;
     }
-
     /**
      * Add component of the given type to an actor.
      * @param type - type of component to add.
@@ -249,7 +232,6 @@ class Actor extends EventEmitter {
         this.alive();
         return this.stage.addComponent(this, type);
     }
-
     /**
      * Find component of given type on this actor.
      * @param type - type of the component to search for.
@@ -260,7 +242,6 @@ class Actor extends EventEmitter {
             if (component instanceof type)
                 return component;
     }
-
     /**
      * Get or add component of the given type.
      * @param type - type of the component to find or create.
@@ -269,7 +250,6 @@ class Actor extends EventEmitter {
     require(type) {
         return this.get(type) || this.add(type);
     }
-
     /**
      * Remove component from the actor.
      * @param component - component to remove.
@@ -277,7 +257,6 @@ class Actor extends EventEmitter {
     remove(component) {
         this.stage.destroyComponent(this, component);
     }
-
     /**
      * Destroy this actor and all of its components.
      */
@@ -289,14 +268,12 @@ class Actor extends EventEmitter {
         this.emit(Actor.DESTROYED, this);
         this.removeAllListeners();
     }
-
     /** Assert that this actor is alive. */
     alive() {
         if (this.destroyed)
             throw new Error("actor is destroyed!");
     }
 }
-
 Actor.DESTROYING = "destroying";
 Actor.DESTROYED = "destroyed";
 /** Number of actors created. */
@@ -311,7 +288,6 @@ class ComponentSystem {
     constructor() {
         this.bag = new BagSet();
     }
-
     /**
      * Add component to a system.
      * @param component - component to add.
@@ -319,7 +295,6 @@ class ComponentSystem {
     add(component) {
         this.bag.add(component);
     }
-
     /**
      * Remove component from a system.
      * @return component which has been removed.
@@ -327,7 +302,6 @@ class ComponentSystem {
     remove(component) {
         this.bag.remove(component);
     }
-
     /**
      * Process each component in a system.
      * @param deltaTime - time since last call.
@@ -348,7 +322,6 @@ class Stage {
         this.destroyActors = new BagSet();
         this.destroyComponents = new BagSet();
     }
-
     /** Start stage updates. */
     start() {
         let lastTime;
@@ -363,7 +336,6 @@ class Stage {
             window.requestAnimationFrame(stage);
         });
     }
-
     /**
      * Add system to receive updates.
      * @param system - system to add.
@@ -390,7 +362,6 @@ class Stage {
             }
         }
     }
-
     /**
      * Create new actor instance and add it to a stage.
      * @param name - optional name of the actor.
@@ -406,7 +377,6 @@ class Stage {
         actor.components = [];
         return actor;
     }
-
     /**
      * Add component of the given type to an actor.
      * @param actor - actor to whom add component.
@@ -419,13 +389,12 @@ class Stage {
         // create component
         const component = new type();
         actor.components.push(component);
-        this.queue.set(component, {enabled: false, started: false});
+        this.queue.set(component, { enabled: false, started: false });
         // activate component
         component.actor = actor;
         Stage.invoke(component, "awake");
         return component;
     }
-
     /**
      * Remove component from a stage and from all related systems.
      * @param actor - actor from whom to remove component.
@@ -457,7 +426,6 @@ class Stage {
         // destroy
         Stage.invoke(component, "destroy");
     }
-
     /**
      * Remove actor and all of its components from a stage.
      * @param actor - actor to remove.
@@ -489,7 +457,6 @@ class Stage {
             Stage.invoke(component, "destroy");
         }
     }
-
     /**
      * Find first occurrence of the component with given type.
      * @param type - type of the component to search for.
@@ -501,7 +468,6 @@ class Stage {
                 if (component instanceof type)
                     return component;
     }
-
     tick(deltaTime) {
         // process components in queue
         this.queue.forEach(this.forEachInQueue, this);
@@ -512,7 +478,7 @@ class Stage {
         for (const component of this.destroyComponents.items)
             component.actor = null;
         // destroy actors
-        const {actors} = this;
+        const { actors } = this;
         for (const actor of this.destroyActors.items) {
             // remove from an actor list
             actors.remove(actor);
@@ -526,7 +492,6 @@ class Stage {
         this.destroyActors.clear();
         this.destroyComponents.clear();
     }
-
     forEachInQueue(state, component, queue) {
         // disabled just after awake or previously?
         if (component.enabled === false)
@@ -553,7 +518,6 @@ class Stage {
         if (state.enabled && state.started)
             queue.delete(component);
     }
-
     /**
      * Safely invoke function on a given instance.
      * @param object - instance that optionally has function to invoke.

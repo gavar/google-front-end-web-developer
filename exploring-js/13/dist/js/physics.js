@@ -7,26 +7,23 @@ class PhysicsBody2D {
         this.layer = this.actor.require(Layer);
         this.transform = this.actor.require(Transform);
     }
-
     /** Trigger entering into collider. */
     enter(collider) {
         for (const component of this.actor.components)
             component.triggerEnter2D &&
-            component.triggerEnter2D(collider);
+                component.triggerEnter2D(collider);
     }
-
     /** Trigger staying in touch with collider. */
     stay(collider) {
         for (const component of this.actor.components)
             component.triggerStay2D &&
-            component.triggerStay2D(collider);
+                component.triggerStay2D(collider);
     }
-
     /** Trigger leaving collider. */
     exit(collider) {
         for (const component of this.actor.components)
             component.triggerExit2D &&
-            component.triggerExit2D(collider);
+                component.triggerExit2D(collider);
     }
 }
 
@@ -47,38 +44,34 @@ class Collider2D {
 class CapsuleCollider2D extends Collider2D {
     constructor() {
         super(...arguments);
-        this.min = {x: 0, y: 0};
-        this.max = {x: 0, y: 0};
+        this.min = { x: 0, y: 0 };
+        this.max = { x: 0, y: 0 };
         /** Width and height of the capsule area. */
-        this.size = {x: 0, y: 0};
+        this.size = { x: 0, y: 0 };
         /** Local pivot of the collider geometry. */
-        this.pivot = {x: .5, y: .5};
+        this.pivot = { x: .5, y: .5 };
         /** Local offset of the collider geometry. */
-        this.offset = {x: 0, y: 0};
+        this.offset = { x: 0, y: 0 };
     }
-
     /** Modify {@link size} values. */
     setSize(x, y) {
         this.size.x = x;
         this.size.y = y;
     }
-
     /** Modify {@link offset} values. */
     setOffset(x, y) {
         this.offset.x = x;
         this.offset.y = y;
     }
-
     /** Modify {@link pivot} values. */
     setPivot(x, y) {
         this.pivot.x = x;
         this.pivot.y = y;
     }
-
     /** @inheritDoc */
     drawGizmo2D(ctx) {
-        const {position} = this.body.transform;
-        const {size, offset, pivot} = this;
+        const { position } = this.body.transform;
+        const { size, offset, pivot } = this;
         const x = position.x + offset.x + pivot.x * size.x;
         const y = position.y + offset.y + pivot.y * size.y;
         ctx.strokeStyle = "red";
@@ -86,11 +79,10 @@ class CapsuleCollider2D extends Collider2D {
         ctx.strokeStyle = "green";
         Gizmo2D.capsule(ctx, x, y, size.x, size.y);
     }
-
     /** @inheritDoc */
     recalculate() {
-        const {position} = this.body.transform;
-        const {size, offset, pivot} = this;
+        const { position } = this.body.transform;
+        const { size, offset, pivot } = this;
         const d = Math.min(size.x, size.y);
         const dx = (size.x - d) * .5;
         const dy = (size.y - d) * .5;
@@ -102,12 +94,10 @@ class CapsuleCollider2D extends Collider2D {
         this.max.x += dx;
         this.max.y += dy;
     }
-
     /** @inheritDoc */
     intersect(collider) {
         return collider.intersectCapsule(this);
     }
-
     /** @inheritDoc */
     intersectCapsule(capsule) {
         return Physics2D.intersectCapsuleCapsule(this.min.x, this.min.y, this.max.x, this.max.y, this.r, capsule.min.x, capsule.min.y, capsule.max.x, capsule.max.y, capsule.r);
@@ -124,7 +114,6 @@ class Physics2D {
         const r = r1 + r2;
         return Physics2D.distanceLineLineSqr(x11, y11, x12, y12, x21, y21, x22, y22) <= r * r;
     }
-
     /**
      * Calculate square of the shortest distance between two segments.
      */
@@ -211,22 +200,19 @@ class CollisionSystem2D extends CompositeSystem {
         /** Array of intersection masks for each layer. */
         this.masks = new Array(32);
     }
-
     static isActive(component, body, masks) {
         return body.enabled // physics body enabled
             && component.enabled // collider enabled
             && !!masks[body.layer.value] // has collision with any other layer
-            ;
+        ;
     }
-
     static invoke(key, self, pair, masks) {
-        const {isActive} = CollisionSystem2D;
+        const { isActive } = CollisionSystem2D;
         self.component.body[key](pair.component);
         pair.component.body[key](self.component);
         self.active = self.active && isActive(self.component, self.component.body, masks);
         pair.active = pair.active && isActive(pair.component, pair.component.body, masks);
     }
-
     /**
      * Configure system to track collision between specified layers (excluding self layer).
      * To enable self layer collision pass value of the layer twice.
@@ -240,12 +226,10 @@ class CollisionSystem2D extends CompositeSystem {
             }
         }
     }
-
     /** @inheritDoc */
     match(component) {
         return component instanceof Collider2D;
     }
-
     /** @inheritDoc */
     compose(component, index) {
         return {
@@ -254,14 +238,13 @@ class CollisionSystem2D extends CompositeSystem {
             next: [],
         };
     }
-
     /** @inheritDoc */
     process(deltaTime, compositions) {
-        const {buffer, isActive, invoke} = CollisionSystem2D;
-        const {masks} = this;
+        const { buffer, isActive, invoke } = CollisionSystem2D;
+        const { masks } = this;
         // update state
         for (const self of compositions) {
-            const {component} = self;
+            const { component } = self;
             self.active = isActive(component, component.body, masks);
             self.active && component.recalculate();
         }
@@ -283,7 +266,7 @@ class CollisionSystem2D extends CompositeSystem {
         }
         // enter / stay / exit
         for (const self of compositions) {
-            const {prev, next} = self;
+            const { prev, next } = self;
             try {
                 // fill buffer with previous collisions
                 for (const collider of prev)
@@ -338,5 +321,4 @@ class CollisionSystem2D extends CompositeSystem {
         }
     }
 }
-
 CollisionSystem2D.buffer = new Set();

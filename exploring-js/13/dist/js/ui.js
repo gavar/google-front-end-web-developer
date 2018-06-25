@@ -5,17 +5,14 @@ class BaseView {
     constructor() {
         this.dirty = true;
     }
-
     /** @inheritDoc */
     enable() {
         this.dirty = true;
     }
-
     /** Mark view as dirty to repaint in next frame. */
     setDirty() {
         this.dirty = true;
     }
-
     /** @inheritDoc */
     draw2D() {
         if (this.dirty) {
@@ -23,7 +20,6 @@ class BaseView {
             this.render();
         }
     }
-
     /**
      * Listen for changes on the component.
      * Whenever the {@link GameEvents.PROPERTY_CHANGED} event occurs on a provided component,
@@ -52,7 +48,6 @@ class DialogView extends BaseView {
             this.render();
         }
     }
-
     /** @inheritDoc */
     start() {
         this.initialized = true;
@@ -60,13 +55,11 @@ class DialogView extends BaseView {
         this.overlay = this.overlay || this.actor.stage.findComponentOfType(OverlayView);
         this.activate(this.active);
     }
-
     /** @inheritDoc */
     disable() {
         this.overlay.hide(this);
         this.activate(false);
     }
-
     /**
      * Set this dialog to be shown or hidden.
      * @param active - whether to show dialog; hide otherwise.
@@ -84,7 +77,6 @@ class DialogView extends BaseView {
         if (active)
             this.setDirty();
     }
-
     static setStateAttributes(value, element) {
         if (element) {
             if (value) {
@@ -105,13 +97,11 @@ class OverlayView {
         /** Set of active dialogs. */
         this.dialogs = new Set();
     }
-
     /** @inheritDoc */
     awake() {
         this.main = document.querySelector("main");
         this.root = document.querySelector(".overlay");
     }
-
     /** Notify that dialog has been shown. */
     show(dialog) {
         if (this.dialogs.add(dialog)) {
@@ -119,7 +109,6 @@ class OverlayView {
             this.modified();
         }
     }
-
     /** Notify that dialog has been hidden. */
     hide(dialog) {
         if (this.dialogs.delete(dialog)) {
@@ -127,23 +116,20 @@ class OverlayView {
             this.modified();
         }
     }
-
     /** Hide all dialogs. */
     close() {
         for (const dialog of this.dialogs)
             this.hide(dialog);
     }
-
     /**
      * Set this overlay to be shown or hidden.
      * @param active - whether to show dialog; hide otherwise.
      */
     activate(active) {
-        const {root, main} = this;
+        const { root, main } = this;
         DialogView.setStateAttributes(active, root);
         DialogView.setStateAttributes(active, main);
     }
-
     modified() {
         this.activate(this.dialogs.size > 0);
     }
@@ -165,17 +151,15 @@ class StatsView extends DialogView {
         this.listen("stats", PlayerStats);
         return root;
     }
-
     /** @inheritDoc */
     render() {
-        const {stats, settings} = this;
+        const { stats, settings } = this;
         this.setInnerText(this.score, stats.score);
         this.setInnerText(this.level, stats.level + 1);
         this.setInnerText(this.lives, StatsView.livesToHearts(stats.lives, settings.lives));
     }
-
     static livesToHearts(now, init) {
-        const {buffer} = StatsView;
+        const { buffer } = StatsView;
         try {
             for (let i = 0; i < now; i++)
                 buffer.push("❤️"); // ❤ Red Heart
@@ -187,7 +171,6 @@ class StatsView extends DialogView {
             buffer.length = 0;
         }
     }
-
     setInnerText(element, value) {
         const prev = element.innerText;
         if (prev == value)
@@ -195,7 +178,6 @@ class StatsView extends DialogView {
         element.innerText = value;
         this.playGfx(element, "change");
     }
-
     playGfx(element, gfx) {
         element.classList.remove(gfx);
         element.style.animation = "none";
@@ -204,7 +186,6 @@ class StatsView extends DialogView {
         element.classList.add(gfx);
     }
 }
-
 StatsView.buffer = [];
 
 /**
@@ -219,10 +200,9 @@ class DifficultyView {
             document.body.appendChild(this.root);
         }
     }
-
     /** @inheritDoc */
     lateUpdate(deltaTime) {
-        const {difficulty} = this;
+        const { difficulty } = this;
         this.root.innerText = `
         Level: ${difficulty.level}
         Enemy Limit: ${difficulty.enemyLimit}
@@ -243,12 +223,10 @@ class MainMenuDialog extends DialogView {
         this.howto.addEventListener("click", () => this.actor.emit("how-to-play"));
         return root;
     }
-
     /** @inheritDoc */
     render() {
         // nothing to do here
     }
-
     /** @inheritDoc */
     activate(active) {
         super.activate(active);
@@ -264,12 +242,10 @@ class HowToPlayDialog extends DialogView {
         this.back.addEventListener("click", () => this.actor.emit("back"));
         return root;
     }
-
     /** @inheritDoc */
     render() {
         // nothing to do here
     }
-
     /** @inheritDoc */
     activate(active) {
         super.activate(active);
@@ -288,10 +264,9 @@ class GameOverDialog extends DialogView {
         this.listen("stats", PlayerStats);
         return root;
     }
-
     /** @inheritDoc */
     render() {
-        const {stats} = this;
+        const { stats } = this;
         this.level.innerText = `#${stats.level + 1}`;
         this.score.innerText = `${stats.score}`;
     }
@@ -304,16 +279,14 @@ class CinematicScene {
     constructor() {
         /** Scene actors. */
         this.actors = [];
-        this.look = {x: 0, y: 0};
+        this.look = { x: 0, y: 0 };
     }
-
     /** @inheritDoc */
     enable() {
         if (this.initialized)
             this.initPlayer();
         this.activate(true);
     }
-
     /** @inheritDoc */
     start() {
         this.initialized = true;
@@ -323,26 +296,23 @@ class CinematicScene {
         this.initPlayer();
         this.initialize();
     }
-
     /** @inheritDoc */
     disable() {
         this.activate(false);
     }
-
     initPlayer() {
         const ghost = this.player.actor.require(Ghost);
         ghost.duration = Number.POSITIVE_INFINITY;
         ghost.blink = false;
         Component.enable(ghost);
-        const {player, terrain, look} = this;
+        const { player, terrain, look } = this;
         look.x = terrain.positionX(2.5);
         look.y = terrain.positionY(1.0);
         player.applyPosition(terrain.positionX(2.0), terrain.positionY(0));
     }
-
     /** Spawn scene actors. */
     initialize() {
-        const {terrain, look} = this;
+        const { terrain, look } = this;
         const size = 9;
         const min = Math.PI * .31;
         const max = Math.PI - min;
@@ -359,12 +329,10 @@ class CinematicScene {
             this.enemy(px, py, look, 0);
         }
     }
-
     activate(active) {
         for (const actor of this.actors)
             actor.setActive(active);
     }
-
     enemy(x, y, look, r) {
         const actor = this.actor.stage.createActor("cinematic-enemy");
         // bring to front
@@ -375,11 +343,11 @@ class CinematicScene {
         view.setImage("enemy-bug.png");
         // tiny bugs are cool
         const transform = actor.require(Transform);
-        const {rotation, scale} = transform;
+        const { rotation, scale } = transform;
         scale.x = 0.75;
         scale.y = 0.75;
         const motor = actor.require(CinematicMotor);
-        const {position, direction} = motor;
+        const { position, direction } = motor;
         position.x = x;
         position.y = y;
         // use constants since image is not yet loaded
@@ -405,7 +373,6 @@ class CinematicScene {
         return actor;
     }
 }
-
 /**
  * Actor animation motor for {@link CinematicScene}.
  */
@@ -415,33 +382,30 @@ class CinematicMotor {
         /** Frequency of single back and forth movement. */
         this.freq = 0.75;
         /** Starting position of the actor. */
-        this.position = {x: 0, y: 0};
+        this.position = { x: 0, y: 0 };
         /** Actor movement direction and amplitude. */
-        this.direction = {x: 0, y: 0};
+        this.direction = { x: 0, y: 0 };
     }
-
     /** @inheritDoc */
     awake() {
         this.offset = Math.random() * Math.PI;
         this.transform = this.actor.require(Transform);
     }
-
     /** @inheritDoc */
     lateUpdate(deltaTime) {
         deltaTime *= 1 + Math.random() * .5;
         this.time += deltaTime;
-        const {freq, position, direction, transform} = this;
+        const { freq, position, direction, transform } = this;
         const t = ((this.time + this.offset) * freq) % Math.PI;
         const f = 1 + Math.sin(Math.PI + t);
         transform.position.x = position.x + direction.x * f;
         transform.position.y = position.y + direction.y * f;
     }
-
     /** @inheritDoc */
     drawGizmo2D(ctx) {
         const sprite = this.actor.get(Sprite);
         if (sprite.image) {
-            const {direction} = this;
+            const { direction } = this;
             const px = sprite.x(0.5);
             const py = sprite.y(0.5);
             const dx = direction.x;
