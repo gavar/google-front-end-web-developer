@@ -6,6 +6,7 @@ import {watchify} from "./watchify";
 export * from "./watcher";
 export * from "./watchify";
 export * from "./display-name";
+export * from "./transform-stream";
 
 type Gulp = typeof gulp & {
     watcher: typeof watcher
