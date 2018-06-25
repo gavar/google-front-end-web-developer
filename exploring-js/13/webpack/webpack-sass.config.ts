@@ -27,7 +27,10 @@ export default function (env: WebpackEnv, argv: WebpackArgv): Configuration {
                     loader: "url-loader",
                     options: {
                         limit: urlLoader.limit || undefined,
-                        name: "../img/[name].[ext]",
+                        emitFile: urlLoader.emitFile || true,
+                        name: urlLoader.name || "[name].[ext]",
+                        outputPath: "./img",
+                        publicPath: "../img",
                     },
                 },
                 {
