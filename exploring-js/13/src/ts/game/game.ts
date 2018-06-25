@@ -80,7 +80,6 @@ export class Game {
         this.stage.addSystem(new DrawSystem(this.canvas));
 
         this.initGizmo();
-        this.stage.createActor("FPS").add(FPS);
         this.resources = this.stage.createActor("resources").add(Resources);
         this.resources.baseUrl = "img";
 
@@ -238,7 +237,10 @@ export class Game {
         this.initHowToPlayDialog();
         this.initCinematicScene();
         this.initMainMenuDialog();
-        if (DEBUG) this.initDebugView();
+        if (DEBUG) {
+            this.initDebugView();
+            this.initFPS();
+        }
     }
 
     initStatsView(): StatsView {
@@ -291,6 +293,10 @@ export class Game {
         if (gizmos.sprite) Sprite.prototype.gizmo = gizmos.sprite;
         if (gizmos.capsule) CapsuleCollider2D.prototype.gizmo = gizmos.capsule;
         if (gizmos.collision) CollisionSystem2D.prototype.gizmo = gizmos.collision;
+    }
+
+    initFPS(): FPS {
+        return this.stage.createActor("FPS").add(FPS);
     }
 
     isGizmoActive(): boolean {
