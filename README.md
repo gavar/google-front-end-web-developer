@@ -71,8 +71,9 @@ Exploring JS       | **Project: Classic Arcade Game Clone**                |**[l
 - [x] Exploring JS: Functions (2h)
 - [x] Exploring JS: Built-ins (2h)
 - [x] Exploring JS: Professional Developer-fu (1h 30m)
+#### week #13-18: 14.05 - 24.06
+- [x] Exploring JS: Project: Classic Arcade Game Clone
 #### Upcoming
-- [ ] Exploring JS: Project: Classic Arcade Game Clone
 - [ ] Exploring JS: Introducing Web Tooling and Automation (35m)
 - [ ] Exploring JS: Productive Editing (12m)
 - [ ] Exploring JS: Powerful Builds (13m)

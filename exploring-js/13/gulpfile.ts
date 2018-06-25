@@ -10,6 +10,7 @@ import replace from "gulp-replace";
 import ts from "gulp-typescript";
 import {InputOptions, OutputOptions} from "rollup";
 
+process.env["PAGE_URL"] = "https://gavar.github.io/google-front-end-web-developer/exploring-js/13/dist";
 process.env["ANALYTICS_PROTOCOL"] = "https";
 process.env["ANALYTICS_HOST"] = "gavar-analytics.herokuapp.com/ga";
 
@@ -26,6 +27,7 @@ function html() {
     ];
     return gulp.watchify(glob)
         .pipe(replace(".ts", ".js"))
+        .pipe(replace("process.env.PAGE_URL", process.env.PAGE_URL)) // const as static field
         .pipe(gulp.dest("./dist"));
 }
 
