@@ -73,16 +73,17 @@ Exploring JS       | **Project: Classic Arcade Game Clone**                |**[l
 - [x] Exploring JS: Professional Developer-fu (1h 30m)
 #### week #13-18: 14.05 - 24.06
 - [x] Exploring JS: Project: Classic Arcade Game Clone
+#### week #19: 25.06 - 01.07
+- [x] Exploring JS: Introducing Web Tooling and Automation (35m)
+- [x] Exploring JS: Productive Editing (12m)
+- [x] Exploring JS: Powerful Builds (13m)
+- [x] Exploring JS: Expressive Live Editing (15m)
+- [x] Exploring JS: How to Prevent Disasters (30m)
+- [x] Exploring JS: Awesome Optimizations (1h)
+- [x] Exploring JS: Web Tooling and Automation Conclusion (15m)
+- [x] Exploring JS: Rethinking Testing (2h)
+- [x] Exploring JS: Writing Test Suites (4h)
 #### Upcoming
-- [ ] Exploring JS: Introducing Web Tooling and Automation (35m)
-- [ ] Exploring JS: Productive Editing (12m)
-- [ ] Exploring JS: Powerful Builds (13m)
-- [ ] Exploring JS: Expressive Live Editing (15m)
-- [ ] Exploring JS: How to Prevent Disasters (30m)
-- [ ] Exploring JS: Awesome Optimizations (1h)
-- [ ] Exploring JS: Web Tooling and Automation Conclusion (15m)
-- [ ] Exploring JS: Rethinking Testing (2h)
-- [ ] Exploring JS: Writing Test Suites (4h)
 - [ ] Exploring JS: Project: Feed Reader Testing
 
 ### Udacity Frontend Nanodegree Style Guide
