@@ -9,6 +9,28 @@
  * to ensure they don't run until the DOM is ready.
  */
 $(function () {
+
+    /**
+     * Promise which resolves after given timeout.
+     * @param timeout - timeout in milliseconds
+     */
+    function delay(timeout) {
+        return new Promise(resolve => window.setTimeout(resolve, timeout));
+    }
+
+    /**
+     * Check whether given HTML element is within screen rect.
+     * @param element - HTML element to test.
+     */
+    function isRectWithinWindow(element) {
+        const rect = element.getBoundingClientRect();
+        return rect.x >= 0
+            && rect.x < window.innerWidth
+            && rect.y >= 0
+            && rect.y < window.innerHeight
+            ;
+    }
+
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
@@ -49,19 +71,47 @@ $(function () {
         });
     });
 
-    /* TODO: Write a new test suite named "The menu" */
+    /* Test suite named "The menu" */
+    describe("The menu", function () {
+        /* Test that ensures the menu element is
+         * hidden by default. You'll have to analyze the HTML and
+         * the CSS to determine how we're performing the
+         * hiding/showing of the menu element.
+         */
+        it("hidden by default", function () {
+            const body = document.body;
+            const menu = document.querySelector(".slide-menu");
+            expect(body.classList.contains("menu-hidden")).toBeTruthy("body should have 'menu-hidden' class");
+            expect(isRectWithinWindow(menu)).toBeFalsy("should be off-screen");
+        });
 
-    /* TODO: Write a test that ensures the menu element is
-     * hidden by default. You'll have to analyze the HTML and
-     * the CSS to determine how we're performing the
-     * hiding/showing of the menu element.
-     */
+        /* Test that ensures the menu changes
+         * visibility when the menu icon is clicked. This test
+         * should have two expectations: does the menu display when
+         * clicked and does it hide when clicked again.
+         */
+        it("change state on click", async function (done) {
+            const body = document.body;
+            const menu = document.querySelector(".slide-menu");
+            const icon = document.querySelector(".menu-icon-link");
+            const token = "menu-hidden";
 
-    /* TODO: Write a test that ensures the menu changes
-     * visibility when the menu icon is clicked. This test
-     * should have two expectations: does the menu display when
-     * clicked and does it hide when clicked again.
-     */
+            // check become visible after first click
+            icon.click();
+            await delay(1000);
+            expect(body.classList.contains(token)).toBeFalsy(`body should not have '${token}' class`);
+            expect(isRectWithinWindow(menu)).toBeTruthy("should be on screen");
+
+            // check become invisible after second click
+            icon.click();
+            await delay(1000);
+            expect(body.classList.contains(token)).toBeTruthy(`body should have '${token}' class`);
+            expect(isRectWithinWindow(menu)).toBeFalsy("should be off-screen");
+
+            // complete
+            done();
+        });
+    });
 
     /* TODO: Write a new test suite named "Initial Entries" */
 
