@@ -146,6 +146,11 @@ typings/
 ### Yarn ###
 yarn.lock
 
+### InteliJ ###
+!.idea/dictionaries
+!.idea/libraries
+!.idea/jsLinters
+
 ### custom ###
 \#*
 out/
