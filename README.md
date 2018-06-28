@@ -86,6 +86,20 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 - [x] Exploring JS: Writing Test Suites (4h)
 - [x] Exploring JS: Project: Feed Reader Testing
 #### Upcoming
+- [ ] Frontend Apps: Changing Expectations (5h)
+- [ ] Frontend Apps: Refactoring with Separation of Concerns (7h)
+- [ ] Frontend Apps: Creating Promises (1h30m)
+- [ ] Frontend Apps: Chaining Promises (1h30m)
+- [ ] Frontend Apps: Ajax with XHR (1h30m)
+- [ ] Frontend Apps: Ajax with jQuery (1h30m)
+- [ ] Frontend Apps: Ajax with Fetch (1h30m)
+- [ ] Frontend Apps: Features of Single Page Apps (1h)
+- [ ] Frontend Apps: Examine a Framework's Source (2h)
+- [ ] Frontend Apps: Angular (2h)
+- [ ] Frontend Apps: Ember (2h)
+- [ ] Frontend Apps: The Benefits of Offline First (1h)
+- [ ] Frontend Apps: Introducing the Service Worker (2h)
+- [ ] Frontend Apps: Project: Restaurant Reviews App—Stage 1
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
