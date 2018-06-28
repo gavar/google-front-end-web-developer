@@ -134,4 +134,4 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 [U3-L13#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/13/dist
 
 [U3-L23#05-code]: exploring-js/23
-[U3-L23#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/13
+[U3-L23#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/23/index.html
