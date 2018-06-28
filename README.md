@@ -17,6 +17,7 @@ Responsive Images  | Full Responsiveness: Project Part 3                   |  [l
 Web Programming JS | Exercise: Pixel Art Maker                             |  [link][U2-L22#02-code]  |  [view][U2-L22#02-view]  |
 Web Programming JS | **Project: Memory Game**                              |**[link][U2-L24#03-code]**|**[view][U2-L24#03-view]**|
 Exploring JS       | **Project: Classic Arcade Game Clone**                |**[link][U3-L13#05-code]**|**[view][U3-L13#05-view]**|
+Exploring JS       | Project: Feed Reader Testing                          |  [link][U3-L23#05-code]  |  [view][U3-L23#05-view]  |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -130,3 +131,6 @@ Exploring JS       | **Project: Classic Arcade Game Clone**                |**[l
 
 [U3-L13#05-code]: exploring-js/13
 [U3-L13#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/13/dist
+
+[U3-L23#05-code]: exploring-js/23
+[U3-L23#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/13
