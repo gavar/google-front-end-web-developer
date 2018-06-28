@@ -1,0 +1,11 @@
+{
+  "name": "feed-reader",
+  "version": "1.0.0",
+  "description": "Feed Reader Testing",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/jasmine": "2.2.29"
+  }
+}

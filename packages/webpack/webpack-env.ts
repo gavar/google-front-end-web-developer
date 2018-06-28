@@ -14,6 +14,8 @@ export interface WebpackEnv {
  */
 export interface WebpackUrlLoaderEnv {
     limit?: number;
+    emitFile?: boolean;
+    name?: string;
 }
 
 export function safeWebpackEnv(env?: DeepPartial<WebpackEnv>): WebpackEnv {

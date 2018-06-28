@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="jasmine" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$APPLICATION_CONFIG_DIR$/javascript/extLibs/http_cdnjs.cloudflare.com_ajax_libs_jasmine_2.1.2_jasmine.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/@types/jasmine" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$APPLICATION_CONFIG_DIR$/javascript/extLibs/http_cdnjs.cloudflare.com_ajax_libs_jasmine_2.1.2_jasmine.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/@types/jasmine" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
