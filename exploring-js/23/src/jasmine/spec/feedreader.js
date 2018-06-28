@@ -113,14 +113,29 @@ $(function () {
         });
     });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* Test suite named "Initial Entries" */
+    describe("Initial Entries", function () {
 
-    /* TODO: Write a test that ensures when the loadFeed
-     * function is called and completes its work, there is at least
-     * a single .entry element within the .feed container.
-     * Remember, loadFeed() is asynchronous so this test will require
-     * the use of Jasmine's beforeEach and asynchronous done() function.
-     */
+        let index = 0;
+        beforeEach(function (done) {
+            $(".feed").empty();
+            loadFeed(index, done);
+        });
+
+        /* Test that ensures when the loadFeed
+         * function is called and completes its work, there is at least
+         * a single .entry element within the .feed container.
+         * Remember, loadFeed() is asynchronous so this test will require
+         * the use of Jasmine's beforeEach and asynchronous done() function.
+         */
+        for (const feed of allFeeds)
+            it(`has new entries after loading feed '${feed.name}'`, function (done) {
+                const size = $(".feed .entry").length;
+                expect(size).toBeGreaterThan(0, "should fetch at least one new entry from the feed");
+                index++;
+                done();
+            });
+    });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
 
