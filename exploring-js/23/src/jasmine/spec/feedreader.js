@@ -31,6 +31,22 @@ $(function () {
             ;
     }
 
+    /**
+     * Converts function having callback as last argument to a function that returns promise.
+     * @param func - function to convert.
+     */
+    function promisify(func) {
+        return function (...args) {
+            return new Promise(function (resolve, reject) {
+                func.call(null, ...args, function (err, value) {
+                    if (err) reject(err);
+                    else if (value) resolve(value);
+                    else resolve();
+                });
+            });
+        };
+    }
+
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
@@ -137,10 +153,23 @@ $(function () {
             });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
+    /* Test suite named "New Feed Selection" */
+    describe("New Feed Selection", function () {
 
-    /* TODO: Write a test that ensures when a new feed is loaded
-     * by the loadFeed function that the content actually changes.
-     * Remember, loadFeed() is asynchronous.
-     */
+        beforeEach(function (done) {
+            $(".feed").empty();
+            loadFeed(0, done);
+        });
+
+        /* Test that ensures when a new feed is loaded
+         * by the loadFeed function that the content actually changes.
+         * Remember, loadFeed() is asynchronous.
+         */
+        it("content changes after loading new feed", async function (done) {
+            const prev = $(".feed").html();
+            await promisify(loadFeed)(1);
+            expect($(".feed").html()).not.toBe(prev);
+            done();
+        });
+    });
 }());
