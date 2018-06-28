@@ -6,7 +6,7 @@ Project contains aimed to provide test suites against a web-based application th
 1. Acquire project:
     * download the repository from [GitHub](https://github.com/gavar/google-front-end-web-developer/tree/develop/exploring-js/23)
     * open [index.html](index.html) in a browser of your choice
-    * alternatively you can use [online version](https://gavar.github.io/google-front-end-web-developer/exploring-js/13)
+    * alternatively you can use [online version](https://gavar.github.io/google-front-end-web-developer/exploring-js/23)
 2. Observe the test results at the bottom of the page, containing information the summary of the tests ran.
 
 ## Prerequisites
@@ -19,4 +19,4 @@ Project has strictly education purposes and will no accept any pull requests.
 * **[Max Stankevich](https://github.com/gavar)**
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details
