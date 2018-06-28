@@ -99,7 +99,7 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 - [ ] Frontend Apps: Ember (2h)
 - [ ] Frontend Apps: The Benefits of Offline First (1h)
 - [ ] Frontend Apps: Introducing the Service Worker (2h)
-- [ ] Frontend Apps: Project: Restaurant Reviews App—Stage 1
+- [ ] Frontend Apps: Project: Restaurant Reviews App - Stage 1
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
