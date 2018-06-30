@@ -44,17 +44,21 @@
 
       Make sure you return the Promise!
       */
-      document.addEventListener("readystatechange", function () {
-        /*
-        Your code here too!
-        */
+      return new Promise(function (resolve) {
+        function checkReady() {
+          if (document.readyState === "loading") return;
+          document.removeEventListener("readystatechange", checkReady);
+          resolve();
+        }
+        document.addEventListener("readystatechange", checkReady);
+        checkReady();
       });
     }
     /*
     Don't forget to test your code!
     Call wrapperResolved when the DOM is ready.
     */
-    // ready()
+    ready().then(wrapperResolved);
 
     // Just here for your testing
     function wrapperResolved() {
