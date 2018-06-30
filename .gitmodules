@@ -1,0 +1,3 @@
+[submodule "frontend-apps/exoplanet-explorer"]
+	path = frontend-apps/exoplanet-explorer
+	url = https://github.com/udacity/exoplanet-explorer
