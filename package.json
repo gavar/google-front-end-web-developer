@@ -36,6 +36,8 @@
       "app/*",
       "packages/*",
       "exploring-js/*",
+      "frontend-apps/*",
+      "frontend-apps/10/*",
       "web-programming/*",
       "web-foundations/*",
       "responsive-images/*"
