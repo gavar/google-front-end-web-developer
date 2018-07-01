@@ -48,5 +48,10 @@ angular.module("directivesQuizApp")
         },
       },
     };
+    this.return = function (brick) {
+      brick.quantity++;
+    };
+    this.buy = function (brick) {
+      brick.quantity--;
     };
   });
