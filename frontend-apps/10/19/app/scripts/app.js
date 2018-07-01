@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc overview
- * @name q1UpAndRunningApp
+ * @name controllerQuizApp
  * @description
- * # q1UpAndRunningApp
+ * # controllerQuizApp
  *
  * Main module of the application.
  */
 angular
-    .module("q1UpAndRunningApp", []);
+  .module("controllerQuizApp", []);
