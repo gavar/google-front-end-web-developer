@@ -1,0 +1,53 @@
+<h2>Instructions</h2>
+
+<ul>
+  <li>Write all your Handlebars in the <code>store.hbs</code> template file</li>
+  <li>The following data structure is available stored in the <code>model</code> variable:
+    <pre class="code-demo"><code>[
+  {
+    color: 'Red',
+    bricks: [
+      { size: '2 x 2', quantity: 15 },
+      { size: '1 x 3', quantity: 17 }
+    ],
+    onSale: false
+  },
+  {
+    color: 'Blue',
+    bricks: [
+      { size: '1 x 8', quantity: 21 },
+      { size: '2 x 8', quantity: 52 },
+      { size: '4 x 3', quantity: 33 },
+      { size: '3 x 6', quantity: 16 }
+    ],
+    onSale: false
+  },
+  {
+    color: 'Green',
+    bricks: [
+      { size: '1 x 1', quantity: 13 },
+      { size: '2 x 4', quantity: 36 },
+      { size: '2 x 6', quantity: 28 }
+    ],
+    onSale: true
+  }
+]</code></pre>
+  </li>
+  <li>display a section for each color</li>
+  <li>give each section a heading with the classes <code>color-group</code> and <code>[color]-bricks</code> where
+    "[color]" is "red" for the red section, "blue" for the blue section, and "green" for the green section
+  </li>
+  <li>each color section should display a section with each brick's stats
+    <ul>
+      <li>display the size in a container with class <code>brick-size</code></li>
+      <li>display the quantity in a container with class <code>brick-quantity</code></li>
+    </ul>
+  </li>
+  <li>if the brick color is on sale, apply the class <code>on-sale</code> to it</li>
+</ul>
+
+<p class="notice">
+  The Feedback extension will give you a code when you've fulfilled the tests on the
+  <a href="/tests?nojshint&filter=Quiz" target="_blank">tests page</a>
+  .
+</p>
