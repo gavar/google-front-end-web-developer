@@ -1,5 +1,5 @@
 {
-  "name": "wittr",
+  "name": "@udacity/wittr",
   "version": "1.0.0",
   "description": "A fake social network app",
   "main": "gulpfile.js",
