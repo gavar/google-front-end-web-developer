@@ -1,0 +1,41 @@
+.color-group h2 {
+  color: white;
+  padding: 15px;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.38);
+  text-transform: capitalize;
+}
+
+.red-bricks h2 {
+  background-color: #d32f2f;
+}
+
+.blue-bricks h2 {
+  background-color: #1976d2;
+}
+
+.green-bricks h2 {
+  background-color: #388e3c;
+}
+
+.on-sale {
+  overflow: hidden;
+}
+
+.on-sale::before {
+  background: white;
+  box-shadow: 1px 1px 5px rgba(146, 142, 142, 0.5);
+  content: 'sale!';
+  text-align: center;
+  transform: rotate(45deg);
+  position: absolute;
+  height: 1.5em;
+  width: 10em;
+  top: 1.1em;
+  right: -3.5em;
+}
+
+.notice {
+  background: rgba(255, 255, 209, 0.52);
+  display: inline-block;
+  padding: 1em;
+}

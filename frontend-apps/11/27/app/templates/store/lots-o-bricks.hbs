@@ -1,0 +1,14 @@
+{{#each-in model as |color bricks|}}
+  <section class="row color-group {{color}}-bricks">
+    <h2>{{color}}</h2>
+    {{#each-in bricks as |size stats|}}
+      <div class="col-md-4 well">
+        <p>Size: {{size}}</p>
+        <p>Price: {{stats.price}}</p>
+        <p>Quantity: {{stats.quantity}}</p>
+      </div>
+    {{/each-in}}
+  </section>
+{{/each-in}}
+
+{{outlet}}

@@ -1,0 +1,36 @@
+<h2>Instructions</h2>
+
+<ul>
+  <li>add a <code>cart</code> feature
+    <ul>
+      <li>create a <code>cart</code> route</li>
+      <li>add a "Cart" link to the site's navigation with an <code>ID</code> "nav-link-store"</li>
+    </ul>
+  </li>
+  <li>add a <code>shopping-cart</code> feature
+    <ul>
+      <li>create a <code>shopping-cart</code> service</li>
+      <li>add a <code>cart</code> property that's an array to the service</li>
+      <li>add a <code>addToCart</code> property that's a function to the service
+        <ul>
+          <li>it should accept<code>color</code>, <code>size</code>, and <code>price</code></li>
+          <li>it should push an object with these values into the <code>cart</code> array</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>the cart template should display all items in the <code>shopping-cart</code>'s <code>cart</code> array</li>
+  <li>update the Bricks A Bunch route
+    <ul>
+      <li>add a button to each Bricks A Bunch brick item</li>
+      <li>clicking the button should add that brick to the cart page</li>
+      <li>clicking the button should also decrease the warehouse's quantity for that item</li>
+    </ul>
+  </li>
+</ul>
+
+<p class="notice">
+  The Feedback extension will give you a code when you've fulfilled the tests on the
+  <a href="/tests?nojshint&filter=Quiz" target="_blank">tests page</a>
+  .
+</p>

@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Routes & Templates Quiz",
+    "code": "actionActionWeWantAction",
+    "tests": [
+      {
+        "description": "all tests have passed",
+        "definition": {
+          "waitForEvent": "tests-pass",
+          "exists": true
+        }
+      }
+    ]
+  }
+]
