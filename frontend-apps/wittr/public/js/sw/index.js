@@ -1,6 +1,6 @@
 self.addEventListener("install", function (event) {
     event.waitUntil(
-        caches.open("wittr-static-v1").then(function (cache) {
+        caches.open("wittr-static-v2").then(function (cache) {
             return cache.addAll([
                 "/",
                 "js/main.js",
@@ -13,12 +13,16 @@ self.addEventListener("install", function (event) {
     );
 });
 
+self.addEventListener("activate", function (event) {
+    event.waitUntil(
+        caches.delete("wittr-static-v1"),
+    );
+});
+
 self.addEventListener("fetch", function (event) {
-    // If there isn't, fetch from the network.
     event.respondWith(
         caches.match(event.request).then(function (response) {
-            if (response) return response;
-            return fetch(event.request);
+            return response || fetch(event.request);
         }),
     );
 });
