@@ -1,5 +1,5 @@
 {
-  "name": "handlebars",
+  "name": "@udacity/ember-handlebars",
   "version": "0.0.0",
   "description": "Small description for handlebars goes here",
   "private": true,

@@ -1,5 +1,5 @@
 {
-  "name": "routes-and-templates",
+  "name": "@udacity/ember-routes-and-templates",
   "version": "0.0.0",
   "description": "Small description for routes-and-templates goes here",
   "private": true,
