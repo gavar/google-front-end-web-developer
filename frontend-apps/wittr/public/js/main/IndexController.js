@@ -12,10 +12,47 @@ export default function IndexController(container) {
 
 IndexController.prototype._registerServiceWorker = function () {
     if (!navigator.serviceWorker) return;
-    navigator.serviceWorker.register("/sw.js").then(function (registration) {
-        console.log("service registration complete!");
-    }).catch(function (error) {
-        console.log("service registration error:", error);
+
+    const indexController = this;
+
+    navigator.serviceWorker.register("/sw.js").then(function (reg) {
+        // TODO: if there's no controller, this page wasn't loaded
+        // via a service worker, so they're looking at the latest version.
+        // In that case, exit early
+        if (!navigator.serviceWorker.controller)
+            return;
+
+        // TODO: if there's an updated worker already waiting, call
+        // indexController._updateReady()
+        if (reg.waiting)
+            return indexController._updateReady();
+
+        function trackInstalling(worker) {
+            worker.addEventListener("statechange", function () {
+                if (worker.state == "installed")
+                    return indexController._updateReady();
+            });
+        }
+
+        // TODO: if there's an updated worker installing, track its
+        // progress. If it becomes "installed", call
+        // indexController._updateReady()
+        if (reg.installing)
+            return trackInstalling(reg.installing);
+
+        // TODO: otherwise, listen for new installing workers arriving.
+        // If one arrives, track its progress.
+        // If it becomes "installed", call
+        // indexController._updateReady()
+        reg.addEventListener("updatefound", function () {
+            trackInstalling(reg.installing);
+        });
+    });
+};
+
+IndexController.prototype._updateReady = function () {
+    const toast = this._toastsView.show("New version available", {
+        buttons: ["whatever"],
     });
 };
 
