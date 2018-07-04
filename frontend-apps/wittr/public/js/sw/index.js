@@ -1,6 +1,8 @@
-var staticCacheName = "wittr-static-v2";
+var staticCacheName = "wittr-static-v3";
 
 self.addEventListener("install", function (event) {
+    // TODO: cache /skeleton rather than the root page
+
     event.waitUntil(
         caches.open(staticCacheName).then(function (cache) {
             return cache.addAll([
@@ -31,6 +33,9 @@ self.addEventListener("activate", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
+    // TODO: respond to requests for the root page with
+    // the page skeleton from the cache
+
     event.respondWith(
         caches.match(event.request).then(function (response) {
             return response || fetch(event.request);
@@ -38,9 +43,8 @@ self.addEventListener("fetch", function (event) {
     );
 });
 
-// TODO: listen for the "message" event, and call
-// skipWaiting if you get the appropriate message
 self.addEventListener("message", function (event) {
-    if (event.data === "skipWaiting")
+    if (event.data.action === "skipWaiting") {
         self.skipWaiting();
+    }
 });

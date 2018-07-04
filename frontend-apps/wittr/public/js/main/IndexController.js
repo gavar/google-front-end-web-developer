@@ -36,10 +36,13 @@ IndexController.prototype._registerServiceWorker = function () {
         });
     });
 
-    // TODO: listen for the controlling service worker changing
-    // and reload the page
+    // Ensure refresh is only called once.
+    // This works around a bug in "force update on reload".
+    var refreshing;
     navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (refreshing) return;
         window.location.reload();
+        refreshing = true;
     });
 };
 
@@ -59,8 +62,7 @@ IndexController.prototype._updateReady = function (worker) {
 
     toast.answer.then(function (answer) {
         if (answer != "refresh") return;
-        // TODO: tell the service worker to skipWaiting
-        worker.postMessage("skipWaiting");
+        worker.postMessage({action: "skipWaiting"});
     });
 };
 
