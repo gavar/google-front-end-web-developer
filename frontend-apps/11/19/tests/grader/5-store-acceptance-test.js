@@ -1,5 +1,5 @@
 import {test} from "qunit";
-import moduleForAcceptance from "dymanic-data-p1/tests/helpers/module-for-acceptance";
+import moduleForAcceptance from "ember-dymanic-data-p1/tests/helpers/module-for-acceptance";
 
 moduleForAcceptance("Quiz - Dynamic Data Setup");
 

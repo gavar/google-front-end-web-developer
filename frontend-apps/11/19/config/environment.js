@@ -2,11 +2,12 @@
 
 module.exports = function (environment) {
   var ENV = {
-    modulePrefix: "dymanic-data-p1",
+    modulePrefix: "ember-dymanic-data-p1",
     environment: environment,
     baseURL: "/",
     locationType: "auto",
     EmberENV: {
+      EXTEND_PROTOTYPES: true,
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
