@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "preinstall": "yarn use-yarn || npx use-yarn",
-    "clean": "lerna clean && del-cli **/yarn.lock **/package-lock.json && rimraf node_modules",
+    "clean": "lerna clean --yes && del-cli **/yarn.lock **/package-lock.json **/*.log && rimraf node_modules",
     "build": "lerna exec yarn build",
     "lint": "tslint --project tsconfig.json",
     "lint-fix": "tslint --project tsconfig.json --fix",
