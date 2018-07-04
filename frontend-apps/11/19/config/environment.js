@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   var ENV = {
-    modulePrefix: "ember-dymanic-data-p1",
+    modulePrefix: "dymanic-data-p1",
     environment: environment,
     baseURL: "/",
     locationType: "auto",
