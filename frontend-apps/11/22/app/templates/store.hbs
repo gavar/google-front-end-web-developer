@@ -1,0 +1,13 @@
+{{#each model as |item|}}
+  <section class="row color-group {{item.color}}-bricks">
+    <h2>{{item.color}}</h2>
+    {{#each item.bricks as |brick|}}
+      <div class="col-sm-4 well {{if item.onSale 'on-sale' ''}}">
+        <p class="brick-size">Size: {{brick.size}}</p>
+        <p class="brick-quantity">Quantity: {{brick.quantity}}</p>
+      </div>
+    {{/each}}
+  </section>
+{{/each}}
+
+{{outlet}}

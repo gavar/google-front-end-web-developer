@@ -1,0 +1,30 @@
+<h2>Instructions</h2>
+
+<ul>
+  <li>convert the inner loop of <code>store.hbs</code> to a component</li>
+  <li>name the component <code>lego-brick</code></li>
+  <li>each color section should have the following levels of nesting:
+    <pre>┌────────────┐
+│ &lt;section&gt;  │     // section for each color
+└───┬────────┘
+    │  ┌────────────┐
+    ├─▶│    &lt;h2&gt;    │     // color heading
+    │  └────────────┘
+    │  ┌────────────┐
+    └─▶│   &lt;div&gt;    │     // component (one for each brick)
+       └───┬────────┘
+           │  ┌────────────┐
+           ├─▶│    &lt;p&gt;     │    // brick size
+           │  └────────────┘
+           │  ┌────────────┐
+           └─▶│    &lt;p&gt;     │    // brick quantity
+              └────────────┘</pre>
+  </li>
+  <li>make sure each component div has the <code>on-sale</code> class, if needed</li>
+</ul>
+
+<p class="notice">
+  The Feedback extension will give you a code when you've fulfilled the tests on the
+  <a href="/tests?nojshint&filter=Quiz" target="_blank">tests page</a>
+  .
+</p>
