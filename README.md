@@ -95,10 +95,11 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 - [x] Frontend Apps: Features of Single Page Apps (1h)
 - [x] Frontend Apps: Examine a Framework's Source (2h)
 - [x] Frontend Apps: Angular (2h)
+#### week #20: 02.07 - 08.07
+- [x] Frontend Apps: Ember (2h)
+- [x] Frontend Apps: The Benefits of Offline First (1h)
+- [x] Frontend Apps: Introducing the Service Worker (2h)
 #### Upcoming
-- [ ] Frontend Apps: Ember (2h)
-- [ ] Frontend Apps: The Benefits of Offline First (1h)
-- [ ] Frontend Apps: Introducing the Service Worker (2h)
 - [ ] Frontend Apps: Project: Restaurant Reviews App - Stage 1
 
 ### Udacity Frontend Nanodegree Style Guide
