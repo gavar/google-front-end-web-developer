@@ -1,36 +1,14 @@
 <h2>All Cookies</h2>
 
 <div class="row">
-  <div class="col-sm-4 well">
-    <h3 class="cookie-name">Chocolate Chip</h3>
-    <p class="cookie-count">Count: 248</p>
-    <p class="cookie-price">Price: $0.39</p>
-    <p class="cookie-per-dozen">Per Dozen: $4.50</p>
-  </div>
-  <div class="col-sm-4 well">
-    <h3 class="cookie-name">Sugar</h3>
-    <p class="cookie-count">Count: 182</p>
-    <p class="cookie-price">Price: $0.30</p>
-    <p class="cookie-per-dozen">Per Dozen: $3.35</p>
-  </div>
-  <div class="col-sm-4 well">
-    <h3 class="cookie-name">Oatmeal</h3>
-    <p class="cookie-count">Count: 137</p>
-    <p class="cookie-price">Price: $0.42</p>
-    <p class="cookie-per-dozen">Per Dozen: $4.80</p>
-  </div>
-  <div class="col-sm-4 well">
-    <h3 class="cookie-name">Peanut Butter</h3>
-    <p class="cookie-count">Count: 186</p>
-    <p class="cookie-price">Price: $0.47</p>
-    <p class="cookie-per-dozen">Per Dozen: $5.25</p>
-  </div>
-  <div class="col-sm-4 well">
-    <h3 class="cookie-name">Shortbread</h3>
-    <p class="cookie-count">Count: 93</p>
-    <p class="cookie-price">Price: $0.35</p>
-    <p class="cookie-per-dozen">Per Dozen: $4.00</p>
-  </div>
+  {{#each model as |cookie|}}
+    <div class="col-sm-4 well">
+      <h3 class="cookie-name">{{cookie.name}}</h3>
+      <p class="cookie-count">Count: {{cookie.count}}</p>
+      <p class="cookie-price">Price: ${{cookie.price}}</p>
+      <p class="cookie-per-dozen">Per Dozen: ${{cookie.perDozen}}</p>
+    </div>
+  {{/each}}
 </div>
 
 {{outlet}}
