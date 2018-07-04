@@ -12,6 +12,7 @@ Router.map(function () {
     this.route("bricks-a-bunch");
     this.route("lots-o-bricks");
   });
+  this.route('cart');
 });
 
 export default Router;

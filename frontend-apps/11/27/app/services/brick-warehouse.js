@@ -45,4 +45,9 @@ export default Ember.Service.extend({
   getRedBricks() {
     return this.get("bricks").red;
   },
+
+  hold(color, size) {
+    const quantity = this.get("bricks")[color][size].quantity;
+    this.set(`bricks.${color}.${size}.quantity`, quantity - 1);
+  },
 });
