@@ -1,0 +1,8 @@
+{
+  "name": "@project/restaurant-reviews-v1",
+  "version": "1.0.0",
+  "description": "Three Stage Course Material Project - Restaurant Reviews",
+  "author": "Max Stankevich <max.stankevich.me@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
