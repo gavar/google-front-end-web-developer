@@ -31,13 +31,16 @@
     "use-yarn": "^2.2.0"
   },
   "workspaces": {
-    "nohoist": ["**/$"],
+    "nohoist": [
+      "**/$"
+    ],
     "packages": [
       "app/*",
       "packages/*",
       "exploring-js/*",
       "frontend-apps/*",
       "frontend-apps/10/*",
+      "frontend-apps/11/*",
       "web-programming/*",
       "web-foundations/*",
       "responsive-images/*"
