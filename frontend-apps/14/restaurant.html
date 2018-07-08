@@ -20,7 +20,7 @@
       </h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb">
+    <ul id="breadcrumb" aria-label="Breadcrumb">
       <li>
         <a href="/">Home</a>
       </li>
@@ -34,7 +34,8 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" role="application" aria-hidden="true" aria-describedby="aria-describe-map"></div>
+      <div hidden id="aria-describe-map">Google Maps showing restaurants location.</div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->

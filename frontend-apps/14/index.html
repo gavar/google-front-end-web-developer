@@ -19,18 +19,19 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" role="application" aria-hidden="true" aria-describedby="aria-describe-map"></div>
+      <div hidden id="aria-describe-map">Google Maps showing restaurants location.</div>
     </section>
     <section>
       <div class="filter-options">
         <h2>Filter Results</h2>
         <select id="neighborhoods-select"
-                aria-label="Neighborhoods"
+                aria-label="Select neighborhood"
                 name="neighborhoods" onchange="updateRestaurants()">
           <option value="all">All Neighborhoods</option>
         </select>
         <select id="cuisines-select"
-                aria-label="Cuisines"
+                aria-label="Select cuisine type"
                 name="cuisines" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
         </select>
