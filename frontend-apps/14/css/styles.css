@@ -228,6 +228,10 @@ nav h1 a {
   z-index: 1000;
 }
 
+#map {
+  max-height: calc(100vh - 80px - 30px);
+}
+
 .inside #map-container {
   background: blue none repeat scroll 0 0;
   height: calc(100% - 80px);
