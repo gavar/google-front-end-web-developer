@@ -294,7 +294,7 @@ nav h1 a {
 }
 
 #reviews-container {
-  padding: 30px 40px 80px;
+  padding: 30px 40px 0;
 }
 
 #reviews-container h2 {
