@@ -356,6 +356,19 @@ nav h1 a {
   }
 }
 
+/* TABLET */
+@media screen and (max-width: 1023px) {
+  #restaurant-container,
+  #reviews-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #reviews-list li {
+    margin-bottom: 10px;
+  }
+}
+
 /* XLARGE screens */
 @media screen and (min-width: 1380px) {
   .inside #map-container {
