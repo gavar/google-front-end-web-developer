@@ -230,7 +230,7 @@ nav h1 a {
 
 .inside #map-container {
   background: blue none repeat scroll 0 0;
-  height: 87%;
+  height: calc(100% - 80px);
   position: fixed;
   right: 0;
   top: 80px;
@@ -244,9 +244,7 @@ nav h1 a {
 }
 
 .inside #footer {
-  bottom: 0;
-  position: absolute;
-  width: 50%;
+  max-width: calc(600px + 40px);
 }
 
 #restaurant-name {
@@ -258,10 +256,6 @@ nav h1 a {
   margin: 15px 0 30px;
   text-transform: uppercase;
   line-height: 1.1;
-}
-
-#restaurant-img {
-  width: 90%;
 }
 
 #restaurant-address {
@@ -279,14 +273,24 @@ nav h1 a {
   padding: 2px 0;
   text-align: center;
   text-transform: uppercase;
-  width: 90%;
+}
+
+#restaurant-cuisine, #restaurant-img {
+  display: block;
+  width: 100%;
+}
+
+#restaurant-container,
+#reviews-container,
+.inside #footer {
+  margin-right: 50%;
 }
 
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   padding: 140px 40px 30px;
-  width: 50%;
+  max-width: 600px;
 }
 
 #reviews-container {
@@ -315,7 +319,6 @@ nav h1 a {
   overflow: hidden;
   padding: 0 20px 20px;
   position: relative;
-  width: 85%;
 }
 
 #reviews-list li p {
@@ -344,5 +347,11 @@ nav h1 a {
   .filter-options select {
     flex: 1;
     max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 1380px) {
+  .inside #map-container {
+    width: calc(100% - 600px - 40px * 2);
   }
 }
