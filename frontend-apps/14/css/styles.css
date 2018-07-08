@@ -1,6 +1,10 @@
 @charset "utf-8";
 /* CSS Document */
 
+* {
+  box-sizing: border-box;
+}
+
 body, td, th, p {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 10pt;
@@ -228,12 +232,7 @@ nav h1 a {
   z-index: 1000;
 }
 
-#map {
-  max-height: calc(100vh - 80px - 30px);
-}
-
 .inside #map-container {
-  background: blue none repeat scroll 0 0;
   height: calc(100% - 80px);
   position: fixed;
   right: 0;
@@ -247,8 +246,8 @@ nav h1 a {
   width: 100%;
 }
 
-.inside #footer {
-  max-width: calc(600px + 40px);
+#restaurant-img {
+  background-color: #333;
 }
 
 #restaurant-name {
@@ -282,19 +281,15 @@ nav h1 a {
 #restaurant-cuisine, #restaurant-img {
   display: block;
   width: 100%;
+  max-width: 600px;
 }
 
 #breadcrumb,
 #restaurant-container,
 #reviews-container,
 .inside #footer {
-  margin-right: 50%;
-}
-
-#breadcrumb,
-#restaurant-container,
-#reviews-container {
-  max-width: 600px;
+  width: 50%;
+  max-width: 640px;
 }
 
 #restaurant-container,
@@ -340,7 +335,7 @@ nav h1 a {
   color: #666;
 }
 
-/* RESPONSIVE */
+/* RESTAURANTS LIST */
 @media screen and (max-width: 380px) {
   #restaurants-list {
     margin-left: 0;
@@ -348,7 +343,8 @@ nav h1 a {
   }
 }
 
-@media screen and (max-width: 614px) {
+/* FILTER BUTTONS */
+@media screen and (max-width: 600px) {
   /* always break map filter on small screens */
   .filter-options h2 {
     width: 100%;
@@ -361,8 +357,76 @@ nav h1 a {
   }
 }
 
-/* TABLET */
+/* MAP > 50% */
+@media screen and (min-width: 1380px) {
+  .inside #map-container {
+    width: calc(100% - 640px);
+  }
+}
+
+/* TABLET+ */
 @media screen and (max-width: 1023px) {
+  #restaurant-container,
+  #reviews-container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  #reviews-list li {
+    margin-bottom: 30px;
+  }
+}
+
+/* TABLET- */
+@media screen and (max-width: 767px) {
+  .inside #maincontent,
+  .inside #footer {
+    position: relative;
+    top: 130px;
+    width: 100%;
+  }
+
+  #breadcrumb,
+  #restaurant-container,
+  #reviews-container {
+    border: none;
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+
+  #restaurant-container {
+    padding: 0 10px;
+  }
+
+  .inside #map-container {
+    position: static;
+    height: 200px;
+    width: 100%;
+  }
+
+  #restaurant-cuisine, #restaurant-img {
+    margin: auto;
+  }
+
+  .inside #footer {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #map {
+    max-height: calc(100vh - 80px - 30px);
+  }
+}
+
+/* FULL SCREEN WIDTH RESTAURANT IMAGE */
+@media screen and (max-width: 610px) {
+  #restaurant-cuisine, #restaurant-img {
+    margin-left: -10px;
+    width: calc(100% + 40px);
+  }
+
   #restaurant-container,
   #reviews-container {
     padding-left: 10px;
@@ -371,12 +435,5 @@ nav h1 a {
 
   #reviews-list li {
     margin-bottom: 10px;
-  }
-}
-
-/* XLARGE screens */
-@media screen and (min-width: 1380px) {
-  .inside #map-container {
-    width: calc(100% - 600px - 40px * 2);
   }
 }
