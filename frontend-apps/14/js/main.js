@@ -184,7 +184,7 @@ registerServiceWorker = async function () {
         return;
 
     try {
-        const reg = await serviceWorker.register("sw.js", {scope: "/"});
+        const reg = await serviceWorker.register("sw.js");
         console.log("service worker registered successfully");
         if (serviceWorker.controller) {
             if (reg.waiting) updateReady(reg.waiting);
