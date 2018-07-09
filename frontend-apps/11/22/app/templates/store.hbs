@@ -1,0 +1,10 @@
+{{#each model as |store|}}
+  <section class="row color-group {{store.color}}-bricks">
+    <h2>{{store.color}}</h2>
+    {{#each store.bricks as |brick|}}
+      {{lego-brick brick=brick sale=store.onSale}}
+    {{/each}}
+  </section>
+{{/each}}
+
+{{outlet}}

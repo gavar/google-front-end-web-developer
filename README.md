@@ -18,6 +18,7 @@ Web Programming JS | Exercise: Pixel Art Maker                             |  [l
 Web Programming JS | **Project: Memory Game**                              |**[link][U2-L24#03-code]**|**[view][U2-L24#03-view]**|
 Exploring JS       | **Project: Classic Arcade Game Clone**                |**[link][U3-L13#05-code]**|**[view][U3-L13#05-view]**|
 Exploring JS       | Project: Feed Reader Testing                          |  [link][U3-L23#05-code]  |  [view][U3-L23#05-view]  |
+Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [link][U4-L14#03-code]  |  [view][U4-L14#03-view]  |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -85,6 +86,21 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 - [x] Exploring JS: Rethinking Testing (2h)
 - [x] Exploring JS: Writing Test Suites (4h)
 - [x] Exploring JS: Project: Feed Reader Testing
+- [x] Frontend Apps: Changing Expectations (5h)
+- [x] Frontend Apps: Refactoring with Separation of Concerns (7h)
+- [x] Frontend Apps: Creating Promises (1h30m)
+- [x] Frontend Apps: Chaining Promises (1h30m)
+- [x] Frontend Apps: Ajax with XHR (1h30m)
+- [x] Frontend Apps: Ajax with jQuery (1h30m)
+- [x] Frontend Apps: Ajax with Fetch (1h30m)
+- [x] Frontend Apps: Features of Single Page Apps (1h)
+- [x] Frontend Apps: Examine a Framework's Source (2h)
+- [x] Frontend Apps: Angular (2h)
+#### week #20: 02.07 - 08.07
+- [x] Frontend Apps: Ember (2h)
+- [x] Frontend Apps: The Benefits of Offline First (1h)
+- [x] Frontend Apps: Introducing the Service Worker (2h)
+- [x] Frontend Apps: Project: Restaurant Reviews App - Stage 1
 #### Upcoming
 
 ### Udacity Frontend Nanodegree Style Guide
@@ -135,3 +151,6 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 
 [U3-L23#05-code]: exploring-js/23
 [U3-L23#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/23/index.html
+
+[U4-L14#03-code]: frontend-apps/14
+[U4-L14#03-view]: https://gavar.github.io/google-front-end-web-developer/frontend-apps/14/index.html

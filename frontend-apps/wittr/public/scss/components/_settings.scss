@@ -1,0 +1,71 @@
+.settings {
+  padding: 16px;
+  color: #333;
+
+  & h1 {
+    font-size: inherit;
+    font-weight: bold;
+    margin: 3px 0 21px;
+    color: #919191;
+  }
+
+  & .warning {
+    color: red;
+    display: none;
+  }
+}
+
+.tester {
+  & .meme-container {
+    background: #dadada;
+    opacity: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  & .meme-img-container {
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    padding-top: 56.25%;
+
+    & img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #111;
+    }
+  }
+
+  & .feedback-text {
+    min-height: 30px;
+    font-weight: bold;
+    color: #0da00d;
+
+    &.fail {
+      color: #a00d0d;
+    }
+  }
+
+  & .spinner {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: #bbb;
+
+    & .circle {
+      border-width: 13px;
+    }
+  }
+}
+
+.hidden-tester {
+  display: none;
+}

@@ -1,0 +1,41 @@
+<div class="scroller">
+    <section class="card settings">
+        <form class="settings-form" action="/set" method="POST">
+            <h1>Connection to server</h1>
+            <div class="warning">
+                <p>You browser doesn't support the fetch API, so this won't work. Try Chrome or Firefox.</p>
+            </div>
+            {{#each connectionTypes}}
+                <div>
+                    <label class="material-radio">
+                        <input type="radio" name="connectionType" value="{{value}}" {{#if checked}}checked{{/if}}>
+                        <span class="material-radio-btn"></span>
+                        <span class="material-radio-text">{{title}}</span>
+                    </label>
+                </div>
+            {{/each}}
+        </form>
+    </section>
+    <section class="card settings tester">
+        <form class="test-form">
+            <h1>Test results</h1>
+            <p>
+                During the course you'll be able to come here and run tests to verify everything
+                is working as expected.
+            </p>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input test-id" type="text" id="testId" name="testId"/>
+                <label class="mdl-textfield__label" for="testId">Test ID</label>
+            </div>
+            <div class="feedback-text"></div>
+            <div class="meme-container">
+                <div class="meme-img-container"></div>
+            </div>
+        </form>
+    </section>
+</div>
+<script>
+    var config = {
+        appPort: {{appPort}}
+    };
+</script>
