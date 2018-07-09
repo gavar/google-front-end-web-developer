@@ -31,6 +31,7 @@ a {
 a:hover, a:focus {
   color: #3397db;
   text-decoration: none;
+  outline: darkblue solid medium;
 }
 
 a img {
@@ -153,6 +154,10 @@ nav h1 a {
   min-width: 200px;
   max-width: 200px;
   margin: 10px;
+}
+
+.filter-options select:focus {
+  outline: darkorange solid medium;
 }
 
 /* ====================== Restaurant Listing ====================== */
