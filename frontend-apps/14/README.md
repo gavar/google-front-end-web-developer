@@ -1,5 +1,5 @@
 # Restaurant Reviews: Stage 1
-This project is a part of [Front-End Web Deveveloper](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) course.
+This project is a part of [Front-End Web Developer](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) course.
 Project contains restaurants reviews application, focused on accessibility and offline-first approach, providing possibility to observe restaurants reviews in offline mode, including Google Maps markers.
 
 ## Getting Started
