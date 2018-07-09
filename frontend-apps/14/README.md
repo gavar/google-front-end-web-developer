@@ -1,28 +1,30 @@
-# Mobile Web Specialist Certification Course
----
-#### _Three Stage Course Material Project - Restaurant Reviews_
+# Restaurant Reviews: Stage 1
+This project is a part of [Front-End Web Deveveloper](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001) course.
+Project contains restaurants reviews application, focused on accessibility and offline-first approach, providing possibility to observe restaurants reviews in offline mode, including Google Maps markers.
 
-## Project Overview: Stage 1
+## Getting Started
+1. Acquire project:
+    - *(preferable)* download the source code [archive](https://github.com/gavar/google-front-end-web-developer/releases/download/project%2Frestaurants-v1/restaurants-reviews-v1.zip)
+    - *(advanced)* you could also clone a git subtree from [GitHub](https://github.com/gavar/google-front-end-web-developer/tree/develop/frontend-apps/14)
+2. Make sure [NodeJS](https://nodejs.org) installed on your machine.
+3. Install `http-server` package by running `npm i http-server -g`
+4. Run the server on `port 8080` using NPM script `npm run serve`
+    * you can alter port by providing `-p` parameter like: `npm run serve -p 3000`
+5. The script should automatically open the page.
+6. Turn off internet connection and observe how applications works offline.
 
-For the **Restaurant Reviews** projects, you will incrementally convert a static webpage to a mobile-ready web application. In **Stage One**, you will take a static design that lacks accessibility and convert the design to be responsive on different sized displays and accessible for screen reader use. You will also add a service worker to begin the process of creating a seamless offline experience for your users.
+## Prerequisites
+Project is made of pure HTML / CSS / JS files, so there is no special prerequisites and it could be run just in a browser (except of XHR requests fetching JSON data, so hosting machine should support it).
+However, JavaScript files rely on ES6 syntax, so you need to keep in mind, whether chosen browser supports it.
 
-### Specification
+## Contributing
+Project has strictly education purposes and will no accept any pull requests.
 
-You have been provided the code for a restaurant reviews website. The code has a lot of issues. It’s barely usable on a desktop browser, much less a mobile device. It also doesn’t include any standard accessibility features, and it doesn’t work offline at all. Your job is to update the code to resolve these issues while still maintaining the included functionality. 
+## Authors
+* **[Max Stankevich](https://github.com/gavar)**
 
-### What do I do from here?
-
-1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 
-
-In a terminal, check the version of Python you have: `python -V`. If you have Python 2.x, spin up the server with `python -m SimpleHTTPServer 8000` (or some other port, if port 8000 is already in use.) For Python 3.x, you can use `python3 -m http.server 8000`. If you don't have Python installed, navigate to Python's [website](https://www.python.org/) to download and install the software.
-
-2. With your server running, visit the site: `http://localhost:8000`, and look around for a bit to see what the current experience looks like.
-3. Explore the provided code, and make start making a plan to implement the required features in three areas: responsive design, accessibility and offline use.
-4. Write code to implement the updates to get this site on its way to being a mobile-ready website.
-
-### Note about ES6
-
-Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write. 
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details
 
 
 
