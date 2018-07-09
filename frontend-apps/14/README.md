@@ -4,8 +4,9 @@ Project contains restaurants reviews application, focused on accessibility and o
 
 ## Getting Started
 1. Acquire project:
-    - *(preferable)* download the source code [archive](https://github.com/gavar/google-front-end-web-developer/releases/download/project%2Frestaurants-v1/restaurants-reviews-v1.zip)
-    - *(advanced)* you could also clone a git subtree from [GitHub](https://github.com/gavar/google-front-end-web-developer/tree/develop/frontend-apps/14)
+    - *(easy)* use [online version](https://gavar.github.io/google-front-end-web-developer/frontend-apps/14/index.html) hosted on GitHub pages;
+    - *(preferable)* download the source code [archive](https://github.com/gavar/google-front-end-web-developer/releases/download/project%2Frestaurants-v1/restaurants-reviews-v1.zip);
+    - *(advanced)* you could also clone a git subtree from [GitHub](https://github.com/gavar/google-front-end-web-developer/tree/develop/frontend-apps/14);
 2. Make sure [NodeJS](https://nodejs.org) installed on your machine.
 3. Install `http-server` package by running `npm i http-server -g`
 4. Run the server on `port 8080` using NPM script `npm run serve`
