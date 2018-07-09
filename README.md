@@ -102,6 +102,16 @@ Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [l
 - [x] Frontend Apps: Introducing the Service Worker (2h)
 - [x] Frontend Apps: Project: Restaurant Reviews App - Stage 1
 #### Upcoming
+- [ ] React: Why React? (1h30m)
+- [ ] React: Rendering UI with React (2h)
+- [ ] React: State Management (3h)
+- [ ] React: Render UI with External Data (1h)
+- [ ] React: Managing App Location with React Router (2h)
+- [ ] React: Project: MyReads - A Book Tracking App
+- [ ] React: Getting Started with the APIs (2h)
+- [ ] React: Understanding API Services (3h)
+- [ ] React: Using the APIs in Practice (1h)
+- [ ] React: Project: Neighborhood Map
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
