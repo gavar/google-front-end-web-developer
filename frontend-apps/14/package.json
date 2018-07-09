@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "browser-sync start --server --port 8080 --files **"
+    "dev": "browser-sync start -s -f **",
+    "serve": "http-server . -c-1 -o"
   }
 }
