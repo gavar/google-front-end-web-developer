@@ -2,6 +2,7 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$/exploring-js/23" libraries="{HTML, boot, jasmine, jasmine-html, jquery}" />
+    <file url="file://$PROJECT_DIR$/frontend-apps/14" libraries="{DOM, ES6, HTML}" />
     <file url="PROJECT" libraries="{DOM, ES6, HTML}" />
   </component>
 </project>
