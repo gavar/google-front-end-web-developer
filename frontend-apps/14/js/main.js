@@ -177,3 +177,46 @@ addMarkersToMap = (restaurants = self.restaurants) => {
         self.markers.push(marker);
     });
 };
+
+registerServiceWorker = async function () {
+    const serviceWorker = navigator.serviceWorker;
+    if (!serviceWorker)
+        return;
+
+    try {
+        const reg = await serviceWorker.register("sw.js", {scope: "/"});
+        console.log("service worker registered successfully");
+        if (serviceWorker.controller) {
+            if (reg.waiting) updateReady(reg.waiting);
+            else if (reg.installing) trackInstalling(reg.installing);
+            else reg.addEventListener("updatefound", () => trackInstalling(reg.installing));
+        }
+    }
+    catch (e) {
+        console.log("service worker registration error");
+        console.error(e);
+    }
+
+    // Ensure refresh is only called once.
+    // This works around a bug in "force update on reload".
+    var refreshing;
+    serviceWorker.addEventListener("controllerchange", function () {
+        if (refreshing) return;
+        window.location.reload();
+        refreshing = true;
+    });
+
+};
+
+trackInstalling = function (worker) {
+    worker.addEventListener("statechange", function () {
+        if (worker.state === "installed")
+            updateReady(worker);
+    });
+};
+
+updateReady = function (worker) {
+    worker.postMessage({action: "skipWaiting"});
+};
+
+registerServiceWorker();
