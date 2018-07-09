@@ -18,6 +18,7 @@ Web Programming JS | Exercise: Pixel Art Maker                             |  [l
 Web Programming JS | **Project: Memory Game**                              |**[link][U2-L24#03-code]**|**[view][U2-L24#03-view]**|
 Exploring JS       | **Project: Classic Arcade Game Clone**                |**[link][U3-L13#05-code]**|**[view][U3-L13#05-view]**|
 Exploring JS       | Project: Feed Reader Testing                          |  [link][U3-L23#05-code]  |  [view][U3-L23#05-view]  |
+Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [link][U4-L14#03-code]  |  [view][U4-L14#03-view]  |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -99,8 +100,8 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 - [x] Frontend Apps: Ember (2h)
 - [x] Frontend Apps: The Benefits of Offline First (1h)
 - [x] Frontend Apps: Introducing the Service Worker (2h)
+- [x] Frontend Apps: Project: Restaurant Reviews App - Stage 1
 #### Upcoming
-- [ ] Frontend Apps: Project: Restaurant Reviews App - Stage 1
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
@@ -150,3 +151,6 @@ Exploring JS       | Project: Feed Reader Testing                          |  [l
 
 [U3-L23#05-code]: exploring-js/23
 [U3-L23#05-view]: https://gavar.github.io/google-front-end-web-developer/exploring-js/23/index.html
+
+[U4-L14#03-code]: frontend-apps/14
+[U4-L14#03-view]: https://gavar.github.io/google-front-end-web-developer/frontend-apps/14/index.html
