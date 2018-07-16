@@ -1,5 +1,5 @@
 import React, {ChangeEvent, Component} from "react";
-import {BookViewProps} from "./book-list";
+import {BookViewProps} from "./book-view";
 
 export class BookShelfChanger extends Component<BookViewProps> {
 
@@ -12,11 +12,12 @@ export class BookShelfChanger extends Component<BookViewProps> {
   render() {
     const {shelf} = this.props.book;
     return <div className="book-shelf-changer">
-      <select onChange={this.onChange} value={shelf}>
+      <select onChange={this.onChange} value={shelf || "none"}>
         <option value="move" disabled>Move to...</option>
         <option value="currentlyReading">Currently Reading</option>
         <option value="wantToRead">Want to Read</option>
         <option value="read">Read</option>
+        <option value="none">None</option>
       </select>
     </div>;
   }
