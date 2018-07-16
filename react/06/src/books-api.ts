@@ -1,3 +1,5 @@
+import {Book} from "./types";
+
 const api = "https://reactnd-books-api.udacity.com";
 
 // Generate a unique token for storing your bookshelf data on the backend server.
@@ -10,18 +12,20 @@ const headers = {
     "Authorization": token,
 };
 
-export const get = (bookId) =>
-    fetch(`${api}/books/${bookId}`, {headers})
+export const get = function (id: string): Promise<Book> {
+    return fetch(`${api}/books/${id}`, {headers})
         .then(res => res.json())
         .then(data => data.book);
+};
 
-export const getAll = () =>
-    fetch(`${api}/books`, {headers})
+export function getAll(): Promise<Book[]> {
+    return fetch(`${api}/books`, {headers})
         .then(res => res.json())
         .then(data => data.books);
+}
 
-export const update = (book, shelf) =>
-    fetch(`${api}/books/${book.id}`, {
+export function update(book: Book, shelf: string): Promise<Book> {
+    return fetch(`${api}/books/${book.id}`, {
         method: "PUT",
         headers: {
             ...headers,
@@ -29,9 +33,10 @@ export const update = (book, shelf) =>
         },
         body: JSON.stringify({shelf}),
     }).then(res => res.json());
+}
 
-export const search = (query) =>
-    fetch(`${api}/search`, {
+export function search(query: string): Promise<Book[]> {
+    return fetch(`${api}/search`, {
         method: "POST",
         headers: {
             ...headers,
@@ -40,3 +45,4 @@ export const search = (query) =>
         body: JSON.stringify({query}),
     }).then(res => res.json())
         .then(data => data.books);
+}
