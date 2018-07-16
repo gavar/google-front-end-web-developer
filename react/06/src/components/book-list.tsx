@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import * as BooksAPI from "../books-api";
+import {bookService} from "../service";
 import {Book} from "../types";
 import {BookView} from "./book-view";
 
@@ -30,7 +30,7 @@ export class BookList extends Component<{}, BookListProps> {
     }
 
     async fetchBooks() {
-        const books = await BooksAPI.getAll();
+        const books = await bookService.fetch();
         this.setState({
             read: books.filter(book => book.shelf === "read"),
             wantToRead: books.filter(book => book.shelf === "wantToRead"),
@@ -72,30 +72,22 @@ export class BookList extends Component<{}, BookListProps> {
             return;
 
         // update state without waiting response
+        const prevShelf = book.shelf;
         this.setState(state => {
             // remove from current shelf
-            const prev: Book[] = state[book.shelf];
+            const prev: Book[] = state[prevShelf];
             const index = prev.indexOf(book);
             prev.splice(index, 1);
 
             // place on new shelf
             const active: Book[] = state[shelf];
             active.push(book);
-            book.shelf = shelf;
-
             return state;
         });
 
-        try {
-            // update book shelf on a server
-            await BooksAPI.update(book, shelf);
-        }
-        catch (e) {
-            // re-fetch all books if error
-            console.error(e);
-            await this.fetchBooks();
-        }
-
+        // wait for book shelf update & refresh self
+        await bookService.setBookShelf(book, shelf);
+        await this.fetchBooks();
     }
 }
 
