@@ -1,7 +1,8 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 export interface BooksListProps {
-    openSearch: () => void;
+
 }
 
 export function BookList(props: BooksListProps) {
@@ -197,7 +198,7 @@ export function BookList(props: BooksListProps) {
             </div>
         </div>
         <div className="open-search">
-            <a onClick={props.openSearch}>Add a book</a>
+            <Link to="/search">Add a book</Link>
         </div>
     </div>;
 }
