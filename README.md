@@ -101,12 +101,13 @@ Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [l
 - [x] Frontend Apps: The Benefits of Offline First (1h)
 - [x] Frontend Apps: Introducing the Service Worker (2h)
 - [x] Frontend Apps: Project: Restaurant Reviews App - Stage 1
+#### week #21: 09.07 - 15.07
+- [x] React: Why React? (1h30m)
+- [x] React: Rendering UI with React (2h)
+- [x] React: State Management (3h)
+- [x] React: Render UI with External Data (1h)
+- [x] React: Managing App Location with React Router (2h)
 #### Upcoming
-- [ ] React: Why React? (1h30m)
-- [ ] React: Rendering UI with React (2h)
-- [ ] React: State Management (3h)
-- [ ] React: Render UI with External Data (1h)
-- [ ] React: Managing App Location with React Router (2h)
 - [ ] React: Project: MyReads - A Book Tracking App
 - [ ] React: Getting Started with the APIs (2h)
 - [ ] React: Understanding API Services (3h)
