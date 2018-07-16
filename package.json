@@ -36,6 +36,7 @@
     ],
     "packages": [
       "app/*",
+      "react/*",
       "packages/*",
       "exploring-js/*",
       "frontend-apps/*",
