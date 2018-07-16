@@ -1,39 +1,63 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import * as BooksAPI from "./books-api";
+import {BookShelfChanger} from "./components";
 import {Book} from "./types";
 
-export interface BooksListState {
-    books?: Book[];
+export interface BookListProps {
+    read: Book[];
+    wantToRead: Book[];
+    currentlyReading: Book[];
 }
 
-export class BookList extends Component<{}, BooksListState> {
+export class BookList extends Component<{}, BookListProps> {
 
     /** @inheritDoc */
-    state = {} as BooksListState;
+    state = {
+        read: [],
+        wantToRead: [],
+        currentlyReading: [],
+    };
 
     /** @inheritDoc */
-    async componentDidMount() {
+    componentWillMount(): void {
+        this.changeBookShelf = this.changeBookShelf.bind(this);
+    }
+
+    /** @inheritDoc */
+    componentDidMount() {
+        return this.fetchBooks();
+    }
+
+    async fetchBooks() {
         const books = await BooksAPI.getAll();
-        this.setState({books});
+        this.setState({
+            read: books.filter(book => book.shelf === "read"),
+            wantToRead: books.filter(book => book.shelf === "wantToRead"),
+            currentlyReading: books.filter(book => book.shelf === "currentlyReading"),
+        });
     }
 
     /** @inheritDoc */
     render(): React.ReactNode {
-        const {books} = this.state;
-        const read = books && books.filter(book => book.shelf === "read");
-        const reading = books && books.filter(book => book.shelf === "currentlyReading");
-        const wantToRead = books && books.filter(book => book.shelf === "wantToRead");
-
+        const {read, currentlyReading, wantToRead} = this.state;
         return <div className="list-books">
             <div className="list-books-title">
                 <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
                 <div>
-                    <Bookshelf title="Currently Reading" books={reading}/>
-                    <Bookshelf title="Want to Read" books={wantToRead}/>
-                    <Bookshelf title="Read" books={read}/>
+                    <Bookshelf title="Currently Reading"
+                               books={currentlyReading}
+                               changeBookShelf={this.changeBookShelf}/>
+
+                    <Bookshelf title="Want to Read"
+                               books={wantToRead}
+                               changeBookShelf={this.changeBookShelf}/>
+
+                    <Bookshelf title="Read"
+                               books={read}
+                               changeBookShelf={this.changeBookShelf}/>
                 </div>
             </div>
             <div className="open-search">
@@ -41,22 +65,55 @@ export class BookList extends Component<{}, BooksListState> {
             </div>
         </div>;
     }
+
+    async changeBookShelf(book: Book, shelf: string) {
+        // check if really changed
+        if (shelf === book.shelf)
+            return;
+
+        // update state without waiting response
+        this.setState(state => {
+            // remove from current shelf
+            const prev: Book[] = state[book.shelf];
+            const index = prev.indexOf(book);
+            prev.splice(index, 1);
+
+            // place on new shelf
+            const active: Book[] = state[shelf];
+            active.push(book);
+            book.shelf = shelf;
+
+            return state;
+        });
+
+        try {
+            // update book shelf on a server
+            await BooksAPI.update(book, shelf);
+        }
+        catch (e) {
+            // re-fetch all books if error
+            console.error(e);
+            await this.fetchBooks();
+        }
+
+    }
 }
 
 export interface BookshelfProps {
     title: string;
     books?: Book[];
+    changeBookShelf: (book: Book, shelf: string) => void;
 }
 
 export function Bookshelf(props: BookshelfProps) {
-    const {title, books} = props;
+    const {title, books, changeBookShelf} = props;
     return <div className="bookshelf">
         <h2 className="bookshelf-title">{title}</h2>
         <div className="bookshelf-books">
             <ol className="books-grid">
                 {books && books.map(book => (
                     <li key={book.id}>
-                        <BookView book={book}/>
+                        <BookView book={book} changeBookShelf={changeBookShelf}/>
                     </li>
                 ))}
             </ol>
@@ -65,27 +122,19 @@ export function Bookshelf(props: BookshelfProps) {
 }
 
 export interface BookViewProps {
-    book: Book
+    book: Book;
+    changeBookShelf: (book: Book, shelf: string) => void;
 }
 
 export function BookView(props: BookViewProps) {
-    const {book} = props;
+    const {book, changeBookShelf} = props;
     const {title, authors} = book;
     const {thumbnail} = book.imageLinks;
 
     return <div className="book">
         <div className="book-top">
             <img className="book-cover" src={thumbnail}/>
-            <div className="book-shelf-changer">
-                <select>
-                    <option value="move" disabled>Move to...</option>
-                    <option value="currentlyReading">Currently Reading
-                    </option>
-                    <option value="wantToRead">Want to Read</option>
-                    <option value="read">Read</option>
-                    <option value="none">None</option>
-                </select>
-            </div>
+            <BookShelfChanger book={book} changeBookShelf={changeBookShelf}/>
         </div>
         <div className="book-title">{title}</div>
         <div className="book-authors">
