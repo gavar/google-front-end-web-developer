@@ -41,7 +41,11 @@ export function update(book: Book, shelf: string): Promise<BookShelves> {
     }).then(res => res.json());
 }
 
-export function search(query: string): Promise<Book[]> {
+export interface SearchResult extends Array<Book> {
+    error?: any;
+}
+
+export function search(query: string): Promise<SearchResult> {
     return fetch(`${api}/search`, {
         method: "POST",
         headers: {
