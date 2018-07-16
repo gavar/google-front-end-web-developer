@@ -1,5 +1,5 @@
 import React, {ChangeEvent, Component} from "react";
-import {BookViewProps} from "../book-list";
+import {BookViewProps} from "./book-list";
 
 export class BookShelfChanger extends Component<BookViewProps> {
 

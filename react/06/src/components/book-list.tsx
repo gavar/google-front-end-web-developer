@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import * as BooksAPI from "./books-api";
-import {BookShelfChanger} from "./components";
-import {Book} from "./types";
+import * as BooksAPI from "../books-api";
+import {Book} from "../types";
+import {BookShelfChanger} from "./book-shelf-changer";
 
 export interface BookListProps {
     read: Book[];
