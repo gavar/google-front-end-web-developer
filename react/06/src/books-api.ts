@@ -24,7 +24,13 @@ export function getAll(): Promise<Book[]> {
         .then(data => data.books);
 }
 
-export function update(book: Book, shelf: string): Promise<Book> {
+export interface BookShelves {
+    read: string[];
+    wantToRead: string[];
+    currentlyReading: string[];
+}
+
+export function update(book: Book, shelf: string): Promise<BookShelves> {
     return fetch(`${api}/books/${book.id}`, {
         method: "PUT",
         headers: {
