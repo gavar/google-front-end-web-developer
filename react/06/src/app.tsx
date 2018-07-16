@@ -3,7 +3,6 @@ import {BrowserRouter, Route} from "react-router-dom";
 import "./app.css";
 import {BookList} from "./book-list";
 import {BookSearch} from "./book-search";
-import * as BooksAPI from "./books-api";
 
 class BooksApp extends React.Component {
 
@@ -11,7 +10,6 @@ class BooksApp extends React.Component {
   componentWillMount(): void {
     this.openSearch = this.openSearch.bind(this);
     this.closeSearch = this.closeSearch.bind(this);
-    BooksAPI.getAll().then(console.log);
   }
 
   render() {
