@@ -11,6 +11,10 @@ indent_style = space
 [*.html]
 indent_size = 2
 
+# JSX / TSX
+[*.{jsx,tsx}]
+indent_size = 2
+
 # CSS
 [*.{css,scss}]
 indent_size = 2
