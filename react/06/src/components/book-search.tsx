@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Component} from "react";
 import {Link} from "react-router-dom";
-import * as BooksAPI from "../books-api";
+import {bookService} from "../service";
 import {Book} from "../types";
 import {BookView} from "./book-view";
 
@@ -48,44 +48,30 @@ export class BookSearch extends Component<{}, BookSearchState> {
         const query = e.target.value.trim();
         this.setState({query});
 
-        // clear books if empty search
-        if (!query.length)
-            return this.setState({books: []});
+        // query for search results
+        const books = await bookService.search(query);
 
-        try {
-            // query for search results
-            const books = await BooksAPI.search(query);
+        // modify state if still have same query
+        return this.setState(prev => {
+            if (prev.query === query)
+                return {...prev, books};
 
-            // clear books if error
-            if (books.error) {
-                console.log(books);
-                return this.setState({books: []});
-            }
-
-            // modify state if still have same query
-            return this.setState(prev => {
-                if (prev.query === query)
-                    return {...prev, books};
-
-                return prev;
-            });
-        }
-        catch (e) {
-            // clear books if error
-            this.setState({books: []});
-            console.error(e);
-        }
+            return prev;
+        });
     }
 
     async changeBookShelf(book: Book, shelf: string) {
-        // check if really changed
-        if (shelf === book.shelf)
+        if (book.shelf === shelf)
             return;
 
-        // update book shelf locally
-        book.shelf = shelf;
+        // initiate shelf update
+        const promise = bookService.setBookShelf(book, shelf);
+        this.setState({books: this.state.books});
 
-        // update book shelf on a server
-        await BooksAPI.update(book, shelf);
+        // repaint if book reference changed
+        const modified = await promise;
+        if (modified !== book)
+            this.setState({books: this.state.books});
+
     }
 }

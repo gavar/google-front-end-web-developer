@@ -4,20 +4,13 @@ import {bookService} from "../service";
 import {Book} from "../types";
 import {BookView} from "./book-view";
 
-export interface BookListProps {
+interface BookListState {
     read: Book[];
     wantToRead: Book[];
     currentlyReading: Book[];
 }
 
-export class BookList extends Component<{}, BookListProps> {
-
-    /** @inheritDoc */
-    state = {
-        read: [],
-        wantToRead: [],
-        currentlyReading: [],
-    };
+export class BookList extends Component<{}, BookListState> {
 
     /** @inheritDoc */
     componentWillMount(): void {
@@ -25,22 +18,15 @@ export class BookList extends Component<{}, BookListProps> {
     }
 
     /** @inheritDoc */
-    componentDidMount() {
-        return this.fetchBooks();
-    }
-
-    async fetchBooks() {
-        const books = await bookService.fetch();
-        this.setState({
-            read: books.filter(book => book.shelf === "read"),
-            wantToRead: books.filter(book => book.shelf === "wantToRead"),
-            currentlyReading: books.filter(book => book.shelf === "currentlyReading"),
-        });
+    async componentDidMount() {
+        this.updateBooks();
+        await bookService.refresh();
+        this.updateBooks();
     }
 
     /** @inheritDoc */
     render(): React.ReactNode {
-        const {read, currentlyReading, wantToRead} = this.state;
+        // const {read, currentlyReading, wantToRead} = this.state;
         return <div className="list-books">
             <div className="list-books-title">
                 <h1>MyReads</h1>
@@ -48,15 +34,15 @@ export class BookList extends Component<{}, BookListProps> {
             <div className="list-books-content">
                 <div>
                     <BookShelf title="Currently Reading"
-                               books={currentlyReading}
+                               books={bookService.booksOnShelf("currentlyReading")}
                                changeBookShelf={this.changeBookShelf}/>
 
                     <BookShelf title="Want to Read"
-                               books={wantToRead}
+                               books={bookService.booksOnShelf("wantToRead")}
                                changeBookShelf={this.changeBookShelf}/>
 
                     <BookShelf title="Read"
-                               books={read}
+                               books={bookService.booksOnShelf("read")}
                                changeBookShelf={this.changeBookShelf}/>
                 </div>
             </div>
@@ -66,28 +52,22 @@ export class BookList extends Component<{}, BookListProps> {
         </div>;
     }
 
-    async changeBookShelf(book: Book, shelf: string) {
-        // check if really changed
-        if (shelf === book.shelf)
-            return;
-
-        // update state without waiting response
-        const prevShelf = book.shelf;
-        this.setState(state => {
-            // remove from current shelf
-            const prev: Book[] = state[prevShelf];
-            const index = prev.indexOf(book);
-            prev.splice(index, 1);
-
-            // place on new shelf
-            const active: Book[] = state[shelf];
-            active.push(book);
-            return state;
+    updateBooks() {
+        this.setState({
+            read: bookService.booksOnShelf("read") || [],
+            wantToRead: bookService.booksOnShelf("wantToRead") || [],
+            currentlyReading: bookService.booksOnShelf("currentlyReading") || [],
         });
+    }
 
-        // wait for book shelf update & refresh self
-        await bookService.setBookShelf(book, shelf);
-        await this.fetchBooks();
+    async changeBookShelf(book: Book, shelf: string) {
+        // initiate books shelf update
+        const promise = bookService.setBookShelf(book, shelf);
+        // re-render books with locally changed shelf
+        this.updateBooks();
+        // wait for book shelf update on a server & re-render
+        await promise;
+        this.updateBooks();
     }
 }
 

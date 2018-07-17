@@ -23,7 +23,9 @@ export class BookShelfChanger extends Component<BookViewProps> {
   }
 
   onChange(e: ChangeEvent<HTMLSelectElement>) {
+    const shelf = e.target.value;
     const {book, changeBookShelf} = this.props;
-    changeBookShelf(book, e.target.value);
+    changeBookShelf(book, shelf === "none" ? void  0 : shelf);
+    this.setState({book});
   }
 }

@@ -4,7 +4,7 @@ import {BookShelfChanger} from "./book-shelf-changer";
 
 export interface BookViewProps {
   book: Book;
-  changeBookShelf: (book: Book, shelf: string) => void;
+  changeBookShelf: (book: Book, shelf: string | undefined) => void;
 }
 
 export function BookView(props: BookViewProps) {
