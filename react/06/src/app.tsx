@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Route} from "react-router-dom";
+import {HashRouter, Route} from "react-router-dom";
 import "./app.css";
 import {BookList, BookSearch} from "./components";
 
@@ -13,12 +13,12 @@ class BooksApp extends React.Component {
 
     render() {
         return (
-            <BrowserRouter>
+            <HashRouter>
                 <main className={"app"}>
                     <Route path={"/search"} component={BookSearch}/>
                     <Route exact path={"/"} component={BookList}/>
                 </main>
-            </BrowserRouter>
+            </HashRouter>
         );
     }
 
