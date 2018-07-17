@@ -19,6 +19,7 @@ Web Programming JS | **Project: Memory Game**                              |**[l
 Exploring JS       | **Project: Classic Arcade Game Clone**                |**[link][U3-L13#05-code]**|**[view][U3-L13#05-view]**|
 Exploring JS       | Project: Feed Reader Testing                          |  [link][U3-L23#05-code]  |  [view][U3-L23#05-view]  |
 Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [link][U4-L14#03-code]  |  [view][U4-L14#03-view]  |
+React              | Project: MyReads - A Book Tracking App                |  [link][U5-L06#07-code]  |  [view][U5-L06#07-view]  |
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -101,7 +102,19 @@ Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [l
 - [x] Frontend Apps: The Benefits of Offline First (1h)
 - [x] Frontend Apps: Introducing the Service Worker (2h)
 - [x] Frontend Apps: Project: Restaurant Reviews App - Stage 1
+#### week #21: 09.07 - 15.07
+- [x] React: Why React? (1h30m)
+- [x] React: Rendering UI with React (2h)
+- [x] React: State Management (3h)
+- [x] React: Render UI with External Data (1h)
+- [x] React: Managing App Location with React Router (2h)
+#### week #22: 16.07 - 22.07
+- [x] React: Project: MyReads - A Book Tracking App
 #### Upcoming
+- [ ] React: Getting Started with the APIs (2h)
+- [ ] React: Understanding API Services (3h)
+- [ ] React: Using the APIs in Practice (1h)
+- [ ] React: Project: Neighborhood Map
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
@@ -154,3 +167,6 @@ Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [l
 
 [U4-L14#03-code]: frontend-apps/14
 [U4-L14#03-view]: https://gavar.github.io/google-front-end-web-developer/frontend-apps/14/index.html
+
+[U5-L06#07-code]: react/06
+[U5-L06#07-view]: https://gavar.github.io/google-front-end-web-developer/react/06/build/index.html
