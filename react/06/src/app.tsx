@@ -5,30 +5,30 @@ import {BookList, BookSearch} from "./components";
 
 class BooksApp extends React.Component {
 
-  /** @inheritDoc */
-  componentWillMount(): void {
-    this.openSearch = this.openSearch.bind(this);
-    this.closeSearch = this.closeSearch.bind(this);
-  }
+    /** @inheritDoc */
+    componentWillMount(): void {
+        this.openSearch = this.openSearch.bind(this);
+        this.closeSearch = this.closeSearch.bind(this);
+    }
 
-  render() {
-    return (
-      <BrowserRouter>
-        <main className={"app"}>
-          <Route path={"/search"} component={BookSearch}/>
-          <Route exact path={"/"} component={BookList}/>
-        </main>
-      </BrowserRouter>
-    );
-  }
+    render() {
+        return (
+            <BrowserRouter>
+                <main className={"app"}>
+                    <Route path={"/search"} component={BookSearch}/>
+                    <Route exact path={"/"} component={BookList}/>
+                </main>
+            </BrowserRouter>
+        );
+    }
 
-  openSearch() {
-    this.setState({showSearchPage: true});
-  }
+    openSearch() {
+        this.setState({showSearchPage: true});
+    }
 
-  closeSearch() {
-    this.setState({showSearchPage: false});
-  }
+    closeSearch() {
+        this.setState({showSearchPage: false});
+    }
 }
 
 export default BooksApp;
