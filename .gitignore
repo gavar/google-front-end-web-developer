@@ -156,6 +156,8 @@ yarn.lock
 out/
 tmp/
 dist/
+build/
 
 ### PUBLISH ###
 !dist/
+!build/
