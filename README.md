@@ -169,4 +169,4 @@ React              | Project: MyReads - A Book Tracking App                |  [l
 [U4-L14#03-view]: https://gavar.github.io/google-front-end-web-developer/frontend-apps/14/index.html
 
 [U5-L06#07-code]: react/06
-[U5-L06#07-view]: https://gavar.github.io/google-front-end-web-developer/react/06/build/index.html
+[U5-L06#07-view]: https://gavar.github.io/google-front-end-web-developer/react/06/build
