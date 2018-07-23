@@ -110,10 +110,11 @@ React              | Project: MyReads - A Book Tracking App                |  [l
 - [x] React: Managing App Location with React Router (2h)
 #### week #22: 16.07 - 22.07
 - [x] React: Project: MyReads - A Book Tracking App
+#### week #23: 23.07 - 29.07
+- [x] React: Getting Started with the APIs (2h)
+- [x] React: Understanding API Services (3h)
+- [x] React: Using the APIs in Practice (1h)
 #### Upcoming
-- [ ] React: Getting Started with the APIs (2h)
-- [ ] React: Understanding API Services (3h)
-- [ ] React: Using the APIs in Practice (1h)
 - [ ] React: Project: Neighborhood Map
 
 ### Udacity Frontend Nanodegree Style Guide
