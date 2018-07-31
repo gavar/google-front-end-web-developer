@@ -1,17 +1,39 @@
-import React from "react";
-import {Header} from "../header";
-import {Main} from "../main";
-import {Navbar} from "../navbar";
-import "./app.css";
+import {PlaceResult} from "$google/maps/places";
+import {autobind} from "core-decorators";
+import React, {Component} from "react";
+import {GoogleMap, GoogleMapsScript} from "../google-map";
+import {PlaceMarkerCluster} from "../marker";
+import {NearbyPlacesTracker} from "../nearby-places";
+import "./app.scss";
 
-export class App extends React.Component {
+export interface AppState {
+    places: PlaceResult[];
+}
+
+export class App extends Component<{}, AppState> {
+
+    /** @inheritDoc */
+    state = {
+        places: [],
+    };
 
     /** @inheritDoc */
     render() {
+        const {places} = this.state;
+
         return <div className="app">
-            <Header/>
-            <Navbar/>
-            <Main/>
+            <GoogleMapsScript libraries={["places"]}
+                              googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
+                <GoogleMap defaultCenter="Latvia, Riga">
+                    <NearbyPlacesTracker onPlacesUpdate={this.onPlacesUpdate}/>
+                    <PlaceMarkerCluster places={places}/>
+                </GoogleMap>
+            </GoogleMapsScript>
         </div>;
+    }
+
+    @autobind
+    protected onPlacesUpdate(places: PlaceResult[]) {
+        this.setState({places});
     }
 }

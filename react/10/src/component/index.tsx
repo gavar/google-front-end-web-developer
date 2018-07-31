@@ -1,4 +1,4 @@
 export * from "./app";
-export * from "./main";
-export * from "./header";
-export * from "./navbar";
+export * from "./marker";
+export * from "./google-map";
+export * from "./nearby-places";
