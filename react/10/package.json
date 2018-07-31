@@ -6,13 +6,17 @@
     "serve": "webpack-dev-server --inline --hot"
   },
   "dependencies": {
+    "core-decorators": "^0.20.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-google-maps": "^9.4.5",
     "typeface-roboto": "^0.0.54"
   },
   "devDependencies": {
     "@types/googlemaps": "^3.30.11",
+    "@types/markerclustererplus": "^2.1.33",
     "@types/node": "^10.5.2",
+    "@types/prop-types": "^15.5.4",
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
     "ts-node": "^7.0.0",
