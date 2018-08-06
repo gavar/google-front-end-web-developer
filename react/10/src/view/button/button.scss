@@ -1,0 +1,27 @@
+.button {
+  position: relative;
+  user-select: none;
+  cursor: default;
+  outline: none; // TODO: support keyboard focus
+
+  &:active {
+    // TODO: theming
+  }
+
+  &:hover {
+    // TODO: theming
+  }
+}
+
+.button-primary {
+  // TODO: theming
+}
+
+.button-secondary {
+  // TODO: theming
+}
+
+.button-clear {
+  border: none;
+  background: none;
+}
