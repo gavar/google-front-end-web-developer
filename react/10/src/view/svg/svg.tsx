@@ -11,7 +11,12 @@ export interface SvgProps extends SVGProps {
 }
 
 export function Svg(props: SvgProps) {
-    const {svg: SVG, icon, children, ...other} = this.props;
+    const {
+        svg: Component,
+        icon,
+        children,
+        ...other
+    } = props;
 
     other.className = [
         icon && "icon",
@@ -19,7 +24,7 @@ export function Svg(props: SvgProps) {
         other.className,
     ].join(" ");
 
-    return <SVG {...other}>
+    return <Component {...other}>
         {children}
-    </SVG>;
+    </Component>;
 }
