@@ -31,12 +31,21 @@ export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, Pla
         return <PlaceMarker key={key}
                             place={place}
                             active={key === selection}
-                            onSelect={this.onSelect}/>;
+                            onSelect={this.onSelect}
+                            onDestroy={this.onDestroy}/>;
     }
 
     @autobind
     protected onSelect(marker: PlaceMarker) {
         const key = marker.props.place.place_id;
         this.setState({selection: key});
+    }
+
+    @autobind
+    protected onDestroy(marker: PlaceMarker) {
+        const {selection} = this.state;
+        const key = marker.props.place.place_id;
+        if (selection !== key) return;
+        this.setState({selection: null});
     }
 }

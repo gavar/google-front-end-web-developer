@@ -7,7 +7,8 @@ import {PlaceMarkerInfo} from "./place-marker-info";
 export interface PlaceMarkerProps {
     place: PlaceResult;
     active?: boolean;
-    onSelect?(place: PlaceMarker): void,
+    onSelect?(marker: PlaceMarker);
+    onDestroy?(marker: PlaceMarker);
 }
 
 export interface PlaceMarkerState {
@@ -27,7 +28,14 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        this.setState({info: false});
+        const {onDestroy} = this.props;
+        if (onDestroy) onDestroy(this);
+    }
+
+    componentDidUpdate(prev: Readonly<PlaceMarkerProps>): void {
+        const {active} = this.props;
+        if (active !== prev.active)
+            if (!active) this.setShowInfo(false);
     }
 
     /** @inheritDoc */
@@ -39,7 +47,6 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
         const showInfo = info && active;
 
         return <Marker position={location}
-                       noRedraw={true}
                        place={{placeId: place_id, location: location}}
                        onClick={this.toggleInfo}>
             {showInfo && <PlaceMarkerInfo
@@ -50,9 +57,13 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
 
     @autobind
     protected toggleInfo() {
+        const {info} = this.state;
+        this.setShowInfo(!info);
+    }
+
+    private setShowInfo(value: boolean) {
         const {onSelect} = this.props;
-        const info = !this.state.info;
-        if (info) onSelect && onSelect(this);
-        this.setState({info});
+        if (value) onSelect && onSelect(this);
+        this.setState({info: value});
     }
 }
