@@ -1,22 +1,23 @@
 import {MapsEventListener} from "$google/maps";
-import {PlaceResult, PlaceSearchPagination, PlacesService, PlacesServiceStatus} from "$google/maps/places";
+import {PlaceResult, PlaceSearchPagination} from "$google/maps/places";
 import {withContextProps} from "$util";
 import {autobind} from "core-decorators";
 import {PureComponent} from "react";
-import {GoogleMapContext, GoogleMapContextProps} from "../../context";
+import {ApplicationContext, ApplicationContextProps} from "../../context";
+import {PlaceService} from "../../service";
 
-function contextToProps(props: GoogleMapContextProps): Partial<NearbyPlacesProps> {
-    const {map, placesService} = props;
-    return {map, placesService};
+function contextToProps(props: ApplicationContextProps): Partial<NearbyPlacesProps> {
+    const {map, placeService} = props;
+    return {map, placeService};
 }
 
 export interface NearbyPlacesProps {
-    map?: google.maps.Map,
-    placesService?: PlacesService,
+    map: google.maps.Map,
+    placeService?: PlaceService;
     onPlacesUpdate?(places: PlaceResult[]): void;
 }
 
-@withContextProps(GoogleMapContext, contextToProps)
+@withContextProps(ApplicationContext, contextToProps)
 export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
 
     protected alive: boolean = true;
@@ -59,9 +60,9 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
         const bounds = map.getBounds();
         if (!bounds) return;
 
-        const {placesService} = this.props;
+        const {placeService} = this.props;
         this.scheduleNearbySearchByBounds = false;
-        placesService.nearbySearch({
+        placeService.nearbySearch({
             bounds,
             type: "car_wash",
         }, this.onNearbySearchResults);
@@ -76,7 +77,7 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
     }
 
     @autobind
-    protected onNearbySearchResults(places: PlaceResult[], status: PlacesServiceStatus, pagination: PlaceSearchPagination) {
+    protected onNearbySearchResults(places: PlaceResult[], pagination: PlaceSearchPagination) {
         // cache places
         const placeByID = this.placeByID;
         for (const place of places)

@@ -1,1 +1,1 @@
-export * from "./google-map-context";
+export * from "./application-context";

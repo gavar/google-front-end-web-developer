@@ -1,6 +1,9 @@
+import {Map} from "$google/maps";
 import {PlaceResult} from "$google/maps/places";
 import {autobind} from "core-decorators";
 import React, {Component} from "react";
+import {ApplicationContext, ApplicationContextProps} from "../../context";
+import {PlaceService} from "../../service";
 import {AppBarTop} from "../app-bar";
 import {GoogleMap, GoogleMapsScript} from "../google-map";
 import {PlaceMarkerCluster} from "../marker";
@@ -12,6 +15,7 @@ import "./app.scss";
 export interface AppState {
     showNavDrawer: boolean;
     places: PlaceResult[];
+    context: ApplicationContextProps;
 }
 
 export class App extends Component<{}, AppState> {
@@ -21,25 +25,30 @@ export class App extends Component<{}, AppState> {
         this.state = {
             showNavDrawer: false,
             places: [],
+            context: {
+                map: null,
+                placeService: new PlaceService(),
+            },
         };
     }
 
     /** @inheritDoc */
     render() {
         const {places, showNavDrawer} = this.state;
-
         return <div className="app">
-            <AppBarTop title="Car Wash Map" onNavClick={this.toggleNavDrawer}/>
-            <NavDrawer open={showNavDrawer}>
-                <SearchBox/>
-            </NavDrawer>
-            <GoogleMapsScript libraries={["places"]}
-                              googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
-                <GoogleMap defaultCenter="Latvia, Riga">
-                    <NearbyPlacesTracker onPlacesUpdate={this.onPlacesUpdate}/>
-                    <PlaceMarkerCluster places={places}/>
-                </GoogleMap>
-            </GoogleMapsScript>
+            <ApplicationContext.Provider value={this.state.context}>
+                <AppBarTop title="Car Wash Map" onNavClick={this.toggleNavDrawer}/>
+                <NavDrawer open={showNavDrawer}>
+                    <SearchBox/>
+                </NavDrawer>
+                <GoogleMapsScript libraries={["places"]}
+                                  googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
+                    <GoogleMap defaultCenter="Latvia, Riga" onGoogleMap={this.setGoogleMap}>
+                        <NearbyPlacesTracker onPlacesUpdate={this.onPlacesUpdate}/>
+                        <PlaceMarkerCluster places={places}/>
+                    </GoogleMap>
+                </GoogleMapsScript>
+            </ApplicationContext.Provider>
         </div>;
     }
 
@@ -53,5 +62,16 @@ export class App extends Component<{}, AppState> {
         let {showNavDrawer} = this.state;
         showNavDrawer = !showNavDrawer;
         this.setState({showNavDrawer});
+    }
+
+    @autobind
+    protected setGoogleMap(map: Map) {
+        const {context} = this.state;
+        if (context.map === map) return;
+
+        context.map = map;
+        const {placeService} = context;
+        placeService.setGoogleMap(map);
+        this.forceUpdate();
     }
 }

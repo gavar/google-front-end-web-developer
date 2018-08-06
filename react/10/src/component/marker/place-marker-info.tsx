@@ -1,18 +1,19 @@
-import {PlaceDetailsRequest, PlaceResult, PlacesService, PlacesServiceStatus} from "$google/maps/places";
+import {PlaceResult} from "$google/maps/places";
 import {withContextProps} from "$util";
 import {autobind} from "core-decorators";
 import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
-import {GoogleMapContext, GoogleMapContextProps} from "../../context";
+import {ApplicationContext, ApplicationContextProps} from "../../context";
+import {PlaceService} from "../../service";
 import "./marker-info.scss";
 
-function contextToProps(props: GoogleMapContextProps): Partial<PlaceMarkerInfoProps> {
-    const {placesService} = props;
-    return {placesService};
+function contextToProps(props: ApplicationContextProps): Partial<PlaceMarkerInfoProps> {
+    const {placeService} = props;
+    return {placeService};
 }
 
 export interface PlaceMarkerInfoProps {
-    placesService?: PlacesService,
+    placeService?: PlaceService,
     place: PlaceResult;
     onCloseClick?(): void;
 }
@@ -21,7 +22,7 @@ export interface PlaceMarkerInfoState {
     details?: PlaceResult;
 }
 
-@withContextProps(GoogleMapContext, contextToProps)
+@withContextProps(ApplicationContext, contextToProps)
 export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMarkerInfoState> {
     /** @inheritDoc */
     state = {} as PlaceMarkerInfoState;
@@ -100,17 +101,14 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     }
 
     protected fetchDetails(place: PlaceResult) {
-        const {placesService} = this.props;
-        const request: PlaceDetailsRequest = {
-            placeId: place.place_id,
-        };
-        placesService.getDetails(request, this.onReceiveDetails);
+        const {placeService} = this.props;
+        placeService.fetchDetails(place.place_id, this.onReceiveDetails);
     }
 
     @autobind
-    protected onReceiveDetails(details: PlaceResult, status: PlacesServiceStatus) {
-        if (status !== google.maps.places.PlacesServiceStatus.OK)
-            return;
+    protected onReceiveDetails(details: PlaceResult) {
+        // if (status !== google.maps.places.PlacesServiceStatus.OK)
+        //     return;
 
         // is request actual?
         if (details.place_id === this.props.place.place_id)

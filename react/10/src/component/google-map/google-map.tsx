@@ -1,20 +1,19 @@
-import {GeocoderResult, GeocoderStatus, LatLng, LatLngLiteral, Map} from "$google/maps";
+import {Geocoder, GeocoderResult, GeocoderStatus, LatLng, LatLngLiteral, Map} from "$google/maps";
 import {autobind} from "core-decorators";
 import PropTypes from "prop-types";
 import React, {PureComponent} from "react";
 import {GoogleMap as $GoogleMap, withGoogleMap} from "react-google-maps";
 import {MAP} from "react-google-maps/src/constants";
-import {GoogleMapContext, GoogleMapContextProps} from "../../context";
 import "./google-map.scss";
 
 export interface GoogleMapProps {
+    onGoogleMap?(map: Map);
     defaultZoom?: number
     defaultCenter?: string | LatLng | LatLngLiteral;
     submit?: (query: string) => void;
 }
 
 export interface GoogleMapState {
-    context: GoogleMapContextProps,
     center?: LatLng | LatLngLiteral
 }
 
@@ -28,25 +27,23 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
         defaultZoom: 13,
     };
 
-    /** @inheritDoc */
-    state = {} as GoogleMapState;
+    protected map: Map;
+    protected geocoder: Geocoder;
 
     constructor(props: GoogleMapProps, context: any) {
         super(props, context);
-        this.state.context = this.createContext(context[MAP]);
+        this.state = {};
+        this.setGoogleMap(context[MAP]);
     }
 
     /** @inheritDoc */
     componentWillReceiveProps(props: Readonly<GoogleMapProps>, context: any): void {
-        const map = context[MAP] as Map;
-        if (this.state.context.map !== map)
-            this.setState({
-                context: this.createContext(map),
-            });
+        this.setGoogleMap(context[MAP]);
     }
 
     /** @inheritDoc */
     componentDidMount(): void {
+        this.geocoder = new google.maps.Geocoder();
         // try to detect user location
         const {geolocation} = navigator;
         if (geolocation) geolocation.getCurrentPosition(this.setGeoLocationPosition, this.resolveGeocodeLocation);
@@ -55,23 +52,12 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
     /** @inheritDoc */
     render() {
+        const {center} = this.state;
         const {children, defaultZoom} = this.props;
-        const {center, context} = this.state;
-
         return <$GoogleMap defaultZoom={defaultZoom}
                            center={center}>
-            <GoogleMapContext.Provider value={context}>
-                {children}
-            </GoogleMapContext.Provider>
+            {children}
         </$GoogleMap>;
-    }
-
-    protected createContext(map: Map): GoogleMapContextProps {
-        return {
-            map,
-            placesService: new google.maps.places.PlacesService(map),
-            geocoder: new google.maps.Geocoder(),
-        };
     }
 
     protected setCenter(center: LatLng | LatLngLiteral) {
@@ -89,10 +75,9 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
     @autobind
     protected resolveGeocodeLocation() {
         const {defaultCenter} = this.props;
-        const {geocoder} = this.state.context;
         switch (typeof defaultCenter) {
             case "string":
-                geocoder.geocode({address: defaultCenter as string}, this.onResolveGeocodeComplete);
+                this.geocoder.geocode({address: defaultCenter as string}, this.onResolveGeocodeComplete);
                 break;
             case "object":
                 this.setCenter(defaultCenter as LatLngLiteral);
@@ -104,6 +89,16 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
     protected onResolveGeocodeComplete(results: GeocoderResult[], status: GeocoderStatus) {
         if (results && results.length)
             this.setCenter(results[0].geometry.location);
+    }
+
+    setGoogleMap(map: Map) {
+        const {onGoogleMap} = this.props;
+        if (!onGoogleMap) return;
+
+        if (this.map == map) return;
+        this.map = map;
+
+        onGoogleMap(map);
     }
 }
 
