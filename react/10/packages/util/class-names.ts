@@ -6,7 +6,7 @@ import {identity} from "./identity";
  */
 export function classNames(...names: string[]) {
     names = names.filter(identity);
-    return names.join(" ");
+    if (names.length) return names.join(" ");
 }
 
 
