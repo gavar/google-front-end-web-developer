@@ -10,11 +10,6 @@ dialog.drawer {
   border: none;
   z-index: 1000;
   pointer-events: none;
-
-  &.entered {
-    // enable events only after animation completes
-    pointer-events: auto;
-  }
 }
 
 .drawer-container {
@@ -24,4 +19,11 @@ dialog.drawer {
   height: 100%;
   position: relative;
   background: #fff;
+}
+
+// when animation completes
+.drawer.entered {
+  .drawer-container {
+    pointer-events: auto;
+  }
 }
