@@ -4,6 +4,7 @@ import {autobind} from "core-decorators";
 import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
 import {GoogleMapContext, GoogleMapContextProps} from "../../context";
+import "./marker-info.scss";
 
 function contextToProps(props: GoogleMapContextProps): Partial<PlaceMarkerInfoProps> {
     const {placesService} = props;

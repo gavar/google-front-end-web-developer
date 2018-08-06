@@ -1,0 +1,22 @@
+.place-marker-info {
+
+  .info-label {
+    text-align: left;
+    padding-right: 4px;
+
+    img {
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  .info-value {
+    text-align: left;
+  }
+
+  .name {
+    .info-label {
+      text-align: right;
+    }
+  }
+}
