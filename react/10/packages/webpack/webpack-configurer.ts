@@ -6,6 +6,7 @@ import {
     configureDevServer,
     configureHTML,
     configureSASS,
+    configureSVG,
     configureTS,
     HtmlConfigureOptions,
     SassConfigureOptions,
@@ -70,6 +71,7 @@ export function configurer(provider: ConfigurerProvider) {
 
         // apply configurers
         configureTS(config, options.ts);
+        configureSVG(config, options);
         configureSASS(config, options, options.sass);
         configureHTML(config, options, options.html);
         configureDevServer(config);
