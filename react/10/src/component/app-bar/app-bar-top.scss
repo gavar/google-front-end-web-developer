@@ -1,0 +1,22 @@
+@import "style/variables";
+
+.app-bar-top {
+  height: $app-bar-top-height;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  .nav-icon {
+    height: 24px;
+    margin-right: 32px;
+  }
+
+  .title {
+    top: -4px;
+    position: relative;
+  }
+}
+
+
