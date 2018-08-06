@@ -1,4 +1,3 @@
-import {withDefaultProps} from "$util";
 import {autobind} from "core-decorators";
 import {Component} from "react";
 
@@ -13,12 +12,13 @@ export interface WithGoogleMapsState {
     ready: boolean;
 }
 
-@withDefaultProps<WithGoogleMapsProps>({
-    async: true,
-    defer: true,
-    libraries: [],
-})
 export class GoogleMapsScript extends Component<WithGoogleMapsProps, WithGoogleMapsState> {
+
+    public static readonly defaltProps: Partial<WithGoogleMapsProps> = {
+        async: true,
+        defer: true,
+        libraries: [],
+    };
 
     /** @inheritDoc */
     state = {

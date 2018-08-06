@@ -1,5 +1,4 @@
 import {PlaceResult} from "$google/maps/places";
-import {withDefaultProps} from "$util";
 import {autobind} from "core-decorators";
 import React, {PureComponent} from "react";
 import {Marker} from "react-google-maps";
@@ -15,8 +14,11 @@ export interface PlaceMarkerState {
     info: boolean;
 }
 
-@withDefaultProps<PlaceMarkerProps>({active: true})
 export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerState> {
+
+    static readonly defaultProps: Partial<PlaceMarkerProps> = {
+        active: true,
+    };
 
     /** @inheritDoc */
     state = {

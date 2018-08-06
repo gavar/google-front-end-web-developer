@@ -1,5 +1,4 @@
 import {GeocoderResult, GeocoderStatus, LatLng, LatLngLiteral, Map} from "$google/maps";
-import {withDefaultProps} from "$util";
 import {autobind} from "core-decorators";
 import PropTypes from "prop-types";
 import React, {PureComponent} from "react";
@@ -19,15 +18,14 @@ export interface GoogleMapState {
     center?: LatLng | LatLngLiteral
 }
 
-const defaultProps: GoogleMapProps = {
-    defaultZoom: 13,
-};
-
-@withDefaultProps<GoogleMapProps>(defaultProps)
 class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
-    static contextTypes = {
+    static readonly contextTypes = {
         [MAP]: PropTypes.object,
+    };
+
+    static readonly defaultProps: GoogleMapProps = {
+        defaultZoom: 13,
     };
 
     /** @inheritDoc */
