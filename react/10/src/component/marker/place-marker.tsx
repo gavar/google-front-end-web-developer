@@ -1,14 +1,14 @@
-import {PlaceResult} from "$google/maps/places";
 import {autobind} from "core-decorators";
 import React, {PureComponent} from "react";
 import {Marker} from "react-google-maps";
+import {Place} from "../../service";
 import {PlaceMarkerInfo} from "./place-marker-info";
 
 export interface PlaceMarkerProps {
-    place: PlaceResult;
+    place: Place;
     active?: boolean;
-    onSelect?(marker: PlaceMarker);
-    onDestroy?(marker: PlaceMarker);
+    onSelect?(marker: Place);
+    onDestroy?(marker: Place);
 }
 
 export interface PlaceMarkerState {
@@ -28,8 +28,8 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        const {onDestroy} = this.props;
-        if (onDestroy) onDestroy(this);
+        const {place, onDestroy} = this.props;
+        if (onDestroy) onDestroy(place);
     }
 
     componentDidUpdate(prev: Readonly<PlaceMarkerProps>): void {
@@ -42,15 +42,14 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
     render() {
         const {info} = this.state;
         const {place, active} = this.props;
-        const {geometry, place_id} = place;
-        const {location} = geometry;
+        const {location, key} = place;
         const showInfo = info && active;
 
         return <Marker position={location}
-                       place={{placeId: place_id, location: location}}
+                       place={{placeId: key, location: location}}
                        onClick={this.toggleInfo}>
             {showInfo && <PlaceMarkerInfo
-                place={place}
+                placeKey={key}
                 onCloseClick={this.toggleInfo}/>}
         </Marker>;
     }
@@ -62,8 +61,8 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
     }
 
     private setShowInfo(value: boolean) {
-        const {onSelect} = this.props;
-        if (value) onSelect && onSelect(this);
+        const {place, onSelect} = this.props;
+        if (value) onSelect && onSelect(place);
         this.setState({info: value});
     }
 }

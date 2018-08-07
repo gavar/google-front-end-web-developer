@@ -1,11 +1,11 @@
-import {PlaceResult} from "$google/maps/places";
 import {autobind} from "core-decorators";
 import React, {PureComponent} from "react";
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
+import {Place} from "../../service";
 import {PlaceMarker} from "./place-marker";
 
 export interface PlaceMarkerCloudProps {
-    places: PlaceResult[];
+    places: Place[];
 }
 
 export interface PlaceMarkerCloudState {
@@ -25,8 +25,8 @@ export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, Pla
         </MarkerClusterer>;
     }
 
-    protected placeToMarker(place: PlaceResult) {
-        const key = place.place_id;
+    protected placeToMarker(place: Place) {
+        const {key} = place;
         const {selection} = this.state;
         return <PlaceMarker key={key}
                             place={place}
@@ -36,15 +36,15 @@ export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, Pla
     }
 
     @autobind
-    protected onSelect(marker: PlaceMarker) {
-        const key = marker.props.place.place_id;
+    protected onSelect(place: Place) {
+        const {key} = place;
         this.setState({selection: key});
     }
 
     @autobind
-    protected onDestroy(marker: PlaceMarker) {
+    protected onDestroy(place: Place) {
+        const {key} = place;
         const {selection} = this.state;
-        const key = marker.props.place.place_id;
         if (selection !== key) return;
         this.setState({selection: null});
     }

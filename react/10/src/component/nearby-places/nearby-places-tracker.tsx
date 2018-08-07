@@ -1,10 +1,9 @@
 import {MapsEventListener} from "$google/maps";
-import {PlaceResult, PlaceSearchPagination} from "$google/maps/places";
 import {withContextProps} from "$util";
 import {autobind} from "core-decorators";
 import {PureComponent} from "react";
 import {ApplicationContext, ApplicationContextProps} from "../../context";
-import {PlaceService} from "../../service";
+import {Place, PlaceService} from "../../service";
 
 function contextToProps(props: ApplicationContextProps): Partial<NearbyPlacesProps> {
     const {map, placeService} = props;
@@ -12,9 +11,9 @@ function contextToProps(props: ApplicationContextProps): Partial<NearbyPlacesPro
 }
 
 export interface NearbyPlacesProps {
-    map: google.maps.Map,
+    map?: google.maps.Map,
     placeService?: PlaceService;
-    onPlacesUpdate?(places: PlaceResult[]): void;
+    onPlacesUpdate?(places: Place[]);
 }
 
 @withContextProps(ApplicationContext, contextToProps)
@@ -22,10 +21,9 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
 
     protected alive: boolean = true;
     protected lastMoveTime: number = 0;
-    protected scheduleNearbySearchByBounds: boolean;
-
+    protected scheduleNearbySearchByBoundsCache: boolean;
+    protected scheduleNearbySearchByBoundsRemote: boolean;
     protected readonly listeners: MapsEventListener[] = [];
-    protected readonly placeByID: Map<string, PlaceResult> = new Map<string, PlaceResult>();
 
     /** @inheritDoc */
     componentDidMount(): void {
@@ -55,63 +53,68 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
         this.listeners.length = 0;
     }
 
-    protected searchNearbyByBounds() {
+    protected searchNearbyByBounds(cache: boolean) {
         const {map} = this.props;
         const bounds = map.getBounds();
         if (!bounds) return;
 
         const {placeService} = this.props;
-        this.scheduleNearbySearchByBounds = false;
-        placeService.nearbySearch({
-            bounds,
-            type: "car_wash",
-        }, this.onNearbySearchResults);
+        if (cache) {
+            this.scheduleNearbySearchByBoundsCache = false;
+            placeService.nearbySearchCache(bounds, this.onNearbySearch);
+        }
+        else {
+            this.scheduleNearbySearchByBoundsRemote = false;
+            placeService.nearbySearchRemote(bounds, this.onNearbySearch);
+        }
     }
 
     protected update() {
         const now = Date.now();
-        // wait for 1 sec before start fetching new places
-        if (this.scheduleNearbySearchByBounds)
+
+        // wait for 50ms sec before start fetching new places from cache
+        if (this.scheduleNearbySearchByBoundsCache)
+            if (now - this.lastMoveTime >= 50)
+                this.searchNearbyByBounds(true);
+
+        // wait for 1 sec before start fetching new places from remote
+        if (this.scheduleNearbySearchByBoundsRemote)
             if (now - this.lastMoveTime >= 1000)
-                this.searchNearbyByBounds();
+                this.searchNearbyByBounds(false);
     }
 
     @autobind
-    protected onNearbySearchResults(places: PlaceResult[], pagination: PlaceSearchPagination) {
-        // cache places
-        const placeByID = this.placeByID;
-        for (const place of places)
-            placeByID.set(place.place_id, place);
-
-        // fetch next page if exists
-        if (pagination.hasNextPage)
-            pagination.nextPage();
-
+    protected onNearbySearch() {
         // notify places update
-        const {onPlacesUpdate} = this.props;
+        const {placeService, onPlacesUpdate} = this.props;
         if (onPlacesUpdate) {
-            let items = Array.from(placeByID.values());
+            let items = placeService.places;
             items = items.filter(isOperating);
-            items.sort(sortByPlaceID);
+            items.sort(sortByKey);
             onPlacesUpdate(items);
         }
     }
 
     @autobind
     protected onBoundsChanged() {
+        const {placeService} = this.props;
+        const {places} = placeService;
+
         this.lastMoveTime = Date.now();
-        this.scheduleNearbySearchByBounds = true;
-        if (this.placeByID.size < 1)
-            return this.searchNearbyByBounds();
+        this.scheduleNearbySearchByBoundsCache = true;
+        this.scheduleNearbySearchByBoundsRemote = true;
+
+        if (places.length < 1)
+            return this.searchNearbyByBounds(false);
     }
 }
 
-function isOperating(place: PlaceResult) {
-    return !place.permanently_closed;
+function isOperating(place: Place) {
+    return place.operating;
 }
 
-function sortByPlaceID(a: PlaceResult, b: PlaceResult) {
-    if (a.place_id > b.place_id) return 1;
-    if (a.place_id < b.place_id) return 1;
+function sortByKey(a: Place, b: Place) {
+    if (a.key > b.key) return 1;
+    if (a.key < b.key) return 1;
     return 0;
 }

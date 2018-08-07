@@ -1,11 +1,12 @@
-import {PlaceResult} from "$google/maps/places";
-import {withContextProps} from "$util";
+import {identity, withContextProps} from "$util";
 import {autobind} from "core-decorators";
 import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
 import {ApplicationContext, ApplicationContextProps} from "../../context";
-import {PlaceService} from "../../service";
+import {Place, PlaceService} from "../../service";
 import "./marker-info.scss";
+
+const EMPTY_PLACE: Place = {} as any;
 
 function contextToProps(props: ApplicationContextProps): Partial<PlaceMarkerInfoProps> {
     const {placeService} = props;
@@ -13,13 +14,13 @@ function contextToProps(props: ApplicationContextProps): Partial<PlaceMarkerInfo
 }
 
 export interface PlaceMarkerInfoProps {
+    placeKey: string;
     placeService?: PlaceService,
-    place: PlaceResult;
     onCloseClick?(): void;
 }
 
 export interface PlaceMarkerInfoState {
-    details?: PlaceResult;
+    place?: Place;
 }
 
 @withContextProps(ApplicationContext, contextToProps)
@@ -29,54 +30,53 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
     /** @inheritDoc */
     componentDidMount(): void {
-        const {place} = this.props;
-        this.fetchDetails(place);
+        const {placeKey} = this.props;
+        this.fetchDetails(placeKey);
     }
 
     /** @inheritDoc */
     componentDidUpdate(prev: Readonly<PlaceMarkerInfoProps>): void {
-        const {place} = this.props;
-        if (prev.place.place_id != place.place_id) {
-            this.setState({details: null});
-            this.fetchDetails(place);
+        const {placeKey} = this.props;
+        if (prev.placeKey != placeKey) {
+            this.setState({place: null});
+            this.fetchDetails(placeKey);
         }
     }
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        this.setState({details: null});
+        this.setState({place: null});
     }
 
     /** @inheritDoc */
     render() {
-        const {details} = this.state;
-        if (!details) return "";
+        const {place} = this.state;
+        const {onCloseClick} = this.props;
 
-        const {onCloseClick, place} = this.props;
         const {
             name,
             icon,
+            phone,
             rating,
             website,
             vicinity,
-            international_phone_number,
-        } = details || place;
+        } = place || EMPTY_PLACE;
 
-        const tbody = [
+        const rows = place && [
             // TITLE
-            row(<img src={icon}/>,
+            name && row(<img src={icon}/>,
                 <a target="_blank" href={website || "#"}>{name}</a>,
                 "name"),
 
             // ADDRESS
-            row("Address:",
+            vicinity && row("Address:",
                 <address>{vicinity.split(",", 1)[0]}</address>,
                 "address"),
 
             // PHONE
-            international_phone_number && row("Phone:",
-                <a href={`tel:${international_phone_number}`}>
-                    {international_phone_number.replace(/ /g, "-")}
+            phone && row("Phone:",
+                <a href={`tel:${phone}`}>
+                    {phone.replace(/ /g, "-")}
                 </a>,
                 "phone"),
 
@@ -89,30 +89,32 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             website && row("Website:",
                 <a target="_blank" href={website}>{website}</a>,
                 "website"),
-        ];
+        ].filter(identity);
+
+        const table = rows && <table>
+            <tbody>{rows}</tbody>
+        </table>;
 
         return <InfoWindow onCloseClick={onCloseClick}>
             <div className={"place-marker-info"}>
-                <table>
-                    <tbody>{tbody}</tbody>
-                </table>
+                {table}
             </div>
         </InfoWindow>;
     }
 
-    protected fetchDetails(place: PlaceResult) {
-        const {placeService} = this.props;
-        placeService.fetchDetails(place.place_id, this.onReceiveDetails);
+    protected fetchDetails(placeKey: string) {
+        if (placeKey) {
+            const {placeService} = this.props;
+            placeService.fetchDetails(placeKey, this.onReceiveDetails);
+        }
     }
 
     @autobind
-    protected onReceiveDetails(details: PlaceResult) {
-        // if (status !== google.maps.places.PlacesServiceStatus.OK)
-        //     return;
-
+    protected onReceiveDetails(place: Place) {
         // is request actual?
-        if (details.place_id === this.props.place.place_id)
-            this.setState({details});
+        const {placeKey} = this.props;
+        if (place.key === placeKey)
+            this.setState({place});
     }
 }
 

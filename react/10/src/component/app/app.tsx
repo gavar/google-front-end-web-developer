@@ -1,9 +1,8 @@
 import {Map} from "$google/maps";
-import {PlaceResult} from "$google/maps/places";
 import {autobind} from "core-decorators";
 import React, {Component} from "react";
 import {ApplicationContext, ApplicationContextProps} from "../../context";
-import {PlaceService} from "../../service";
+import {Place, PlaceService} from "../../service";
 import {AppBarTop} from "../app-bar";
 import {GoogleMap, GoogleMapsScript} from "../google-map";
 import {PlaceMarkerCluster} from "../marker";
@@ -14,7 +13,7 @@ import "./app.scss";
 
 export interface AppState {
     showNavDrawer: boolean;
-    places: PlaceResult[];
+    places: Place[];
     context: ApplicationContextProps;
 }
 
@@ -53,7 +52,7 @@ export class App extends Component<{}, AppState> {
     }
 
     @autobind
-    protected onPlacesUpdate(places: PlaceResult[]) {
+    protected onPlacesUpdate(places: Place[]) {
         this.setState({places});
     }
 
