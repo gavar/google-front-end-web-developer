@@ -32,6 +32,14 @@ export class Slide extends Component<SlideProps> {
         direction: "right",
     };
 
+    protected readonly initialPose: SlidePose;
+
+    constructor(props: SlideProps, context: any) {
+        super(props, context);
+        const {show} = props;
+        this.initialPose = show ? "show" : "hide";
+    }
+
     /** @inheritDoc */
     render() {
         const {show, direction, children, ...other} = this.props;
@@ -41,6 +49,7 @@ export class Slide extends Component<SlideProps> {
         );
 
         const props = other as PoseAnimatorProps;
+        props.initialPose = this.initialPose;
         props.pose = show ? "show" : "hide";
         props.controller = controllerByDirection(direction);
         props.attr = {className};

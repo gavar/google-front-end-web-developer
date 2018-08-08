@@ -16,6 +16,8 @@ export interface PoseAnimatorProps<C extends ComponentType | keyof HTML = "div">
     /** State of the controller to move in. */
     pose: string;
 
+    initialPose?: string;
+
     /** Controller providing configuration of available states. */
     controller: PoseController;
 
@@ -70,9 +72,10 @@ export class PoseAnimator<C extends ComponentType | keyof HTML = "div"> extends 
     /** @inheritDoc */
     render() {
         const {poser: Poser} = this.state;
-        const {pose, attr, children} = this.props;
+        const {pose, initialPose, attr, children} = this.props;
         return <Poser {...attr}
                       pose={pose}
+                      initialPose={initialPose}
                       onPoseComplete={this.onPoseComplete}>
             {children}
         </Poser>;
