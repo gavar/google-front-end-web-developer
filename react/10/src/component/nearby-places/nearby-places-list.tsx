@@ -48,7 +48,7 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
 }
 
 function NearbyPlaceItem(this: NearbyPlacesListProps, place: Place) {
-    return <li key={place.key}>
+    return <li key={place.key} className="nearby-places-list-item">
         <NearbyPlaceSummary place={place}
                             onDidMount={this.onDidMount}/>
     </li>;

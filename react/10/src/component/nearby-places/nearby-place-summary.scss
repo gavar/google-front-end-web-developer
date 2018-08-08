@@ -1,3 +1,54 @@
+@import "style/typography";
+
 .nearby-place-summary {
+  position: relative;
   padding: 10px 18px 10px 24px;
+
+  // default font style
+  font-size: 13px;
+  line-height: 16px;
+  font-style: normal;
+  vertical-align: middle;
+}
+
+.nearby-place-summary-title {
+  color: black;
+  font-size: 15px;
+  line-height: inherit;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.nearby-place-summary-rating {
+  color: $accent-color;
+}
+
+.nearby-place-summary-rating-value {
+  margin-right: 1px;
+}
+
+.nearby-place-summary-rating-stars {
+  top: 1px;
+  position: relative;
+  height: 16px;
+  padding: 0;
+  margin-right: 1px;
+  display: inline-block;
+  list-style: none;
+
+  li {
+    display: inline-block;
+  }
+
+  .icon {
+    width: 13px;
+    height: 13px;
+    fill: $accent-color;
+  }
+}
+
+.nearby-place-summary-address {
+  padding-top: 2px;
+  font-style: inherit;
+  color: $text-secondary-color;
 }

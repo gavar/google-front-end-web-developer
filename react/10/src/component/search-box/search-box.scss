@@ -24,7 +24,7 @@
 
   input {
     flex: 1;
-    @extend %subtitle1;
+    @extend %subtitle-1;
     background-color: inherit;
     border: none;
     outline: none;
@@ -51,7 +51,7 @@
   align-items: center;
   margin: 8px;
   border-radius: 2px;
-  background-color: $background-color;
+  background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
   0 -1px 0px rgba(0, 0, 0, 0.02);
 
