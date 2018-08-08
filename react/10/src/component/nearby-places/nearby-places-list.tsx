@@ -6,7 +6,7 @@ import "./nearby-places-list.scss";
 
 export interface NearbyPlacesListProps {
     places: Place[];
-    filter: string;
+    search: string;
     onDidMount?(place: Place);
 }
 
@@ -18,20 +18,17 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
 
     /** @inheritDoc */
     render() {
-        const {places, filter} = this.props;
-        const regex = filter && new RegExp(filter, "i");
-        const filtered = regex ? places.filter(filterPlaces, regex) : places;
-        const size = filtered ? filtered.length : 0;
+        const {places, search} = this.props;
+        const size = places.length;
 
         let content;
         if (size > 0) {
-            filtered.sort(sortByRating);
-            const items = filtered.map(NearbyPlaceItem, this.props);
+            const items = places.map(NearbyPlaceItem, this.props);
             content = <ul className="nearby-places-list">
                 {items}
             </ul>;
         }
-        else if (filter) {
+        else if (search) {
             content = <>
                 <Typography>No places found matching search criteria</Typography>
                 <Typography>To see more results, try changing search criteria.</Typography>
@@ -48,24 +45,6 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
             {content}
         </div>;
     }
-}
-
-function filterPlaces(this: RegExp, place: Place) {
-    const {name, address, vicinity} = place;
-    if (name && name.match(this)) return true;
-    if (vicinity && vicinity.match(this)) return true;
-    if (address) {
-        const {country, city, street} = address;
-        if (street && street.match(this)) return true;
-        if (city && city.match(this)) return true;
-        if (country && country.match(this)) return true;
-    }
-}
-
-function sortByRating(a: Place, b: Place) {
-    if (a.rating > b.rating) return -1;
-    if (a.rating < b.rating) return 1;
-    return 0;
 }
 
 function NearbyPlaceItem(this: NearbyPlacesListProps, place: Place) {

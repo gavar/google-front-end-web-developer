@@ -2,5 +2,26 @@
 
 .nav-drawer {
   top: $app-bar-top-height;
-  width: 400px;
+
+  .drawer-container {
+    width: 400px;
+    display: flex;
+    flex-flow: column;
+    box-sizing: border-box;
+  }
+}
+
+.nav-drawer-toggle {
+  top: 8px;
+  left: 100%;
+  z-index: -1;
+  margin-left: -2px;
+  position: absolute;
+  width: 23px;
+  height: 48px;
+  cursor: pointer;
+  pointer-events: auto;
+  border-left: 1px solid #d4d4d4;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  background-color: rgba(white, .9);
 }

@@ -1,18 +1,59 @@
 @import "style/typography";
 
 .search-box {
-  width: 100%;
+  background-color: #4285f4;
+
+  .search-button {
+    &::after {
+      content: "";
+      right: 0;
+      height: 60%;
+      position: absolute;
+      border-left: 1px solid #ddd;
+    }
+  }
+}
+
+.search-box-input {
+  flex: 1;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-
-  .search-button {
-    padding: 12px 16px;
-  }
+  position: relative;
 
   input {
-    @extend %subtitle1;
     flex: 1;
+    @extend %subtitle1;
     border: none;
+    outline: none;
+  }
+
+  .icon-search {
+    right: 15px;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    right: 0;
+    height: 60%;
+    position: absolute;
+    border-left: 1px solid #ddd;
+  }
+}
+
+.search-box-container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin: 8px;
+  border-radius: 2px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+  0 -1px 0px rgba(0, 0, 0, 0.02);
+
+  & > * {
+    padding: 12px 15px;
   }
 }

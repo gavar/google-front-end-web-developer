@@ -21,23 +21,22 @@ export class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
 
     render() {
         const {value} = this.state;
-        const before = <Button color="clear"
-                               className="search-button">
-            <Search/>
-        </Button>;
-
-        const after = <Button color="clear"
-                              className="clear-button"
-                              onClick={this.clear}>
-            <Cancel/>
-        </Button>;
 
         return <div className="search-box">
-            {before}
-            <input value={value}
-                   onChange={this.onChange}
-                   placeholder="Filter places"/>
-            {after}
+            <div className="search-box-container">
+
+                <div className="search-box-input">
+                    <input value={value}
+                           onChange={this.onChange}
+                           placeholder="Find a car wash in the area"/>
+                    <Search/>
+                </div>
+                <Button color="clear"
+                        className="clear-button"
+                        onClick={this.clear}>
+                    <Cancel/>
+                </Button>
+            </div>
         </div>;
     }
 

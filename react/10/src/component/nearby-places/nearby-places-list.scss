@@ -1,15 +1,19 @@
 .nearby-places {
+  height: 100%;
   display: flex;
   flex-flow: column;
-  height: 100%
 }
 
 .nearby-places-list {
-  height: 100%;
-  padding: 0;
+  display: flex;
+  flex-flow: column;
+  flex: 1 1;
+  margin: 0;
+  padding: 0 8px 0 0;
   list-style-type: none;
   text-align: left;
   overflow-y: auto;
+  overflow-x: hidden;
 
   /* width */
   &::-webkit-scrollbar {
