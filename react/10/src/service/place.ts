@@ -6,11 +6,18 @@ export interface Place {
     name: string;
     phone: string;
     rating: number;
+    reviews: number;
+    address: Address;
     website: string;
-    vicinity: string;
+    vicinity: string
     location: LatLngLiteral;
     operating: boolean;
-
     updateTime: number;
     details?: boolean;
+}
+
+export interface Address {
+    country?: string;
+    city?: string;
+    street?: string;
 }

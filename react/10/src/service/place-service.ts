@@ -1,4 +1,4 @@
-import {Geocoder, LatLngBounds, Map as GoogleMap} from "$google/maps";
+import {Geocoder, GeocoderAddressComponent, LatLngBounds, Map as GoogleMap} from "$google/maps";
 import {
     PlaceDetailsRequest,
     PlaceResult,
@@ -7,9 +7,8 @@ import {
     PlacesService,
     PlacesServiceStatus,
 } from "$google/maps/places";
-import {identity} from "$util";
-import {autobind} from "core-decorators";
-import {Place} from "./place";
+import {hasOwnProperty, identity} from "$util";
+import {Address, Place} from "./place";
 import {store} from "./sql-store";
 
 export class PlaceService {
@@ -29,7 +28,8 @@ export class PlaceService {
     protected geocoder: Geocoder;
     protected placesService: PlacesService;
     protected listeners: PlaceListenerEntry[] = [];
-    protected freshPlaces: Set<string> = new Set();
+    protected placesWithDetails: Set<string> = new Set();
+    protected placeDetailsRequests: Set<string> = new Set();
 
     /**
      * Initialize places service with google map to fetch places from Google API.
@@ -50,15 +50,25 @@ export class PlaceService {
         if (place) listener(place);
 
         // no need to refresh twice
-        if (this.freshPlaces.has(key))
+        if (this.placesWithDetails.has(key))
             return;
 
         // save request
         this.listeners.push({key, listener});
 
+        // already requested?
+        if (this.placeDetailsRequests.has(key))
+            return;
+
         // fetch from remote to refresh data
-        const request: PlaceDetailsRequest = {placeId: key};
-        this.placesService.getDetails(request, this.onReceiveDetails);
+        const request: PlaceDetailsRequest = {
+            placeId: key,
+            fields: detailsFields,
+        };
+        this.placeDetailsRequests.add(key);
+        this.placesService.getDetails(request, (result, status) => {
+            return this.onReceiveDetails(key, result, status);
+        });
 
         // use cache while fetching from remote
         place = await store.places.get(key);
@@ -76,7 +86,7 @@ export class PlaceService {
     async nearbySearchCache(bounds: LatLngBounds, listener: PlacesListener): Promise<void> {
         // save bounds for future use
         this.nearbyBounds = bounds;
-        
+
         const query = store.places.filter(isWithinBounds.bind(bounds));
         const places = await query.toArray();
 
@@ -110,7 +120,7 @@ export class PlaceService {
                         pagination.nextPage();
 
                     // merge places data with existing
-                    const promises = results.map(fromNearbyPlace);
+                    const promises = results.map(self.fromNearbyPlace, self);
                     const places = await Promise.all(promises);
                     await self.savePlace.apply(self, places);
 
@@ -128,13 +138,13 @@ export class PlaceService {
         }
     }
 
-    @autobind
-    protected async onReceiveDetails(result: PlaceResult, status: PlacesServiceStatus) {
+    protected async onReceiveDetails(key: string, result: PlaceResult, status: PlacesServiceStatus) {
+        this.placeDetailsRequests.delete(key);
         const {OK} = google.maps.places.PlacesServiceStatus;
         switch (status) {
             case OK:
-                const place = fromPlaceDetails(result);
-                this.freshPlaces.add(place.key);
+                const place = await this.fromPlaceDetails(key, result);
+                this.placesWithDetails.add(place.key);
                 await this.savePlace(place);
                 this.notify(place, true);
                 break;
@@ -181,6 +191,23 @@ export class PlaceService {
         }
         this.listeners = items.filter(identity);
     }
+
+    async fromPlaceDetails(key: string, result: PlaceResult): Promise<Place> {
+        const place = await this.fromPlace(key, result);
+        place.details = true;
+        return place;
+    }
+
+    fromNearbyPlace(result: PlaceResult): Promise<Place> {
+        return this.fromPlace(result.place_id, result);
+    }
+
+    async fromPlace(key: string, result: PlaceResult) {
+        let place = convertToPlace(result, key);
+        let existing = this.placeByKey.get(key) || await store.places.get(key);
+        place = {...existing, ...place};
+        return place;
+    }
 }
 
 export interface PlaceListenerEntry {
@@ -196,35 +223,82 @@ export interface PlacesListener {
     (places: Place[]);
 }
 
-function asPlace(item: PlaceResult): Place {
-    const {geometry} = item;
+const detailsFields = [
+    // "place_id", // extracted from request
+    // "name", // provided by NearbySearch
+    // "icon", // provided by NearbySearch
+    // "rating", // provided by NearbySearch
+    "reviews",
+    "website",
+    // "vicinity", // provided by NearbySearch
+    // "geometry.location", // provided by NearbySearch
+    "permanently_closed",
+    "address_components",
+    "international_phone_number",
+];
+
+function convertToPlace(item: PlaceResult, key?: string): Place {
+    const {geometry, reviews, address_components} = item;
     const place: Place = {
-        key: item.place_id,
+        key: key || item.place_id,
         name: item.name,
         icon: item.icon,
         phone: item.international_phone_number,
         rating: item.rating,
+        reviews: reviews && reviews.length || 0,
         website: item.website,
+        address: address(address_components, item.vicinity),
         vicinity: item.vicinity,
         operating: !item.permanently_closed,
-        location: geometry.location.toJSON(),
+        location: geometry && geometry.location.toJSON(),
         updateTime: Date.now(),
     };
     // remove undefined keys
     return JSON.parse(JSON.stringify(place));
 }
 
-function fromPlaceDetails(item: PlaceResult): Place {
-    const place = asPlace(item);
-    place.details = true;
-    return place;
+function address(components: GeocoderAddressComponent[], vicinity: string): Address {
+    return components && addressByComponents(components)
+        // || vicinity && addressByVicinity(vicinity)
+        || null;
 }
 
-async function fromNearbyPlace(result: PlaceResult): Promise<Place> {
-    let place = asPlace(result);
-    let existing = await store.places.get(place.key);
-    place = {...existing, ...place};
-    return place;
+function addressByComponents(components: GeocoderAddressComponent[]): Address {
+    const country = findComponentWithType(components, "country");
+    const city = findComponentWithType(components, "locality");
+    const street = findComponentWithType(components, "route");
+    const number = findComponentWithType(components, "street_number");
+
+    const value: Address = {};
+    if (country) value.country = country.long_name;
+    if (city) value.city = city.long_name;
+    if (street) {
+        if (number) value.street = `${street.long_name} ${number.long_name}`;
+        else value.street = street.long_name;
+    }
+
+    // check if any key set
+    if (hasOwnProperty(value))
+        return value;
+}
+
+function addressByVicinity(vicinity: string): Address {
+    const parts = vicinity.split(",");
+    // last part is always city
+    const city = parts[parts.length - 1];
+    // may accidentally include postal code
+    const street = Number(parts[0]) ? parts[1] : parts[0];
+    return {
+        city,
+        street,
+    };
+}
+
+function findComponentWithType(components: GeocoderAddressComponent[], type: string): GeocoderAddressComponent {
+    if (components)
+        for (const component of components)
+            if (component.types.includes(type))
+                return component;
 }
 
 function isWithinBounds(this: LatLngBounds, place: Place): boolean {
