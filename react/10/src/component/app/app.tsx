@@ -7,7 +7,7 @@ import {AppBarTop} from "../app-bar";
 import {GoogleMap, GoogleMapsScript} from "../google-map";
 import {PlaceMarkerCluster} from "../marker";
 import {NavDrawer} from "../nav-drawer";
-import {NearbyPlacesTracker} from "../nearby-places";
+import {NearbyPlacesList, NearbyPlacesTracker} from "../nearby-places";
 import {SearchBox} from "../search-box";
 import "./app.scss";
 
@@ -35,12 +35,14 @@ export class App extends Component<{}, AppState> {
 
     /** @inheritDoc */
     render() {
-        const {places, showNavDrawer} = this.state;
+        const {places, search, showNavDrawer} = this.state;
         return <div className="app">
             <ApplicationContext.Provider value={this.state.context}>
                 <AppBarTop title="Car Wash Map" onNavClick={this.toggleNavDrawer}/>
                 <NavDrawer open={showNavDrawer}>
                     <SearchBox onChange={this.onSearchChange}/>
+                    <NearbyPlacesList places={places}
+                                      filter={search}/>
                 </NavDrawer>
                 <GoogleMapsScript libraries={["places"]}
                                   googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
