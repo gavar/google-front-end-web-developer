@@ -13,6 +13,7 @@ dialog.drawer {
 }
 
 .drawer-container {
+  width: 100%;
   min-width: 256px;
   max-width: calc(100vw - 56px);
   display: inline-block;
