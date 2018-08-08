@@ -1,8 +1,8 @@
 import {identity} from "$util";
 import React, {Component} from "react";
+import {Star, StarBorder, StarHalf} from "../../icon";
 import {Address, Place} from "../../service";
 import "./nearby-place-summary.scss";
-import {Star, StarBorder, StarHalf} from "../../icon";
 
 export interface NearbyPlaceProps {
     place: Place;
@@ -43,17 +43,13 @@ export function RatingView(rating: number, reviews: number) {
         </span> || null;
 }
 
-const star = <li><Star/></li>;
-const starHalf = <li><StarHalf/></li>;
-const starEmpty = <li><StarBorder/></li>;
-
 export function RatingStars(rating: number) {
     const stars = [];
     for (let i = 0; i < 5; i++) {
         const v = rating - i;
-        if (v >= .5) stars.push(star);
-        else if (v >= .25) stars.push(starHalf);
-        else stars.push(starEmpty);
+        if (v >= .5) stars.push(<li key={i}><Star/></li>);
+        else if (v >= .25) stars.push(<li key={i}><StarHalf/></li>);
+        else stars.push(<li key={i}><StarBorder/></li>);
     }
     return stars;
 }
