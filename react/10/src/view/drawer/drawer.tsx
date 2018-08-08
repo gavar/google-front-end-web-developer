@@ -1,7 +1,9 @@
 import {classNames} from "$util";
 import {autobind} from "core-decorators";
 import React, {Component} from "react";
-import {Dialog, PoseStatus, Slide, SlideDirection, SlidePoses} from "../";
+import {Dialog, PoseStatus} from "../";
+import {Slide, SlideDirection, SlidePose} from "../slide";
+
 import "./drawer.scss";
 
 export type DrawerVariant =
@@ -91,7 +93,7 @@ export class Drawer extends Component<DrawerProps, DrawerState> {
     }
 
     @autobind
-    onSlideStateTransition(state: SlidePoses, status: PoseStatus) {
+    onSlideStateTransition(state: SlidePose, status: PoseStatus) {
         switch (state) {
             case "show":
                 this.setState({status});

@@ -1,4 +1,4 @@
-import {Geocoder, LatLngBounds, LatLngLiteral, Map as GoogleMap} from "$google/maps";
+import {Geocoder, LatLngBounds, Map as GoogleMap} from "$google/maps";
 import {
     PlaceDetailsRequest,
     PlaceResult,
@@ -9,6 +9,7 @@ import {
 } from "$google/maps/places";
 import {identity} from "$util";
 import {autobind} from "core-decorators";
+import {Place} from "./place";
 import {store} from "./sql-store";
 
 export class PlaceService {
@@ -190,21 +191,6 @@ export interface PlaceListener {
 
 export interface PlacesListener {
     (places: Place[]);
-}
-
-export interface Place {
-    key: string;
-    icon: string;
-    name: string;
-    phone: string;
-    rating: number;
-    website: string;
-    vicinity: string;
-    location: LatLngLiteral;
-    operating: boolean;
-
-    updateTime: number;
-    details?: boolean;
 }
 
 function asPlace(item: PlaceResult): Place {

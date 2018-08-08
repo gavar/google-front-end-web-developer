@@ -2,21 +2,15 @@ import {classNames} from "$util";
 import {tween} from "popmotion";
 import React, {Component} from "react";
 import {PoseAnimator, PoseAnimatorProps, PoseBehaviour, PoseController} from "../pose";
+import {SlideDirection} from "./slide-direction";
 import "./slide.scss";
 
-/**
- * Direction the component will enter from.
- */
-export type SlideDirection =
-    | "left"
-    | "right"
-    | "up"
-    | "down"
+export type SlidePose =
+    | "show"
+    | "hide"
     ;
 
-export type SlidePoses = "show" | "hide";
-
-export interface SlideProps extends PoseBehaviour<SlidePoses> {
+export interface SlideProps extends PoseBehaviour<SlidePose> {
 
     /**
      * Show the component, triggers enter or exit animation.
@@ -56,7 +50,7 @@ export class Slide extends Component<SlideProps> {
     }
 }
 
-const LeftToRight: PoseController<SlidePoses> = {
+const LeftToRight: PoseController<SlidePose> = {
     poses: {
         show: {
             x: 0,

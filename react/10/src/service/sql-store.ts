@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import {Place} from "./place-service";
+import {Place} from "./place";
 
 /**
  * Storage for application data that use IndexedDB or WebSQL.
