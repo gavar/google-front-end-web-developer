@@ -110,7 +110,17 @@ function placesByRegex(this: RegExp, place: Place) {
 }
 
 function sortByRating(a: Place, b: Place) {
-    if (a.rating > b.rating) return -1;
-    if (a.rating < b.rating) return 1;
+    return -compare(a.rating, b.rating)
+        || compare(a.name, b.name)
+        || compare(a.key, b.key)
+        || 0;
+}
+
+function compare(a: any, b: any): number {
+    if (a === b) return 0;
+    if (a == null && b != null) return -1;
+    if (a != null && b == null) return 1;
+    if (a > b) return 1;
+    if (a < b) return -1;
     return 0;
 }
