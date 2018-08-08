@@ -25,6 +25,7 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
 
         let content;
         if (size > 0) {
+            filtered.sort(sortByRating);
             const items = filtered.map(NearbyPlaceItem, this.props);
             content = <ul className="nearby-places-list">
                 {items}
@@ -50,7 +51,7 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
 }
 
 function filterPlaces(this: RegExp, place: Place) {
-    const {name, phone, website, address, vicinity} = place;
+    const {name, address, vicinity} = place;
     if (name && name.match(this)) return true;
     if (vicinity && vicinity.match(this)) return true;
     if (address) {
@@ -59,8 +60,12 @@ function filterPlaces(this: RegExp, place: Place) {
         if (city && city.match(this)) return true;
         if (country && country.match(this)) return true;
     }
-    if (phone && phone.match(this)) return true;
-    if (website && website.match(this)) return true;
+}
+
+function sortByRating(a: Place, b: Place) {
+    if (a.rating > b.rating) return -1;
+    if (a.rating < b.rating) return 1;
+    return 0;
 }
 
 function NearbyPlaceItem(this: NearbyPlacesListProps, place: Place) {
