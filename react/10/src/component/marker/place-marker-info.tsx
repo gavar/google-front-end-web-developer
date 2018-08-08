@@ -4,6 +4,7 @@ import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
 import {ApplicationContext, ApplicationContextProps} from "../../context";
 import {Place, PlaceService} from "../../service";
+import {AddressView} from "../nearby-places";
 import "./marker-info.scss";
 
 const EMPTY_PLACE: Place = {} as any;
@@ -59,6 +60,7 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             phone,
             rating,
             website,
+            address,
             vicinity,
         } = place || EMPTY_PLACE;
 
@@ -69,8 +71,8 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
                 "name"),
 
             // ADDRESS
-            vicinity && row("Address:",
-                <address>{vicinity.split(",", 1)[0]}</address>,
+            address && row("Address:",
+                AddressView(address, vicinity),
                 "address"),
 
             // PHONE
