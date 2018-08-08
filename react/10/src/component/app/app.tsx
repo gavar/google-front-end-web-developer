@@ -13,6 +13,7 @@ import "./app.scss";
 
 export interface AppState {
     showNavDrawer: boolean;
+    search: string;
     places: Place[];
     context: ApplicationContextProps;
 }
@@ -23,6 +24,7 @@ export class App extends Component<{}, AppState> {
         super(props, context);
         this.state = {
             showNavDrawer: false,
+            search: null,
             places: [],
             context: {
                 map: null,
@@ -38,7 +40,7 @@ export class App extends Component<{}, AppState> {
             <ApplicationContext.Provider value={this.state.context}>
                 <AppBarTop title="Car Wash Map" onNavClick={this.toggleNavDrawer}/>
                 <NavDrawer open={showNavDrawer}>
-                    <SearchBox/>
+                    <SearchBox onChange={this.onSearchChange}/>
                 </NavDrawer>
                 <GoogleMapsScript libraries={["places"]}
                                   googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
@@ -72,5 +74,10 @@ export class App extends Component<{}, AppState> {
         const {placeService} = context;
         placeService.setGoogleMap(map);
         this.forceUpdate();
+    }
+
+    @autobind
+    protected onSearchChange(search: string) {
+        this.setState({search});
     }
 }
