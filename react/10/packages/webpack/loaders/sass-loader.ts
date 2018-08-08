@@ -5,10 +5,12 @@ import {Configurer} from "../";
 
 export interface SassLoaderOptions {
     includePaths?: string[];
+    resources?: string[];
 }
 
 export function sassLoader(configurer: Configurer, options?: SassLoaderOptions): RuleSetRule {
     const {optimize, context, hmr} = configurer;
+    const {includePaths, resources} = options || {} as SassLoaderOptions;
 
     const postcssLoader = {
         loader: "postcss-loader",
@@ -27,11 +29,22 @@ export function sassLoader(configurer: Configurer, options?: SassLoaderOptions):
     const sassLoader = {
         loader: "sass-loader",
         options: {
-            includePaths: options.includePaths || [
+            includePaths: includePaths || [
                 path.join(context, "src"),
             ],
         },
     };
+
+    const sassResourceLoader = {
+        loader: "sass-resources-loader",
+        options: {
+            resources: resources || [
+                path.join(context, "src", "main.scss"),
+            ],
+        },
+    };
+
+    console.log(sassResourceLoader);
 
     const cssLoader = {
         loader: "css-loader",
@@ -50,6 +63,7 @@ export function sassLoader(configurer: Configurer, options?: SassLoaderOptions):
             cssLoader,
             postcssLoader,
             sassLoader,
+            sassResourceLoader,
         ].filter(identity),
     };
 }
