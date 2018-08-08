@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-    "keyofStringsOnly": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": true, // TODO: false in production
+    "allowUnusedLabels": true, // TODO: false in production
     "baseUrl": ".",
+    "declaration": false,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -11,15 +13,16 @@
     "importHelpers": true,
     "isolatedModules": false,
     "jsx": "react",
+    "keyofStringsOnly": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": false,
     "noEmitHelpers": true,
     "noEmitOnError": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
+    "noImplicitAny": false, // TODO: true in production
+    "noImplicitThis": false, // TODO: true in production
     "noResolve": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false, // TODO: true in production
     "outDir": "out",
     "preserveConstEnums": true,
     "pretty": true,
@@ -37,6 +40,7 @@
   },
   "exclude": [
     "build",
-    "node_modules"
+    "node_modules",
+    "**/#*"
   ]
 }
