@@ -21,6 +21,11 @@ export = configurer((env, argv) => {
                 configFile: resolve(root, "tsconfig.webpack.json"),
             },
         },
+        sass: {
+            loader: {
+                resources: [join(root, "src/theme.scss")],
+            },
+        },
         html: {
             template: join(publicPath, "index.html"),
             favicon: join(publicPath, "favicon.ico"),
