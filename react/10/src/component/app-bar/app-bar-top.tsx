@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Menu} from "../../icon";
-import {Button, Typography} from "../../view";
+import {Button} from "../../view";
 import "./app-bar-top.scss";
 
 export interface AppBarProps {
@@ -18,9 +18,7 @@ export class AppBarTop extends Component<AppBarProps> {
                     onClick={onNavClick}>
                 <Menu className="nav-icon"/>
             </Button>
-            <Typography component="h6">
-                {title}
-            </Typography>
+            <h6>{title}</h6>
         </div>;
     }
 }
