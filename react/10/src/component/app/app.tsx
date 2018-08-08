@@ -45,7 +45,7 @@ export class App extends Component<{}, AppState> {
                 <GoogleMapsScript libraries={["places"]}
                                   googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
                     <GoogleMap defaultCenter="Latvia, Riga" onGoogleMap={this.setGoogleMap}>
-                        <NearbyPlacesTracker onPlacesUpdate={this.onPlacesUpdate}/>
+                        <NearbyPlacesTracker onNearbyPlacesChanged={this.onNearbyPlacesChanged}/>
                         <PlaceMarkerCluster places={places}/>
                     </GoogleMap>
                 </GoogleMapsScript>
@@ -54,7 +54,7 @@ export class App extends Component<{}, AppState> {
     }
 
     @autobind
-    protected onPlacesUpdate(places: Place[]) {
+    protected onNearbyPlacesChanged(places: Place[]) {
         this.setState({places});
     }
 

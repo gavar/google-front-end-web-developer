@@ -13,7 +13,7 @@ function contextToProps(props: ApplicationContextProps): Partial<NearbyPlacesPro
 export interface NearbyPlacesProps {
     map?: google.maps.Map,
     placeService?: PlaceService;
-    onPlacesUpdate?(places: Place[]);
+    onNearbyPlacesChanged?(places: Place[]);
 }
 
 @withContextProps(ApplicationContext, contextToProps)
@@ -72,9 +72,9 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
     protected update() {
         const now = Date.now();
 
-        // wait for 50ms sec before start fetching new places from cache
+        // wait for 10 frames before start fetching new places from cache
         if (this.scheduleNearbySearchByBoundsCache)
-            if (now - this.lastMoveTime >= 50)
+            if (now - this.lastMoveTime >= 10 / 60)
                 this.searchNearbyByBounds(true);
 
         // wait for 1 sec before start fetching new places from remote
@@ -86,12 +86,12 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
     @autobind
     protected onNearbySearch() {
         // notify places update
-        const {placeService, onPlacesUpdate} = this.props;
-        if (onPlacesUpdate) {
-            let items = placeService.places;
-            items = items.filter(isOperating);
-            items.sort(sortByKey);
-            onPlacesUpdate(items);
+        const {placeService, onNearbyPlacesChanged} = this.props;
+        if (onNearbyPlacesChanged) {
+            let {nearbyPlaces} = placeService;
+            nearbyPlaces = nearbyPlaces.filter(isOperating);
+            nearbyPlaces.sort(sortByKey);
+            onNearbyPlacesChanged(nearbyPlaces);
         }
     }
 

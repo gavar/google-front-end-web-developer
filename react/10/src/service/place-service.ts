@@ -20,6 +20,12 @@ export class PlaceService {
     /** Dictionary of places in memory by key. */
     public placeByKey: Map<string, Place> = new Map();
 
+    /** List of nearby places within {@link nearbyBounds}. */
+    public nearbyPlaces: Place[] = [];
+
+    /** Bounds within which nearby places are filtered. */
+    public nearbyBounds: LatLngBounds;
+
     protected geocoder: Geocoder;
     protected placesService: PlacesService;
     protected listeners: PlaceListenerEntry[] = [];
@@ -56,7 +62,10 @@ export class PlaceService {
 
         // use cache while fetching from remote
         place = await store.places.get(key);
-        if (place) this.notify(place, false);
+        if (place) {
+            this.savePlaceToMemory(place);
+            this.notify(place, false);
+        }
     }
 
     /**
@@ -65,12 +74,14 @@ export class PlaceService {
      * @param listener - callback to invoke when search completes.
      */
     async nearbySearchCache(bounds: LatLngBounds, listener: PlacesListener): Promise<void> {
-        const query = store.places.filter(place => isWithinBounds(bounds, place));
+        // save bounds for future use
+        this.nearbyBounds = bounds;
+        
+        const query = store.places.filter(isWithinBounds.bind(bounds));
         const places = await query.toArray();
 
         // save cache places to memory
-        for (const place of places) this.placeByKey.set(place.key, place);
-        this.updatePlaceList();
+        this.savePlaceToMemory.apply(this, places);
 
         // notify with places from cache
         listener(places);
@@ -82,6 +93,8 @@ export class PlaceService {
      * @param listener - callback to invoke when search completes.
      */
     async nearbySearchRemote(bounds: LatLngBounds, listener: PlacesListener): Promise<void> {
+        // save bounds for future use
+        this.nearbyBounds = bounds;
 
         // request places from server
         const self = this;
@@ -97,9 +110,9 @@ export class PlaceService {
                         pagination.nextPage();
 
                     // merge places data with existing
-                    const promises = results.map(self.nearbyPlace, self);
+                    const promises = results.map(fromNearbyPlace);
                     const places = await Promise.all(promises);
-                    await self.savePlaces.apply(self, places);
+                    await self.savePlace.apply(self, places);
 
                     // notify
                     listener(places);
@@ -120,7 +133,9 @@ export class PlaceService {
         const {OK} = google.maps.places.PlacesServiceStatus;
         switch (status) {
             case OK:
-                const place = await this.savePlaceDetails(result);
+                const place = fromPlaceDetails(result);
+                this.freshPlaces.add(place.key);
+                await this.savePlace(place);
                 this.notify(place, true);
                 break;
 
@@ -130,27 +145,9 @@ export class PlaceService {
         }
     }
 
-    protected async nearbyPlace(result: PlaceResult): Promise<Place> {
-        let place = asPlace(result);
-        let existing = await store.places.get(place.key);
-        place = {...existing, ...place};
-        return place;
-    }
-
-    protected async savePlaceDetails(result: PlaceResult): Promise<Place> {
-        const place = asPlaceDetails(result);
-        this.freshPlaces.add(place.key);
-        await this.savePlaces(place);
-        return place;
-    }
-
-    protected async savePlaces(...places: Place[]) {
+    protected async savePlace(...places: Place[]) {
         // save to memory
-        for (const place of places)
-            this.placeByKey.set(place.key, place);
-
-        // update places list
-        this.updatePlaceList();
+        this.savePlaceToMemory.apply(this, places);
 
         // save to store
         await store.places.bulkPut(places);
@@ -163,8 +160,14 @@ export class PlaceService {
             .delete();
     }
 
-    protected updatePlaceList() {
+    protected savePlaceToMemory(...places: Place[]) {
+        // update index
+        for (const place of places)
+            this.placeByKey.set(place.key, place);
+
+        // update places lists
         this.places = Array.from(this.placeByKey.values());
+        this.nearbyPlaces = this.places.filter(isWithinBounds, this.nearbyBounds);
     }
 
     protected notify(place: Place, evict: boolean) {
@@ -211,12 +214,19 @@ function asPlace(item: PlaceResult): Place {
     return JSON.parse(JSON.stringify(place));
 }
 
-function asPlaceDetails(item: PlaceResult): Place {
+function fromPlaceDetails(item: PlaceResult): Place {
     const place = asPlace(item);
     place.details = true;
     return place;
 }
 
-function isWithinBounds(bounds: LatLngBounds, place: Place): boolean {
-    return bounds.contains(place.location);
+async function fromNearbyPlace(result: PlaceResult): Promise<Place> {
+    let place = asPlace(result);
+    let existing = await store.places.get(place.key);
+    place = {...existing, ...place};
+    return place;
+}
+
+function isWithinBounds(this: LatLngBounds, place: Place): boolean {
+    return this.contains(place.location);
 }
