@@ -1,5 +1,34 @@
+.nearby-places {
+  display: flex;
+  flex-flow: column;
+  height: 100%
+}
+
 .nearby-places-list {
+  height: 100%;
   padding: 0;
   list-style-type: none;
   text-align: left;
+  overflow-y: auto;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }
+
