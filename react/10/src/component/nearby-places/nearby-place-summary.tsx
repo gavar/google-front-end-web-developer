@@ -39,7 +39,7 @@ export function RatingView(rating: number, reviews: number) {
 
 export function AddressView(address: Address, vicinity: string) {
     const content = address
-        ? [address.street, address.city].filter(identity).join(",")
+        ? [address.street, address.city].filter(identity).join(", ")
         : vicinity;
 
     return content &&
