@@ -33,7 +33,7 @@ export function RatingView(rating: number, reviews: number) {
     // TODO: stars
     return rating &&
         <div className="nearby-place-summary-rating">
-            <span className="value">{rating} / 5.0</span>
+            <span className="value">{rating.toFixed(1)} / 5.0</span>
         </div> || null;
 }
 
