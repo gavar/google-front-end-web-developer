@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {Place} from "../../service";
-import {Typography} from "../../view";
 import {NearbyPlaceSummary} from "./nearby-place-summary";
 import "./nearby-places-list.scss";
 
@@ -29,16 +28,16 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
             </ul>;
         }
         else if (search) {
-            content = <>
-                <Typography>No places found matching search criteria</Typography>
-                <Typography>To see more results, try changing search criteria.</Typography>
-            </>;
+            content = <div className="nearby-places-empty">
+                <p className="subtitle-1 text-primary">No places found matching search criteria</p>
+                <p className="subtitle-2 text-secondary">To see more results, try changing search criteria.</p>
+            </div>;
         }
         else {
-            content = <>
-                <Typography>No places found in the area</Typography>
-                <Typography>To see more results, try panning or zooming the map.</Typography>
-            </>;
+            content = <div className="nearby-places-empty">
+                <p className="subtitle-1 text-primary">No places found in the area</p>
+                <p className="subtitle-2 text-secondary">To see more results, try panning or zooming the map.</p>
+            </div>;
         }
 
         return <div className="nearby-places">
