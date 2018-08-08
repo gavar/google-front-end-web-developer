@@ -231,7 +231,7 @@ const detailsFields = [
     "reviews",
     "website",
     // "vicinity", // provided by NearbySearch
-    // "geometry.location", // provided by NearbySearch
+    // "geometry/location", // provided by NearbySearch
     "permanently_closed",
     "address_components",
     "international_phone_number",
@@ -240,12 +240,12 @@ const detailsFields = [
 function convertToPlace(item: PlaceResult, key?: string): Place {
     const {geometry, reviews, address_components} = item;
     const place: Place = {
-        key: key || item.place_id,
+        key: key || item.place_id || void 0,
         name: item.name,
         icon: item.icon,
         phone: item.international_phone_number,
         rating: item.rating,
-        reviews: reviews && reviews.length || 0,
+        reviews: reviews && reviews.length || void 0,
         website: item.website,
         address: address(address_components, item.vicinity),
         vicinity: item.vicinity,
