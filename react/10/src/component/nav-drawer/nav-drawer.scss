@@ -1,4 +1,5 @@
 @import "style/variables";
+@import "style/theming";
 
 .nav-drawer {
   top: $app-bar-top-height;
@@ -23,5 +24,5 @@
   pointer-events: auto;
   border-left: 1px solid #d4d4d4;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  background-color: rgba(white, .9);
+  background-color: $background-color;
 }
