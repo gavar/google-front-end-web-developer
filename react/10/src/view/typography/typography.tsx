@@ -1,11 +1,13 @@
-import {classNames} from "$util";
 import React, {Component, HTMLAttributes, ReactType} from "react";
-import "./typography.scss";
+// import "./typography.scss";
 
 export type TypographyVariant =
-    | "headline"
-    | "title"
-    | "subheading"
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
     | "body"
 
 export interface TypographyProps extends HTMLAttributes<HTMLElement> {
@@ -27,13 +29,7 @@ export class Typography extends Component<TypographyProps> {
         if (!children)
             return null;
 
-        other.className = classNames(
-            variant,
-            other.className,
-        );
-
         const Component = component || variants[variant] || "div";
-
         return <Component {...other}>
             {children}
         </Component>;
@@ -41,8 +37,11 @@ export class Typography extends Component<TypographyProps> {
 }
 
 const variants = {
-    headline: "h1",
-    title: "h2",
-    subheading: "h3",
+    h1: "h1",
+    h2: "h2",
+    h3: "h3",
+    h4: "h4",
+    h5: "h5",
+    h6: "h6",
     body: "p",
 };
