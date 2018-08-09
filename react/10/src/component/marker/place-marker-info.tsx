@@ -1,22 +1,15 @@
-import {identity, withContextProps} from "$util";
+import {identity} from "$util";
 import {autobind} from "core-decorators";
 import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
-import {ApplicationContext, ApplicationContextProps} from "../../context";
-import {Place, PlaceService} from "../../service";
+import {Place, placeService} from "../../service";
 import {AddressView} from "../nearby-places";
 import "./marker-info.scss";
 
 const EMPTY_PLACE: Place = {} as any;
 
-function contextToProps(props: ApplicationContextProps): Partial<PlaceMarkerInfoProps> {
-    const {placeService} = props;
-    return {placeService};
-}
-
 export interface PlaceMarkerInfoProps {
     placeKey: string;
-    placeService?: PlaceService,
     onCloseClick?(): void;
 }
 
@@ -24,7 +17,6 @@ export interface PlaceMarkerInfoState {
     place?: Place;
 }
 
-@withContextProps(ApplicationContext, contextToProps)
 export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMarkerInfoState> {
     /** @inheritDoc */
     state = {} as PlaceMarkerInfoState;
@@ -105,10 +97,8 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     }
 
     protected fetchDetails(placeKey: string) {
-        if (placeKey) {
-            const {placeService} = this.props;
+        if (placeKey)
             placeService.fetchDetails(placeKey, this.onReceiveDetails);
-        }
     }
 
     @autobind
