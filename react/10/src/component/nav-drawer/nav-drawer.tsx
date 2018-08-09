@@ -1,30 +1,51 @@
+import {autobind} from "core-decorators";
 import React, {PureComponent} from "react";
 import {ArrowLeft, ArrowRight} from "../../icon";
 import {Button, Drawer} from "../../view";
 import "./nav-drawer.scss";
 
 export interface NavDrawerProps {
-    open?: boolean;
+    defaultOpen?: boolean;
     onToggle?();
 }
 
-export class NavDrawer extends PureComponent<NavDrawerProps> {
+interface NawDrawerState {
+    open?: boolean;
+}
+
+export class NavDrawer extends PureComponent<NavDrawerProps, NawDrawerState> {
+
+    constructor(props: NavDrawerProps, context) {
+        super(props, context);
+        const {defaultOpen} = props;
+        this.state = {open: defaultOpen};
+    }
+
     render() {
-        const {open, children} = this.props;
+        const {open} = this.state;
+        const {children} = this.props;
         return <Drawer open={open}
                        className="nav-drawer"
                        variant="persistent">
-            {NavDrawerToggle(this.props)}
+            {NavDrawerToggle(this)}
             {children}
         </Drawer>;
     }
+
+    @autobind
+    onToggle() {
+        let {open} = this.state;
+        this.setState({open: !open});
+        const {onToggle} = this.props;
+        if (onToggle) onToggle();
+    }
 }
 
-function NavDrawerToggle(props: NavDrawerProps) {
-    const {open, onToggle} = props;
+function NavDrawerToggle(drawer: NavDrawer) {
+    const {open} = drawer.state;
     const Arrow = open ? ArrowLeft : ArrowRight;
     return <Button variant="text"
-                   onClick={onToggle}
+                   onClick={drawer.onToggle}
                    className="nav-drawer-toggle">
         <Arrow/>
     </Button>;

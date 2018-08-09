@@ -1,20 +1,26 @@
 import {Geocoder, GeocoderResult, GeocoderStatus, LatLng, LatLngLiteral, Map} from "$google/maps";
 import {autobind} from "core-decorators";
 import PropTypes from "prop-types";
-import React, {PureComponent} from "react";
+import React, {ComponentType, PureComponent} from "react";
 import {GoogleMap as $GoogleMap, withGoogleMap} from "react-google-maps";
 import {MAP} from "react-google-maps/src/constants";
 import "./google-map.scss";
+
+export interface WithGoogleMapProps {
+    map: Map;
+}
 
 export interface GoogleMapProps {
     onGoogleMap?(map: Map);
     defaultZoom?: number
     defaultCenter?: string | LatLng | LatLngLiteral;
-    submit?: (query: string) => void;
+
+    /** Component to mount when google map is ready. */
+    component?: ComponentType<WithGoogleMapProps>;
 }
 
 export interface GoogleMapState {
-    ready: boolean;
+    map: Map;
     center?: LatLng | LatLngLiteral
 }
 
@@ -32,13 +38,8 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
     constructor(props: GoogleMapProps, context: any) {
         super(props, context);
-        this.state = {ready: false};
-        this.setGoogleMap(context[MAP]);
-    }
-
-    /** @inheritDoc */
-    componentWillReceiveProps(props: Readonly<GoogleMapProps>, context: any): void {
-        this.setGoogleMap(context[MAP]);
+        this.state = {map: context[MAP]};
+        this.onGoogleMap(this.state.map);
     }
 
     /** @inheritDoc */
@@ -52,11 +53,13 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
     /** @inheritDoc */
     render() {
-        const {center, ready} = this.state;
-        const {children, defaultZoom} = this.props;
-        const content = ready ? children : null;
+        const {center, map} = this.state;
+        const {children, defaultZoom, component: Component} = this.props;
+        const content = map && Component && <Component map={map}/> || null;
+
         return <$GoogleMap defaultZoom={defaultZoom}
                            center={center}>
+            {children}
             {content}
         </$GoogleMap>;
     }
@@ -92,10 +95,9 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
             this.setCenter(results[0].geometry.location);
     }
 
-    setGoogleMap(map: Map) {
+    onGoogleMap(map: Map) {
         const {onGoogleMap} = this.props;
         if (onGoogleMap) onGoogleMap(map);
-        this.setState({ready: !!map});
     }
 }
 

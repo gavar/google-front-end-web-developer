@@ -1,130 +1,91 @@
 import {Map as $GoogleMap} from "$google/maps";
-import {autobind} from "core-decorators";
-import React, {PureComponent} from "react";
+import React from "react";
 import {Place, placeService} from "../../service";
-import {$PlaceSelectionStore} from "../../store";
-import {GoogleMap, GoogleMapsScript} from "../google-map";
+import {$PlaceSelectionStore, $PlacesStore} from "../../store";
+import {GoogleMap, GoogleMapsScript, WithGoogleMapProps} from "../google-map";
 import {PlaceMarkerCluster, PlaceMarkerInfo} from "../marker";
 import {NavDrawer} from "../nav-drawer";
 import {NearbyPlacesList, NearbyPlacesTracker} from "../nearby-places";
 import {SearchBox} from "../search-box";
 import "./app.scss";
 
-export interface AppState {
-    search: string;
-    places: Place[];
-    searchPlaces: Place[];
-    showNavDrawer: boolean;
-    googleMap: $GoogleMap;
+export function App() {
+    return <div className="app">
+        <NavDrawer defaultOpen={true}>
+            <SearchBox onChange={onSearchChanged}/>
+            <NearbyPlacesList onClick={onPlaceClick}
+                              onMouseOver={onPlaceMouseOver}
+                              onMouseOut={onPlaceMouseOut}/>
+        </NavDrawer>
+        <GoogleMapsScript libraries={["places"]}
+                          googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
+            <GoogleMap defaultCenter="Latvia, Riga"
+                       component={GoogleMapComponents}
+                       onGoogleMap={setGoogleMap}/>
+        </GoogleMapsScript>
+    </div>;
 }
 
-export class App extends PureComponent<{}, AppState> {
+function GoogleMapComponents({map}: WithGoogleMapProps) {
+    return <>
+        <NearbyPlacesTracker map={map}
+                             onNearbyPlacesChanged={onNearbyPlacesChanged}/>;
+        <PlaceMarkerInfo onCloseClick={onCloseInfoWindow}/>
+        <PlaceMarkerCluster onClick={onPlaceClick}
+                            onMouseOver={onPlaceMouseOver}
+                            onMouseOut={onPlaceMouseOut}/>
+    </>;
+}
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
-            places: [],
-            search: null,
-            googleMap: null,
-            searchPlaces: [],
-            showNavDrawer: true,
-        };
-    }
+let googleMap: $GoogleMap;
+function setGoogleMap(value: $GoogleMap) {
+    if (googleMap === value) return;
+    googleMap = value;
+    placeService.setGoogleMap(value);
+}
 
-    /** @inheritDoc */
-    render() {
-        const {search, searchPlaces, googleMap, showNavDrawer} = this.state;
-        return <div className="app">
-            <NavDrawer open={showNavDrawer} onToggle={this.toggleNavDrawer}>
-                <SearchBox onChange={this.onSearchChanged}/>
-                <NearbyPlacesList search={search}
-                                  places={searchPlaces}
-                                  onClick={this.onPlaceClick}
-                                  onMouseOver={this.onPlaceMouseOver}
-                                  onMouseOut={this.onPlaceMouseOut}
-                />
-            </NavDrawer>
-            <GoogleMapsScript libraries={["places"]}
-                              googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
-                <GoogleMap defaultCenter="Latvia, Riga" onGoogleMap={this.setGoogleMap}>
-                    <PlaceMarkerInfo onCloseClick={this.onCloseInfoWindow}/>
-                    <NearbyPlacesTracker map={googleMap}
-                                         onNearbyPlacesChanged={this.onNearbyPlacesChanged}/>
-                    <PlaceMarkerCluster places={searchPlaces}
-                                        onClick={this.onPlaceClick}
-                                        onMouseOver={this.onPlaceMouseOver}
-                                        onMouseOut={this.onPlaceMouseOut}
-                    />
+function onNearbyPlacesChanged(places: Place[]) {
+    const {search} = $PlacesStore.state;
+    updatePlaces(places, search);
+}
 
-                </GoogleMap>
-            </GoogleMapsScript>
-        </div>;
-    }
+function onSearchChanged(search: string) {
+    const {places} = $PlacesStore.state;
+    updatePlaces(places, search);
+}
 
-    protected updatePlaces(places: Place[], search: string) {
-        const searchPlaces = filterPlaces(places, search);
-        searchPlaces.sort(sortByRating);
-        this.setState({
-            search,
-            searchPlaces,
-        });
-    }
+function updatePlaces(places: Place[], search: string) {
+    const searchPlaces = filterPlaces(places, search);
+    searchPlaces.sort(sortByRating);
+    $PlacesStore.setState({
+        places,
+        search,
+        searchPlaces,
+    });
+}
 
-    @autobind
-    protected setGoogleMap(map: $GoogleMap) {
-        const {googleMap} = this.state;
-        if (googleMap === map) return;
-        placeService.setGoogleMap(map);
-        this.setState({googleMap: map});
-    }
+function onPlaceClick(place: Place) {
+    const {selection} = $PlaceSelectionStore.state;
+    if (selection && selection.key == place.key) return;
 
-    @autobind
-    protected onSearchChanged(search: string) {
-        const {places} = this.state;
-        this.updatePlaces(places, search);
-    }
+    googleMap.panTo(place.location);
+    $PlaceSelectionStore.setState({selection: place});
+}
 
-    @autobind
-    protected onNearbyPlacesChanged(places: Place[]) {
-        const {search} = this.state;
-        this.updatePlaces(places, search);
-    }
+function onPlaceMouseOver(place: Place) {
+    const {hover} = $PlaceSelectionStore.state;
+    if (hover && hover.key === place.key) return;
+    $PlaceSelectionStore.setState({hover: place});
+}
 
-    @autobind
-    protected toggleNavDrawer() {
-        let {showNavDrawer} = this.state;
-        showNavDrawer = !showNavDrawer;
-        this.setState({showNavDrawer});
-    }
+function onPlaceMouseOut(place: Place) {
+    const {hover} = $PlaceSelectionStore.state;
+    if (hover && hover.key === place.key)
+        $PlaceSelectionStore.setState({hover: null});
+}
 
-    @autobind
-    protected onPlaceClick(place: Place) {
-        const {googleMap} = this.state;
-        const {selection} = $PlaceSelectionStore.state;
-        if (selection && selection.key == place.key) return;
-
-        googleMap.panTo(place.location);
-        $PlaceSelectionStore.setState({selection: place});
-    }
-
-    @autobind
-    protected onPlaceMouseOver(place: Place) {
-        const {hover} = $PlaceSelectionStore.state;
-        if (hover && hover.key === place.key) return;
-        $PlaceSelectionStore.setState({hover: place});
-    }
-
-    @autobind
-    protected onPlaceMouseOut(place: Place) {
-        const {hover} = $PlaceSelectionStore.state;
-        if (hover && hover.key === place.key)
-            $PlaceSelectionStore.setState({hover: null});
-    }
-
-    @autobind
-    protected onCloseInfoWindow(place: Place) {
-        $PlaceSelectionStore.setState({selection: null});
-    }
+function onCloseInfoWindow(place: Place) {
+    $PlaceSelectionStore.setState({selection: null});
 }
 
 function filterPlaces(places: Place[], search: string): Place[] {

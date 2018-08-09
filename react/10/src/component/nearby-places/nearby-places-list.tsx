@@ -1,21 +1,51 @@
 import React, {PureComponent} from "react";
 import {Place} from "../../service";
+import {$PlacesStore, PlaceState} from "../../store";
 import {NearbyPlaceSummary} from "./nearby-place-summary";
 import "./nearby-places-list.scss";
 
 export interface NearbyPlacesListProps {
-    places: Place[];
-    search: string;
     onClick?(place: Place);
     onMouseOver?(place: Place);
     onMouseOut?(place: Place);
 }
 
-export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps> {
+interface NearbyPlacesListState {
+    places: Place[];
+    search: string;
+}
+
+function storeToState(state: PlaceState): NearbyPlacesListState {
+    const {searchPlaces, search} = state;
+    return {search, places: searchPlaces};
+}
+
+export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps, NearbyPlacesListState> {
+
+    readonly store = $PlacesStore;
+
+    constructor(props, context) {
+        super(props, context);
+        this.state = storeToState(this.store.state);
+    }
+
+    /** @inheritDoc */
+    componentDidMount(): void {
+        this.store.on(this.onPlaceStoreChanged, this);
+    }
+
+    /** @inheritDoc */
+    componentWillUnmount(): void {
+        this.store.off(this.onPlaceStoreChanged, this);
+    }
+
+    onPlaceStoreChanged(state: PlaceState) {
+        this.setState(storeToState(state));
+    }
 
     /** @inheritDoc */
     render() {
-        const {places, search} = this.props;
+        const {places, search} = this.state;
         const size = places && places.length;
 
         let content;
