@@ -62,14 +62,14 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
     protected update() {
         const now = Date.now();
 
-        // wait for 10 frames before start fetching new places from cache
+        // wait for 1 sec before start fetching new places from cache
         if (this.scheduleNearbySearchByBoundsCache)
-            if (now - this.lastMoveTime >= 10 / 60)
+            if (now - this.lastMoveTime >= 1000)
                 this.searchNearbyByBounds(true);
 
-        // wait for 1 sec before start fetching new places from remote
+        // wait for 1.5 sec before start fetching new places from remote
         if (this.scheduleNearbySearchByBoundsRemote)
-            if (now - this.lastMoveTime >= 1000)
+            if (now - this.lastMoveTime >= 1500)
                 this.searchNearbyByBounds(false);
     }
 
