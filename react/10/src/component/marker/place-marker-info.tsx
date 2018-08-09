@@ -3,17 +3,18 @@ import {autobind} from "core-decorators";
 import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
 import {Place, placeService} from "../../service";
+import {$PlaceSelectionStore} from "../../store";
 import {AddressView} from "../nearby-places";
 import "./marker-info.scss";
 
 const empty: Place = {} as any;
 
 export interface PlaceMarkerInfoProps {
-    place: Place;
     onCloseClick?(place: Place): void;
 }
 
 export interface PlaceMarkerInfoState {
+    place?: Place;
     details?: Place;
 }
 
@@ -23,28 +24,24 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
     /** @inheritDoc */
     componentDidMount(): void {
-        const {place} = this.props;
-        this.fetchDetails(place.key);
-    }
-
-    /** @inheritDoc */
-    componentDidUpdate(prev: Readonly<PlaceMarkerInfoProps>): void {
-        const {place} = this.props;
-        if (prev.place != place) {
-            this.setState({details: null});
-            this.fetchDetails(place.key);
-        }
+        const {selection} = $PlaceSelectionStore.state;
+        if (selection) this.fetchDetails(selection.key);
+        $PlaceSelectionStore.on(this.onPlaceSelectionChange, this);
     }
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        this.setState({details: null});
+        $PlaceSelectionStore.off(this.onPlaceSelectionChange, this);
     }
 
     /** @inheritDoc */
     render() {
-        const {place} = this.props;
-        const {details} = this.state;
+        const {place, details} = this.state;
+
+        // do not render if not selected place
+        if (!place)
+            return null;
+
         const {
             name,
             icon,
@@ -106,15 +103,38 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     @autobind
     protected onReceiveDetails(details: Place) {
         // is request actual?
-        const {place} = this.props;
+        const {place} = this.state;
         if (place && place.key === details.key)
             this.setState({details});
     }
 
     @autobind
     protected onCloseClick() {
-        const {place, onCloseClick} = this.props;
+        const {place} = this.state;
+        const {onCloseClick} = this.props;
         if (onCloseClick) onCloseClick(place);
+    }
+
+    protected onPlaceSelectionChange() {
+        const {place} = this.state;
+        const {selection} = $PlaceSelectionStore.state;
+
+        if (selection) {
+            // showing same place?
+            if (place && place.key == selection.key)
+                return;
+
+            // fetch details & show
+            this.fetchDetails(selection.key);
+            this.setState({place: selection});
+        }
+        else if (place) {
+            // hide window if no selection
+            this.setState({
+                place: null,
+                details: null,
+            });
+        }
     }
 }
 

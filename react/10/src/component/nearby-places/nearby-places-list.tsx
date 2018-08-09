@@ -1,4 +1,3 @@
-import {autobind} from "core-decorators";
 import React, {Component} from "react";
 import {Place} from "../../service";
 import {NearbyPlaceSummary} from "./nearby-place-summary";
@@ -7,10 +6,9 @@ import "./nearby-places-list.scss";
 export interface NearbyPlacesListProps {
     places: Place[];
     search: string;
-    hover?: Place;
-    active?: Place;
-    onHoverChange?(place: Place);
-    onActiveChange?(place: Place);
+    onClick?(place: Place);
+    onMouseOver?(place: Place);
+    onMouseOut?(place: Place);
 }
 
 export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
@@ -44,37 +42,15 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
             {content}
         </div>;
     }
-
-    @autobind
-    onClick(place: Place) {
-        const {active, onActiveChange} = this.props;
-        if (active === place) return;
-        if (onActiveChange) onActiveChange(place);
-    }
-
-    @autobind
-    onMouseOver(place: Place) {
-        const {active, onHoverChange} = this.props;
-        if (active === place) return;
-        if (onHoverChange) onHoverChange(place);
-    }
-    @autobind
-    onMouseOut(place: Place) {
-        const {active, onHoverChange} = this.props;
-        if (active !== place) return;
-        if (onHoverChange) onHoverChange(place);
-    }
 }
 
 function NearbyPlaceItem(this: NearbyPlacesList, place: Place) {
     const {key} = place;
-    const {hover, active} = this.props;
+    const {onClick, onMouseOver, onMouseOut} = this.props;
     return <li key={key} className="nearby-places-list-item">
         <NearbyPlaceSummary place={place}
-                            hover={hover && hover.key == key}
-                            selected={active && active.key == key}
-                            onClick={this.onClick}
-                            onMouseOver={this.onMouseOver}
-                            onMouseOut={this.onMouseOut}/>
+                            onClick={onClick}
+                            onMouseOver={onMouseOver}
+                            onMouseOut={onMouseOut}/>
     </li>;
 }

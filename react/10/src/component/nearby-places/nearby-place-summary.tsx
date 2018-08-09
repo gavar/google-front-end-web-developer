@@ -1,14 +1,13 @@
 import {classNames, identity} from "$util";
 import {autobind} from "core-decorators";
-import React, {Component, MouseEvent} from "react";
+import React, {MouseEvent, PureComponent} from "react";
 import {Star, StarBorder, StarHalf} from "../../icon";
 import {Address, Place} from "../../service";
+import {$PlaceSelectionStore, PlaceSelectionState} from "../../store";
 import {ButtonBase} from "../../view";
 import "./nearby-place-summary.scss";
 
 export interface NearbyPlaceProps {
-    hover?: boolean;
-    selected?: boolean;
     place: Place;
     onClick?(place: Place);
     onMouseOver?(place: Place);
@@ -16,20 +15,33 @@ export interface NearbyPlaceProps {
     onDidMount?(place: Place);
 }
 
-export class NearbyPlaceSummary extends Component<NearbyPlaceProps> {
+export interface NearbyPlaceState {
+    hovering?: boolean;
+    selected?: boolean;
+}
+
+export class NearbyPlaceSummary extends PureComponent<NearbyPlaceProps, NearbyPlaceState> {
+
+    state: NearbyPlaceState = {};
 
     componentDidMount(): void {
         const {place, onDidMount} = this.props;
         if (onDidMount) onDidMount(place);
+        $PlaceSelectionStore.on(this.onPlaceSelectionChange, this);
+    }
+
+    componentWillUnmount(): void {
+        $PlaceSelectionStore.off(this.onPlaceSelectionChange, this);
     }
 
     render() {
-        const {place, hover, selected} = this.props;
+        const {place} = this.props;
+        const {hovering, selected} = this.state;
         const {name, rating, reviews, address, vicinity} = place;
 
         const className = classNames(
             "nearby-place-summary",
-            hover && "hover",
+            hovering && "hover",
             selected && "selected",
         );
 
@@ -64,6 +76,18 @@ export class NearbyPlaceSummary extends Component<NearbyPlaceProps> {
     protected onMouseOut(e: MouseEvent) {
         const {place, onMouseOut} = this.props;
         if (onMouseOut) onMouseOut(place);
+    }
+
+    protected onPlaceSelectionChange(state: PlaceSelectionState) {
+        const {place} = this.props;
+        const {hover, selection} = state;
+
+        const hovering = hover && hover.key === place.key;
+        const selected = selection && selection.key === place.key;
+        const dirty = this.state.hovering !== hovering
+            || this.state.selected !== selected;
+
+        if (dirty) this.setState({hovering, selected});
     }
 }
 

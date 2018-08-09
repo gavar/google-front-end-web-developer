@@ -2,8 +2,9 @@ import {Map as $GoogleMap} from "$google/maps";
 import {autobind} from "core-decorators";
 import React, {Component} from "react";
 import {Place, placeService} from "../../service";
+import {$PlaceSelectionStore} from "../../store";
 import {GoogleMap, GoogleMapsScript} from "../google-map";
-import {PlaceMarkerCluster} from "../marker";
+import {PlaceMarkerCluster, PlaceMarkerInfo} from "../marker";
 import {NavDrawer} from "../nav-drawer";
 import {NearbyPlacesList, NearbyPlacesTracker} from "../nearby-places";
 import {SearchBox} from "../search-box";
@@ -13,8 +14,6 @@ export interface AppState {
     search: string;
     places: Place[];
     searchPlaces: Place[];
-    hoverPlace?: Place;
-    activePlace?: Place;
     showNavDrawer: boolean;
     googleMap: $GoogleMap;
 }
@@ -34,27 +33,28 @@ export class App extends Component<{}, AppState> {
 
     /** @inheritDoc */
     render() {
-        const {search, searchPlaces, hoverPlace, activePlace, googleMap, showNavDrawer} = this.state;
+        const {search, searchPlaces, googleMap, showNavDrawer} = this.state;
         return <div className="app">
             <NavDrawer open={showNavDrawer} onToggle={this.toggleNavDrawer}>
                 <SearchBox onChange={this.onSearchChange}/>
                 <NearbyPlacesList places={searchPlaces}
                                   search={search}
-                                  hover={hoverPlace}
-                                  active={activePlace}
-                                  onHoverChange={this.onHoverPlaceChange}
-                                  onActiveChange={this.onActivePlaceChange}/>
+                                  onClick={this.onPlaceClick}
+                                  onMouseOver={this.onPlaceMouseOver}
+                                  onMouseOut={this.onPlaceMouseOut}
+                />
             </NavDrawer>
             <GoogleMapsScript libraries={["places"]}
                               googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
                 <GoogleMap defaultCenter="Latvia, Riga" onGoogleMap={this.setGoogleMap}>
+                    <PlaceMarkerInfo onCloseClick={this.onCloseInfoWindow}/>
                     <NearbyPlacesTracker map={googleMap}
                                          onNearbyPlacesChanged={this.onNearbyPlacesChanged}/>
                     <PlaceMarkerCluster places={searchPlaces}
-                                        hover={hoverPlace}
-                                        active={activePlace}
-                                        onHoverChange={this.onHoverPlaceChange}
-                                        onActiveChange={this.onActivePlaceChange}/>
+                                        onClick={this.onPlaceClick}
+                                        onMouseOver={this.onPlaceMouseOver}
+                                        onMouseOut={this.onPlaceMouseOut}
+                    />
 
                 </GoogleMap>
             </GoogleMapsScript>
@@ -91,16 +91,32 @@ export class App extends Component<{}, AppState> {
     }
 
     @autobind
-    protected onActivePlaceChange(place: Place) {
-        this.setState({activePlace: place});
+    protected onPlaceClick(place: Place) {
         const {googleMap} = this.state;
-        if (place) googleMap.panTo(place.location);
+        const {selection} = $PlaceSelectionStore.state;
+        if (selection && selection.key == place.key) return;
+
+        googleMap.panTo(place.location);
+        $PlaceSelectionStore.setState({selection: place});
     }
 
     @autobind
-    protected onHoverPlaceChange(place: Place) {
-        const hoverPlace = place ? place : null;
-        this.setState({hoverPlace});
+    protected onPlaceMouseOver(place: Place) {
+        const {hover} = $PlaceSelectionStore.state;
+        if (hover && hover.key === place.key) return;
+        $PlaceSelectionStore.setState({hover: place});
+    }
+
+    @autobind
+    protected onPlaceMouseOut(place: Place) {
+        const {hover} = $PlaceSelectionStore.state;
+        if (hover && hover.key == place.key)
+            $PlaceSelectionStore.setState({hover: null});
+    }
+
+    @autobind
+    protected onCloseInfoWindow(place: Place) {
+        $PlaceSelectionStore.setState({selection: null});
     }
 }
 
