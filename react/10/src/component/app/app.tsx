@@ -1,8 +1,7 @@
-import {Map} from "$google/maps";
+import {Map as $GoogleMap} from "$google/maps";
 import {autobind} from "core-decorators";
 import React, {Component} from "react";
-import {ApplicationContext, ApplicationContextProps} from "../../context";
-import {Place, PlaceService} from "../../service";
+import {Place, placeService} from "../../service";
 import {GoogleMap, GoogleMapsScript} from "../google-map";
 import {PlaceMarkerCluster} from "../marker";
 import {NavDrawer} from "../nav-drawer";
@@ -14,8 +13,10 @@ export interface AppState {
     search: string;
     places: Place[];
     searchPlaces: Place[];
+    hoverPlace?: Place;
+    activePlace?: Place;
     showNavDrawer: boolean;
-    context: ApplicationContextProps;
+    googleMap: $GoogleMap;
 }
 
 export class App extends Component<{}, AppState> {
@@ -23,35 +24,40 @@ export class App extends Component<{}, AppState> {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            showNavDrawer: true,
             places: [],
             search: null,
+            googleMap: null,
             searchPlaces: [],
-            context: {
-                map: null,
-                placeService: new PlaceService(),
-            },
+            showNavDrawer: true,
         };
     }
 
     /** @inheritDoc */
     render() {
-        const {search, searchPlaces, showNavDrawer} = this.state;
-
+        const {search, searchPlaces, hoverPlace, activePlace, googleMap, showNavDrawer} = this.state;
         return <div className="app">
-            <ApplicationContext.Provider value={this.state.context}>
-                <NavDrawer open={showNavDrawer} onToggle={this.toggleNavDrawer}>
-                    <SearchBox onChange={this.onSearchChange}/>
-                    <NearbyPlacesList places={searchPlaces} search={search}/>
-                </NavDrawer>
-                <GoogleMapsScript libraries={["places"]}
-                                  googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
-                    <GoogleMap defaultCenter="Latvia, Riga" onGoogleMap={this.setGoogleMap}>
-                        <NearbyPlacesTracker onNearbyPlacesChanged={this.onNearbyPlacesChanged}/>
-                        <PlaceMarkerCluster places={searchPlaces}/>
-                    </GoogleMap>
-                </GoogleMapsScript>
-            </ApplicationContext.Provider>
+            <NavDrawer open={showNavDrawer} onToggle={this.toggleNavDrawer}>
+                <SearchBox onChange={this.onSearchChange}/>
+                <NearbyPlacesList places={searchPlaces}
+                                  search={search}
+                                  hover={hoverPlace}
+                                  active={activePlace}
+                                  onHoverChange={this.onHoverPlaceChange}
+                                  onActiveChange={this.onActivePlaceChange}/>
+            </NavDrawer>
+            <GoogleMapsScript libraries={["places"]}
+                              googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
+                <GoogleMap defaultCenter="Latvia, Riga" onGoogleMap={this.setGoogleMap}>
+                    <NearbyPlacesTracker map={googleMap}
+                                         onNearbyPlacesChanged={this.onNearbyPlacesChanged}/>
+                    <PlaceMarkerCluster places={searchPlaces}
+                                        hover={hoverPlace}
+                                        active={activePlace}
+                                        onHoverChange={this.onHoverPlaceChange}
+                                        onActiveChange={this.onActivePlaceChange}/>
+
+                </GoogleMap>
+            </GoogleMapsScript>
         </div>;
     }
 
@@ -70,14 +76,11 @@ export class App extends Component<{}, AppState> {
     }
 
     @autobind
-    protected setGoogleMap(map: Map) {
-        const {context} = this.state;
-        if (context.map === map) return;
-
-        context.map = map;
-        const {placeService} = context;
+    protected setGoogleMap(map: $GoogleMap) {
+        const {googleMap} = this.state;
+        if (googleMap === map) return;
         placeService.setGoogleMap(map);
-        this.forceUpdate();
+        this.setState({googleMap: map});
     }
 
     @autobind
@@ -85,6 +88,18 @@ export class App extends Component<{}, AppState> {
         const {places} = this.state;
         const searchPlaces = filterPlaces(places, search);
         this.setState({search, searchPlaces});
+    }
+
+    @autobind
+    protected onActivePlaceChange(place: Place) {
+        const activePlace = place ? place : null;
+        this.setState({activePlace});
+    }
+
+    @autobind
+    protected onHoverPlaceChange(place: Place) {
+        const hoverPlace = place ? place : null;
+        this.setState({hoverPlace});
     }
 }
 
