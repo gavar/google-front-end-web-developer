@@ -1,12 +1,17 @@
 import {identity} from "$util";
-import React, {Component} from "react";
+import {autobind} from "core-decorators";
+import React, {Component, MouseEvent} from "react";
 import {Star, StarBorder, StarHalf} from "../../icon";
 import {Address, Place} from "../../service";
+import {ButtonBase} from "../../view";
 import "./nearby-place-summary.scss";
 
 export interface NearbyPlaceProps {
+    selected?: boolean;
     place: Place;
     onClick?(place: Place);
+    onMouseOver?(place: Place);
+    onMouseOut?(place: Place);
     onDidMount?(place: Place);
 }
 
@@ -18,14 +23,37 @@ export class NearbyPlaceSummary extends Component<NearbyPlaceProps> {
     }
 
     render() {
-        const {place} = this.props;
+        const {place, selected} = this.props;
         const {name, rating, reviews, address, vicinity} = place;
 
-        return <div className="nearby-place-summary">
+        return <ButtonBase role="tab"
+                           aria-selected={selected}
+                           className="nearby-place-summary"
+                           onClick={this.onClick}
+                           onMouseOver={this.onMouseOver}
+                           onMouseOut={this.onMouseOut}>
             <h3 className="nearby-place-summary-title">{name}</h3>
             {RatingView(rating, reviews)}
             {AddressView(address, vicinity, "nearby-place-summary-address")}
-        </div>;
+        </ButtonBase>;
+    }
+
+    @autobind
+    protected onClick(e: MouseEvent) {
+        const {place, onClick} = this.props;
+        if (onClick) onClick(place);
+    }
+
+    @autobind
+    protected onMouseOver(e: MouseEvent) {
+        const {place, onMouseOver} = this.props;
+        if (onMouseOver) onMouseOver(place);
+    }
+
+    @autobind
+    protected onMouseOut(e: MouseEvent) {
+        const {place, onMouseOut} = this.props;
+        if (onMouseOut) onMouseOut(place);
     }
 }
 
