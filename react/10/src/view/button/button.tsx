@@ -1,31 +1,44 @@
 import {classNames} from "$util";
-import React, {ButtonHTMLAttributes, Component} from "react";
-import {ButtonType, ColorType} from "../types";
+import React, {Component} from "react";
+import {ButtonColorType} from "../types";
+import {ButtonBase, ButtonBaseProps} from "./button-base";
 import "./button.scss";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    type?: ButtonType;
-    color?: ColorType;
+export type ButtonVariant =
+    | "text" // https://material.io/design/components/buttons.html#text-button
+    ;
+
+export interface ButtonProps extends ButtonBaseProps {
+    variant?: ButtonVariant;
+    color?: ButtonColorType;
 }
 
+/**
+ * Button with different variants.
+ * @see https://material.io/design/components/buttons.html
+ */
 export class Button extends Component<ButtonProps> {
 
-    public static readonly defaultProps: ButtonProps = {
-        type: "button",
+    static readonly defaultProps: ButtonProps = {
+        color: "default",
+        variant: "text",
     };
 
     /** @inheritDoc */
     render() {
-        const {color, children, ...other} = this.props;
+        const {color, variant, ...other} = this.props;
+        const props: ButtonProps = other;
 
-        other.className = classNames(
+        const text = variant === "text";
+        props.className = classNames(
             "button",
-            color && `button-${color}`,
-            other.className,
+            text && "text",
+            props.className,
         );
 
-        return <button {...other}>
-            {children}
-        </button>;
+        if (color !== "default")
+            props.color = color;
+
+        return <ButtonBase {...props}/>;
     }
 }

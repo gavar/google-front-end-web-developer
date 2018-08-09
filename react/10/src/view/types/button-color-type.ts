@@ -1,7 +1,6 @@
-export type ColorType =
+export type ButtonColorType =
     | "default"
     | "inherit"
     | "primary"
     | "secondary"
-    | "clear"
     ;
