@@ -1,5 +1,5 @@
 import {autobind} from "core-decorators";
-import React, {ChangeEvent, Component} from "react";
+import React, {ChangeEvent, PureComponent} from "react";
 import {Cancel, Search} from "../../icon";
 import {Button} from "../../view";
 import "./search-box.scss";
@@ -12,7 +12,7 @@ interface SearchBoxState {
     value: string;
 }
 
-export class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
+export class SearchBox extends PureComponent<SearchBoxProps, SearchBoxState> {
 
     constructor(props, context) {
         super(props, context);

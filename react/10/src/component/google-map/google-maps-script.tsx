@@ -1,6 +1,6 @@
 import {identity} from "$util";
 import {autobind} from "core-decorators";
-import {Component} from "react";
+import {PureComponent} from "react";
 
 export interface WithGoogleMapsProps {
     googleKey: string;
@@ -14,7 +14,7 @@ export interface WithGoogleMapsState {
     ready: boolean;
 }
 
-export class GoogleMapsScript extends Component<WithGoogleMapsProps, WithGoogleMapsState> {
+export class GoogleMapsScript extends PureComponent<WithGoogleMapsProps, WithGoogleMapsState> {
 
     static readonly defaultProps: Partial<WithGoogleMapsProps> = {
         async: true,

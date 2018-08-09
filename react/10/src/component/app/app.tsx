@@ -1,6 +1,6 @@
 import {Map as $GoogleMap} from "$google/maps";
 import {autobind} from "core-decorators";
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Place, placeService} from "../../service";
 import {$PlaceSelectionStore} from "../../store";
 import {GoogleMap, GoogleMapsScript} from "../google-map";
@@ -18,7 +18,7 @@ export interface AppState {
     googleMap: $GoogleMap;
 }
 
-export class App extends Component<{}, AppState> {
+export class App extends PureComponent<{}, AppState> {
 
     constructor(props, context) {
         super(props, context);

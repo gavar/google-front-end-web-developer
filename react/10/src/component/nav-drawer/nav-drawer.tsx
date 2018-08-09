@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {ArrowLeft, ArrowRight} from "../../icon";
 import {Button, Drawer} from "../../view";
 import "./nav-drawer.scss";
@@ -8,7 +8,7 @@ export interface NavDrawerProps {
     onToggle?();
 }
 
-export class NavDrawer extends Component<NavDrawerProps> {
+export class NavDrawer extends PureComponent<NavDrawerProps> {
     render() {
         const {open, children} = this.props;
         return <Drawer open={open}

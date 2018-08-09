@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Place} from "../../service";
 import {NearbyPlaceSummary} from "./nearby-place-summary";
 import "./nearby-places-list.scss";
@@ -11,7 +11,7 @@ export interface NearbyPlacesListProps {
     onMouseOut?(place: Place);
 }
 
-export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
+export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps> {
 
     /** @inheritDoc */
     render() {
