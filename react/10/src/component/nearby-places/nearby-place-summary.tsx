@@ -12,7 +12,6 @@ export interface NearbyPlaceProps {
     onClick?(place: Place);
     onMouseOver?(place: Place);
     onMouseOut?(place: Place);
-    onDidMount?(place: Place);
 }
 
 export interface NearbyPlaceState {
@@ -22,16 +21,16 @@ export interface NearbyPlaceState {
 
 export class NearbyPlaceSummary extends PureComponent<NearbyPlaceProps, NearbyPlaceState> {
 
+    protected readonly store = $PlaceSelectionStore;
     state: NearbyPlaceState = {};
 
     componentDidMount(): void {
-        const {place, onDidMount} = this.props;
-        if (onDidMount) onDidMount(place);
-        $PlaceSelectionStore.on(this.onPlaceSelectionChange, this);
+        this.store.on(this.onPlaceSelectionChange, this);
+        this.onPlaceSelectionChange(this.store.state);
     }
 
     componentWillUnmount(): void {
-        $PlaceSelectionStore.off(this.onPlaceSelectionChange, this);
+        this.store.off(this.onPlaceSelectionChange, this);
     }
 
     render() {

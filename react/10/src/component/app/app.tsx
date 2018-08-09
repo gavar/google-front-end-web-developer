@@ -1,6 +1,6 @@
 import {Map as $GoogleMap} from "$google/maps";
 import React from "react";
-import {Place, placeService} from "../../service";
+import {Place, $PlaceService} from "../../service";
 import {$PlaceSelectionStore, $PlacesStore} from "../../store";
 import {GoogleMap, GoogleMapsScript, WithGoogleMapProps} from "../google-map";
 import {PlaceMarkerCluster, PlaceMarkerInfo} from "../marker";
@@ -41,7 +41,7 @@ let googleMap: $GoogleMap;
 function setGoogleMap(value: $GoogleMap) {
     if (googleMap === value) return;
     googleMap = value;
-    placeService.setGoogleMap(value);
+    $PlaceService.setGoogleMap(value);
 }
 
 function onNearbyPlacesChanged(places: Place[]) {

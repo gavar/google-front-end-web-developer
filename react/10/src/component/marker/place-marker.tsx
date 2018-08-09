@@ -25,18 +25,21 @@ const markerPin = <PlaceMarkerPin className="place-marker-pin"/>;
 
 export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerState> {
 
+    protected readonly store = $PlaceSelectionStore;
+
     constructor(props, context) {
-        AnchorPoint = AnchorPoint || new google.maps.Point(15, 48);
         super(props, context);
+        AnchorPoint = AnchorPoint || new google.maps.Point(15, 48);
         this.state = {};
     }
 
     componentDidMount(): void {
-        $PlaceSelectionStore.on(this.onPlaceSelectionChange, this);
+        this.store.on(this.onPlaceSelectionChange, this);
+        this.onPlaceSelectionChange(this.store.state);
     }
 
     componentWillUnmount(): void {
-        $PlaceSelectionStore.off(this.onPlaceSelectionChange, this);
+        this.store.off(this.onPlaceSelectionChange, this);
     }
 
     /** @inheritDoc */

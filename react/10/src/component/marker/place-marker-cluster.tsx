@@ -21,7 +21,7 @@ function storeToState(state: PlaceState): PlaceMarkerCloudState {
 
 export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, PlaceMarkerCloudState> {
 
-    readonly store = $PlacesStore;
+    protected readonly store = $PlacesStore;
 
     constructor(props, context) {
         super(props, context);

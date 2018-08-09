@@ -1,7 +1,7 @@
 import {Map, MapsEventListener} from "$google/maps";
 import {autobind} from "core-decorators";
 import {PureComponent} from "react";
-import {Place, placeService} from "../../service";
+import {Place, $PlaceService} from "../../service";
 
 export interface NearbyPlacesProps {
     map: Map,
@@ -14,6 +14,7 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
     protected lastMoveTime: number = 0;
     protected scheduleNearbySearchByBoundsCache: boolean;
     protected scheduleNearbySearchByBoundsRemote: boolean;
+    protected readonly placeService = $PlaceService;
     protected readonly listeners: MapsEventListener[] = [];
 
     /** @inheritDoc */
@@ -44,11 +45,11 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
 
         if (cache) {
             this.scheduleNearbySearchByBoundsCache = false;
-            placeService.nearbySearchCache(bounds, this.onNearbySearchDone);
+            this.placeService.nearbySearchCache(bounds, this.onNearbySearchDone);
         }
         else {
             this.scheduleNearbySearchByBoundsRemote = false;
-            placeService.nearbySearchRemote(bounds, this.onNearbySearchDone);
+            this.placeService.nearbySearchRemote(bounds, this.onNearbySearchDone);
         }
     }
 
@@ -89,7 +90,7 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
         // notify places update
         const {onNearbyPlacesChanged} = this.props;
         if (onNearbyPlacesChanged) {
-            let {nearbyPlaces} = placeService;
+            let {nearbyPlaces} = this.placeService;
             onNearbyPlacesChanged(nearbyPlaces);
         }
     }

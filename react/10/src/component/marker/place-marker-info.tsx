@@ -2,8 +2,8 @@ import {identity} from "$util";
 import {autobind} from "core-decorators";
 import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
-import {Place, placeService} from "../../service";
-import {$PlaceSelectionStore} from "../../store";
+import {$PlaceService, Place} from "../../service";
+import {$PlaceSelectionStore, PlaceSelectionState} from "../../store";
 import {AddressView} from "../nearby-places";
 import "./marker-info.scss";
 
@@ -19,19 +19,23 @@ export interface PlaceMarkerInfoState {
 }
 
 export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMarkerInfoState> {
+
+    protected readonly store = $PlaceSelectionStore;
+    protected readonly placeService = $PlaceService;
+
     /** @inheritDoc */
     state = {} as PlaceMarkerInfoState;
 
     /** @inheritDoc */
     componentDidMount(): void {
-        const {selection} = $PlaceSelectionStore.state;
+        const {selection} = this.store.state;
         if (selection) this.fetchDetails(selection.key);
-        $PlaceSelectionStore.on(this.onPlaceSelectionChange, this);
+        this.store.on(this.onPlaceSelectionChange, this);
     }
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        $PlaceSelectionStore.off(this.onPlaceSelectionChange, this);
+        this.store.off(this.onPlaceSelectionChange, this);
     }
 
     /** @inheritDoc */
@@ -97,7 +101,7 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
     protected fetchDetails(placeKey: string) {
         if (placeKey)
-            placeService.fetchDetails(placeKey, this.onReceiveDetails);
+            this.placeService.fetchDetails(placeKey, this.onReceiveDetails);
     }
 
     @autobind
@@ -115,9 +119,9 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
         if (onCloseClick) onCloseClick(place);
     }
 
-    protected onPlaceSelectionChange() {
+    protected onPlaceSelectionChange(state: PlaceSelectionState) {
         const {place} = this.state;
-        const {selection} = $PlaceSelectionStore.state;
+        const {selection} = state;
 
         if (selection) {
             // showing same place?

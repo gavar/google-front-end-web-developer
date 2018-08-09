@@ -313,4 +313,4 @@ function isWithinBounds(this: LatLngBounds, place: Place): boolean {
 }
 
 // shared service instance.
-export const placeService = new PlaceService();
+export const $PlaceService = new PlaceService();

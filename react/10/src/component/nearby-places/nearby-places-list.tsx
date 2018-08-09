@@ -22,7 +22,7 @@ function storeToState(state: PlaceState): NearbyPlacesListState {
 
 export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps, NearbyPlacesListState> {
 
-    readonly store = $PlacesStore;
+    protected readonly store = $PlacesStore;
 
     constructor(props, context) {
         super(props, context);
