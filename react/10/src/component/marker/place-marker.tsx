@@ -26,7 +26,7 @@ const markerPin = <PlaceMarkerPin className="place-marker-pin"/>;
 export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerState> {
 
     constructor(props, context) {
-        AnchorPoint = AnchorPoint || new google.maps.Point(16, 48);
+        AnchorPoint = AnchorPoint || new google.maps.Point(15, 48);
         super(props, context);
         this.state = {};
     }
@@ -48,7 +48,9 @@ export class PlaceMarker extends PureComponent<PlaceMarkerProps, PlaceMarkerStat
         const z = hovering ? 1001 : selected ? 1000 : void 0;
         const className = classNames(
             "place-marker",
-            selected ? "active" : hovering && "hover",
+            "show",
+            hovering && "hover",
+            selected && "selected",
         );
 
         return <MarkerWithLabel key={key}
