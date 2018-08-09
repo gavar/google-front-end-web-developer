@@ -92,8 +92,9 @@ export class App extends Component<{}, AppState> {
 
     @autobind
     protected onActivePlaceChange(place: Place) {
-        const activePlace = place ? place : null;
-        this.setState({activePlace});
+        this.setState({activePlace: place});
+        const {googleMap} = this.state;
+        if (place) googleMap.panTo(place.location);
     }
 
     @autobind
