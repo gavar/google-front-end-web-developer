@@ -19,8 +19,10 @@ export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, Pla
     /** @inheritDoc */
     render() {
         const {places} = this.props;
-        return <MarkerClusterer defaultMaxZoom={12}
-                                defaultZoomOnClick={false}>
+        return <MarkerClusterer maxZoom={12}
+                                zoomOnClick={false}
+                                enableRetinaIcons
+                                gridSize={60}>
             {places.map(this.placeToMarker, this)}
         </MarkerClusterer>;
     }
