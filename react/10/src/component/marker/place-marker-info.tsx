@@ -6,15 +6,15 @@ import {Place, placeService} from "../../service";
 import {AddressView} from "../nearby-places";
 import "./marker-info.scss";
 
-const EMPTY_PLACE: Place = {} as any;
+const empty: Place = {} as any;
 
 export interface PlaceMarkerInfoProps {
-    placeKey: string;
-    onCloseClick?(): void;
+    place: Place;
+    onCloseClick?(place: Place): void;
 }
 
 export interface PlaceMarkerInfoState {
-    place?: Place;
+    details?: Place;
 }
 
 export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMarkerInfoState> {
@@ -23,29 +23,28 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
     /** @inheritDoc */
     componentDidMount(): void {
-        const {placeKey} = this.props;
-        this.fetchDetails(placeKey);
+        const {place} = this.props;
+        this.fetchDetails(place.key);
     }
 
     /** @inheritDoc */
     componentDidUpdate(prev: Readonly<PlaceMarkerInfoProps>): void {
-        const {placeKey} = this.props;
-        if (prev.placeKey != placeKey) {
-            this.setState({place: null});
-            this.fetchDetails(placeKey);
+        const {place} = this.props;
+        if (prev.place != place) {
+            this.setState({details: null});
+            this.fetchDetails(place.key);
         }
     }
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        this.setState({place: null});
+        this.setState({details: null});
     }
 
     /** @inheritDoc */
     render() {
-        const {place} = this.state;
-        const {onCloseClick} = this.props;
-
+        const {place} = this.props;
+        const {details} = this.state;
         const {
             name,
             icon,
@@ -53,10 +52,11 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             rating,
             website,
             address,
+            location,
             vicinity,
-        } = place || EMPTY_PLACE;
+        } = details || place || empty;
 
-        const rows = place && [
+        const rows = details && [
             // TITLE
             name && row(<img src={icon}/>,
                 <a target="_blank" href={website || "#"}>{name}</a>,
@@ -89,7 +89,9 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             <tbody>{rows}</tbody>
         </table>;
 
-        return <InfoWindow onCloseClick={onCloseClick}>
+        return <InfoWindow
+            position={location}
+            onCloseClick={this.onCloseClick}>
             <div className={"place-marker-info"}>
                 {table}
             </div>
@@ -102,11 +104,17 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     }
 
     @autobind
-    protected onReceiveDetails(place: Place) {
+    protected onReceiveDetails(details: Place) {
         // is request actual?
-        const {placeKey} = this.props;
-        if (place.key === placeKey)
-            this.setState({place});
+        const {place} = this.props;
+        if (place && place.key === details.key)
+            this.setState({details});
+    }
+
+    @autobind
+    protected onCloseClick() {
+        const {place, onCloseClick} = this.props;
+        if (onCloseClick) onCloseClick(place);
     }
 }
 

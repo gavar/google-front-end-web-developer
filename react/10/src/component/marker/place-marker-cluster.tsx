@@ -3,51 +3,72 @@ import React, {PureComponent} from "react";
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
 import {Place} from "../../service";
 import {PlaceMarker} from "./place-marker";
+import {PlaceMarkerInfo} from "./place-marker-info";
 
 export interface PlaceMarkerCloudProps {
     places: Place[];
+    hover?: Place;
+    active?: Place;
+    onActiveChange?(marker: Place);
+    onHoverChange?(marker: Place);
 }
 
-export interface PlaceMarkerCloudState {
-    selection?: string;
+interface PlaceMarkerCloudState {
+
 }
 
 export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, PlaceMarkerCloudState> {
 
     /** @inheritDoc */
-    state = {} as PlaceMarkerCloudState;
-
-    /** @inheritDoc */
     render() {
-        const {places} = this.props;
-        return <MarkerClusterer
-            defaultMaxZoom={12}
-            defaultZoomOnClick={false}>
+        const {places, active} = this.props;
+        const infoWindow = active &&
+            <PlaceMarkerInfo place={active}
+                             onCloseClick={this.onCloseInfoWindow}/> || null;
+
+        return <MarkerClusterer defaultMaxZoom={12}
+                                defaultZoomOnClick={false}>
             {places.map(this.placeToMarker, this)}
+            {infoWindow}
         </MarkerClusterer>;
     }
 
-    protected placeToMarker(place: Place) {
-        const {key} = place;
-        const {selection} = this.state;
-        return <PlaceMarker key={key}
+    protected placeToMarker(place: Place, index: number) {
+        const {hover, active} = this.props;
+        return <PlaceMarker key={index}
                             place={place}
-                            active={key === selection}
+                            hover={place === hover}
+                            active={place === active}
                             onSelect={this.onSelect}
-                            onDestroy={this.onDestroy}/>;
+                            onMouseOver={this.onMouseOver}
+                            onMouseOut={this.onMouseOut}/>;
     }
 
     @autobind
     protected onSelect(place: Place) {
-        const {key} = place;
-        this.setState({selection: key});
+        const {active, onActiveChange} = this.props;
+        if (active === place) return;
+        if (onActiveChange) onActiveChange(place);
     }
 
     @autobind
-    protected onDestroy(place: Place) {
-        const {key} = place;
-        const {selection} = this.state;
-        if (selection !== key) return;
-        this.setState({selection: null});
+    protected onMouseOver(place: Place) {
+        const {active, onHoverChange} = this.props;
+        if (active === place) return;
+        if (onHoverChange) onHoverChange(place);
+    }
+
+    @autobind
+    protected onMouseOut(place: Place) {
+        const {active, onHoverChange} = this.props;
+        if (active !== place) return;
+        if (onHoverChange) onHoverChange(null);
+    }
+
+    @autobind
+    protected onCloseInfoWindow(place: Place) {
+        const {active, onActiveChange} = this.props;
+        if (active !== place) return;
+        if (onActiveChange) onActiveChange(null);
     }
 }
