@@ -23,7 +23,7 @@ export class NavDrawer extends Component<NavDrawerProps> {
 function NavDrawerToggle(props: NavDrawerProps) {
     const {open, onToggle} = props;
     const Arrow = open ? ArrowLeft : ArrowRight;
-    return <Button color="clear"
+    return <Button variant="text"
                    onClick={onToggle}
                    className="nav-drawer-toggle">
         <Arrow/>

@@ -31,7 +31,7 @@ export class SearchBox extends Component<SearchBoxProps, SearchBoxState> {
                            placeholder="Find a car wash in the area"/>
                     <Search/>
                 </div>
-                <Button color="clear"
+                <Button variant="text"
                         className="clear-button"
                         onClick={this.clear}>
                     <Cancel/>
