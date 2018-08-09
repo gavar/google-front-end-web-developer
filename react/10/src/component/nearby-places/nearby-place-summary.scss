@@ -12,6 +12,18 @@
   line-height: 16px;
   font-style: normal;
   vertical-align: middle;
+
+  &.selected {
+    background-color: $accent-lighter-color;
+  }
+
+  &:hover, &.hover {
+    text-decoration: none;
+    background-color: $background-hover-color;
+    &[disabled] {
+      background-color: transparent;
+    }
+  }
 }
 
 .nearby-place-summary-title {

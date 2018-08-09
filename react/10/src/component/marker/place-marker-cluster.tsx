@@ -33,12 +33,13 @@ export class PlaceMarkerCluster extends PureComponent<PlaceMarkerCloudProps, Pla
         </MarkerClusterer>;
     }
 
-    protected placeToMarker(place: Place, index: number) {
+    protected placeToMarker(place: Place) {
+        const {key} = place;
         const {hover, active} = this.props;
-        return <PlaceMarker key={index}
+        return <PlaceMarker key={key}
                             place={place}
-                            hover={place === hover}
-                            active={place === active}
+                            hover={hover && hover.key === key}
+                            active={active && active.key === key}
                             onSelect={this.onSelect}
                             onMouseOver={this.onMouseOver}
                             onMouseOut={this.onMouseOut}/>;

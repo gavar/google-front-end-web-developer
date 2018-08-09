@@ -1,4 +1,4 @@
-import {identity} from "$util";
+import {classNames, identity} from "$util";
 import {autobind} from "core-decorators";
 import React, {Component, MouseEvent} from "react";
 import {Star, StarBorder, StarHalf} from "../../icon";
@@ -7,6 +7,7 @@ import {ButtonBase} from "../../view";
 import "./nearby-place-summary.scss";
 
 export interface NearbyPlaceProps {
+    hover?: boolean;
     selected?: boolean;
     place: Place;
     onClick?(place: Place);
@@ -23,12 +24,18 @@ export class NearbyPlaceSummary extends Component<NearbyPlaceProps> {
     }
 
     render() {
-        const {place, selected} = this.props;
+        const {place, hover, selected} = this.props;
         const {name, rating, reviews, address, vicinity} = place;
+
+        const className = classNames(
+            "nearby-place-summary",
+            hover && "hover",
+            selected && "selected",
+        );
 
         return <ButtonBase role="tab"
                            aria-selected={selected}
-                           className="nearby-place-summary"
+                           className={className}
                            onClick={this.onClick}
                            onMouseOver={this.onMouseOver}
                            onMouseOut={this.onMouseOut}>

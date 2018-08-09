@@ -67,10 +67,12 @@ export class NearbyPlacesList extends Component<NearbyPlacesListProps> {
 }
 
 function NearbyPlaceItem(this: NearbyPlacesList, place: Place) {
-    const {active} = this.props;
-    return <li key={place.key} className="nearby-places-list-item">
+    const {key} = place;
+    const {hover, active} = this.props;
+    return <li key={key} className="nearby-places-list-item">
         <NearbyPlaceSummary place={place}
-                            selected={place === active}
+                            hover={hover && hover.key == key}
+                            selected={active && active.key == key}
                             onClick={this.onClick}
                             onMouseOver={this.onMouseOver}
                             onMouseOut={this.onMouseOut}/>
