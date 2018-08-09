@@ -1,0 +1,36 @@
+@import "style/theming";
+
+.place-marker-pin {
+
+  path {
+    fill: #e94538;
+    stroke: white;
+    stroke-width: 2px;
+    transition: fill .35s;
+  }
+
+  ellipse {
+    fill: rgba(black, .4);
+  }
+}
+
+.place-marker {
+  opacity: 1;
+  width: 27px * 1.25;
+  height: 43px * 1.25;
+  cursor: pointer;
+  transition: transform .35s ease, opacity .35s ease;
+
+  &.hover {
+    transform: scale(1.5) translateY(-25%);
+    path {
+      fill: $primary-color;
+      stroke-width: 1px;
+    }
+  }
+
+  &.active {
+    opacity: 0;
+  }
+}
+
