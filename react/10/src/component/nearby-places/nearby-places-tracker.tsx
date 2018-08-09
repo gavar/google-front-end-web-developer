@@ -1,16 +1,16 @@
-import {MapsEventListener} from "$google/maps";
+import {Map, MapsEventListener} from "$google/maps";
 import {autobind} from "core-decorators";
 import {PureComponent} from "react";
 import {Place, placeService} from "../../service";
 
 export interface NearbyPlacesProps {
-    map: google.maps.Map,
+    map: Map,
     onNearbyPlacesChanged?(places: Place[]);
 }
 
 export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
 
-    protected alive: boolean = true;
+    protected scheduled: boolean;
     protected lastMoveTime: number = 0;
     protected scheduleNearbySearchByBoundsCache: boolean;
     protected scheduleNearbySearchByBoundsRemote: boolean;
@@ -19,26 +19,19 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
     /** @inheritDoc */
     componentDidMount(): void {
         const {map} = this.props;
+        this.scheduleUpdate();
         this.listeners.push(
             map.addListener("bounds_changed", this.onBoundsChanged),
         );
-
-        const frame: FrameRequestCallback = () => {
-            if (!this.alive) return;
-            this.update();
-            window.requestAnimationFrame(frame);
-        };
-        window.requestAnimationFrame(frame);
     }
 
     /** @inheritDoc */
     render() {
-        return null;
+        return "";
     }
 
     /** @inheritDoc */
     componentWillUnmount(): void {
-        this.alive = false;
         for (const listener of this.listeners)
             listener.remove();
         this.listeners.length = 0;
@@ -51,15 +44,17 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
 
         if (cache) {
             this.scheduleNearbySearchByBoundsCache = false;
-            placeService.nearbySearchCache(bounds, this.onNearbySearch);
+            placeService.nearbySearchCache(bounds, this.onNearbySearchDone);
         }
         else {
             this.scheduleNearbySearchByBoundsRemote = false;
-            placeService.nearbySearchRemote(bounds, this.onNearbySearch);
+            placeService.nearbySearchRemote(bounds, this.onNearbySearchDone);
         }
     }
 
+    @autobind
     protected update() {
+        this.scheduled = false;
         const now = Date.now();
 
         // wait for 1 sec before start fetching new places from cache
@@ -71,39 +66,39 @@ export class NearbyPlacesTracker extends PureComponent<NearbyPlacesProps> {
         if (this.scheduleNearbySearchByBoundsRemote)
             if (now - this.lastMoveTime >= 1500)
                 this.searchNearbyByBounds(false);
+
+        // re-schedule?
+        if (this.scheduleNearbySearchByBoundsCache || this.scheduleNearbySearchByBoundsRemote)
+            this.scheduleUpdate();
+    }
+
+    protected scheduleUpdate() {
+        // already scheduled?
+        if (this.scheduled)
+            return;
+
+        // schedule another check in 500 ms
+        if (this.scheduleNearbySearchByBoundsCache || this.scheduleNearbySearchByBoundsRemote) {
+            this.scheduled = true;
+            setTimeout(this.update, 500);
+        }
     }
 
     @autobind
-    protected onNearbySearch() {
+    protected onNearbySearchDone() {
         // notify places update
         const {onNearbyPlacesChanged} = this.props;
         if (onNearbyPlacesChanged) {
             let {nearbyPlaces} = placeService;
-            nearbyPlaces = nearbyPlaces.filter(isOperating);
-            nearbyPlaces.sort(sortByKey);
             onNearbyPlacesChanged(nearbyPlaces);
         }
     }
 
     @autobind
     protected onBoundsChanged() {
-        const {places} = placeService;
-
         this.lastMoveTime = Date.now();
         this.scheduleNearbySearchByBoundsCache = true;
         this.scheduleNearbySearchByBoundsRemote = true;
-
-        if (places.length < 1)
-            return this.searchNearbyByBounds(false);
+        this.scheduleUpdate();
     }
-}
-
-function isOperating(place: Place) {
-    return place.operating;
-}
-
-function sortByKey(a: Place, b: Place) {
-    if (a.key > b.key) return 1;
-    if (a.key < b.key) return 1;
-    return 0;
 }
