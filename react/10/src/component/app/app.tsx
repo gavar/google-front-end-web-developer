@@ -110,7 +110,7 @@ export class App extends Component<{}, AppState> {
     @autobind
     protected onPlaceMouseOut(place: Place) {
         const {hover} = $PlaceSelectionStore.state;
-        if (hover && hover.key == place.key)
+        if (hover && hover.key === place.key)
             $PlaceSelectionStore.setState({hover: null});
     }
 
