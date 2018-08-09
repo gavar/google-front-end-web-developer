@@ -14,6 +14,7 @@ export interface GoogleMapProps {
 }
 
 export interface GoogleMapState {
+    ready: boolean;
     center?: LatLng | LatLngLiteral
 }
 
@@ -27,12 +28,11 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
         defaultZoom: 13,
     };
 
-    protected map: Map;
     protected geocoder: Geocoder;
 
     constructor(props: GoogleMapProps, context: any) {
         super(props, context);
-        this.state = {};
+        this.state = {ready: false};
         this.setGoogleMap(context[MAP]);
     }
 
@@ -52,11 +52,12 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
     /** @inheritDoc */
     render() {
-        const {center} = this.state;
+        const {center, ready} = this.state;
         const {children, defaultZoom} = this.props;
+        const content = ready ? children : null;
         return <$GoogleMap defaultZoom={defaultZoom}
                            center={center}>
-            {children}
+            {content}
         </$GoogleMap>;
     }
 
@@ -93,12 +94,8 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
     setGoogleMap(map: Map) {
         const {onGoogleMap} = this.props;
-        if (!onGoogleMap) return;
-
-        if (this.map == map) return;
-        this.map = map;
-
-        onGoogleMap(map);
+        if (onGoogleMap) onGoogleMap(map);
+        this.setState({ready: !!map});
     }
 }
 
