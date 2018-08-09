@@ -1,5 +1,6 @@
 import {Geocoder, GeocoderAddressComponent, LatLngBounds, Map as GoogleMap} from "$google/maps";
 import {
+    PhotoOptions,
     PlaceDetailsRequest,
     PlaceResult,
     PlaceSearchPagination,
@@ -237,13 +238,19 @@ const detailsFields = [
     "international_phone_number",
 ];
 
+const photoOptions: PhotoOptions = {
+    maxWidth: 100,
+    maxHeight: 100,
+};
+
 function convertToPlace(item: PlaceResult, key?: string): Place {
-    const {geometry, reviews, address_components} = item;
+    const {photos, geometry, reviews, address_components} = item;
     const place: Place = {
         key: key || item.place_id || void 0,
         name: item.name,
         icon: item.icon,
         phone: item.international_phone_number,
+        photo: photos && photos[0] && photos[0].getUrl(photoOptions),
         rating: item.rating,
         reviews: reviews && reviews.length || void 0,
         website: item.website,

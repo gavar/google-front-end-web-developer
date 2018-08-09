@@ -39,9 +39,12 @@ export class NearbyPlaceSummary extends Component<NearbyPlaceProps> {
                            onClick={this.onClick}
                            onMouseOver={this.onMouseOver}
                            onMouseOut={this.onMouseOut}>
-            <h3 className="nearby-place-summary-title">{name}</h3>
-            {RatingView(rating, reviews)}
-            {AddressView(address, vicinity, "nearby-place-summary-address")}
+            <div className="nearby-place-summary-info">
+                <h3 className="nearby-place-summary-title">{name}</h3>
+                {RatingView(rating, reviews)}
+                {AddressView(address, vicinity, "nearby-place-summary-address")}
+            </div>
+            {PhotoView(place, "nearby-place-summary-image")}
         </ButtonBase>;
     }
 
@@ -98,4 +101,12 @@ export function AddressView(address: Address, vicinity: string, className?: stri
         <address className={className}>
             {content}
         </address> || null;
+}
+
+export function PhotoView(place: Place, className?: string) {
+    const {name, photo} = place;
+    if (!photo) return null;
+    return <img className={className}
+                src={photo}
+                alt={`${name} image`}/>;
 }

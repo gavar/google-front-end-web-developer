@@ -4,6 +4,7 @@ export interface Place {
     key: string;
     icon: string;
     name: string;
+    photo: string
     phone: string;
     rating: number;
     reviews: number;
