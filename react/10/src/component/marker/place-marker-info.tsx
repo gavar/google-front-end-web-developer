@@ -121,12 +121,15 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
         if (selection) {
             // showing same place?
-            if (place && place.key == selection.key)
+            if (place && place.key === selection.key)
                 return;
 
             // fetch details & show
+            this.setState({
+                place: selection,
+                details: null,
+            });
             this.fetchDetails(selection.key);
-            this.setState({place: selection});
         }
         else if (place) {
             // hide window if no selection
