@@ -1,8 +1,10 @@
+import {identity} from "$util";
 import {autobind} from "core-decorators";
 import {Component} from "react";
 
 export interface WithGoogleMapsProps {
     googleKey: string;
+    version?: string,
     async?: boolean;
     defer?: boolean;
     libraries?: string[];
@@ -14,7 +16,7 @@ export interface WithGoogleMapsState {
 
 export class GoogleMapsScript extends Component<WithGoogleMapsProps, WithGoogleMapsState> {
 
-    public static readonly defaltProps: Partial<WithGoogleMapsProps> = {
+    static readonly defaultProps: Partial<WithGoogleMapsProps> = {
         async: true,
         defer: true,
         libraries: [],
@@ -27,13 +29,20 @@ export class GoogleMapsScript extends Component<WithGoogleMapsProps, WithGoogleM
 
     /** @inheritDoc */
     componentDidMount(): void {
-        const {async, defer, googleKey, libraries} = this.props;
+        const {async, defer, googleKey, version, libraries} = this.props;
         const script = document.createElement("script");
         script.async = async;
         script.defer = defer;
         script.onload = this.onLoad;
         script.onerror = this.onError;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${googleKey}&libraries=${libraries.join(",")}`;
+
+        const query = [
+            version && `v=${version}`,
+            googleKey && `key=${googleKey}`,
+            libraries && libraries.length && `libraries=${libraries.join(",")}`,
+        ].filter(identity);
+
+        script.src = `https://maps.googleapis.com/maps/api/js?${query.join("&")}`;
         document.head.appendChild(script);
     }
 
@@ -48,6 +57,7 @@ export class GoogleMapsScript extends Component<WithGoogleMapsProps, WithGoogleM
 
     @autobind
     protected onLoad(e: Event) {
+        applyMarkerFix();
         this.setState({ready: true});
     }
 
@@ -55,4 +65,28 @@ export class GoogleMapsScript extends Component<WithGoogleMapsProps, WithGoogleM
     protected onError(e: ErrorEvent) {
         console.error(e);
     }
+}
+
+function applyMarkerFix() {
+    const Marker = google.maps.Marker;
+    const patch = (onRemove) => {
+        return function onRemovePatched(...args) {
+            let temp = document.createElement("div");
+            if (!this.labelDiv_.parentNode) temp.appendChild(this.labelDiv_);
+            if (!this.eventDiv_.parentNode) temp.appendChild(this.eventDiv_);
+            if (!this.listeners_) this.listeners_ = [];
+            onRemove.call(this, ...args);
+            temp = null;
+        };
+    };
+
+    Marker.prototype.setMap = (setMap => {
+        return function setMapPatched(...args) {
+            if (this.label) {
+                const proto = Object.getPrototypeOf(this.label);
+                proto.onRemove = patch(proto.onRemove);
+            }
+            setMap.call(this, ...args);
+        };
+    })(Marker.prototype.setMap);
 }
