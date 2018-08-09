@@ -304,3 +304,6 @@ function findComponentWithType(components: GeocoderAddressComponent[], type: str
 function isWithinBounds(this: LatLngBounds, place: Place): boolean {
     return this.contains(place.location);
 }
+
+// shared service instance.
+export const placeService = new PlaceService();
