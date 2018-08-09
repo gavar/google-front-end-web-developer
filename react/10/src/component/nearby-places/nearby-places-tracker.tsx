@@ -1,7 +1,7 @@
 import {Map, MapsEventListener} from "$google/maps";
 import {autobind} from "core-decorators";
 import {PureComponent} from "react";
-import {Place, $PlaceService} from "../../service";
+import {$PlaceService, Place} from "../../service";
 
 export interface NearbyPlacesProps {
     map: Map,

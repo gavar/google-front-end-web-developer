@@ -4,8 +4,8 @@ import React, {PureComponent, ReactChild} from "react";
 import {InfoWindow} from "react-google-maps";
 import {$PlaceService, Place} from "../../service";
 import {$PlaceSelectionStore, PlaceSelectionState} from "../../store";
-import {AddressView} from "../nearby-places";
-import "./marker-info.scss";
+import {AddressView, RatingView} from "../nearby-places";
+import "./place-marker-info.scss";
 
 const empty: Place = {} as any;
 
@@ -51,6 +51,7 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             icon,
             phone,
             rating,
+            reviews,
             website,
             address,
             location,
@@ -77,7 +78,7 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
             // RATING
             rating && row("Rating:",
-                `${rating} / 5`,
+                RatingView(rating, reviews),
                 "rating"),
 
             // WEBSITE

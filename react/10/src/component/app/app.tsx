@@ -1,6 +1,6 @@
 import {Map as $GoogleMap} from "$google/maps";
 import React from "react";
-import {Place, $PlaceService} from "../../service";
+import {$PlaceService, Place} from "../../service";
 import {$PlaceSelectionStore, $PlacesStore} from "../../store";
 import {GoogleMap, GoogleMapsScript, WithGoogleMapProps} from "../google-map";
 import {PlaceMarkerCluster, PlaceMarkerInfo} from "../marker";

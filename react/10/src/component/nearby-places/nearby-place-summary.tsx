@@ -52,7 +52,7 @@ export class NearbyPlaceSummary extends PureComponent<NearbyPlaceProps, NearbyPl
                            onMouseOut={this.onMouseOut}>
             <div className="nearby-place-summary-info">
                 <h3 className="nearby-place-summary-title">{name}</h3>
-                {RatingView(rating, reviews)}
+                {RatingView(rating, reviews, "nearby-place-summary-rating")}
                 {AddressView(address, vicinity, "nearby-place-summary-address")}
             </div>
             {PhotoView(place, "nearby-place-summary-image")}
@@ -90,17 +90,17 @@ export class NearbyPlaceSummary extends PureComponent<NearbyPlaceProps, NearbyPl
     }
 }
 
-export function RatingView(rating: number, reviews: number) {
+export function RatingView(rating: number, reviews: number, className: string = "place-rating") {
     if (!rating) return null;
 
     const stars = RatingStars(rating);
     const $rating = rating.toFixed(1);
 
     return rating &&
-        <span className="nearby-place-summary-rating">
-            <span className="nearby-place-summary-rating-value">{$rating}</span>
-            <ol className="nearby-place-summary-rating-stars">{stars}</ol>
-            {reviews && <span className="nearby-place-summary-rating-reviews">({reviews})</span> || null}
+        <span className={className}>
+            <span className="rating-value">{$rating}</span>
+            <ol className="rating-stars">{stars}</ol>
+            {reviews && <span className="rating-reviews">({reviews})</span> || null}
         </span> || null;
 }
 
