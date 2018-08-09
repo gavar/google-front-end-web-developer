@@ -36,9 +36,9 @@ export class App extends Component<{}, AppState> {
         const {search, searchPlaces, googleMap, showNavDrawer} = this.state;
         return <div className="app">
             <NavDrawer open={showNavDrawer} onToggle={this.toggleNavDrawer}>
-                <SearchBox onChange={this.onSearchChange}/>
-                <NearbyPlacesList places={searchPlaces}
-                                  search={search}
+                <SearchBox onChange={this.onSearchChanged}/>
+                <NearbyPlacesList search={search}
+                                  places={searchPlaces}
                                   onClick={this.onPlaceClick}
                                   onMouseOver={this.onPlaceMouseOver}
                                   onMouseOut={this.onPlaceMouseOut}
@@ -61,18 +61,13 @@ export class App extends Component<{}, AppState> {
         </div>;
     }
 
-    @autobind
-    protected onNearbyPlacesChanged(places: Place[]) {
-        const {search} = this.state;
+    protected updatePlaces(places: Place[], search: string) {
         const searchPlaces = filterPlaces(places, search);
-        this.setState({places, searchPlaces});
-    }
-
-    @autobind
-    protected toggleNavDrawer() {
-        let {showNavDrawer} = this.state;
-        showNavDrawer = !showNavDrawer;
-        this.setState({showNavDrawer});
+        searchPlaces.sort(sortByRating);
+        this.setState({
+            search,
+            searchPlaces,
+        });
     }
 
     @autobind
@@ -84,10 +79,22 @@ export class App extends Component<{}, AppState> {
     }
 
     @autobind
-    protected onSearchChange(search: string) {
+    protected onSearchChanged(search: string) {
         const {places} = this.state;
-        const searchPlaces = filterPlaces(places, search);
-        this.setState({search, searchPlaces});
+        this.updatePlaces(places, search);
+    }
+
+    @autobind
+    protected onNearbyPlacesChanged(places: Place[]) {
+        const {search} = this.state;
+        this.updatePlaces(places, search);
+    }
+
+    @autobind
+    protected toggleNavDrawer() {
+        let {showNavDrawer} = this.state;
+        showNavDrawer = !showNavDrawer;
+        this.setState({showNavDrawer});
     }
 
     @autobind
@@ -121,11 +128,9 @@ export class App extends Component<{}, AppState> {
 }
 
 function filterPlaces(places: Place[], search: string): Place[] {
-    if (search) {
-        const regex = new RegExp(search, "i");
-        places = places.filter(placesByRegex, regex);
-    }
-    places.sort(sortByRating);
+    if (!search) return places;
+    const regex = new RegExp(search, "i");
+    places = places.filter(placesByRegex, regex);
     return places;
 }
 
