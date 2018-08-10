@@ -13,12 +13,14 @@ export interface PlaceMarkerInfoProps {
 }
 
 export interface PlaceMarkerInfoState {
+    key?: string,
     place?: Place;
+    loading?: boolean
+    location?: LatLngLiteral
 }
 
 export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMarkerInfoState> {
 
-    protected lastLocation: LatLngLiteral;
     protected readonly store = $PlaceSelectionStore;
     protected readonly placeService = $PlaceService;
 
@@ -38,15 +40,10 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
     /** @inheritDoc */
     render() {
-        const {place} = this.state;
-        const location = place && place.location;
-
-        // update location
-        if (location)
-            this.lastLocation = location;
+        const {place, location, loading} = this.state;
 
         // do not render without location
-        if (this.lastLocation == null)
+        if (location == null)
             return null;
 
         const full = place && place.detailed;
@@ -54,28 +51,46 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             "place-marker-info",
             place ? "show" : "hide",
             full ? "full" : "partial",
+            !full && loading && "loading",
         );
 
         return <InfoWindow
-            position={this.lastLocation}
+            position={location}
             onCloseClick={this.onCloseClick}>
             <div className={className}>
                 {place && table(place) || null}
-                {!full && "loading..." || null}
+                {loading && "loading..." || null}
             </div>
         </InfoWindow>;
     }
 
     protected show(next: Place) {
-        const {place} = this.state;
-        if (place === next) return;
-        this.setState({place: next});
+        let {key, place, location} = this.state;
+        if (key === next.key) return;
+
+        key = next.key;
+        place = next;
+        location = next && next.location || location;
+
+        this.setState({
+            key,
+            place,
+            location,
+            loading: true,
+        });
+
         this.placeService.fetchDetails(next.key, this.onReceiveDetails);
     }
 
     protected hide() {
+        if (!this.state.key)
+            return;
+
+        // NOTE: keeping last location
         this.setState({
+            key: null,
             place: null,
+            loading: false,
         });
     }
 
@@ -86,14 +101,20 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     }
 
     @autobind
-    protected onReceiveDetails(details: Place) {
+    protected onReceiveDetails(key: string, details: Place, remote: boolean) {
         // check if actual request
-        const {place} = this.state;
-        if (place && place.key !== details.key)
+        if (this.state.key !== key)
             return;
 
+        let {place, location, loading} = this.state;
+        place = details || place;
+        location = place.location || location;
+        if (remote) loading = false;
+
         this.setState({
-            place: details,
+            place,
+            loading,
+            location,
         });
     }
 

@@ -51,7 +51,7 @@ export class PlaceService {
     async fetchDetails(key: string, listener: PlaceListener): Promise<void> {
         // in memory?
         let place = this.placeByKey.get(key);
-        if (place) listener(place, false);
+        if (place) listener(key, place, false);
 
         // no need to refresh twice
         if (this.placesWithDetails.has(key))
@@ -69,10 +69,11 @@ export class PlaceService {
             placeId: key,
             fields: detailsFields,
         };
+
         this.placeDetailsRequests.add(key);
-        this.placesService.getDetails(request, (result, status) => {
-            return this.onReceiveDetails(key, result, status);
-        });
+        const callback = (result, status) => this.onReceiveDetails(key, result, status);
+        try { this.placesService.getDetails(request, callback); }
+        catch (e) { callback(null, google.maps.places.PlacesServiceStatus.ERROR); }
 
         // use cache while fetching from remote
         place = await store.places.get(key);
@@ -218,7 +219,7 @@ export class PlaceService {
             if (item === null) continue;
             if (item.key !== key) continue;
             if (remote) items[i] = null;
-            item.listener(place, remote);
+            item.listener(key, place, remote);
         }
         this.listeners = items.filter(identity);
     }
@@ -248,7 +249,7 @@ export interface PlaceListenerEntry {
 }
 
 export interface PlaceListener {
-    (place: Place, remote: boolean);
+    (key: string, place: Place, remote: boolean);
 }
 
 export interface PlacesListener {

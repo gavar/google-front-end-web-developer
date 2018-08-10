@@ -128,7 +128,7 @@ export function PhotoView(place: Place, className?: string) {
     if (!photo) return null;
     return <img className={className}
                 src={photo}
-                alt={`${name} image`}/>;
+                alt={name}/>;
 }
 
 function toAddressString(address: Address, vicinity: string): string {
