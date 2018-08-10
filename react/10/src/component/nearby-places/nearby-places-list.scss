@@ -3,6 +3,11 @@
   display: flex;
   flex-flow: column;
   background-color: white;
+
+  // HACK: for some reason not working properly in FireFox & IE
+  margin-top: 70px;
+  height: calc(100% - 70px);
+  position: absolute;
 }
 
 .nearby-places-empty {
