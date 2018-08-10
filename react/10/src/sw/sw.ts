@@ -21,9 +21,7 @@ assetsToCache = assetsToCache.map(path => {
 // When the service worker is first added to a computer.
 sw.addEventListener("install", (event: ExtendableEvent) => {
     // Perform install steps.
-    if (DEBUG) {
-        console.log("[SW] Install event");
-    }
+    debug("[SW] Install event");
 
     // Add core website files to cache during serviceworker installation.
     event.waitUntil(
@@ -33,9 +31,7 @@ sw.addEventListener("install", (event: ExtendableEvent) => {
                 return cache.addAll(assetsToCache);
             })
             .then(() => {
-                if (DEBUG) {
-                    console.log("Cached assets: main", assetsToCache);
-                }
+                debug("Cached assets: main", assetsToCache);
             })
             .catch(error => {
                 console.error(error);
@@ -46,9 +42,7 @@ sw.addEventListener("install", (event: ExtendableEvent) => {
 
 // After the install event.
 sw.addEventListener("activate", (event: ExtendableEvent) => {
-    if (DEBUG) {
-        console.log("[SW] Activate event");
-    }
+    debug("[SW] Activate event");
 
     // Clean the caches
     event.waitUntil(
@@ -85,9 +79,7 @@ sw.addEventListener("fetch", (event: FetchEvent) => {
 
     // Ignore not GET request.
     if (request.method !== "GET") {
-        if (DEBUG) {
-            console.log(`[SW] Ignore non GET request ${request.method}`);
-        }
+        debug(`[SW] Ignore non GET request ${request.method}`);
         return;
     }
 
@@ -95,18 +87,13 @@ sw.addEventListener("fetch", (event: FetchEvent) => {
 
     // Ignore difference origin.
     if (requestUrl.origin !== location.origin) {
-        if (DEBUG) {
-            console.log(`[SW] Ignore difference origin ${requestUrl.origin}`);
-        }
+        debug(`[SW] Ignore difference origin ${requestUrl.origin}`);
         return;
     }
 
     const resource = caches.match(request).then(response => {
         if (response) {
-            if (DEBUG) {
-                console.log(`[SW] fetch URL ${requestUrl.href} from cache`);
-            }
-
+            debug(`[SW] fetch URL ${requestUrl.href} from cache`);
             return response;
         }
 
@@ -114,20 +101,15 @@ sw.addEventListener("fetch", (event: FetchEvent) => {
         return fetch(request)
             .then(responseNetwork => {
                 if (!responseNetwork || !responseNetwork.ok) {
-                    if (DEBUG) {
-                        console.log(
-                            `[SW] URL [${requestUrl.toString()}] wrong responseNetwork: ${
-                                responseNetwork.status
-                                } ${responseNetwork.type}`,
-                        );
-                    }
+                    debug(`[SW] URL [${requestUrl.toString()}] wrong responseNetwork: ${
+                        responseNetwork.status
+                        } ${responseNetwork.type}`,
+                    );
 
                     return responseNetwork;
                 }
 
-                if (DEBUG) {
-                    console.log(`[SW] URL ${requestUrl.href} fetched`);
-                }
+                debug(`[SW] URL ${requestUrl.href} fetched`);
 
                 const responseCache = responseNetwork.clone();
 
@@ -137,9 +119,7 @@ sw.addEventListener("fetch", (event: FetchEvent) => {
                         return cache.put(request, responseCache);
                     })
                     .then(() => {
-                        if (DEBUG) {
-                            console.log(`[SW] Cache asset: ${requestUrl.href}`);
-                        }
+                        debug(`[SW] Cache asset: ${requestUrl.href}`);
                     });
 
                 return responseNetwork;
@@ -156,3 +136,8 @@ sw.addEventListener("fetch", (event: FetchEvent) => {
 
     event.respondWith(resource);
 });
+
+function debug(message: string, ...params: any[]) {
+    if (!DEBUG) return;
+    console.log(message, params);
+}
