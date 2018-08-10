@@ -3,68 +3,51 @@ declare const serviceWorkerOption: {
 };
 
 const DEBUG = false;
-const sw = self as ServiceWorkerGlobalScope;
-
-// When the user navigates to your site,
-// the browser tries to redownload the script file that defined the service
-// worker in the background.
-// If there is even a byte's difference in the service worker file compared
-// to what it currently has, it considers it 'new'.
-const {assets} = serviceWorkerOption;
-
 const CACHE_NAME = new Date().toISOString();
 
-let assetsToCache = [...assets, "./"];
+const ORIGINS: Set<string> = new Set([
+    location.origin,
+]);
 
-assetsToCache = assetsToCache.map(path => {
-    return new URL(path, location).toString();
-});
+const HOSTS: Set<string> = new Set([
+    "maps.gstatic.com",
+    "maps.googleapis.com",
+    "fonts.gstatic.com",
+    "fonts.googleapis.com",
+    "cdnjs.cloudflare.com",
+    "raw.githubusercontent.com",
+]);
 
-// When the service worker is first added to a computer.
-sw.addEventListener("install", (event: ExtendableEvent) => {
-    // Perform install steps.
-    debug("[SW] Install event");
+const sw = self as ServiceWorkerGlobalScope;
 
-    // Add core website files to cache during serviceworker installation.
-    event.waitUntil(
-        caches
-            .open(CACHE_NAME)
-            .then(cache => {
-                return cache.addAll(assetsToCache);
-            })
-            .then(() => {
-                debug("Cached assets: main", assetsToCache);
-            })
-            .catch(error => {
-                console.error(error);
-                throw error;
-            }),
-    );
-});
+// when the service worker is first added
+sw.oninstall = function (event: ExtendableEvent) {
+    // When the user navigates to your site,
+    // the browser tries to re-download the script file that defined the service
+    // worker in the background.
+    // If there is even a byte's difference in the service worker file compared
+    // to what it currently has, it considers it 'new'.
+    const {assets} = serviceWorkerOption;
 
-// After the install event.
-sw.addEventListener("activate", (event: ExtendableEvent) => {
-    debug("[SW] Activate event");
+    const assetsToCache = [...assets, "./"]
+        .map(path => new URL(path, location).toString());
 
-    // Clean the caches
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    // Delete the caches that are not the current one.
-                    if (cacheName.indexOf(CACHE_NAME) === 0) {
-                        return null;
-                    }
+    // add core website files to cache during service worker installation
+    const promise = $install(assetsToCache, CACHE_NAME);
+    event.waitUntil(promise);
+};
 
-                    return caches.delete(cacheName);
-                }),
-            );
-        }),
-    );
-});
+// after the install event.
+sw.onactivate = function (event: ExtendableEvent) {
+    debug("activate event");
+    const promise = $clean(CACHE_NAME);
+    event.waitUntil(promise);
+};
 
-sw.addEventListener("message", (event: ExtendableMessageEvent) => {
-    switch (event.data.action) {
+sw.onmessage = function (event: ExtendableMessageEvent) {
+    const {data} = event;
+    const {action} = data;
+    switch (action) {
         case "skipWaiting":
             if (sw.skipWaiting) {
                 sw.skipWaiting();
@@ -74,72 +57,99 @@ sw.addEventListener("message", (event: ExtendableMessageEvent) => {
         default:
             break;
     }
-});
+};
 
-sw.addEventListener("fetch", (event: FetchEvent) => {
-    const request = event.request;
+sw.onfetch = async function (event: FetchEvent) {
+    const {request} = event;
+    const {method} = request;
 
-    // Ignore not GET request.
-    if (request.method !== "GET") {
-        debug(`[SW] Ignore non GET request ${request.method}`);
+    // ignore other than GET request
+    if (method !== "GET") {
+        debug("ignoring request method:", method);
         return;
     }
 
-    const requestUrl = new URL(request.url);
-
-    // Ignore difference origin.
-    if (requestUrl.origin !== location.origin) {
-        debug(`[SW] Ignore difference origin ${requestUrl.origin}`);
+    // ignore different origin
+    const url = new URL(request.url);
+    if (!$canFetchUrl(url)) {
+        debug("ignoring:", url);
         return;
     }
 
-    const resource = caches.match(request).then(response => {
-        if (response) {
-            debug(`[SW] fetch URL ${requestUrl.href} from cache`);
-            return response;
+    const promise = $fetch(request, url, CACHE_NAME);
+    event.respondWith(promise);
+};
+
+function $canFetchUrl(url: URL): boolean {
+    const {origin, hostname, href} = url;
+    if (ORIGINS.has(origin)) return true;
+    if (HOSTS.has(hostname)) return true;
+    return false;
+}
+
+async function $install(requests: (Request | string)[], cacheName: string) {
+    const cache = await caches.open(cacheName);
+    try {
+        await cache.addAll(requests);
+        debug("install assets: ", requests);
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+async function $fetch(request: Request, url: URL, cacheName: string): Promise<Response> {
+    const {href} = url;
+    const {mode} = request;
+
+    // try to load request from cache
+    let response: Response = await caches.match(request);
+    if (response) {
+        debug(`from cache:`, href);
+        return response;
+    }
+
+    try {
+        // load and cache known assets
+        response = await fetch(request);
+        const {ok, type, statusText} = response;
+        if (ok) {
+            debug(`fetch:`, href);
+            $cache(request, response.clone(), cacheName);
         }
+        else if (type !== "opaque") {
+            debug(`error '${statusText}' while fetching`, url, response);
+        }
+        return response;
+    }
+    catch (e) {
+        // user is landing on our page.
+        if (mode === "navigate")
+            return caches.match("./");
 
-        // Load and cache known assets.
-        return fetch(request)
-            .then(responseNetwork => {
-                if (!responseNetwork || !responseNetwork.ok) {
-                    debug(`[SW] URL [${requestUrl.toString()}] wrong responseNetwork: ${
-                        responseNetwork.status
-                        } ${responseNetwork.type}`,
-                    );
+        return null;
+    }
+}
 
-                    return responseNetwork;
-                }
+async function $cache(request: Request, response: Response, cacheName: string): Promise<void> {
+    debug("cache:", request.url);
+    const cache = await caches.open(cacheName);
+    await cache.put(request, response);
+}
 
-                debug(`[SW] URL ${requestUrl.href} fetched`);
+async function $clean(except: string): Promise<void> {
+    const names = await caches.keys();
+    await Promise.all(names.map($delete, except));
+}
 
-                const responseCache = responseNetwork.clone();
+async function $delete(this: string, cacheName: string): Promise<void> {
+    // delete the caches that are not the current one
+    if (!this || cacheName.indexOf(this) !== 0)
+        await caches.delete(cacheName);
+}
 
-                caches
-                    .open(CACHE_NAME)
-                    .then(cache => {
-                        return cache.put(request, responseCache);
-                    })
-                    .then(() => {
-                        debug(`[SW] Cache asset: ${requestUrl.href}`);
-                    });
-
-                return responseNetwork;
-            })
-            .catch(() => {
-                // User is landing on our page.
-                if (event.request.mode === "navigate") {
-                    return caches.match("./");
-                }
-
-                return null;
-            });
-    });
-
-    event.respondWith(resource);
-});
-
-function debug(message: string, ...params: any[]) {
+function debug(message: string, ...params: any[]): void {
     if (!DEBUG) return;
-    console.log(message, params);
+    console.log("[SW]: " + message, ...params);
 }
