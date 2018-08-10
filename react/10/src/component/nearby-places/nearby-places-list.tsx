@@ -12,12 +12,21 @@ export interface NearbyPlacesListProps {
 
 interface NearbyPlacesListState {
     places: Place[];
+    searchPlaces: Place[];
     search: string;
 }
 
+const LIMIT = 20;
+
 function storeToState(state: PlaceState): NearbyPlacesListState {
     const {searchPlaces, search} = state;
-    return {search, places: searchPlaces};
+    const size = searchPlaces && searchPlaces.length || 0;
+    const places = size > LIMIT ? searchPlaces.slice(0, LIMIT) : searchPlaces;
+    return {
+        search,
+        places,
+        searchPlaces,
+    };
 }
 
 export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps, NearbyPlacesListState> {
@@ -45,8 +54,9 @@ export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps, Nearb
 
     /** @inheritDoc */
     render() {
-        const {places, search} = this.state;
-        const size = places && places.length;
+        const {places, search, searchPlaces} = this.state;
+        const size = places && places.length || 0;
+        const limited = searchPlaces && searchPlaces.length > size;
 
         let content;
         if (size) {
@@ -69,6 +79,7 @@ export class NearbyPlacesList extends PureComponent<NearbyPlacesListProps, Nearb
         }
 
         return <div className="nearby-places">
+            {limited && Limitation() || null}
             {content}
         </div>;
     }
@@ -83,4 +94,11 @@ function NearbyPlaceItem(this: NearbyPlacesList, place: Place) {
                             onMouseOver={onMouseOver}
                             onMouseOut={onMouseOut}/>
     </li>;
+}
+
+function Limitation() {
+    return <div className="nearby-places-limit">
+        <p className="subtitle-1 text-primary">{`Showing only first ${LIMIT} best matches.`}</p>
+        <p className="subtitle-2 text-secondary">Try to zoom or set search criteria for better results.</p>
+    </div>;
 }
