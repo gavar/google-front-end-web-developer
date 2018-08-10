@@ -6,6 +6,7 @@ import "./button.scss";
 
 export type ButtonVariant =
     | "text" // https://material.io/design/components/buttons.html#text-button
+    | "contained" // https://material.io/design/components/buttons.html#contained-button
     ;
 
 export interface ButtonProps extends ButtonBaseProps {
@@ -30,9 +31,11 @@ export class Button extends Component<ButtonProps> {
         const props: ButtonProps = other;
 
         const text = variant === "text";
+        const contained = variant === "contained";
         props.className = classNames(
             "button",
             text && "text",
+            contained && "contained",
             props.className,
         );
 
