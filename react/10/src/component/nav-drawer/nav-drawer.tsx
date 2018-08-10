@@ -44,7 +44,7 @@ export class NavDrawer extends PureComponent<NavDrawerProps, NawDrawerState> {
 function NavDrawerToggle(drawer: NavDrawer) {
     const {open} = drawer.state;
     const Arrow = open ? ArrowLeft : ArrowRight;
-    return <Button variant="text"
+    return <Button variant="contained"
                    onClick={drawer.onToggle}
                    className="nav-drawer-toggle">
         <Arrow/>

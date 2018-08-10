@@ -13,6 +13,12 @@
       border-left: 1px solid #ddd;
     }
   }
+
+  .clear-button {
+    &:hover {
+      background-color: inherit;
+    }
+  }
 }
 
 .search-box-input {
