@@ -12,7 +12,8 @@ import {hasOwnProperty, identity} from "$util";
 import {Address, Place} from "./place";
 import {store} from "./sql-store";
 
-const EmptyPlace = {address: {}} as Place;
+const DEBUG = process.env.NODE_ENV !== "production";
+const EmptyPlace = {address: {}, location: {}} as Place;
 
 export class PlaceService {
 
@@ -50,7 +51,7 @@ export class PlaceService {
     async fetchDetails(key: string, listener: PlaceListener): Promise<void> {
         // in memory?
         let place = this.placeByKey.get(key);
-        if (place) listener(place);
+        if (place) listener(place, false);
 
         // no need to refresh twice
         if (this.placesWithDetails.has(key))
@@ -77,7 +78,7 @@ export class PlaceService {
         place = await store.places.get(key);
         if (place) {
             this.savePlaceToMemory(place);
-            this.notify(place, false);
+            this.notify(key, place, false);
         }
     }
 
@@ -115,7 +116,14 @@ export class PlaceService {
         this.placesService.nearbySearch(request, callback);
 
         async function callback(results: PlaceResult[], status: PlacesServiceStatus, pagination: PlaceSearchPagination) {
-            const {OK, ZERO_RESULTS} = google.maps.places.PlacesServiceStatus;
+            const {
+                OK,
+                NOT_FOUND,
+                ZERO_RESULTS,
+                REQUEST_DENIED,
+                OVER_QUERY_LIMIT,
+            } = google.maps.places.PlacesServiceStatus;
+
             switch (status) {
                 case OK:
                     // fetch next page
@@ -131,11 +139,15 @@ export class PlaceService {
                     listener(places);
                     break;
 
+                case NOT_FOUND:
+                case REQUEST_DENIED:
                 case ZERO_RESULTS:
+                case OVER_QUERY_LIMIT:
+                    if (DEBUG) console.log(status, ":", results);
                     break;
 
                 default:
-                    console.error(status, ":", results);
+                    if (DEBUG) console.error(status, ":", results);
                     break;
             }
         }
@@ -143,17 +155,33 @@ export class PlaceService {
 
     protected async onReceiveDetails(key: string, result: PlaceResult, status: PlacesServiceStatus) {
         this.placeDetailsRequests.delete(key);
-        const {OK} = google.maps.places.PlacesServiceStatus;
+        const {
+            OK,
+            NOT_FOUND,
+            ZERO_RESULTS,
+            REQUEST_DENIED,
+            OVER_QUERY_LIMIT,
+        } = google.maps.places.PlacesServiceStatus;
+
         switch (status) {
             case OK:
                 const place = await this.fromPlaceDetails(key, result);
-                this.placesWithDetails.add(place.key);
+                this.placesWithDetails.add(key);
                 await this.savePlace(place);
-                this.notify(place, true);
+                this.notify(key, place, true);
+                break;
+
+            case NOT_FOUND:
+            case REQUEST_DENIED:
+            case ZERO_RESULTS:
+            case OVER_QUERY_LIMIT:
+                this.notify(key, null, true);
+                if (DEBUG) console.log(status, ":", result);
                 break;
 
             default:
-                console.error(status, ":", result);
+                this.notify(key, null, true);
+                if (DEBUG) console.error(status, ":", result);
                 break;
         }
     }
@@ -183,14 +211,14 @@ export class PlaceService {
         this.nearbyPlaces = this.places.filter(isWithinBounds, this.nearbyBounds);
     }
 
-    protected notify(place: Place, evict: boolean) {
-        const {key} = place;
+    protected notify(key: string, place: Place, remote: boolean) {
         const items = this.listeners;
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
+            if (item === null) continue;
             if (item.key !== key) continue;
-            if (evict) items[i] = null;
-            item.listener(place);
+            if (remote) items[i] = null;
+            item.listener(place, remote);
         }
         this.listeners = items.filter(identity);
     }
@@ -220,7 +248,7 @@ export interface PlaceListenerEntry {
 }
 
 export interface PlaceListener {
-    (place: Place);
+    (place: Place, remote: boolean);
 }
 
 export interface PlacesListener {
