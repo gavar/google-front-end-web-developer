@@ -1,6 +1,7 @@
 import CleanWebpackPlugin from "clean-webpack-plugin";
 import {Tapable} from "tapable";
 import {BundleAnalyzerPlugin} from "webpack-bundle-analyzer";
+import ManifestPlugin from "webpack-manifest-plugin";
 import {Configuration, EnvironmentPlugin, Stats} from "~/webpack";
 import {
     configureDevServer,
@@ -92,6 +93,7 @@ export function configurer(provider: ConfigurerProvider) {
                 "PUBLIC_URL": "/",
                 ...process.env,
             }),
+            new ManifestPlugin(),
         );
 
         // configure profile mode
