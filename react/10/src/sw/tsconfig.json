@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es2015.promise",
+      "webworker"
+    ],
+    "paths": {}
+  },
+  "include": [
+    "types.d.ts",
+    "*.ts"
+  ]
+}

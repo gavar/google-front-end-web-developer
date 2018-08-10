@@ -30,5 +30,8 @@ export = configurer((env, argv) => {
             template: join(publicPath, "index.html"),
             favicon: join(publicPath, "favicon.ico"),
         },
+        serviceWorker: {
+            entry: join(root, "src/sw/sw.ts"),
+        },
     } as ConfigurerOptions;
 })
