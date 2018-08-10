@@ -6,10 +6,12 @@ import {
     configureDevServer,
     configureHTML,
     configureSASS,
+    configureServiceWorker,
     configureSVG,
     configureTS,
     HtmlConfigureOptions,
     SassConfigureOptions,
+    ServiceWorkerConfigureOptions,
     TsConfigureOptions,
 } from "./configurer";
 import {WebpackArgv} from "./webpack-argv";
@@ -26,6 +28,7 @@ export interface ConfigurerOptions extends Partial<Configurer> {
     ts?: TsConfigureOptions,
     sass?: SassConfigureOptions,
     html?: HtmlConfigureOptions,
+    serviceWorker?: ServiceWorkerConfigureOptions,
 }
 
 export interface ConfigurerProvider {
@@ -75,6 +78,9 @@ export function configurer(provider: ConfigurerProvider) {
         configureSASS(config, options, options.sass);
         configureHTML(config, options, options.html);
         configureDevServer(config);
+
+        if (options.serviceWorker)
+            configureServiceWorker(config, options, options.serviceWorker);
 
         // plugins
         config.plugins.push(
