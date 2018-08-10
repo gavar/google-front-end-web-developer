@@ -29,7 +29,7 @@ export function App() {
 function GoogleMapComponents({map}: WithGoogleMapProps) {
     return <>
         <NearbyPlacesTracker map={map}
-                             onNearbyPlacesChanged={onNearbyPlacesChanged}/>;
+                             onNearbyPlacesChanged={onNearbyPlacesChanged}/>
         <PlaceMarkerInfo onCloseClick={onCloseInfoWindow}/>
         <PlaceMarkerCluster onClick={onPlaceClick}
                             onMouseOver={onPlaceMouseOver}
