@@ -1,6 +1,8 @@
-const DEBUG = false;
+declare const serviceWorkerOption: {
+    assets: string[];
+};
 
-declare const serviceWorkerOption: any;
+const DEBUG = false;
 const sw = self as ServiceWorkerGlobalScope;
 
 // When the user navigates to your site,
