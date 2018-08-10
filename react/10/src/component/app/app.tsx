@@ -20,6 +20,12 @@ export function App() {
         <GoogleMapsScript libraries={["places"]}
                           googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
             <GoogleMap defaultAddress="Latvia, Riga"
+                       clickableIcons={false}
+                       options={{
+                           mapTypeControl: false,
+                           streetViewControl: false,
+                           fullscreenControl: false,
+                       }}
                        component={GoogleMapComponents}
                        onGoogleMap={setGoogleMap}/>
         </GoogleMapsScript>
