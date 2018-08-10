@@ -150,6 +150,7 @@ yarn.lock
 !.idea/dictionaries
 !.idea/libraries
 !.idea/jsLinters
+.idea/typescript-compiler.xml
 
 ### custom ###
 \#*
