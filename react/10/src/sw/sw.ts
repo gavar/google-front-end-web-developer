@@ -126,9 +126,12 @@ async function $fetch(request: Request, url: URL, cacheName: string): Promise<Re
     catch (e) {
         // user is landing on our page.
         if (mode === "navigate")
-            return caches.match("./");
+            response = await caches.match("./");
 
-        return null;
+        return response || new Response(null, {
+            status: 404,
+            statusText: e.message,
+        });
     }
 }
 
