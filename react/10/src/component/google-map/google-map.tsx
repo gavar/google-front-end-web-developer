@@ -34,17 +34,17 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
         defaultZoom: 13,
     };
 
-    protected geocoder: Geocoder;
+    protected readonly geocoder: Geocoder;
 
     constructor(props: GoogleMapProps, context: any) {
         super(props, context);
         this.state = {map: context[MAP]};
         this.onGoogleMap(this.state.map);
+        this.geocoder = new google.maps.Geocoder();
     }
 
     /** @inheritDoc */
     componentDidMount(): void {
-        this.geocoder = new google.maps.Geocoder();
         // try to detect user location
         const {geolocation} = navigator;
         if (geolocation) geolocation.getCurrentPosition(this.setGeoLocationPosition, this.resolveGeocodeLocation);
