@@ -1,9 +1,28 @@
+.place-marker-info,
+.place-marker-info * {
+  max-height: 100%;
+  overflow: hidden;
+  transition-duration: 1s;
+  transition-property: all;
+  transition-timing-function: ease;
+}
+
 .place-marker-info {
+  &.show { opacity: 1; }
+  &.hide { opacity: 0; }
+
+  table {
+    max-width: 300px;
+    min-width: 150px;
+  }
+
+  &.partial {
+    min-height: 140px;
+  }
 
   .info-label {
     text-align: left;
     padding-right: 4px;
-
     img {
       height: 24px;
       width: 24px;
@@ -14,9 +33,7 @@
     text-align: left;
   }
 
-  .name {
-    .info-label {
-      text-align: right;
-    }
+  .name .info-label {
+    text-align: right;
   }
 }

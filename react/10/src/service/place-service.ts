@@ -12,6 +12,8 @@ import {hasOwnProperty, identity} from "$util";
 import {Address, Place} from "./place";
 import {store} from "./sql-store";
 
+const EmptyPlace = {address: {}} as Place;
+
 export class PlaceService {
 
     /** List of places in memory. */
@@ -195,7 +197,7 @@ export class PlaceService {
 
     async fromPlaceDetails(key: string, result: PlaceResult): Promise<Place> {
         const place = await this.fromPlace(key, result);
-        place.details = true;
+        place.detailed = true;
         return place;
     }
 
@@ -205,8 +207,9 @@ export class PlaceService {
 
     async fromPlace(key: string, result: PlaceResult) {
         let place = convertToPlace(result, key);
-        let existing = this.placeByKey.get(key) || await store.places.get(key);
+        let existing = this.placeByKey.get(key) || await store.places.get(key) || EmptyPlace;
         place = {...existing, ...place};
+        place.address = {...existing.address, ...place.address};
         return place;
     }
 }

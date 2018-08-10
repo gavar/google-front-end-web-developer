@@ -14,7 +14,7 @@ export interface Place {
     location: LatLngLiteral;
     operating: boolean;
     updateTime: number;
-    details?: boolean;
+    detailed?: boolean;
 }
 
 export interface Address {

@@ -116,11 +116,8 @@ export function RatingStars(rating: number) {
 }
 
 export function AddressView(address: Address, vicinity: string, className?: string) {
-    const content = address
-        ? [address.street, address.city].filter(identity).join(", ")
-        : vicinity;
-
-    return content &&
+    const content = toAddressString(address, vicinity).trim();
+    return content && content.length &&
         <address className={className}>
             {content}
         </address> || null;
@@ -132,4 +129,15 @@ export function PhotoView(place: Place, className?: string) {
     return <img className={className}
                 src={photo}
                 alt={`${name} image`}/>;
+}
+
+function toAddressString(address: Address, vicinity: string): string {
+    if (address) {
+        const {street, city} = address;
+        if (street && city)
+            return [street, city]
+                .filter(identity)
+                .join(", ");
+    }
+    return vicinity || "";
 }
