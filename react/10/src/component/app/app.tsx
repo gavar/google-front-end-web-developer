@@ -19,7 +19,7 @@ export function App() {
         </NavDrawer>
         <GoogleMapsScript libraries={["places"]}
                           googleKey="AIzaSyBCQniJ6Ik1NbOBEbdoH5R-tjGP0aZqlEw">
-            <GoogleMap defaultCenter="Latvia, Riga"
+            <GoogleMap defaultAddress="Latvia, Riga"
                        component={GoogleMapComponents}
                        onGoogleMap={setGoogleMap}/>
         </GoogleMapsScript>

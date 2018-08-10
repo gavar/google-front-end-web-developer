@@ -2,7 +2,7 @@ import {Geocoder, GeocoderResult, GeocoderStatus, LatLng, LatLngLiteral, Map} fr
 import {autobind} from "core-decorators";
 import PropTypes from "prop-types";
 import React, {ComponentType, PureComponent} from "react";
-import {GoogleMap as $GoogleMap, withGoogleMap} from "react-google-maps";
+import {GoogleMap as $GoogleMap, GoogleMapProps as $GoogleMapProps, withGoogleMap} from "react-google-maps";
 import {MAP} from "react-google-maps/src/constants";
 import "./google-map.scss";
 
@@ -10,10 +10,9 @@ export interface WithGoogleMapProps {
     map: Map;
 }
 
-export interface GoogleMapProps {
+export interface GoogleMapProps extends $GoogleMapProps {
     onGoogleMap?(map: Map);
-    defaultZoom?: number
-    defaultCenter?: string | LatLng | LatLngLiteral;
+    defaultAddress?: string;
 
     /** Component to mount when google map is ready. */
     component?: ComponentType<WithGoogleMapProps>;
@@ -54,11 +53,11 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
     /** @inheritDoc */
     render() {
         const {center, map} = this.state;
-        const {children, defaultZoom, component: Component} = this.props;
+        const {children, component: Component, ...other} = this.props;
         const content = map && Component && <Component map={map}/> || null;
 
-        return <$GoogleMap defaultZoom={defaultZoom}
-                           center={center}>
+        return <$GoogleMap center={center}
+                           {...other}>
             {children}
             {content}
         </$GoogleMap>;
@@ -78,19 +77,13 @@ class GoogleMapContainer extends PureComponent<GoogleMapProps, GoogleMapState> {
 
     @autobind
     protected resolveGeocodeLocation() {
-        const {defaultCenter} = this.props;
-        switch (typeof defaultCenter) {
-            case "string":
-                this.geocoder.geocode({address: defaultCenter as string}, this.onResolveGeocodeComplete);
-                break;
-            case "object":
-                this.setCenter(defaultCenter as LatLngLiteral);
-                break;
-        }
+        const {defaultAddress: address} = this.props;
+        this.geocoder.geocode({address}, this.onResolveGeocodeComplete);
     }
 
     @autobind
     protected onResolveGeocodeComplete(results: GeocoderResult[], status: GeocoderStatus) {
+        console.log(results);
         if (results && results.length)
             this.setCenter(results[0].geometry.location);
     }
