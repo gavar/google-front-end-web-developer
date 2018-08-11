@@ -13,7 +13,6 @@ export function configureHTML(config: Configuration, configurer: Configurer, opt
 
     // defaults
     options = {
-        ...options,
         inject: true,
         minify: optimize && {
             removeComments: true,
@@ -27,6 +26,7 @@ export function configureHTML(config: Configuration, configurer: Configurer, opt
             minifyCSS: true,
             minifyURLs: true,
         },
+        ...options,
     };
 
     // plugins
