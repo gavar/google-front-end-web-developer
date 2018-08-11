@@ -65,3 +65,30 @@
     padding: 12px 15px;
   }
 }
+
+@media screen and (max-width: 375px) {
+  .search-box-container {
+    & > * {
+      padding: 8px 5px;
+    }
+
+    input {
+      font-size: 0.9rem;
+    }
+
+    .button {
+      box-sizing: border-box;
+      min-width: 50px;
+    }
+
+
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .search-box-container {
+    .icon-search {
+      visibility: hidden;
+    }
+  }
+}

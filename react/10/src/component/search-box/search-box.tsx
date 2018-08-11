@@ -28,7 +28,7 @@ export class SearchBox extends PureComponent<SearchBoxProps, SearchBoxState> {
                 <div className="search-box-input">
                     <input value={value}
                            onChange={this.onChange}
-                           placeholder="Find a car wash in the area"/>
+                           placeholder="Search for car wash nearby..."/>
                     <Search/>
                 </div>
                 <Button variant="text"

@@ -98,7 +98,7 @@ function NearbyPlaceItem(this: NearbyPlacesList, place: Place) {
 
 function Limitation() {
     return <div className="nearby-places-limit">
-        <p className="subtitle-1 text-primary">{`Showing only first ${LIMIT} best matches.`}</p>
+        <p className="subtitle-1 text-primary">{`Showing first ${LIMIT} matches`}</p>
         <p className="subtitle-2 text-secondary">Try to zoom or set search criteria for better results.</p>
     </div>;
 }
