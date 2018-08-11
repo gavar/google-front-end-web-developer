@@ -30,6 +30,7 @@ export = configurer((env, argv) => {
             },
         },
         html: {
+            title: "Car Wash Nearby",
             template: join(publicPath, "index.html"),
             favicon: join(publicPath, "favicon.ico"),
         },
