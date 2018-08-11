@@ -20,6 +20,10 @@ export function configureTS(config: Configuration, options: TsConfigureOptions):
     const entry = config.entry as string[];
     entry.push(options.entry);
 
+    // output
+    const {output} = options;
+    if (output) Object.assign(config.output, output);
+
     // rules
     const {module} = config;
     module.rules.push(tsLoader(loader));
