@@ -91,7 +91,9 @@ function onPlaceMouseOut(place: Place) {
 }
 
 function onCloseInfoWindow(place: Place) {
-    $PlaceSelectionStore.setState({selection: null});
+    const {selection} = $PlaceSelectionStore.state;
+    if (selection && selection.key === place.key)
+        $PlaceSelectionStore.setState({selection: null});
 }
 
 function filterPlaces(places: Place[], search: string): Place[] {
