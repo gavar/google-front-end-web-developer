@@ -57,7 +57,7 @@ export function configurer(provider: ConfigurerProvider) {
         const config: Configuration = {
             mode: argv.mode || "development",
             entry: [],
-            devtool: "source-map",
+            devtool: production ? false : "source-map",
             output: {...options.output},
             stats: {
                 colors: true,
