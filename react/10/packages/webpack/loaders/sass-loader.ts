@@ -44,8 +44,6 @@ export function sassLoader(configurer: Configurer, options?: SassLoaderOptions):
         },
     };
 
-    console.log(sassResourceLoader);
-
     const cssLoader = {
         loader: "css-loader",
         options: {
