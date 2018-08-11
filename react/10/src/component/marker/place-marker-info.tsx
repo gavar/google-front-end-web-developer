@@ -1,8 +1,9 @@
-import {LatLngLiteral} from "$google/maps";
+import {InfoWindow, Map} from "$google/maps";
 import {classNames, identity} from "$util";
 import {autobind} from "core-decorators";
+import PropTypes from "prop-types";
 import React, {PureComponent, ReactChild} from "react";
-import {InfoWindow} from "react-google-maps";
+import {MAP} from "react-google-maps/src/constants";
 import {$PlaceService, Place} from "../../service";
 import {$PlaceSelectionStore, PlaceSelectionState} from "../../store";
 import {AddressView, RatingView} from "../nearby-places";
@@ -13,39 +14,54 @@ export interface PlaceMarkerInfoProps {
 }
 
 export interface PlaceMarkerInfoState {
-    key?: string,
     place?: Place;
-    loading?: boolean
-    location?: LatLngLiteral
+    loading?: boolean;
 }
 
 export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMarkerInfoState> {
 
+    static contextTypes = {
+        [MAP]: PropTypes.object,
+    };
+
     protected readonly store = $PlaceSelectionStore;
     protected readonly placeService = $PlaceService;
 
+    protected map: Map;
+    protected content: HTMLDivElement;
+    protected infoWindow: InfoWindow;
+
     /** @inheritDoc */
     state: PlaceMarkerInfoState = {};
+
+    constructor(props, context) {
+        super(props, context);
+        this.map = context[MAP];
+        this.infoWindow = new google.maps.InfoWindow();
+    }
 
     /** @inheritDoc */
     componentDidMount(): void {
         this.onPlaceSelectionChange(this.store.state);
         this.store.on(this.onPlaceSelectionChange, this);
+        this.infoWindow.addListener("closeclick", this.onCloseClick);
+    }
+
+    /** @inheritDoc */
+    componentDidUpdate(props: PlaceMarkerInfoProps, state: PlaceMarkerInfoState): void {
+        this.infoWindow.setContent(this.content);
     }
 
     /** @inheritDoc */
     componentWillUnmount(): void {
+        this.infoWindow.close();
+        this.infoWindow.unbindAll();
         this.store.off(this.onPlaceSelectionChange, this);
     }
 
     /** @inheritDoc */
     render() {
-        const {place, location, loading} = this.state;
-
-        // do not render without location
-        if (location == null)
-            return null;
-
+        const {place, loading} = this.state;
         const full = place && place.detailed;
         const className = classNames(
             "place-marker-info",
@@ -54,41 +70,33 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
             !full && loading && "loading",
         );
 
-        return <InfoWindow
-            position={location}
-            onCloseClick={this.onCloseClick}>
-            <div className={className}>
-                {place && table(place) || null}
-                {loading && "loading..." || null}
-            </div>
-        </InfoWindow>;
+        return <div ref={this.setContent} className={className}>
+            {place && table(place) || null}
+        </div>;
     }
 
     protected show(next: Place) {
-        let {key, place, location} = this.state;
-        if (key === next.key) return;
+        // ensure showing other then current
+        const {place} = this.state;
+        if (place && place.key === next.key)
+            return;
 
-        key = next.key;
-        place = next;
-        location = next && next.location || location;
+        // open window
+        const position = next && next.location;
+        if (position) this.infoWindow.setPosition(position);
+        this.infoWindow.open(this.map);
 
-        this.setState({
-            key,
-            place,
-            location,
-            loading: true,
-        });
-
+        // update & fetch
+        this.setState({place: next, loading: true});
         this.placeService.fetchDetails(next.key, this.onReceiveDetails);
     }
 
     protected hide() {
-        if (!this.state.key)
-            return;
+        // make sure to close the window
+        this.infoWindow.setContent(null);
+        this.infoWindow.close();
 
-        // NOTE: keeping last location
         this.setState({
-            key: null,
             place: null,
             loading: false,
         });
@@ -101,20 +109,20 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     }
 
     @autobind
+    protected setContent(content: HTMLDivElement) {
+        this.content = content;
+    }
+
+    @autobind
     protected onReceiveDetails(key: string, details: Place, remote: boolean) {
-        // check if actual request
-        if (this.state.key !== key)
+        // check if valid response
+        const {place, loading} = this.state;
+        if (place && place.key !== key)
             return;
 
-        let {place, location, loading} = this.state;
-        place = details || place;
-        location = place.location || location;
-        if (remote) loading = false;
-
         this.setState({
-            place,
-            loading,
-            location,
+            place: details || place,
+            loading: remote ? false : loading,
         });
     }
 
