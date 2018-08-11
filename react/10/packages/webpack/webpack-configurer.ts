@@ -78,7 +78,9 @@ export function configurer(provider: ConfigurerProvider) {
         configureSVG(config, options);
         configureSASS(config, options, options.sass);
         configureHTML(config, options, options.html);
-        configureDevServer(config);
+
+        if (isDevServer)
+            configureDevServer(config);
 
         if (options.serviceWorker)
             configureServiceWorker(config, options, options.serviceWorker);
