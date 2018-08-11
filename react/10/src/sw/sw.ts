@@ -28,7 +28,6 @@ sw.oninstall = function (event: ExtendableEvent) {
     // If there is even a byte's difference in the service worker file compared
     // to what it currently has, it considers it 'new'.
     const {assets} = serviceWorkerOption;
-
     const assetsToCache = [...assets, "./"]
         .map(path => new URL(path, location).toString());
 
@@ -90,8 +89,8 @@ function $canFetchUrl(url: URL): boolean {
 async function $install(requests: (Request | string)[], cacheName: string) {
     const cache = await caches.open(cacheName);
     try {
+        debug("installing assets: ", requests);
         await cache.addAll(requests);
-        debug("install assets: ", requests);
     }
     catch (error) {
         console.error(error);
@@ -141,15 +140,14 @@ async function $cache(request: Request, response: Response, cacheName: string): 
     await cache.put(request, response);
 }
 
-async function $clean(except: string): Promise<void> {
-    const names = await caches.keys();
-    await Promise.all(names.map($delete, except));
-}
-
-async function $delete(this: string, cacheName: string): Promise<void> {
-    // delete the caches that are not the current one
-    if (!this || cacheName.indexOf(this) !== 0)
-        await caches.delete(cacheName);
+async function $clean(except: string): Promise<any> {
+    let names = await caches.keys();
+    names = names && names.filter(x => x != except);
+    if (names && names.length) {
+        debug("deleting caches:", names);
+        const promises = names.map(caches.delete, caches);
+        return Promise.all(promises);
+    }
 }
 
 function debug(message: string, ...params: any[]): void {
