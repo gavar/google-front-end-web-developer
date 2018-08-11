@@ -15,7 +15,7 @@ export = configurer((env, argv) => {
         ts: {
             entry: "src/index.tsx",
             output: {
-                filename: `static/js/${dev ? "[name].js" : "[name].[contenthash:8].js"}`,
+                filename: dev ? "[name].js" : "[name].[contenthash:8].js",
             },
             loader: {
                 configFile: resolve(root, "tsconfig.webpack.json"),
@@ -24,6 +24,9 @@ export = configurer((env, argv) => {
         sass: {
             loader: {
                 resources: [join(root, "src/theme.scss")],
+            },
+            output: {
+                filename: dev ? "[name].css" : "[name].[contenthash:8].css",
             },
         },
         html: {
