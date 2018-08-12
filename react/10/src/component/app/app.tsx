@@ -90,9 +90,9 @@ function onPlaceMouseOut(place: Place) {
         $PlaceSelectionStore.setState({hover: null});
 }
 
-function onCloseInfoWindow(place: Place) {
+function onCloseInfoWindow(key: string) {
     const {selection} = $PlaceSelectionStore.state;
-    if (selection && selection.key === place.key)
+    if (selection && selection.key === key)
         $PlaceSelectionStore.setState({selection: null});
 }
 

@@ -4,17 +4,16 @@ import {autobind} from "core-decorators";
 import PropTypes from "prop-types";
 import React, {PureComponent, ReactChild} from "react";
 import {MAP} from "react-google-maps/src/constants";
-import {$PlaceService, Place} from "../../service";
+import {$PlaceService, FourSquarePlace, Place, PlaceSource} from "../../service";
 import {$PlaceSelectionStore, PlaceSelectionState} from "../../store";
 import {AddressView, RatingView} from "../nearby-places";
 import "./place-marker-info.scss";
 
 export interface PlaceMarkerInfoProps {
-    onCloseClick?(place: Place): void;
+    onCloseClick?(key: string): void;
 }
 
-export interface PlaceMarkerInfoState {
-    place?: Place;
+export interface PlaceMarkerInfoState extends Partial<Place> {
     loading?: boolean;
 }
 
@@ -27,6 +26,7 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     protected readonly store = $PlaceSelectionStore;
     protected readonly placeService = $PlaceService;
 
+    protected key: string;
     protected map: Map;
     protected content: HTMLDivElement;
     protected infoWindow: InfoWindow;
@@ -61,45 +61,46 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
 
     /** @inheritDoc */
     render() {
-        const {place, loading} = this.state;
-        const full = place && place.detailed;
+        const {key, loading, detailed} = this.state;
         const className = classNames(
             "place-marker-info",
-            place ? "show" : "hide",
-            full ? "full" : "partial",
-            !full && loading && "loading",
+            key ? "show" : "hide",
+            detailed ? "full" : "partial",
+            loading && "loading",
         );
 
+        this.infoWindow.setContent(this.content);
         return <div ref={this.setContent} className={className}>
-            {place && table(place) || null}
+            {table(this.state) || null}
         </div>;
     }
 
-    protected show(next: Place) {
+    protected show(place: Place) {
         // ensure showing other then current
-        const {place} = this.state;
-        if (place && place.key === next.key)
-            return;
+        if (this.key === place.key) return;
 
         // open window
-        const position = next && next.location;
+        const position = place && place.location;
         if (position) this.infoWindow.setPosition(position);
         this.infoWindow.open(this.map);
 
-        // update & fetch
-        this.setState({place: next, loading: true});
-        this.placeService.fetchDetails(next.key, this.onReceiveDetails);
+        // update state
+        this.key = place.key;
+        const state = placeToState(place);
+        state.loading = true;
+        this.setState(state);
+
+        // fetch
+        this.placeService.fetchDetails(place.key, this.onReceiveDetails);
     }
 
     protected hide() {
         // make sure to close the window
         this.infoWindow.setContent(null);
         this.infoWindow.close();
-
-        this.setState({
-            place: null,
-            loading: false,
-        });
+        // clear state
+        this.key = null;
+        this.setState(NullPlace);
     }
 
     protected onPlaceSelectionChange(state: PlaceSelectionState) {
@@ -114,32 +115,55 @@ export class PlaceMarkerInfo extends PureComponent<PlaceMarkerInfoProps, PlaceMa
     }
 
     @autobind
-    protected onReceiveDetails(key: string, details: Place, remote: boolean) {
+    protected onReceiveDetails(key: string, details: Place, source: PlaceSource) {
         // check if valid response
-        const {place, loading} = this.state;
-        if (place && place.key !== key)
+        if (this.key !== key)
             return;
 
-        this.setState({
-            place: details || place,
-            loading: remote ? false : loading,
-        });
+        // update state
+        const state = placeToState(details);
+        if (source === "google") state.loading = false;
+        this.setState(state);
     }
 
     @autobind
     protected onCloseClick() {
-        const {place} = this.state;
         const {onCloseClick} = this.props;
-        if (onCloseClick) onCloseClick(place);
+        if (onCloseClick) onCloseClick(this.state.key);
         this.hide();
     }
 }
 
-function table(place: Place) {
+const NullPlace: Place = {
+    key: null,
+    icon: null,
+    name: null,
+    photo: null,
+    phone: null,
+    rating: null,
+    reviews: null,
+    address: null,
+    website: null,
+    vicinity: null,
+    location: null,
+    operating: null,
+    updateTime: null,
+    foursquare: null,
+    detailed: null,
+};
+
+function placeToState(place: Place): PlaceMarkerInfoState {
+    return {
+        ...NullPlace,
+        ...place,
+    };
+}
+
+function table(place: Partial<Place>) {
     const {
         name, icon, phone,
         rating, reviews, website,
-        address, vicinity,
+        address, vicinity, foursquare,
     } = place;
 
     const rows = place && [
@@ -148,6 +172,7 @@ function table(place: Place) {
         row("Phone:", Phone(phone), "phone"),
         row("Rating:", RatingView(rating, reviews), "rating"),
         row("Website:", Website(website), "website"),
+        row("FourSquare:", FourSquare(foursquare), "foursquare"),
     ].filter(identity);
 
     return rows && <table>
@@ -182,6 +207,13 @@ function Website(website: string) {
         text = text.slice(0, -1);
 
     return <a target="_blank" href={website}>{clamp(text)}</a>;
+}
+
+function FourSquare(foursquare: FourSquarePlace) {
+    if (!foursquare) return null;
+    const {found, likes} = foursquare;
+    if (found) return `${likes} Likes`;
+    return "unable to find";
 }
 
 function clamp(text: string, maxLength: number = 35) {
