@@ -10,10 +10,11 @@ export interface Place {
     reviews: number;
     address: Address;
     website: string;
-    vicinity: string
+    vicinity: string;
     location: LatLngLiteral;
     operating: boolean;
     updateTime: number;
+    foursquare?: FourSquarePlace;
     detailed?: boolean;
 }
 
@@ -21,4 +22,10 @@ export interface Address {
     country?: string;
     city?: string;
     street?: string;
+}
+
+export interface FourSquarePlace {
+    found: boolean;
+    venue?: string;
+    likes?: number;
 }

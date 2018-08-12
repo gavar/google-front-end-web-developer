@@ -8,12 +8,12 @@ import {
     PlacesService,
     PlacesServiceStatus,
 } from "$google/maps/places";
-import {hasOwnProperty, identity} from "$util";
-import {Address, Place} from "./place";
+import {identity} from "$util";
+import * as fq from "./foursquare";
+import {Address, FourSquarePlace, Place} from "./place";
 import {store} from "./sql-store";
 
 const DEBUG = process.env.NODE_ENV !== "production";
-const EmptyPlace = {address: {}, location: {}} as Place;
 
 export class PlaceService {
 
@@ -30,6 +30,7 @@ export class PlaceService {
     public nearbyBounds: LatLngBounds;
 
     protected geocoder: Geocoder;
+    protected saveLock: Promise<any>;
     protected placesService: PlacesService;
     protected listeners: PlaceListenerEntry[] = [];
     protected placesWithDetails: Set<string> = new Set();
@@ -51,36 +52,44 @@ export class PlaceService {
     async fetchDetails(key: string, listener: PlaceListener): Promise<void> {
         // in memory?
         let place = this.placeByKey.get(key);
-        if (place) listener(key, place, false);
+        if (place) listener(key, place, "memory");
 
         // no need to refresh twice
         if (this.placesWithDetails.has(key))
             return;
 
         // save request
-        this.listeners.push({key, listener});
+        this.listeners.push({
+            key,
+            listener,
+            waits: new Set<PlaceSource>([
+                "cache",
+                "google",
+                "foursquare",
+            ]),
+        });
 
-        // already requested?
+        // already requesting?
         if (this.placeDetailsRequests.has(key))
             return;
-
-        // fetch from remote to refresh data
-        const request: PlaceDetailsRequest = {
-            placeId: key,
-            fields: detailsFields,
-        };
-
-        this.placeDetailsRequests.add(key);
-        const callback = (result, status) => this.onReceiveDetails(key, result, status);
-        try { this.placesService.getDetails(request, callback); }
-        catch (e) { callback(null, google.maps.places.PlacesServiceStatus.ERROR); }
 
         // use cache while fetching from remote
         place = await store.places.get(key);
         if (place) {
             this.savePlaceToMemory(place);
-            this.notify(key, place, false);
+            this.notifyPlaceListener(key, "cache");
         }
+
+        // fetch from remote to refresh data
+        this.placeDetailsRequests.add(key);
+        const request: PlaceDetailsRequest = {placeId: key, fields: detailsFields};
+        const callback = (result, status) => this.onReceiveDetails(key, result, status);
+        try { this.placesService.getDetails(request, callback); }
+        catch (e) { callback(null, google.maps.places.PlacesServiceStatus.ERROR); }
+
+        // fetch FourSquare data
+        if (place)
+            this.fetchFoursquare(key, place);
     }
 
     /**
@@ -97,6 +106,7 @@ export class PlaceService {
 
         // save cache places to memory
         this.savePlaceToMemory.apply(this, places);
+        this.updateNearbyPlaces();
 
         // notify with places from cache
         listener(places);
@@ -134,7 +144,8 @@ export class PlaceService {
                     // merge places data with existing
                     const promises = results.map(self.fromNearbyPlace, self);
                     const places = await Promise.all(promises);
-                    await self.savePlace.apply(self, places);
+                    self.savePlace.apply(self, places);
+                    self.updateNearbyPlaces();
 
                     // notify
                     listener(places);
@@ -154,6 +165,66 @@ export class PlaceService {
         }
     }
 
+    protected async fetchFoursquare(key: string, place: Place) {
+        let {foursquare} = place;
+
+        // fetch foursquare venue
+        if (!foursquare) {
+            try {
+                let {name, location} = place;
+                const {lat, lng} = location;
+                const {meta, body} = await fq.search(name, lat, lng);
+                switch (meta.code) {
+                    case 200:
+                        const {venues} = body;
+                        const venue = venues && venues[0];
+                        if (venue) {
+                            foursquare = {
+                                found: true,
+                                venue: venue.id,
+                            };
+                        }
+                        else {
+                            foursquare = {
+                                found: false,
+                            };
+                        }
+                        break;
+                    default:
+                        if (DEBUG) console.log(meta);
+                        break;
+                }
+            }
+            catch (e) {
+                if (DEBUG) console.error(e);
+            }
+        }
+
+        // fetch foursquare likes by venue id
+        const venue = foursquare && foursquare.venue;
+        if (venue) {
+            try {
+                const {meta, body} = await fq.likes(venue);
+                switch (meta.code) {
+                    case 200:
+                        foursquare.likes = body.likes.count;
+                        break;
+                    default:
+                        if (DEBUG) console.log(meta);
+                        break;
+                }
+            }
+            catch (e) {
+                if (DEBUG) console.error(e);
+            }
+        }
+
+        // update
+        place = await this.withFourSquarePlace(key, foursquare);
+        this.savePlace(place);
+        this.notifyPlaceListener(key, "foursquare");
+    }
+
     protected async onReceiveDetails(key: string, result: PlaceResult, status: PlacesServiceStatus) {
         this.placeDetailsRequests.delete(key);
         const {
@@ -166,31 +237,36 @@ export class PlaceService {
 
         switch (status) {
             case OK:
-                const place = await this.fromPlaceDetails(key, result);
+                const place = await this.fromDetails(key, result);
                 this.placesWithDetails.add(key);
-                await this.savePlace(place);
-                this.notify(key, place, true);
+                this.savePlace(place);
                 break;
 
             case NOT_FOUND:
             case REQUEST_DENIED:
             case ZERO_RESULTS:
             case OVER_QUERY_LIMIT:
-                this.notify(key, null, true);
                 if (DEBUG) console.log(status, ":", result);
                 break;
 
             default:
-                this.notify(key, null, true);
                 if (DEBUG) console.error(status, ":", result);
                 break;
         }
+
+        this.notifyPlaceListener(key, "google");
     }
 
     protected async savePlace(...places: Place[]) {
-        // save to memory
         this.savePlaceToMemory.apply(this, places);
+        // wait for previous save to complete
+        await this.saveLock;
+        // save places
+        const lock = this.saveLock = this.savePlaceToStore.apply(this, places);
+        await lock;
+    }
 
+    protected async savePlaceToStore(...places: Place[]) {
         // save to store
         await store.places.bulkPut(places);
 
@@ -203,53 +279,92 @@ export class PlaceService {
     }
 
     protected savePlaceToMemory(...places: Place[]) {
+        let update = false;
+
         // update index
-        for (const place of places)
+        for (const place of places) {
+            const {key} = place;
+            update = update || place !== this.placeByKey.get(key);
             this.placeByKey.set(place.key, place);
+        }
 
         // update places lists
-        this.places = Array.from(this.placeByKey.values());
+        if (update)
+            this.places = Array.from(this.placeByKey.values());
+    }
+
+    protected updateNearbyPlaces() {
         this.nearbyPlaces = this.places.filter(isWithinBounds, this.nearbyBounds);
     }
 
-    protected notify(key: string, place: Place, remote: boolean) {
+    protected notifyPlaceListener(key: string, source: PlaceSource) {
+        const place = this.placeByKey.get(key);
         const items = this.listeners;
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
             if (item === null) continue;
             if (item.key !== key) continue;
-            if (remote) items[i] = null;
-            item.listener(key, place, remote);
+
+            // waits for source?
+            const {waits, listener} = item;
+            if (!waits.has(source)) continue;
+
+            // evict?
+            waits.delete(source);
+            if (waits.size <= 0)
+                items[i] = null;
+
+            // invoke
+            listener(key, place, source);
         }
         this.listeners = items.filter(identity);
     }
 
-    async fromPlaceDetails(key: string, result: PlaceResult): Promise<Place> {
-        const place = await this.fromPlace(key, result);
+    async fromDetails(key: string, googlePlace: PlaceResult): Promise<Place> {
+        const place = await this.withGooglePlace(key, googlePlace);
         place.detailed = true;
         return place;
     }
 
-    fromNearbyPlace(result: PlaceResult): Promise<Place> {
-        return this.fromPlace(result.place_id, result);
+    async fromNearbyPlace(googlePlace: PlaceResult): Promise<Place> {
+        return await this.withGooglePlace(googlePlace.place_id, googlePlace);
     }
 
-    async fromPlace(key: string, result: PlaceResult) {
-        let place = convertToPlace(result, key);
-        let existing = this.placeByKey.get(key) || await store.places.get(key) || EmptyPlace;
-        place = {...existing, ...place};
-        place.address = {...existing.address, ...place.address};
+    async getPlaceByKey(key: string): Promise<Place> {
+        let place = this.placeByKey.get(key);
+        if (place == null) place = await store.places.get(key);
         return place;
+    }
+
+    async withGooglePlace(key: string, googlePlace: PlaceResult): Promise<Place> {
+        const now = await this.getPlaceByKey(key) || {key} as Place;
+        Object.assign(now, fromGooglePlace(googlePlace, key));
+        return now;
+    }
+
+    async withFourSquarePlace(key: string, foursquarePlace: FourSquarePlace): Promise<Place> {
+        const now = await this.getPlaceByKey(key) || {key} as Place;
+        if (now.foursquare) Object.assign(now.foursquare, foursquarePlace);
+        else now.foursquare = foursquarePlace;
+        return now;
     }
 }
 
+export type PlaceSource =
+    | "memory"
+    | "cache"
+    | "google"
+    | "foursquare"
+    ;
+
 export interface PlaceListenerEntry {
     key: string;
+    waits: Set<PlaceSource>;
     listener: PlaceListener;
 }
 
 export interface PlaceListener {
-    (key: string, place: Place, remote: boolean);
+    (key: string, place: Place, source: PlaceSource);
 }
 
 export interface PlacesListener {
@@ -275,21 +390,21 @@ const photoOptions: PhotoOptions = {
     maxHeight: 100,
 };
 
-function convertToPlace(item: PlaceResult, key?: string): Place {
+function fromGooglePlace(item: PlaceResult, key?: string): Place {
     const {photos, geometry, reviews, address_components} = item;
     const place: Place = {
         key: key || item.place_id || void 0,
         name: item.name,
         icon: item.icon,
         phone: item.international_phone_number,
-        photo: photos && photos[0] && photos[0].getUrl(photoOptions),
+        photo: photos && photos[0] && photos[0].getUrl(photoOptions) || void 0,
         rating: item.rating,
         reviews: reviews && reviews.length || void 0,
         website: item.website,
-        address: address(address_components, item.vicinity),
+        address: address(address_components, item.vicinity) || void 0,
         vicinity: item.vicinity,
         operating: !item.permanently_closed,
-        location: geometry && geometry.location.toJSON(),
+        location: geometry && geometry.location.toJSON() || void 0,
         updateTime: Date.now(),
     };
     // remove undefined keys
@@ -299,7 +414,7 @@ function convertToPlace(item: PlaceResult, key?: string): Place {
 function address(components: GeocoderAddressComponent[], vicinity: string): Address {
     return components && addressByComponents(components)
         // || vicinity && addressByVicinity(vicinity)
-        || null;
+        || void 0;
 }
 
 function addressByComponents(components: GeocoderAddressComponent[]): Address {
@@ -317,7 +432,7 @@ function addressByComponents(components: GeocoderAddressComponent[]): Address {
     }
 
     // check if any key set
-    if (hasOwnProperty(value))
+    if (Object.keys(value).length > 0)
         return value;
 }
 
