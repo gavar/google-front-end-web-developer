@@ -24,6 +24,7 @@ interface Route {
     path?: string;
     regex?: RegExp,
     cacheUrl?: (url: URL) => string,
+    cacheUrlNoParams?: boolean;
 }
 
 const ROUTES: Route[] = [
@@ -31,6 +32,7 @@ const ROUTES: Route[] = [
         strategy: "cache-first",
         host: "raw.githubusercontent.com",
         cacheName: "github",
+        cacheUrlNoParams: true,
     },
     {
         strategy: "cache-first",
@@ -42,29 +44,33 @@ const ROUTES: Route[] = [
         strategy: "cache-first",
         host: "maps.gstatic.com",
         cacheName: "google/static",
+        cacheUrlNoParams: true,
     },
     {
         strategy: "cache-first",
         host: "maps.googleapis.com",
         regex: /PhotoService/,
         cacheName: "google/photos",
+        cacheUrl: ({href}) => href.slice(0, href.indexOf("&")),
     },
     {
         strategy: "network-first",
         host: "maps.googleapis.com",
         path: "maps/api/js",
         cacheName: "google/maps/api",
+        cacheUrlNoParams: true,
     },
     {
         strategy: "network-first",
         host: "maps.googleapis.com",
         regex: /ViewportInfoService|AuthenticationService/,
         cacheName: "google/maps/api",
+        cacheUrlNoParams: true,
     },
 ];
 
 for (const route of ROUTES)
-    route.cacheUrl = cacheUrlTransform;
+    route.cacheUrl = route.cacheUrl || cacheUrlTransform;
 
 function cacheUrlTransform(url: URL): string {
     const {searchParams} = url;
@@ -156,7 +162,7 @@ function $fetchStrategyOf(request: Request): FetchStrategy {
     if (request.method !== "GET")
         return;
 
-    const url = new URL(request.url);
+    const url: URL = new URL(request.url);
 
     // local asset?
     if (assets.has(url.href))
@@ -164,20 +170,31 @@ function $fetchStrategyOf(request: Request): FetchStrategy {
             type: ASSETS_STRATEGY,
             cacheUrl: url.href,
             cacheName: ASSETS_CACHE,
+            ignoreSearch: true,
         };
 
     // route?
     for (const route of ROUTES) {
-        const {strategy, href, host, path, regex, cacheUrl, cacheName} = route;
+        const {
+            strategy,
+            href, host, path, regex,
+            cacheUrl, cacheName, cacheUrlNoParams,
+        } = route;
+
         if (host && url.host != host) continue;
         if (href && url.href != href) continue;
         if (path && url.pathname != path) continue;
         if (regex && !url.href.match(regex)) continue;
 
-        let $url = new URL("", url);
+        let $href = url.href;
+        if (cacheUrlNoParams) {
+            const index = $href.indexOf("?");
+            if (index > 0) $href = $href.slice(0, index);
+        }
+
         return {
             type: strategy,
-            cacheUrl: cacheUrl && cacheUrl($url) || void 0,
+            cacheUrl: cacheUrl && cacheUrl(new URL($href)) || $href,
             cacheName,
         };
     }
