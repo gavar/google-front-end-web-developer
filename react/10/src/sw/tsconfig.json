@@ -2,10 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": [],
-    "paths": {}
+    "paths": {},
+    "outDir": "out"
   },
   "include": [
     "types.d.ts",
-    "*.ts"
+    "sw.ts"
   ]
 }

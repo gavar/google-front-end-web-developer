@@ -39,8 +39,10 @@
     }
   },
   "exclude": [
-    "build",
-    "node_modules",
-    "**/#*"
+    "**/sw", // all service worker files
+    "**/#*", // all files where names starts with #
+    "**/out", // all 'out' directories
+    "**/tmp", // all 'tmp' directories
+    "**/dist" // all 'dist' directories
   ]
 }
