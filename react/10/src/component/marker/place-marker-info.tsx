@@ -167,8 +167,8 @@ function table(place: Partial<Place>) {
     } = place;
 
     const rows = place && [
-        name && row(<img src={icon}/>, Title(name, website), "name"),
-        place.detailed && row("Address:", AddressView(address, vicinity), "address"),
+        row(<img src={icon}/>, Title(name, website), "name"),
+        row("Address:", AddressView(address, vicinity), "address"),
         row("Phone:", Phone(phone), "phone"),
         row("Rating:", RatingView(rating, reviews), "rating"),
         row("Website:", Website(website), "website"),
