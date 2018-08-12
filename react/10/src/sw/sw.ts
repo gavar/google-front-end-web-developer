@@ -44,7 +44,6 @@ const ROUTES: Route[] = [
         strategy: "cache-first",
         host: "maps.gstatic.com",
         cacheName: "google/static",
-        cacheUrlNoParams: true,
     },
     {
         strategy: "cache-first",
@@ -58,7 +57,6 @@ const ROUTES: Route[] = [
         host: "maps.googleapis.com",
         path: "maps/api/js",
         cacheName: "google/maps/api",
-        cacheUrlNoParams: true,
     },
     {
         strategy: "network-first",
