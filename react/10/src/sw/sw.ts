@@ -1,9 +1,10 @@
 declare const serviceWorkerOption: {
+    hash: string;
     assets: string[];
 };
 
 const DEBUG = false;
-const ASSETS_CACHE = new Date().toISOString();
+const ASSETS_CACHE = serviceWorkerOption.hash || "v1";
 const ASSETS_STRATEGY: FetchStrategyType = "cache-only";
 
 const CACHES = [
