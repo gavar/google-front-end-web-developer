@@ -1,0 +1,44 @@
+.gm-style-iw,
+.gm-style-iw * {
+  overflow: hidden;
+}
+
+.place-marker-info {
+  &.show { opacity: 1; }
+  &.hide { opacity: 0; }
+
+  table {
+    max-width: 300px;
+    min-width: 150px;
+  }
+
+  &.show.loading.partial {
+    min-height: 150px;
+  }
+
+  .info-label {
+    position: relative;
+    text-align: left;
+    padding-right: 4px;
+    img {
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  .info-value {
+    text-align: left;
+  }
+
+  .name .info-label {
+    text-align: right;
+  }
+
+  .rating-stars {
+    top: 4px;
+  }
+
+  .icon-foursquare {
+    height: 20px;
+  }
+}

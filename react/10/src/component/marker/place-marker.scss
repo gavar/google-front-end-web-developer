@@ -1,0 +1,63 @@
+@import "style/theming";
+
+.place-marker {
+  opacity: 0;
+  width: 27px * 1.25;
+  height: 43px * 1.25;
+  cursor: pointer;
+
+  // commons
+  $duration: .3s;
+  $easing: ease;
+
+  // animation
+  transition-duration: $duration;
+  transition-timing-function: $easing;
+  transition-property: transform;
+  animation-fill-mode: forwards;
+  animation-duration: $duration;
+  animation-timing-function: $easing;
+
+  path {
+    fill: #e94538;
+    stroke-width: 2px;
+    // animation
+    transition-duration: $duration;
+    transition-timing-function: $easing;
+    transition-property: fill, stroke-width;
+  }
+
+  ellipse {
+    fill: rgba(black, .4);
+  }
+
+  &.show {
+    animation-name: place-marker-show;
+  }
+
+  &.hover {
+    transform: scale(1.5) translateY(-25%);
+    path {
+      fill: $primary-color;
+      stroke-width: 1px;
+    }
+  }
+
+  &.selected {
+    transform: scale(1.5) translateY(-10%);
+    path {
+      fill: $primary-color;
+      stroke-width: 1px;
+    }
+  }
+}
+
+@keyframes place-marker-show {
+  from {opacity: 0;}
+  to { opacity: 1; }
+}
+
+@keyframes place-marker-hide {
+  from {opacity: 1;}
+  to { opacity: 0; }
+}

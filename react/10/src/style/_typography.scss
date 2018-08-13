@@ -1,0 +1,163 @@
+@import "./theming/classes";
+
+@function letter-spacing($tracking, $font-size) {
+  @return $tracking / ($font-size * 16) * 1em;
+}
+
+// font-weight
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$font-weight-black: 900;
+
+$font-family: Roboto, Helvetica, Arial sans-serif !default;
+%typography-base {
+  margin: 0;
+  font-family: $font-family;
+  @extend %text-primary-color;
+}
+
+%h1 {
+  @extend %typography-base;
+  font-size: 6rem; // 96
+  line-height: 6rem;
+  font-weight: $font-weight-light;
+  letter-spacing: letter-spacing(-1.5, 6);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%h2 {
+  @extend %typography-base;
+  font-size: 3.75rem; // 60
+  line-height: 3.75rem;
+  font-weight: $font-weight-light;
+  letter-spacing: letter-spacing(-0.5, 3.75);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%h3 {
+  @extend %typography-base;
+  font-size: 3rem; // 48
+  line-height: 3.125rem; // 50
+  font-weight: $font-weight-regular;
+  letter-spacing: normal;
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%h4 {
+  @extend %typography-base;
+  font-size: 2.125rem; // 34
+  line-height: 2.5rem; // 40
+  font-weight: $font-weight-regular;
+  letter-spacing: letter-spacing(0.25, 2.125);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%h5 {
+  @extend %typography-base;
+  font-size: 1.5rem; // 24
+  line-height: 2rem; // 32
+  font-weight: $font-weight-regular;
+  letter-spacing: normal;
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%h6 {
+  @extend %typography-base;
+  font-size: 1.25rem; // 20
+  line-height: 2rem; // 32
+  font-weight: $font-weight-medium;
+  letter-spacing: letter-spacing(0.25, 1.25);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%subtitle-1 {
+  @extend %typography-base;
+  font-size: 1rem; // 16
+  line-height: 1.75rem; // 28
+  font-weight: $font-weight-regular;
+  letter-spacing: letter-spacing(0.15, 1);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%subtitle-2 {
+  @extend %typography-base;
+  font-size: 0.875rem; // 14
+  line-height: 1.375rem; // 22
+  font-weight: $font-weight-medium;
+  letter-spacing: letter-spacing(0.1, 0.875);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%body-1 {
+  @extend %typography-base;
+  font-size: 1rem; // 16
+  line-height: 1.5rem; // 24
+  font-weight: $font-weight-regular;
+  letter-spacing: letter-spacing(0.5, 1);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%body-2 {
+  @extend %typography-base;
+  font-size: 0.875rem; // 14
+  line-height: 1.25rem; // 20
+  font-weight: $font-weight-regular;
+  letter-spacing: letter-spacing(0.25, 0.875);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%caption {
+  @extend %typography-base;
+  font-size: 0.75rem; // 12
+  line-height: 1.25rem; // 20
+  font-weight: $font-weight-regular;
+  letter-spacing: letter-spacing(0.4, 0.75);
+  text-decoration: inherit;
+  text-transform: inherit;
+}
+
+%button {
+  @extend %typography-base;
+  font-size: 0.875rem; // 14
+  line-height: 2.25rem; // 36
+  font-weight: $font-weight-medium;
+  letter-spacing: letter-spacing(1.25, 0.875);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+%overline {
+  @extend %typography-base;
+  font-size: 0.75rem; // 12
+  line-height: 2rem; // 32
+  font-weight: $font-weight-medium;
+  letter-spacing: letter-spacing(2, 0.75);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+@mixin base-typography($selector: null) {
+  #{$selector} h1 { @extend %h1 }
+  #{$selector} h2 { @extend %h2 }
+  #{$selector} h3 { @extend %h3 }
+  #{$selector} h4 { @extend %h4 }
+  #{$selector} h5 { @extend %h5 }
+  #{$selector} h6 { @extend %h6 }
+  #{$selector} .subtitle-1 { @extend %subtitle-1 }
+  #{$selector} .subtitle-2 { @extend %subtitle-2 }
+  #{$selector} .body-1 { @extend %body-1 }
+  #{$selector} .body-2 { @extend %body-2 }
+  #{$selector} .caption { @extend %caption }
+}

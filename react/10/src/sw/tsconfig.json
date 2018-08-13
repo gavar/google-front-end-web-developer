@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [],
+    "paths": {},
+    "outDir": "out"
+  },
+  "include": [
+    "types.d.ts",
+    "sw.ts"
+  ]
+}
