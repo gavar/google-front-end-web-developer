@@ -92,7 +92,7 @@ export function configurer(provider: ConfigurerProvider) {
                 verbose: true,
             }) as Plugin,
             new EnvironmentPlugin({
-                "PUBLIC_URL": "/",
+                "PUBLIC_URL": "./",
                 ...process.env,
             }),
             new ManifestPlugin(),
