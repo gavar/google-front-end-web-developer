@@ -20,6 +20,7 @@ Exploring JS       | **Project: Classic Arcade Game Clone**                |**[l
 Exploring JS       | Project: Feed Reader Testing                          |  [link][U3-L23#05-code]  |  [view][U3-L23#05-view]  |
 Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [link][U4-L14#03-code]  |  [view][U4-L14#03-view]  |
 React              | Project: MyReads - A Book Tracking App                |  [link][U5-L06#07-code]  |  [view][U5-L06#07-view]  |
+React              | Project: Neighborhood Map (React)                     |**[link][U5-L10#04-code]**|**[view][U5-L10#04-view]**|
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
@@ -114,8 +115,8 @@ React              | Project: MyReads - A Book Tracking App                |  [l
 - [x] React: Getting Started with the APIs (2h)
 - [x] React: Understanding API Services (3h)
 - [x] React: Using the APIs in Practice (1h)
-#### Upcoming
-- [ ] React: Project: Neighborhood Map
+#### week #24-25: 30.07 - 12.08
+- [x] React: Project: Neighborhood Map
 
 ### Udacity Frontend Nanodegree Style Guide
 * [HTML](https://udacity.github.io/frontend-nanodegree-styleguide/index)
@@ -171,3 +172,6 @@ React              | Project: MyReads - A Book Tracking App                |  [l
 
 [U5-L06#07-code]: react/06
 [U5-L06#07-view]: https://gavar.github.io/google-front-end-web-developer/react/06/build
+
+[U5-L10#04-code]: react/10
+[U5-L10#04-view]: https://gavar.github.io/google-front-end-web-developer/react/10/dist/index
