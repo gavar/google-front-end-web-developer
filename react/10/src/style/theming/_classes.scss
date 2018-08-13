@@ -1,0 +1,34 @@
+@import "./colors";
+
+%primary-color {
+  color: $primary-color;
+}
+
+%accent-color {
+  color: $accent-color;
+}
+
+%text-primary-color {
+  color: $text-color;
+}
+
+%text-secondary-color {
+  color: $text-secondary-color;
+}
+
+%text-hint-color {
+  color: $text-hint-color;
+}
+
+%text-disabled-color {
+  color: $text-disabled-color;
+}
+
+@mixin base-colors($selector: null) {
+  #{$selector} .color-primary { @extend %primary-color; }
+  #{$selector} .color-accent { @extend %accent-color; }
+  #{$selector} .text-primary { @extend %text-primary-color; }
+  #{$selector} .text-secondary { @extend %text-secondary-color; }
+  #{$selector} .text-hint { @extend %text-primary-color; }
+  #{$selector} .text-disabled { @extend %text-primary-color; }
+}

@@ -1,0 +1,9 @@
+@import "style/variables";
+
+.google-map-container {
+  height: calc(100vh - #{$app-bar-top-height});
+}
+
+.google-map {
+  height: 100%;
+}

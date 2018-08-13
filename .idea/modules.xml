@@ -3,10 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/exploring-js/13/arcade-game.iml" filepath="$PROJECT_DIR$/exploring-js/13/arcade-game.iml" />
-      <module fileurl="file://$PROJECT_DIR$/frontend-apps/exoplanet-explorer/exoplanet-explorer.iml" filepath="$PROJECT_DIR$/frontend-apps/exoplanet-explorer/exoplanet-explorer.iml" />
       <module fileurl="file://$PROJECT_DIR$/exploring-js/23/feed-reader.iml" filepath="$PROJECT_DIR$/exploring-js/23/feed-reader.iml" />
       <module fileurl="file://$PROJECT_DIR$/google-front-end-web-developer.iml" filepath="$PROJECT_DIR$/google-front-end-web-developer.iml" />
       <module fileurl="file://$PROJECT_DIR$/web-programming/24.03/memory-game.iml" filepath="$PROJECT_DIR$/web-programming/24.03/memory-game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/react/10/neighborhood-map.iml" filepath="$PROJECT_DIR$/react/10/neighborhood-map.iml" />
       <module fileurl="file://$PROJECT_DIR$/web-programming/22.02/pixel-art-maker.iml" filepath="$PROJECT_DIR$/web-programming/22.02/pixel-art-maker.iml" />
       <module fileurl="file://$PROJECT_DIR$/web-foundations/18.03/portfolio-project.iml" filepath="$PROJECT_DIR$/web-foundations/18.03/portfolio-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/responsive-images/02.16/responsive-images-v1.iml" filepath="$PROJECT_DIR$/responsive-images/02.16/responsive-images-v1.iml" />

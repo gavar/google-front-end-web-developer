@@ -1,0 +1,9 @@
+.slide {
+  height: 100%;
+  position: absolute;
+}
+
+// hidden on the left to slide out to the right
+.slide-right {
+  left: 0;
+}

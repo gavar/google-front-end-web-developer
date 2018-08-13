@@ -11,6 +11,10 @@ indent_style = space
 [*.html]
 indent_size = 2
 
+# XML
+[*.xml]
+indent_size = 2
+
 # CSS
 [*.{css,scss}]
 indent_size = 2

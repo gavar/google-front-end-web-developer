@@ -1,0 +1,33 @@
+@import "./button-base";
+@import "../theming/colors";
+
+%button {
+  @extend %button-base;
+  line-height: 1.4em;
+  box-sizing: border-box;
+  min-width: 64px;
+  min-height: 36px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  color: $text-color;
+  // TODO: transition
+
+  &:hover {
+    text-decoration: none;
+    background-color: rgba($text-color, $background-hover-opacity);
+    &[disabled] {
+      background-color: transparent;
+    }
+  }
+
+  &[disabled] {
+    color: $text-disabled-color;
+  }
+
+  &.contained {
+    background-color: #e0e0e0;
+    &:hover {
+      background-color: #d5d5d5;
+    }
+  }
+}

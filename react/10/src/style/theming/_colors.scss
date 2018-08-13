@@ -1,0 +1,45 @@
+@import "./palette";
+@import "./theming";
+
+// Primary palette.
+// A primary color is the color displayed most frequently across your app’s screens and components.
+// If you don’t have a secondary color, your primary color can also be used to accent elements.
+$primary: palette($_primary-default) !default;
+$primary-color: color($primary, default) !default;
+$primary-lighter-color: color($primary, lighter) !default;
+$primary-darker-color: color($primary, darker) !default;
+$primary-contrast-color: color($primary, default-contrast) !default;
+$primary-lighter-contrast-color: color($primary, lighter-contrast) !default;
+$primary-darker-contrast-color: color($primary, lighter-contrast) !default;
+
+// Secondary palette.
+// A secondary color provides more ways to accent and distinguish your product.
+// Having a secondary color is optional, and should be applied sparingly to accent select parts of your UI.
+$accent: palette($_accent-default) !default;
+$accent-color: color($accent, default) !default;
+$accent-lighter-color: color($accent, lighter) !default;
+$accent-darker-color: color($accent, darker) !default;
+$accent-contrast-color: color($accent, default-contrast) !default;
+$accent-lighter-contrast-color: color($accent, lighter-contrast) !default;
+$accent-darker-contrast-color: color($accent, lighter-contrast) !default;
+
+// Error palette.
+// Error color indicates errors components, such as text fields.
+// Colors used to convey error state.
+$warn: $_warn-default !default;
+
+// Surface palette.
+// Colors for text and icons.
+$foreground: $_foreground-default !default;
+$text-color: color($foreground, text) !default;
+$text-secondary-color: color($foreground, secondary-text) !default;
+$text-disabled-color: color($foreground, disabled-text) !default;
+$text-hint-color: color($foreground, hint-text) !default;
+
+// Background palette.
+// Colors used for element backgrounds.
+$background: $_background-default !default;
+$background-color: color($background, background) !default;
+$background-hover-color: color($background, hover) !default; // rbga(black, 0.08);
+$background-hover-opacity: map_get($background, hover-opacity) !default; // 0.08;
+$background-disabled-color: color($background, disabled) !default;

@@ -1,0 +1,30 @@
+dialog.drawer {
+  background: none;
+}
+
+.drawer {
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  border: none;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.drawer-container {
+  width: 100%;
+  min-width: 256px;
+  max-width: calc(100vw - 56px);
+  display: inline-block;
+  height: 100%;
+  position: relative;
+  background: #fff;
+}
+
+// when animation completes
+.drawer.entered {
+  .drawer-container {
+    pointer-events: auto;
+  }
+}
