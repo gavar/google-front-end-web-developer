@@ -4,7 +4,7 @@ import sw from "serviceworker-webpack-plugin/lib/runtime";
 import {App} from "./component";
 import "./index.scss";
 
-if ("serviceWorker" in navigator)
+if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator)
     sw.register();
 
 ReactDOM.render(
