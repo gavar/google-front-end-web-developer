@@ -9,7 +9,7 @@ export interface ServiceWorkerConfigureOptions {
     /**
      * Specifies the public URL address of the output files when referenced in a browser.
      * We use this value to load the service worker over the network.
-     * @default process.env.PUBLIC_PATH || "/"
+     * @default process.env.PUBLIC_PATH || "./"
      */
     publicPath?: string;
 
@@ -23,7 +23,7 @@ export interface ServiceWorkerConfigureOptions {
      * Receives a raw serviceWorkerOption argument.
      * The jsonStats key contains all the webpack build information.
      */
-    transformOptions?(options: ServiceWorkerOptions): any
+    transformOptions?(options: ServiceWorkerOptions): any;
 }
 
 export interface ServiceWorkerOptions {
@@ -35,7 +35,7 @@ export interface ServiceWorkerOptions {
 export function configureServiceWorker(config: Configuration, configurer: Configurer, options: ServiceWorkerConfigureOptions): void {
     // defaults
     options = {
-        publicPath: process.env.PUBLIC_PATH || "/",
+        publicPath: process.env.PUBLIC_PATH || "./",
         transformOptions: function (serviceWorkerOption) {
             const {assets, jsonStats, ...other} = serviceWorkerOption;
             const hash = jsonStats.hash || other.hash || String(Date.now());

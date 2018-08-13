@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "webpack-dev-server --inline --hot"
+    "serve": "webpack-dev-server --inline --hot",
+    "build": "webpack -p"
   },
   "dependencies": {
     "core-decorators": "^0.20.0",
