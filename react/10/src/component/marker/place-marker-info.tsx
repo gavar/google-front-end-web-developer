@@ -4,6 +4,7 @@ import {autobind} from "core-decorators";
 import PropTypes from "prop-types";
 import React, {PureComponent, ReactChild} from "react";
 import {MAP} from "react-google-maps/src/constants";
+import {Foursquare} from "../../icon";
 import {$PlaceService, FourSquarePlace, Place, PlaceSource} from "../../service";
 import {$PlaceSelectionStore, PlaceSelectionState} from "../../store";
 import {AddressView, RatingView} from "../nearby-places";
@@ -172,7 +173,7 @@ function table(place: Partial<Place>) {
         row("Phone:", Phone(phone), "phone"),
         row("Rating:", RatingView(rating, reviews), "rating"),
         row("Website:", Website(website), "website"),
-        row("FourSquare:", FourSquare(foursquare), "foursquare"),
+        row(<Foursquare/>, FoursquareView(foursquare), "foursquare"),
     ].filter(identity);
 
     return rows && <table>
@@ -209,11 +210,11 @@ function Website(website: string) {
     return <a target="_blank" href={website}>{clamp(text)}</a>;
 }
 
-function FourSquare(foursquare: FourSquarePlace) {
+function FoursquareView(foursquare: FourSquarePlace) {
     if (!foursquare) return null;
     const {found, likes} = foursquare;
-    if (found) return `${likes} Likes`;
-    return "unable to find";
+    if (found) return `${likes} people like this`;
+    return "not found";
 }
 
 function clamp(text: string, maxLength: number = 35) {

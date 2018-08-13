@@ -12,11 +12,12 @@
     min-width: 150px;
   }
 
-  &.loading.partial {
+  &.show.loading.partial {
     min-height: 150px;
   }
 
   .info-label {
+    position: relative;
     text-align: left;
     padding-right: 4px;
     img {
@@ -35,5 +36,9 @@
 
   .rating-stars {
     top: 4px;
+  }
+
+  .icon-foursquare {
+    height: 20px;
   }
 }
