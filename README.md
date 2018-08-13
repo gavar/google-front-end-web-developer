@@ -20,7 +20,7 @@ Exploring JS       | **Project: Classic Arcade Game Clone**                |**[l
 Exploring JS       | Project: Feed Reader Testing                          |  [link][U3-L23#05-code]  |  [view][U3-L23#05-view]  |
 Frontend Apps      | Project: Restaurant Reviews: Stage 1                  |  [link][U4-L14#03-code]  |  [view][U4-L14#03-view]  |
 React              | Project: MyReads - A Book Tracking App                |  [link][U5-L06#07-code]  |  [view][U5-L06#07-view]  |
-React              | Project: Neighborhood Map (React)                     |**[link][U5-L10#04-code]**|**[view][U5-L10#04-view]**|
+React              | **Project: Neighborhood Map (React)**                 |**[link][U5-L10#04-code]**|**[view][U5-L10#04-view]**|
 
 ## Weekly Progress
 #### week #1: 15.02 - 18.02
