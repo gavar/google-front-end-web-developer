@@ -87,8 +87,14 @@ function cacheUrlTransform(url: URL): string {
 }
 
 const sw = self as ServiceWorkerGlobalScope;
-const assets: Set<string> = new Set([...serviceWorkerOption.assets, "./"].map(localHref));
-function localHref(path: string) { return new URL(path, location).href;}
+const assets: Set<string> = new Set([
+    "./",
+    ...serviceWorkerOption.assets,
+].map(localHref));
+
+function localHref(path: string) {
+    return new URL(path, location).href;
+}
 
 // when the service worker is first added
 sw.oninstall = function (event: ExtendableEvent) {
