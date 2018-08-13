@@ -12,6 +12,8 @@ Project contains application for searching a car wash facility near your locatio
 #### Dependencies
 * make sure [NodeJS](https://nodejs.org) installed on your machine by running `node -v`.
 * install [Yarn](https://yarnpkg.com/en/) package manager via `npm i yarn --dev`
+* run `yarn` to install dependencies
+* project relies on mono-repository principle powered by [Yarn Workspaces](https://yarnpkg.com/lang/en/docs/workspaces/)
 
 #### Build project
 Project assembly is powered via [Webpack](https://webpack.js.org/), so any related configuration flags will apply. For example, to change a serving port you could provide `--port $PORT$` flag. You can find webpack config file [here](./webpack.config.ts). The full list of options is defined in [Webpack CLI documentation](https://webpack.js.org/api/cli/)
